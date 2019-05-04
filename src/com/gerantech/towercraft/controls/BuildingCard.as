@@ -12,13 +12,15 @@ import com.gt.towers.constants.CardFeatureType;
 import com.gt.towers.constants.CardTypes;
 import com.gt.towers.constants.ResourceType;
 import com.gt.towers.scripts.ScriptEngine;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
-import starling.animation.Transitions;
+
 import starling.core.Starling;
 import starling.events.Event;
 
@@ -316,7 +318,7 @@ protected function defaultCountDisplayFactory() : ShadowLabel
 	
 	if( countDisplay == null )
 	{
-		countDisplay = new ShadowLabel(null, 1, 0, null, "ltr", false, null, 1.4);
+		countDisplay = new ShadowLabel(null, 1, 0, null, "ltr", false, null, 1.35);
 		countDisplay.layoutData = new AnchorLayoutData(NaN, padding * 1.8, padding * 0.6);
 		labelsContainer.addChild(countDisplay);
 	}
