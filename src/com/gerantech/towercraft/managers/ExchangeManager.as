@@ -168,12 +168,14 @@ public function process(item : ExchangeItem) : void
 				details.removeEventListener(Event.SELECT, details_selectHandler);
 			if( _state == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
 				params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
-			exchange(item, params);
+			var response:int = exchange(item, params);
+			if( response != MessageTypes.RESPONSE_SUCCEED )
+				details.close();
 		}
 	}
 }
 
-private function exchange( item:ExchangeItem, params:SFSObject ) : void
+private function exchange( item:ExchangeItem, params:SFSObject ) : int
 {
 	if( item.category == ExchangeType.C100_FREES )
 		exchanger.findRandomOutcome(item, timeManager.now);
@@ -216,6 +218,7 @@ private function exchange( item:ExchangeItem, params:SFSObject ) : void
 		SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_extensionResponseHandler);
 		SFSConnection.instance.sendExtensionRequest(SFSCommands.EXCHANGE, params);
 	}
+	return response;
 }
 
 protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
