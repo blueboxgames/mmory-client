@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF - 8"?>
+<TextureAtlas imagePath="battlefields.png" width="2048" height="2048">
+	<SubTexture name="home1" x="0" y="0" width="600" height="500" frameX="0" frameY="-55" frameWidth="600" frameHeight="600"/>
+	<SubTexture name="home2" x="601" y="0" width="546" height="476" frameX="-35" frameY="-97" frameWidth="600" frameHeight="600"/>
+	<SubTexture name="gariiiiii" x="1148" y="0" width="537" height="450" frameX="0" frameY="-35" frameWidth="610" frameHeight="600"/>
+	<SubTexture name="home3" x="1148" y="451" width="573" height="362" frameX="0" frameY="-163" frameWidth="600" frameHeight="600"/>
+	<SubTexture name="melon-store" x="601" y="477" width="455" height="437" frameX="-35" frameY="-64" frameWidth="600" frameHeight="600"/>
+	<SubTexture name="home2-r" x="0" y="501" width="440" height="445" frameX="-47" frameY="-29" frameWidth="600" frameHeight="600"/>
+	<SubTexture name="home1-r" x="1057" y="814" width="544" height="294" frameX="-12" frameY="-159" frameWidth="600" frameHeight="600"/>
+	<SubTexture name="home4" x="1602" y="814" width="368" height="434" frameX="-120" frameY="-98" frameWidth="600" frameHeight="600"/>
+	<SubTexture name="pellle" x="1686" y="0" width="320" height="327" frameX="-32" frameY="0" frameWidth="400" frameHeight="400"/>
+	<SubTexture name="yin-yang" x="1722" y="328" width="300" height="299" frameX="0" frameY="0" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="map-layers_0008_cheker" x="441" y="915" width="239" height="233" frameX="0" frameY="0" frameWidth="239" frameHeight="234"/>
+	<SubTexture name="bolevard" x="0" y="947" width="400" height="135" frameX="0" frameY="0" frameWidth="400" frameHeight="136"/>
+	<SubTexture name="damage-range" x="681" y="915" width="200" height="199" frameX="0" frameY="0" frameWidth="200" frameHeight="200"/>
+	<SubTexture name="ttrree" x="441" y="501" width="140" height="198" frameX="-113" frameY="-92" frameWidth="400" frameHeight="400"/>
+	<SubTexture name="summon-0" x="1722" y="628" width="136" height="167" frameX="0" frameY="0" frameWidth="136" frameHeight="168"/>
+	<SubTexture name="summon-1" x="1859" y="628" width="136" height="167" frameX="0" frameY="0" frameWidth="136" frameHeight="168"/>
+	<SubTexture name="summon-2" x="441" y="700" width="136" height="167" frameX="0" frameY="0" frameWidth="136" frameHeight="168"/>
+	<SubTexture name="summon-t" x="882" y="915" width="136" height="167" frameX="0" frameY="0" frameWidth="136" frameHeight="168"/>
+	<SubTexture name="cone" x="0" y="1083" width="150" height="149" frameX="0" frameY="0" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="standguard" x="151" y="1083" width="150" height="149" frameX="0" frameY="0" frameWidth="150" frameHeight="150"/>
+	<SubTexture name="tile" x="882" y="1083" width="160" height="127" frameX="0" frameY="0" frameWidth="160" frameHeight="128"/>
+	<SubTexture name="tile-marshal" x="1043" y="1109" width="160" height="127" frameX="0" frameY="0" frameWidth="160" frameHeight="128"/>
+	<SubTexture name="manhole" x="1204" y="1109" width="162" height="111" frameX="-15" frameY="-52" frameWidth="200" frameHeight="200"/>
+	<SubTexture name="focus-rectangle" x="1057" y="477" width="80" height="79" frameX="0" frameY="0" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="grid" x="1057" y="557" width="64" height="63" frameX="0" frameY="0" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="white-line" x="441" y="868" width="103" height="19" frameX="-97" frameY="0" frameWidth="200" frameHeight="20"/>
+	<SubTexture name="end-line" x="2007" y="0" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
+	<SubTexture name="alpha-mask" x="2007" y="32" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="asphalt-1" x="2024" y="32" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="asphalt-2" x="2007" y="48" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="edge-tile" x="2024" y="48" width="8" height="2" frameX="0" frameY="0" frameWidth="8" frameHeight="3"/>
+</TextureAtlas>

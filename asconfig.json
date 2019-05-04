@@ -1,0 +1,57 @@
+{
+	"type": "app",
+	"config": "airmobile",
+	"compilerOptions": {
+		"default-frame-rate": 60,
+		"default-background-color": "0x000000",
+		"library-path": [
+			"libs",
+			"exts"
+		],
+		"external-library-path": [
+			"exts"
+		],
+		"output": "bin/release.swf",
+		// "optimize": true
+	},
+	"application": "src/application.xml",
+	"files": [
+		"src/Main.as",
+	],
+	// "copySourcePathAssets": true,
+	"airOptions": {
+		"extdir": [
+			"exts"
+		],
+		"files": [
+			{
+				"file": "files/icons/android/icons",
+				"path": "icons"
+			},
+			{
+				"file": "files/locale",
+				"path": "locale"
+			},
+			{
+				"file": "files/assets",
+				"path": "assets"
+			}
+		],
+		"android": {
+			"listen": true,
+			"output": "dist/app.apk",
+			"signingOptions": {
+				"storetype": "pkcs12",
+				"keystore": "cert/android.p12",
+			}
+		},
+		"ios": {
+			"output": "dist/app.ipa",
+			"signingOptions": {
+				"storetype": "pkcs12",
+				"keystore": "ios_certificate.p12",
+				"provisioning-profile": "example.mobileprovision"
+			}
+		}
+	}
+}
