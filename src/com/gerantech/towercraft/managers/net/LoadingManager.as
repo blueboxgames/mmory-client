@@ -8,7 +8,6 @@ import com.gerantech.towercraft.managers.BillingManager;
 import com.gerantech.towercraft.managers.InboxService;
 import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.UserPrefs;
-import com.gerantech.towercraft.managers.VideoAdsManager;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
@@ -19,11 +18,12 @@ import com.gt.towers.constants.PrefsTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import flash.events.ErrorEvent;
+
 import flash.events.Event;
 import flash.events.EventDispatcher;
 import flash.system.Capabilities;
 import flash.utils.getTimer;
+import flash.utils.setTimeout;
 
 [Event(name="loaded",				type="com.gerantech.towercraft.events.LoadingEvent")]
 [Event(name="loginError",			type="com.gerantech.towercraft.events.LoadingEvent")]
@@ -78,8 +78,8 @@ protected function sfsConnection_connectionHandler(event:SFSEvent):void
 	}
 	else
 	{
-		dispatchEvent(new LoadingEvent(LoadingEvent.NETWORK_ERROR));
 		state = STATE_DISCONNECTED;
+		setTimeout( dispatchEvent, 100, new LoadingEvent(LoadingEvent.NETWORK_ERROR));
 	}
 }
 

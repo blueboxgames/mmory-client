@@ -4,13 +4,15 @@ import com.gerantech.towercraft.controls.StackNavigator;
 import com.gerantech.towercraft.controls.screens.*;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.themes.MainTheme;
+import com.gerantech.towercraft.utils.Localizations;
+
 import feathers.controls.Drawers;
 import feathers.controls.StackScreenNavigatorItem;
 import feathers.core.IFeathersControl;
 import feathers.motion.Cover;
 import feathers.motion.Reveal;
+
 import starling.events.Event;
-import com.gerantech.towercraft.utils.Localizations;
 
 public class Game extends Drawers
 {
@@ -31,8 +33,9 @@ static public const SEARCH_CHAT_SCREEN:String = "searchChatScreen";
 
 public function Game(content:IFeathersControl=null)
 {
-	AppModel.instance.theme = new MainTheme();
 	super(content);
+	AppModel.instance.theme = new MainTheme();
+	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(AppModel.instance.descriptor.market), AppModel.instance.assets);
 }
 
 override protected function initialize():void
@@ -42,8 +45,6 @@ override protected function initialize():void
 	AppModel.instance.navigator =  new StackNavigator();
 	this.content = AppModel.instance.navigator;
 	stage.color = 0x3e92fb;
-
-	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(AppModel.instance.descriptor.market), AppModel.instance.assets)
 
 	addScreen(CHALLENGES_SCREEN,ChallengesScreen, false, false);
 	addScreen(DASHBOARD_SCREEN,	DashboardScreen, false, false);
