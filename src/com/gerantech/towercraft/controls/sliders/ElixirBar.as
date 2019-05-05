@@ -109,7 +109,7 @@ public function set value(newValue:Number):void
 	
 	var last:Number = (_value + 0) / BattleField.POPULATION_MAX * this.width;
 	var next:Number = (_value + 1) / BattleField.POPULATION_MAX * this.width;
-	var time:Number = 1 / appModel.battleFieldView.battleData.battleField.getElixirIncreaseSpeed() / 1000;
+	var time:Number = 1 / appModel.battleFieldView.battleData.battleField.getElixirIncreaseSpeed(appModel.battleFieldView.battleData.battleField.side) / 1000;
 	if( fillDisplay != null )
 	{
 		Starling.juggler.removeTweens(fillDisplay);

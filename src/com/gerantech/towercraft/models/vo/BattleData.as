@@ -84,7 +84,7 @@ public function getAlliseDeck():IntCardMap
 }
 public function getAlliseEllixir():Number
 {
-	return battleField.elixirBar.get(battleField.side);
+	return battleField.elixirBar[battleField.side];
 }
 
 public function getBattleStep() : int

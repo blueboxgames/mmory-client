@@ -3,7 +3,6 @@ package com.gerantech.towercraft.controls.headers
 import com.gerantech.towercraft.controls.BattleDeckCard;
 import com.gerantech.towercraft.controls.BuildingCard;
 import com.gerantech.towercraft.controls.TowersLayout;
-import com.gerantech.towercraft.controls.buttons.CustomButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.overlays.TutorialSwipeOverlay;
 import com.gerantech.towercraft.controls.sliders.ElixirBar;
@@ -14,13 +13,12 @@ import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.views.MapBuilder;
 import com.gerantech.towercraft.views.units.CardPlaceHolder;
 import com.gt.towers.battle.BattleField;
-import com.gt.towers.battle.fieldes.FieldData;
 import com.gt.towers.constants.CardTypes;
 import com.gt.towers.constants.PrefsTypes;
 import com.gt.towers.socials.Challenge;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import feathers.controls.Button;
+
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
@@ -28,8 +26,10 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalAlign;
+
 import flash.geom.Point;
 import flash.geom.Rectangle;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Quad;
@@ -127,8 +127,8 @@ protected function sfsConnection_roomVariablesUpdateHandler(event:SFSEvent):void
 	if( !appModel.battleFieldView.battleData.room.containsVariable("bars") )
 		return;
 	var bars:SFSObject = appModel.battleFieldView.battleData.room.getVariable("bars").getValue() as SFSObject;
-	battleField.elixirBar.set(0, bars.getInt("0"));
-	battleField.elixirBar.set(1, bars.getInt("1"));
+	battleField.elixirBar[0] = bars.getInt("0");
+	battleField.elixirBar[1] = bars.getInt("1");
 	elixirBar.value = appModel.battleFieldView.battleData.getAlliseEllixir();
 	for( var i:int=0; i<cards.length; i++ )
 		cards[i].updateData();
@@ -341,8 +341,10 @@ private function get battleField() : BattleField
 
 import com.gerantech.towercraft.controls.BuildingCard;
 import com.gerantech.towercraft.models.Assets;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
 class Draggable extends BuildingCard
 {
