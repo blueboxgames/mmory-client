@@ -8,6 +8,7 @@ import com.gerantech.towercraft.utils.Localizations;
 import com.gt.towers.constants.PrefsTypes;
 import com.marpies.ane.gameanalytics.GameAnalytics;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import starling.events.Event;
 import starling.events.EventDispatcher;
 
@@ -86,6 +87,7 @@ public function setString(key:int, value:String):void
 /************************   AUTHENTICATE SOCIAL OR GAME SERVICES   ***************************/
 public function authenticateSocial():void
 {
+	return;
     //NativeAbilities.instance.showToast(SocialManager.instance.initialized + " == " + SocialManager.instance.authenticated + " == " + player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE), 2);
     if( OAuthManager.instance.authenticated )
     {
