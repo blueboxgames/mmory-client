@@ -74,6 +74,7 @@ if not exist "%CERT_FILE%" goto certificate
 
 set BINF=%TEMP%\bin
 rd /q /s %BINF%
+if %TYPE%==ipa echo f | xcopy /f /y files\sfs-config.xml %BINF%\sfs-config.xml
 echo f | xcopy /f /y bin\release.swf %BINF%\release.swf
 echo d | xcopy /s /y files\assets %BINF%\assets
 echo d | xcopy /s /y files\locale %BINF%\locale
@@ -85,7 +86,7 @@ set OUTPUT=%DIST_PATH%\%DIST_NAME%%TARGET%.%DIST_EXT%
 echo Packaging: %OUTPUT%
 echo using certificate: %CERT_FILE%...
 echo.
-pause
+
 echo adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" src/"%APP_XML%" %FILE_OR_DIR% -extdir exts
 call adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" src/"%APP_XML%" %FILE_OR_DIR% -extdir exts 
 echo.
