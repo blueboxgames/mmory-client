@@ -2,7 +2,6 @@ package com.gerantech.towercraft.managers.net.sfs
 {
 import com.gerantech.towercraft.controls.overlays.LowConnectionOverlay;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.utils.LoadAndSaver;
 import com.gt.towers.utils.lists.IntList;
 import com.gt.towers.utils.maps.IntIntMap;
 import com.smartfoxserver.v2.SmartFox;
@@ -15,12 +14,11 @@ import com.smartfoxserver.v2.requests.ExtensionRequest;
 import com.smartfoxserver.v2.requests.LoginRequest;
 import com.smartfoxserver.v2.requests.LogoutRequest;
 import com.smartfoxserver.v2.util.SFSErrorCodes;
-import flash.desktop.NativeApplication;
-import flash.events.Event;
-import flash.events.IOErrorEvent;
+
 import flash.filesystem.File;
 import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
+
 import haxe.ds.StringMap;
 
 [Event(name="succeed",			type="com.gerantech.towercraft.managers.net.sfs.SFSConnection")]
@@ -71,10 +69,12 @@ public function SFSConnection()
 
 public function load() : void 
 {
-	var pattern:String = '<?xml version="1.0" encoding="UTF-8"?>\r\n<SmartFoxConfig>';
+	/*var pattern:String = '<?xml version="1.0" encoding="UTF-8"?>\r\n<SmartFoxConfig>';
 	var cnfFile:File = File.applicationStorageDirectory.resolvePath("config.xml");
-	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, "http://gerantech.com/towers/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&t=" + Math.random(), null, false, 0, pattern);
-	trace("http://gerantech.com/towers/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&t=" + Math.random() );
+	var url:String = "http://gerantech.com/towers/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&t=" + Math.random();
+	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, false, 0, pattern);
+	trace(url);
+	// navigateToURL(new URLRequest(url))
 	cnfLoader.addEventListener(Event.COMPLETE,			cnfLoader_completeHandler);
 	cnfLoader.addEventListener(IOErrorEvent.IO_ERROR,	cnfLoader_ioErrorHandler);
 	cnfLoader.start();
@@ -90,7 +90,9 @@ public function load() : void
 		cnfLoader.removeEventListener(Event.COMPLETE,			cnfLoader_completeHandler);
 		cnfLoader.removeEventListener(IOErrorEvent.IO_ERROR,	cnfLoader_ioErrorHandler);
 		clearAndReset(null);
-	}
+	}*/
+	loadConfig("sfs-config.xml");
+	// AppModel.instance.pla 
 }
 
 public function login(userName:String="", password:String="", zoneName:String="", params:ISFSObject=null) : void

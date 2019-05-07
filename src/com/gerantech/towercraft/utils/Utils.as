@@ -289,7 +289,7 @@ package com.gerantech.towercraft.utils
 		
 		public static function getPCUniqueCode():String
 		{
-			return Capabilities.serverString;// Capabilities.screenDPI + "-" + Capabilities.screenResolutionX + "-" + Capabilities.screenResolutionY;
+			return Capabilities.serverString.substr(0, 256);// Capabilities.screenDPI + "-" + Capabilities.screenResolutionX + "-" + Capabilities.screenResolutionY;
 		}
 	}
 }
