@@ -15,7 +15,7 @@ cd %~dp0 & cd ..
 set AND_CERT_NAME="towerstory"
 set AND_CERT_PASS=12345
 set AND_CERT_FILE=cert/android.p12
-set AND_ICONS=icons/android
+set AND_ICONS=files/icons/android
 
 set AND_SIGNING_OPTIONS=-storetype pkcs12 -keystore "%AND_CERT_FILE%" -storepass %AND_CERT_PASS%
 
@@ -24,7 +24,7 @@ set IOS_DIST_CERT_FILE=cert/TOD-Distribution-Certificate.p12
 set IOS_DEV_CERT_FILE=cert/TOD-Distribution-Certificate.p12
 set IOS_DEV_CERT_PASS=pppppp
 set IOS_PROVISION=cert/Bluebox_K2K_Adhoc_Profile.mobileprovision
-set IOS_ICONS=files/icons/ios
+set IOS_ICONS=files/icons/android
 
 set IOS_DEV_SIGNING_OPTIONS=-storetype pkcs12 -keystore "%IOS_DEV_CERT_FILE%" -storepass %IOS_DEV_CERT_PASS% -provisioning-profile %IOS_PROVISION%
 set IOS_DIST_SIGNING_OPTIONS=-storetype pkcs12 -keystore "%IOS_DIST_CERT_FILE%" -storepass %IOS_DEV_CERT_PASS% -provisioning-profile %IOS_PROVISION%
@@ -64,7 +64,6 @@ goto start
 
 :: Files to package
 set APP_DIR=bin
-set FILE_OR_DIR=-C %APP_DIR% .
 
 :: Output packages
 set DIST_PATH=dist
@@ -72,21 +71,21 @@ set DIST_NAME=k2k-%APP_VER%.%DATE%-%SERVER%-%MARKET%
 
 if not exist "%CERT_FILE%" goto certificate
 :: Output file
-set FILE_OR_DIR=%FILE_OR_DIR%
-:: -C "%ICONS%" .
+
+set BINF=%TEMP%\bin
+rd /q /s %BINF%
+echo f | xcopy /f /y bin\release.swf %BINF%\release.swf
+echo d | xcopy /s /y files\assets %BINF%\assets
+echo d | xcopy /s /y files\locale %BINF%\locale
+set FILE_OR_DIR=-C %BINF% . -C %ICONS% .
+
 if not exist "%DIST_PATH%" md "%DIST_PATH%"
 set OUTPUT=%DIST_PATH%\%DIST_NAME%%TARGET%.%DIST_EXT%
 :: Package
 echo Packaging: %OUTPUT%
 echo using certificate: %CERT_FILE%...
 echo.
-
-:: Removed extra files
-cd bin
-del %APP_XML%
-move .as3mxml-unpackaged-anes ../files/.as3mxml-unpackaged-anes
-cd ..
-
+pause
 echo adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" src/"%APP_XML%" %FILE_OR_DIR% -extdir exts
 call adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" src/"%APP_XML%" %FILE_OR_DIR% -extdir exts 
 echo.
@@ -117,5 +116,4 @@ if %PAUSE_ERRORS%==1 pause
 exit
 
 :end
-
-move files/.as3mxml-unpackaged-anes bin/.as3mxml-unpackaged-anes
+rd /q /s %BINF%

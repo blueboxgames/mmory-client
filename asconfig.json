@@ -49,10 +49,11 @@
 		},
 		"ios": {
 			"output": "dist/app.ipa",
+			"target": "ipa-ad-hoc",
 			"signingOptions": {
 				"storetype": "pkcs12",
-				"keystore": "ios_certificate.p12",
-				"provisioning-profile": "example.mobileprovision"
+				"keystore": "files/cert/TOD-Distribution-Certificate.p12",
+				"provisioning-profile": "files/cert/Bluebox_K2K_Adhoc_Profile.mobileprovision"
 			}
 		}
 	}

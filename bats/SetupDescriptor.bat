@@ -12,7 +12,6 @@ if %MARKET%==ario		set PERMISSION_FINE=com.arioclub.android.sdk.IAB
 if %MARKET%==cando		set PERMISSION_FINE=com.ada.market.BILLING
 
 echo %DESC_FINE%
-
 ::echo %MARKET%...%PLATFORM%...%PERMISSION_FINE%
 
 (for /f "delims=" %%i in (%APP_XML_TEMP%) do (
