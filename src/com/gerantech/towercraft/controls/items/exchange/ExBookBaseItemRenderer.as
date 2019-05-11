@@ -2,12 +2,14 @@ package com.gerantech.towercraft.controls.items.exchange
 {
 import com.gerantech.towercraft.controls.buttons.ExchangeButton;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.constants.ExchangeType;
 import com.gt.towers.constants.ResourceType;
 import com.gt.towers.exchanges.ExchangeItem;
+
 import dragonBones.starling.StarlingArmatureDisplay;
+
 import feathers.layout.AnchorLayoutData;
+
+import starling.display.DisplayObject;
 public class ExBookBaseItemRenderer extends ExBaseItemRenderer
 {
 protected var buttonDisplay:ExchangeButton;
@@ -31,7 +33,7 @@ protected function bookFactory() : StarlingArmatureDisplay
 		bookArmature.x = width * 0.5;
 		bookArmature.y = height * 0.4;
 	}
-	addChild(bookArmature);
+	addChild(bookArmature as DisplayObject);
 	return bookArmature;
 }
 protected function buttonFactory() : ExchangeButton

@@ -6,21 +6,19 @@ import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import dragonBones.Armature;
+
 import dragonBones.starling.StarlingArmatureDisplay;
+
 import feathers.controls.ImageLoader;
-import flash.utils.setTimeout;
-
-import flash.geom.Rectangle;
-
-import feathers.controls.AutoSizeMode;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 
+import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
-import starling.display.Image;
+import starling.display.DisplayObject;
 
 public class BattleHeader extends TowersLayout
 {
@@ -111,7 +109,7 @@ public function showWinnerLabel(isWinner:Boolean) : void
 	armatureDisplay.scaleX = 4;
 	armatureDisplay.scaleY = 2;
 	armatureDisplay.animation.gotoAndPlayByFrame("rotate", 1);
-	addChildAt(armatureDisplay, 0);
+	addChildAt(armatureDisplay as DisplayObject, 0);
 }
 }
 }

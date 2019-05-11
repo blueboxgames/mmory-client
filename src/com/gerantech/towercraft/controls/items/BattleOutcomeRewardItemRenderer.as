@@ -9,12 +9,17 @@ import com.gerantech.towercraft.models.vo.RewardData;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.towers.constants.ResourceType;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import dragonBones.starling.StarlingArmatureDisplay;
+
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
+
 import starling.core.Starling;
+import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
 
@@ -47,7 +52,7 @@ override protected function commitData():void
 		armatureDisplay.scale = 0.8;
 		armatureDisplay.animation.timeScale = 0;
 		armatureDisplay.animation.gotoAndStopByProgress("appear", 1);
-		addChild(armatureDisplay);
+		addChild(armatureDisplay as DisplayObject);
 	}
 	else
 	{

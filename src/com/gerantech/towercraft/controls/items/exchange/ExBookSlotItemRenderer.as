@@ -15,19 +15,24 @@ import com.gt.towers.constants.PrefsTypes;
 import com.gt.towers.constants.ResourceType;
 import com.gt.towers.exchanges.ExchangeItem;
 import com.gt.towers.exchanges.Exchanger;
+
 import dragonBones.events.EventObject;
 import dragonBones.starling.StarlingArmatureDisplay;
 import dragonBones.starling.StarlingEvent;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
 import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
+import starling.display.DisplayObject;
 import starling.events.Event;
 
 public class ExBookSlotItemRenderer extends ExBookBaseItemRenderer
@@ -116,7 +121,7 @@ override protected function bookFactory() : StarlingArmatureDisplay
 			bookArmature.animation.gotoAndStopByProgress("appear", 1);
 			bookArmature.animation.timeScale = 0;
 		}
-		addChild(bookArmature);
+		addChild(bookArmature as DisplayObject);
 	}
 	return bookArmature;
 }
@@ -316,7 +321,7 @@ private function achieve():void
 	bookAnimation.x = rd.x;
 	bookAnimation.y = rd.y;
 	bookAnimation.addEventListener(EventObject.COMPLETE, bookAnimation_completeHandler);
-	appModel.navigator.addChild(bookAnimation);
+	appModel.navigator.addChild(bookAnimation as DisplayObject);
 	var globalPos:Rectangle = this.getBounds(stage);
 	Starling.juggler.tween(bookAnimation, 0.5, {delay:0.5, x:globalPos.x + width * 0.53, scale:OpenBookOverlay.getBookScale(exchange.outcome) * 0.68, transition:Transitions.EASE_IN_OUT});
 	Starling.juggler.tween(bookAnimation, 0.5, {delay:0.5, y:globalPos.y + height * 0.65, transition:Transitions.EASE_IN_BACK});
