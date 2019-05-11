@@ -243,7 +243,7 @@ protected function timeManager_changeHandler(event:Event):void
 	}
 }
 
-public function animateShadow(alphaSeed:Number, shadow:Image = null, color:uint = 0) : void
+public function animateShadow(alphaSeed:Number, shadow:Image, color:uint = 0) : void
 {
 	if( shadow == null )
 	{
