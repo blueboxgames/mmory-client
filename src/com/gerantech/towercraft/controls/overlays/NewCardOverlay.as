@@ -10,14 +10,18 @@ import com.gerantech.towercraft.views.effects.UIParticleSystem;
 import com.gt.towers.constants.CardFeatureType;
 import com.gt.towers.scripts.ScriptEngine;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import dragonBones.events.EventObject;
 import dragonBones.starling.StarlingArmatureDisplay;
 import dragonBones.starling.StarlingEvent;
 import dragonBones.starling.StarlingTextureData;
+
 import feathers.controls.AutoSizeMode;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
+
 import starling.display.DisplayObject;
 import starling.events.Event;
 import starling.textures.SubTexture;
@@ -64,7 +68,7 @@ override protected function addedToStageHandler(event:Event) : void
 	cardArmature.x = stageWidth * 0.5;
 	cardArmature.y = stageHeight * 0.8;
 	cardArmature.addEventListener(EventObject.SOUND_EVENT, armature_soundEventHandler);
-	addChild(cardArmature);
+	addChild(cardArmature as DisplayObject);
 	
 	var rarity:int = ScriptEngine.getInt(CardFeatureType.F00_RARITY, type);
 	// change card
