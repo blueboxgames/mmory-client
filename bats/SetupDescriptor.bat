@@ -1,5 +1,5 @@
 set APP_XML_TEMP=files/application-template.xml
-set APP_XML=src/application.xml
+set APP_XML=bin/application.xml
 set DESC_TEMP=__DESCRIPTION__
 set DESC_FINE={ "platform": "%PLATFORM%", "market": "%MARKET%", "server": "%SERVER%" }
 

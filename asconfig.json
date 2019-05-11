@@ -16,7 +16,7 @@
 		"output": "bin/release.swf",
 		// "optimize": true
 	},
-	"application": "src/application.xml",
+	"application": "bin/application.xml",
 	"files": [
 		"src/Main.as",
 	],

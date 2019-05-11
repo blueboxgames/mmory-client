@@ -87,8 +87,8 @@ echo Packaging: %OUTPUT%
 echo using certificate: %CERT_FILE%...
 echo.
 
-echo adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" src/"%APP_XML%" %FILE_OR_DIR% -extdir exts
-call adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" src/"%APP_XML%" %FILE_OR_DIR% -extdir exts 
+echo adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" bin/"%APP_XML%" %FILE_OR_DIR% -extdir exts
+call adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" bin/"%APP_XML%" %FILE_OR_DIR% -extdir exts 
 echo.
 if errorlevel 1 goto failed
 goto end

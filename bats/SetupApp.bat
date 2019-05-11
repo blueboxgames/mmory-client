@@ -2,7 +2,7 @@
 cd %~dp0 & cd ..
 
 :: Application descriptor
-cd src
+cd bin
 set APP_XML=application.xml
 
 :: Your application ID (must match <id> of Application descriptor) and remove spaces
