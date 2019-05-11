@@ -3,8 +3,12 @@ package com.gerantech.towercraft.controls.items
 import com.gerantech.towercraft.controls.segments.ChatSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemSegment;
 import com.gerantech.towercraft.models.Assets;
+
 import dragonBones.starling.StarlingArmatureDisplay;
+
 import feathers.layout.TiledRowsLayout;
+
+import starling.display.DisplayObject;
 import starling.display.Image;
 /**
 * ...
@@ -25,7 +29,7 @@ public function EmoteItemRenderer()
 	emoteArmature = ChatSegment.factory.buildArmatureDisplay("emote");
 	emoteArmature.scale = 0.7;
 	emoteArmature.touchable = false;
-	addChild(emoteArmature);
+	addChild(emoteArmature as DisplayObject);
 }
 
 override protected function commitData() : void

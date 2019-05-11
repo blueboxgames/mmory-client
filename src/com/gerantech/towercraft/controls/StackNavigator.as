@@ -454,7 +454,7 @@ package com.gerantech.towercraft.controls
 			{
 				var confirm:TutorialMessageOverlay;
 				if( type == PrefsTypes.OFFER_30_RATING )
-					confirm = new RatingMessageOverlay(new TutorialTask(TutorialTask.TYPE_CONFIRM, "popup_offer_" + type));
+					confirm = new RatingMessageOverlay(new TutorialTask(TutorialTask.TYPE_CONFIRM, "popup_offer_" + type)) as TutorialMessageOverlay;
 				else
 					confirm = new TutorialMessageOverlay(new TutorialTask(TutorialTask.TYPE_CONFIRM, "popup_offer_" + type));
 				confirm.addEventListener(Event.SELECT, confirm_handler);

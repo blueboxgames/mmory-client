@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.models.vo
 {
 import com.gerantech.towercraft.managers.TimeManager;
-import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
 import com.gt.towers.Game;
 import com.gt.towers.InitData;
@@ -14,12 +13,11 @@ import com.gt.towers.socials.Challenge;
 import com.gt.towers.utils.maps.IntCardMap;
 import com.gt.towers.utils.maps.IntIntCardMap;
 import com.gt.towers.utils.maps.IntIntMap;
-import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
 public class BattleData
 {
-public var room:Room;
+public var roomId:int = -1;
 public var singleMode:Boolean;
 public var battleField:BattleField;
 public var isLeft:Boolean;
@@ -28,11 +26,13 @@ public var axis:ISFSObject;
 public var outcomes:Vector.<RewardData>;
 public var stars:Vector.<int>;
 public var sfsData:ISFSObject;
+public var userType:int;
 
 public function BattleData(data:ISFSObject)
 {
 	this.sfsData = data;
-	this.room = SFSConnection.instance.getRoomById(data.getInt("roomId"));
+	this.roomId = data.getInt("roomId");
+	this.userType = data.getInt("userType");
 	this.singleMode = data.getBool("singleMode");
 	this.allise = data.getSFSObject("p" + data.getInt("side"));
 	this.axis = data.getSFSObject(data.getInt("side") == 0 ? "p1" : "p0");
@@ -84,7 +84,7 @@ public function getAlliseDeck():IntCardMap
 }
 public function getAlliseEllixir():Number
 {
-	return battleField.elixirBar[battleField.side];
+	return battleField.elixirUpdater.bars[battleField.side];
 }
 
 public function getBattleStep() : int

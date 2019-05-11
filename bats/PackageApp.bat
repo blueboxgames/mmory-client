@@ -86,10 +86,10 @@ if "%M%"=="5" set MARKET=google
 
 
 set PAUSE_ERRORS=1
-call bats\SetupDescriptor.bat
-call bats\SetupSDK.bat
-call bats\SetupApp.bat
-call bats\Packager.bat
+call bats/SetupDescriptor.bat
+call bats/SetupSDK.bat
+call bats/SetupApp.bat
+call bats/Packager.bat
 if "%PLATFORM%"=="android" goto android-package
 
 :ios-package

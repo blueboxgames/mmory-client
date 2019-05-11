@@ -4,17 +4,17 @@ import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gt.towers.battle.BattleField;
+import com.gt.towers.battle.ElixirUpdater;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
 import feathers.controls.text.BitmapFontTextRenderer;
-import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.text.BitmapFontTextFormat;
-import starling.events.Event;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
-import starling.display.BlendMode;
 import starling.display.Image;
 
 public class ElixirBar extends TowersLayout
@@ -95,7 +95,7 @@ public function get value():Number
 }
 public function set value(newValue:Number):void
 {
-	var __v:Number = Math.max(0, Math.min( newValue, BattleField.POPULATION_MAX ));
+	var __v:Number = Math.max(0, Math.min( newValue, ElixirUpdater.MAX_VALUE ));
 	if( _value == __v )
 		return;
 	_value = __v;
@@ -107,9 +107,9 @@ public function set value(newValue:Number):void
 		Starling.juggler.tween(elixirBottle, 0.8, {scale:1, transition:Transitions.EASE_OUT_ELASTIC});
 	}
 	
-	var last:Number = (_value + 0) / BattleField.POPULATION_MAX * this.width;
-	var next:Number = (_value + 1) / BattleField.POPULATION_MAX * this.width;
-	var time:Number = 1 / appModel.battleFieldView.battleData.battleField.getElixirIncreaseSpeed(appModel.battleFieldView.battleData.battleField.side) / 1000;
+	var last:Number = (_value + 0) / ElixirUpdater.MAX_VALUE * this.width;
+	var next:Number = (_value + 1) / ElixirUpdater.MAX_VALUE * this.width;
+	var time:Number = 1 / (battleField.getDuration() > battleField.getTime(1) ? battleField.elixirUpdater.finalSpeeds[battleField.side] : battleField.elixirUpdater.normalSpeeds[battleField.side]) / 1000;
 	if( fillDisplay != null )
 	{
 		Starling.juggler.removeTweens(fillDisplay);
@@ -122,6 +122,11 @@ public function set value(newValue:Number):void
 		Starling.juggler.removeTweens(realtimeDisplay);
 		Starling.juggler.tween(realtimeDisplay, time, {width:next, transition:Transitions.LINEAR});
 	}
+}
+
+private function get battleField() : BattleField
+{
+	return appModel.battleFieldView.battleData.battleField;
 }
 
 override public function dispose():void

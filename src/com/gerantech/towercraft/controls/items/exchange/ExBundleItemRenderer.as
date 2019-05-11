@@ -9,12 +9,16 @@ import com.gerantech.towercraft.models.Assets;
 import com.gt.towers.constants.ResourceType;
 import com.gt.towers.exchanges.ExchangeItem;
 import com.gt.towers.exchanges.Exchanger;
+
 import dragonBones.starling.StarlingArmatureDisplay;
+
 import feathers.controls.ImageLoader;
-import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayoutData;
+
 import flash.utils.setTimeout;
+
+import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 
 public class ExBundleItemRenderer extends ExBaseItemRenderer
@@ -75,8 +79,8 @@ private function createOutcome(outKeys:Vector.<int>, i:int, rowH:int):void
 		bookArmature.scaleY = bookArmature.scaleX;
 		bookArmature.animation.gotoAndStopByProgress("appear", 1);
 		bookArmature.animation.timeScale = 0;
-		addChild(bookArmature);
-		outcome = bookArmature;
+		addChild(bookArmature as DisplayObject);
+		outcome = bookArmature as DisplayObjectContainer;
 	}
 	else
 	{

@@ -4,19 +4,16 @@ import com.gerantech.towercraft.controls.tooltips.ConfirmTooltip;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
+
 import dragonBones.events.EventObject;
 import dragonBones.objects.DragonBonesData;
 import dragonBones.starling.StarlingArmatureDisplay;
 import dragonBones.starling.StarlingEvent;
 import dragonBones.starling.StarlingFactory;
-import feathers.controls.ImageLoader;
-import feathers.events.FeathersEventType;
-import feathers.layout.AnchorLayoutData;
-import feathers.layout.VerticalAlign;
-import flash.filesystem.File;
+
 import flash.geom.Rectangle;
-import starling.animation.Transitions;
-import starling.core.Starling;
+
+import starling.display.DisplayObject;
 import starling.events.Event;
 import starling.events.TouchEvent;
 
@@ -59,7 +56,7 @@ override protected function transitionInCompleted():void
 	characterArmature.scale = 1 / 0.7;
 	characterArmature.addEventListener(EventObject.COMPLETE, characterArmature_completeHandler);
 	characterArmature.animation.gotoAndPlayByTime("appear", 0, 1);
-	addChild(characterArmature);
+	addChild(characterArmature as DisplayObject);
 	//Starling.juggler.tween(characterArmature, 0.4, {delay:0.2, x:(side == 0 ? 220 : stageWidth - 220), transition:Transitions.EASE_OUT_BACK, onComplete:characterArmature_completeHandler});
 }
 

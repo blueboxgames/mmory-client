@@ -8,26 +8,29 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.utils.StrUtils;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
 import com.gt.towers.constants.CardFeatureType;
 import com.gt.towers.constants.CardTypes;
 import com.gt.towers.constants.ResourceType;
 import com.gt.towers.scripts.ScriptEngine;
 import com.gt.towers.utils.maps.IntIntMap;
+
 import dragonBones.events.EventObject;
 import dragonBones.objects.DragonBonesData;
 import dragonBones.starling.StarlingArmatureDisplay;
 import dragonBones.starling.StarlingEvent;
 import dragonBones.starling.StarlingFactory;
 import dragonBones.starling.StarlingTextureData;
+
 import feathers.controls.AutoSizeMode;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
 import flash.text.engine.ElementFormat;
 import flash.utils.getTimer;
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -111,7 +114,7 @@ override protected function addedToStageHandler(event:Event):void
 	bookArmature.addEventListener(EventObject.COMPLETE, openAnimation_completeHandler);
 	bookArmature.addEventListener(EventObject.SOUND_EVENT, openAnimation_soundEventHandler);
 	bookArmature.animation.gotoAndPlayByTime("appear", 0, 1);
-	addChild(bookArmature);
+	addChild(bookArmature as DisplayObject);
 	Starling.juggler.tween(bookArmature, 0.4, {delay:0.2, y:stage.stageHeight * 0.85, transition:Transitions.EASE_IN});
 	
 	shineArmature = factory.buildArmatureDisplay("shine");
@@ -120,7 +123,7 @@ override protected function addedToStageHandler(event:Event):void
 	shineArmature.scale = 3;
 	shineArmature.x = 348;
 	shineArmature.y = stage.stageHeight * 0.85 - 580;
-	addChild(shineArmature);
+	addChild(shineArmature as DisplayObject);
 	
 	sliderDisplay = new IndicatorCard("ltr", type);
 	sliderDisplay.touchable = false;

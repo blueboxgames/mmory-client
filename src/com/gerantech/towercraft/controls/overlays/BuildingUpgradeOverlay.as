@@ -13,7 +13,9 @@ import com.gt.towers.battle.units.Card;
 import com.gt.towers.constants.CardFeatureType;
 import com.gt.towers.constants.CardTypes;
 import com.gt.towers.constants.PrefsTypes;
+
 import dragonBones.starling.StarlingArmatureDisplay;
+
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
 import feathers.controls.renderers.IListItemRenderer;
@@ -23,9 +25,12 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.TiledRowsLayout;
+
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
+import starling.display.DisplayObject;
 import starling.events.Event;
 
 public class BuildingUpgradeOverlay extends BaseOverlay
@@ -83,7 +88,7 @@ override protected function initialize():void
 		shineArmature.x = 120;
 		shineArmature.y = 170;
 		shineArmature.animation.gotoAndPlayByTime("rotate", 0, 10);
-		cardView.addChildAt(shineArmature, 0);
+		cardView.addChildAt(shineArmature as DisplayObject, 0);
 		Starling.juggler.tween(shineArmature, 0.3, {scale:2.5, transition:Transitions.EASE_OUT_BACK});
 		
 		// explode particles

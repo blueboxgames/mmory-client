@@ -21,15 +21,19 @@ import com.gt.towers.constants.PrefsTypes;
 import com.gt.towers.constants.ResourceType;
 import com.gt.towers.exchanges.ExchangeItem;
 import com.gt.towers.exchanges.Exchanger;
+
 import dragonBones.events.EventObject;
 import dragonBones.starling.StarlingArmatureDisplay;
 import dragonBones.starling.StarlingEvent;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.RelativePosition;
-import flash.geom.Point;
+
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
+
+import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
 
@@ -115,11 +119,11 @@ override protected function transitionInCompleted():void
 	bookArmature.animation.gotoAndPlayByTime("appear", 0, 1);
 	bookArmature.x = 260;
 	bookArmature.y = 50;
-	addChildAt(bookArmature, 0);
+	addChildAt(bookArmature as DisplayObject, 0);
 	function bookArmature_soundEventHandler(event:StarlingEvent):void
 	{
 		bookArmature.removeEventListener(EventObject.SOUND_EVENT, bookArmature_soundEventHandler);
-		addChild(bookArmature);
+		addChild(bookArmature as DisplayObject);
 		appModel.sounds.addAndPlay(event.eventObject.name);
 	}
 	

@@ -198,8 +198,6 @@ private function startBattle():void
 	
 	resetAll(battleData.sfsData);
 	appModel.battleFieldView.updateUnits();
-	
-	SFSConnection.instance.addEventListener(SFSEvent.ROOM_VARIABLES_UPDATE, sfsConnection_roomVariablesUpdateHandler);
 	appModel.loadingManager.serverData.putBool("inBattle", false);
 	
 	// play battle theme -_-_-_
@@ -215,7 +213,7 @@ private function tutorials_tasksStartHandler(e:Event) : void
 
 private function showTutorials() : void 
 {
-	if( SFSConnection.instance.mySelf.isSpectator )
+	if( appModel.battleFieldView.battleData.userType != 0 )
 		return;
 
 	//appModel.battleFieldView.createDrops();
@@ -351,26 +349,6 @@ private function tutorials_tasksFinishHandler(event:Event):void
 	dispatchEventWith(Event.COMPLETE);
 }
 
-protected function sfsConnection_roomVariablesUpdateHandler(event:SFSEvent):void
-{
-	if( event.params.changedVars.indexOf("units") > -1 )
-	{
-		appModel.battleFieldView.updateUnits();
-	    //hud.updateRoomVars();
-	}
-
-	/*if( event.params.changedVars.indexOf("s") > -1 )
-	{
-		var room:SFSRoom = SFSRoom(event.params.room);
-		var towers:ISFSArray = room.getVariable("s").getSFSArrayValue();
-		var destination:int = room.getVariable("d").getIntValue();
-		var troopsDivision:Number = room.getVariable("n").getDoubleValue();
-		
-		for( var i:int=0; i<towers.size(); i++ )
-			appModel.battleFieldView.places[towers.getInt(i)].fight(appModel.battleFieldView.places[destination].place, troopsDivision);
-	}*/
-	//sfsConnection.removeFromCommands(SFSCommands.FIGHT);
-}
 private function resetAll(data:ISFSObject):void
 {
 	if( !data.containsKey("buildings") )
@@ -385,7 +363,7 @@ private function resetAll(data:ISFSObject):void
 
 override protected function backButtonFunction():void
 {
-	if( SFSConnection.instance.lastJoinedRoom != null && SFSConnection.instance.mySelf.isSpectator )
+	if( appModel.battleFieldView.battleData.userType == 1 )
 	{
 		appModel.battleFieldView.responseSender.leave();
 		dispatchEventWith(Event.COMPLETE);
@@ -423,7 +401,6 @@ private function removeConnectionListeners():void
 		tutorials.removeEventListener(GameEvent.TUTORIAL_TASKS_STARTED, tutorials_tasksStartHandler);
 	SFSConnection.instance.removeEventListener(SFSEvent.CONNECTION_LOST,	sfsConnection_connectionLostHandler);
 	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_extensionResponseHandler);
-	SFSConnection.instance.removeEventListener(SFSEvent.ROOM_VARIABLES_UPDATE, sfsConnection_roomVariablesUpdateHandler);
 }
 }
 }

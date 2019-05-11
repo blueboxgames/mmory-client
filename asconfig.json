@@ -4,7 +4,7 @@
 	"compilerOptions": {
 		"default-frame-rate": 60,
 		"default-background-color": "0x000000",
-		"strict": false,
+		"strict": true,
 		// "warnings": false,
 		"library-path": [
 			"libs",
@@ -16,7 +16,7 @@
 		"output": "bin/release.swf",
 		// "optimize": true
 	},
-	"application": "src/application.xml",
+	"application": "bin/application.xml",
 	"files": [
 		"src/Main.as",
 	],

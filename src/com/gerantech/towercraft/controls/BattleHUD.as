@@ -83,7 +83,7 @@ override protected function initialize():void
 	gradient.source = Assets.getTexture("theme/gradeint-left");
 	addChild(gradient);
 	
-	var hasQuit:Boolean = battleData.battleField.field.isOperation() || SFSConnection.instance.mySelf.isSpectator;
+	var hasQuit:Boolean = battleData.battleField.field.isOperation() || appModel.battleFieldView.battleData.userType == 1;
 	padding = 16;
 	var leftPadding:int = (hasQuit ? 150 : 0);
 	if( hasQuit )
@@ -104,7 +104,7 @@ override protected function initialize():void
 	opponentHeader.layoutData = new AnchorLayoutData(0, NaN, NaN, leftPadding );
 	addChild(opponentHeader);
 	
-	if( SFSConnection.instance.mySelf.isSpectator )
+	if( appModel.battleFieldView.battleData.userType == 1 )
 	{
 		_name = battleData.allise.getUtfString("name");
 		_point = battleData.allise.getInt("point");
@@ -136,19 +136,8 @@ override protected function initialize():void
 	
 	if( battleData.battleField.field.isOperation() )
 		return;
-
-	/*if( !SFSConnection.instance.mySelf.isSpectator )
-	{
-		stickerButton = new CustomButton();
-		stickerButton.icon = Assets.getTexture("tooltip-bg-bot-right");
-		stickerButton.iconLayout = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -4);
-		stickerButton.width = 140;
-		stickerButton.layoutData = new AnchorLayoutData(NaN, padding * 2, padding);
-		stickerButton.addEventListener(Event.TRIGGERED, stickerButton_triggeredHandler);
-		addChild(stickerButton);
-	}*/
 	
-	if( !SFSConnection.instance.mySelf.isSpectator )
+	if( false )
 	{
 		if( player.get_arena(player.get_point()) > 4 )
 		{
@@ -378,7 +367,7 @@ public function showBubble(type:int, itsMe:Boolean=true):void
 private function hideBubble(bubble:StickerBubble):void
 {
 	bubble.removeFromParent();
-	if( SFSConnection.instance.lastJoinedRoom != null && !SFSConnection.instance.mySelf.isSpectator )
+	if( appModel.battleFieldView.battleData.userType == 0 )
 		deck.stickerButton.visible = true;
 }
 
