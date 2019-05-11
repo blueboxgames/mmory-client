@@ -6,6 +6,7 @@ import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.overlays.TutorialSwipeOverlay;
 import com.gerantech.towercraft.controls.sliders.ElixirBar;
+import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
@@ -13,6 +14,7 @@ import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.views.MapBuilder;
 import com.gerantech.towercraft.views.units.CardPlaceHolder;
 import com.gt.towers.battle.BattleField;
+import com.gt.towers.battle.ElixirUpdater;
 import com.gt.towers.constants.CardTypes;
 import com.gt.towers.constants.PrefsTypes;
 import com.gt.towers.socials.Challenge;
@@ -93,7 +95,7 @@ override protected function initialize():void
 	preparedCard.setData(cardQueue[0]);
 	addChild(preparedCard);
 	
-	if( !SFSConnection.instance.mySelf.isSpectator )
+	if( appModel.battleFieldView.battleData.userType == 0 )
 	{
 		stickerButton = new MMOryButton();
 		stickerButton.height = 120;
@@ -105,7 +107,7 @@ override protected function initialize():void
 	}
 	
 	elixirBar = new ElixirBar();
-	elixirBar.value = BattleField.POPULATION_INIT;
+	elixirBar.value = ElixirUpdater.INIT_VALUE;
 	elixirBar.layoutData = new AnchorLayoutData(NaN, padding, padding, preparedCard.width);
 	addChild(elixirBar);
 	
@@ -114,7 +116,7 @@ override protected function initialize():void
 	placeHolder = new CardPlaceHolder();
 	
 	stage.addEventListener(TouchEvent.TOUCH, stage_touchHandler);
-	SFSConnection.instance.addEventListener(SFSEvent.ROOM_VARIABLES_UPDATE, sfsConnection_roomVariablesUpdateHandler);
+	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_elixirUpdateHandler);
 }
 
 protected function stickerButton_triggeredHandler():void
@@ -122,16 +124,21 @@ protected function stickerButton_triggeredHandler():void
 	dispatchEventWith(FeathersEventType.BEGIN_INTERACTION);
 }
 
-protected function sfsConnection_roomVariablesUpdateHandler(event:SFSEvent):void
+protected function sfsConnection_elixirUpdateHandler(event:SFSEvent):void
 {
-	if( !appModel.battleFieldView.battleData.room.containsVariable("bars") )
+	if( event.params.cmd != SFSCommands.BATTLE_ELIXIR_UPDATE )
 		return;
-	var bars:SFSObject = appModel.battleFieldView.battleData.room.getVariable("bars").getValue() as SFSObject;
-	battleField.elixirBar[0] = bars.getInt("0");
-	battleField.elixirBar[1] = bars.getInt("1");
-	elixirBar.value = appModel.battleFieldView.battleData.getAlliseEllixir();
-	for( var i:int=0; i<cards.length; i++ )
-		cards[i].updateData();
+
+	var params:SFSObject = event.params.params as SFSObject;
+	if( params.containsKey("0") )
+	{
+		battleField.elixirUpdater.updateAt(0, params.getInt("0"));
+		elixirBar.value = appModel.battleFieldView.battleData.getAlliseEllixir();
+		for( var i:int=0; i<cards.length; i++ )
+			cards[i].updateData();
+	}
+	if( params.containsKey("1") )
+		battleField.elixirUpdater.updateAt(1, params.getInt("1"));
 }
 
 public function updateScore(round:int, winnerSide:int, allise:int, axis:int, unitId:int) : void 
@@ -139,7 +146,6 @@ public function updateScore(round:int, winnerSide:int, allise:int, axis:int, uni
 	if( player.get_battleswins() == 0 && battleField.numSummonedUnits < 4 && allise == 1)
 		//showSummonTutorial(0, new Point(450, 650), 200);
 		showSummonTutorial(0, new Point(450, 900), 200);
-		
 }
 
 private function createDeckItem(cardType:int) : void
@@ -327,7 +333,7 @@ private function pushNewCardToDeck(deckSelected:BattleDeckCard) : void
 override public function dispose() : void
 {
 	super.dispose();
-	SFSConnection.instance.removeEventListener(SFSEvent.ROOM_VARIABLES_UPDATE, sfsConnection_roomVariablesUpdateHandler);
+	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_elixirUpdateHandler);
 	draggableCard.removeFromParent(true);
 	placeHolder.removeFromParent(true);
 	removeEventListener(TouchEvent.TOUCH, stage_touchHandler);

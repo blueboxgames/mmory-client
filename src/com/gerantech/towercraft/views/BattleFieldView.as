@@ -30,6 +30,8 @@ import starling.display.Quad;
 import starling.display.Sprite;
 import starling.events.Event;
 import starlingbuilder.engine.DefaultAssetMediator;
+import com.gt.towers.battle.bullets.Bullet;
+import com.gt.towers.battle.units.Unit;
 
 public class BattleFieldView extends Sprite
 {
@@ -97,7 +99,7 @@ public function createPlaces(battleData:BattleData) : void
 	y = center.y;
 
 	battleData.battleField.state = BattleField.STATE_2_STARTED;
-	responseSender = new ResponseSender(battleData.room);
+	responseSender = new ResponseSender(battleData);
 	TimeManager.instance.addEventListener(Event.UPDATE, timeManager_updateHandler);
 	
 	addChild(shadowsContainer);
@@ -142,7 +144,7 @@ public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Nu
 	{
 		var offset:Point3 = GraphicMetrics.getSpellStartPoint(card.type);
 		var spell:BulletView = new BulletView(battleData.battleField, id, card, side, x + offset.x, y + offset.y * (side == 0 ? 0.7 : -0.7), offset.z * 0.7, x, y, 0);
-		battleData.battleField.bullets.set(id, spell);
+		battleData.battleField.bullets.set(id, spell as Bullet);
 		//trace("summon spell", " side:" + side, " x:" + x, " y:" + y, " offset:" + offset);
 		return;
 	}
@@ -152,7 +154,7 @@ public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Nu
 
 	if( health >= 0 )
 		u.health = health;
-	battleData.battleField.units.set(id, u);
+	battleData.battleField.units.set(id, u as Unit);
 	
 	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
 }
@@ -194,7 +196,7 @@ public function hitUnits(buletId:int, targets:ISFSArray) : void
 
 public function updateUnits() : void
 {
-	if( !battleData.room.containsVariable("units") )
+/* 	if( !battleData.room.containsVariable("units") )
 		return;
 	
 	var unitData:SFSObject = battleData.room.getVariable("units").getValue() as SFSObject;
@@ -233,7 +235,7 @@ public function updateUnits() : void
 			units.get(clientUnitIds[i]).dispose();
 			units.remove(clientUnitIds[i]);
 		}
-	}
+	}*/
 }
 
 override public function dispose() : void
