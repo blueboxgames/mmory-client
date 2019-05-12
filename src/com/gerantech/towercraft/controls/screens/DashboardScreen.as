@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.screens
 {
 import com.gerantech.towercraft.Game;
+import com.gerantech.towercraft.controls.TileBackground;
 import com.gerantech.towercraft.controls.buttons.Indicator;
 import com.gerantech.towercraft.controls.items.DashboardTabItemRenderer;
 import com.gerantech.towercraft.controls.items.SegmentsItemRenderer;
@@ -19,6 +20,7 @@ import com.gt.towers.constants.ExchangeType;
 import com.gt.towers.constants.PrefsTypes;
 import com.gt.towers.constants.ResourceType;
 import com.gt.towers.constants.SegmentType;
+
 import feathers.controls.AutoSizeMode;
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
@@ -32,9 +34,11 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalAlign;
+
 import flash.desktop.NativeApplication;
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.events.Event;
@@ -60,7 +64,12 @@ override protected function initialize():void
 	if( !Assets.animationAssetsLoaded )
 		return;
 	OpenBookOverlay.createFactory();
-	
+
+	// =-=-=-=-=-=-=-=-=-=-=-=- background -=-=-=-=-=-=-=-=-=-=-=-=
+	var tileBacground:TileBackground = new TileBackground("home/pistole-tile", 0.3, true);
+	tileBacground.layoutData = new AnchorLayoutData(0, 0, FOOTER_SIZE, 0);
+	backgroundSkin = tileBacground;
+
 	super.initialize();
 	if( stage == null )
 		addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
