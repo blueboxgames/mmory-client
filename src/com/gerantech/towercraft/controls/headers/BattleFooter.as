@@ -130,21 +130,23 @@ protected function sfsConnection_elixirUpdateHandler(event:SFSEvent):void
 		return;
 
 	var params:SFSObject = event.params.params as SFSObject;
-	if( params.containsKey("0") )
+	if( params.containsKey(battleField.side.toString()) )
 	{
-		battleField.elixirUpdater.updateAt(0, params.getInt("0"));
+		battleField.elixirUpdater.updateAt(battleField.side, params.getInt(battleField.side.toString()));
 		elixirBar.value = appModel.battleFieldView.battleData.getAlliseEllixir();
 		for( var i:int=0; i<cards.length; i++ )
 			cards[i].updateData();
 	}
-	if( params.containsKey("1") )
-		battleField.elixirUpdater.updateAt(1, params.getInt("1"));
+	else
+	{
+		var outside:int = 1 - battleField.side;
+		battleField.elixirUpdater.updateAt(outside, params.getInt(outside.toString()));
+	}
 }
 
 public function updateScore(round:int, winnerSide:int, allise:int, axis:int, unitId:int) : void 
 {
 	if( player.get_battleswins() == 0 && battleField.numSummonedUnits < 4 && allise == 1)
-		//showSummonTutorial(0, new Point(450, 650), 200);
 		showSummonTutorial(0, new Point(450, 900), 200);
 }
 
