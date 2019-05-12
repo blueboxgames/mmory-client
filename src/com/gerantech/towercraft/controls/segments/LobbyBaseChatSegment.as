@@ -17,11 +17,11 @@ import com.gt.towers.constants.MessageTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import feathers.controls.Button;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.core.Starling;
-import starling.display.Image;
 import starling.events.Event;
 
 public class LobbyBaseChatSegment extends ChatSegment
@@ -93,19 +93,19 @@ override protected function chatList_changeHandler(event:Event) : void
 	if( chatList.selectedItem == null )
 		return;
 	var msgPack:ISFSObject = chatList.selectedItem as SFSObject;
-	if( msgPack.getShort("m") == MessageTypes.M30_FRIENDLY_BATTLE  )
+	if( msgPack.getInt("m") == MessageTypes.M30_FRIENDLY_BATTLE  )
 	{
 		var myBattleId:int = manager.getMyRequestBattleId();
 		if( myBattleId > -1 && msgPack.getInt("bid") != myBattleId )
 			return;
 		
-		if( msgPack.getShort("st") > 1 )
+		if( msgPack.getInt("st") > 1 )
 			return;
 		
 		var params:SFSObject = new SFSObject();
-		params.putShort("m", MessageTypes.M30_FRIENDLY_BATTLE);
+		params.putInt("m", MessageTypes.M30_FRIENDLY_BATTLE);
 		params.putInt("bid", msgPack.getInt("bid"));
-		params.putShort("st", msgPack.getShort("st"));
+		params.putInt("st", msgPack.getInt("st"));
 		SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby );
 	}
 }
@@ -126,7 +126,7 @@ override protected function chatList_focusInHandler(event:Event):void
 	
 	var msgPack:ISFSObject = selectedItem.data as ISFSObject;
 	// prevent hints for my messages
-	if( msgPack.getInt("i") != player.id && msgPack.getShort("m") == MessageTypes.M0_TEXT )
+	if( msgPack.getInt("i") != player.id && msgPack.getInt("m") == MessageTypes.M0_TEXT )
 		showSimpleListPopup(msgPack, selectedItem, buttonsPopup_selectHandler, buttonsPopup_selectHandler, "lobby_report", "lobby_profile", "lobby_reply");
 }
 
@@ -214,7 +214,7 @@ protected function emoteToast_changeHandler(event:Event) : void
 {
 	event.currentTarget.removeEventListener(Event.CHANGE, emoteToast_changeHandler);
 	var emote:SFSObject = new SFSObject();
-	emote.putShort("m", MessageTypes.M51_EMOTE);
+	emote.putInt("m", MessageTypes.M51_EMOTE);
 	emote.putInt("e", event.data as int);
 	emote.putInt("i", player.id);
 	emote.putUtfString("s", player.nickName);

@@ -2,15 +2,13 @@ package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.InboxThread;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
-import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.display.Image;
 
 public class InboxThreadItemRenderer extends AbstractTouchableListItemRenderer
@@ -68,7 +66,7 @@ override protected function commitData():void
 
 private function updateSkin():void
 {
-	/*switch( message.getShort("status") )
+	/*switch( message.getInt("status") )
 	{
 		case 1:		mySkin.texture = appModel.theme.itemRendererDisabledSkinTexture; break;
 		case 2:		mySkin.texture = appModel.theme.itemRendererDangerSkinTexture; break;

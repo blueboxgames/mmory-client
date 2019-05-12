@@ -7,11 +7,11 @@ package com.gerantech.towercraft.controls.popups
 	import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 	import com.smartfoxserver.v2.core.SFSEvent;
 	import com.smartfoxserver.v2.entities.data.SFSObject;
-	
+
 	import flash.geom.Rectangle;
 	import flash.text.ReturnKeyLabel;
 	import flash.text.SoftKeyboardType;
-	
+
 	import starling.events.Event;
 
 	public class BroadcastMessagePopup extends ConfirmPopup
@@ -89,7 +89,7 @@ package com.gerantech.towercraft.controls.popups
 			sfs.putUtfString("text", messageInput.text );
 			sfs.putText("data", dataInput.text );
 			sfs.putIntArray("receivers", receivers);
-			sfs.putShort("type", typeSwitcher.value );
+			sfs.putInt("type", typeSwitcher.value );
 			sfs.putBool("isPush", isPushSwitcher.value==1 );
 			SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsCOnnection_extensionResponseHandler);
 			SFSConnection.instance.sendExtensionRequest(SFSCommands.INBOX_BROADCAST, sfs );

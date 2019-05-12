@@ -6,10 +6,10 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
+
 import feathers.controls.AutoSizeMode;
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayoutData;
-import flash.geom.Rectangle;
 
 public class LobbyChatItemBalloonSegment extends LobbyChatItemSegment
 {
@@ -78,7 +78,7 @@ override public function commitData(_data:ISFSObject, index:int):void
 	senderDisplay.text = data.getUtfString("s");
 	senderLayout.right = (itsMe ? mySkinLayout.right : whoSkinLayout.right) + 50;
 	
-	//roleDisplay.text = user == null?"":(loc("lobby_role_" + user.getShort("permission")));
+	//roleDisplay.text = user == null?"":(loc("lobby_role_" + user.getInt("permission")));
 	//roleLayout.left = ( itsMe ? otherPadding : padding ) + inPadding;
 	
 	date.time = data.getInt("u") * 1000;

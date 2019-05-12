@@ -4,7 +4,9 @@ import com.gerantech.towercraft.controls.segments.InboxChatSegment;
 import com.gerantech.towercraft.managers.InboxService;
 import com.gerantech.towercraft.models.vo.InboxThread;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.layout.AnchorLayoutData;
+
 import starling.events.Event;
 
 public class InboxScreen extends SimpleScreen
@@ -51,10 +53,10 @@ protected function inboxService_completeHandler(event:Event) : void
 	}
 	if( event.type == Event.SELECT )
 	{
-		if( message.getShort("type") == MessageTypes.M50_URL )
+		if( message.getInt("type") == MessageTypes.M50_URL )
 			appModel.navigator.handleURL(message.getText("data"));
 	}
-	if( MessageTypes.isConfirm(message.getShort("type")) )
+	if( MessageTypes.isConfirm(message.getInt("type")) )
 	{
 		message.putBool("isAccept", event.type == Event.SELECT);
 		SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_responseConfirmHandler);
