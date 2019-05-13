@@ -2,11 +2,12 @@ package com.gerantech.towercraft.managers
 {
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.vo.UserData;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.data.ListCollection;
+
 import starling.events.Event;
 
 [Event(name = "update", type = "starling.events.Event")]
@@ -48,7 +49,7 @@ protected function sfs_threadsResponseHandler(event:SFSEvent) : void
 		{
 			// check if broadcasts readen 
 			if( msgs.getSFSObject(i).getInt("receiverId") <= 1000 && UserData.instance.broadcasts != null )
-				msgs.getSFSObject(i).putShort("read", UserData.instance.broadcasts.indexOf(msgs.getSFSObject(i).getInt("utc")) >-1 ? 1 : 0);
+				msgs.getSFSObject(i).putInt("read", UserData.instance.broadcasts.indexOf(msgs.getSFSObject(i).getInt("utc")) >-1 ? 1 : 0);
 			
 			if( msgs.size() == 1 )
 				messages.addItemAt(msgs.getSFSObject(i), 0);
@@ -68,7 +69,7 @@ public function get numUnreads() : int
 		return 0;
 	var ret:int = 0;
 	for (var i:int = 0; i < threads.length; i++)
-		if( threads.getItemAt(i).getShort("read") == 0 )
+		if( threads.getItemAt(i).getInt("read") == 0 )
 			ret ++;
 	return ret;
 }

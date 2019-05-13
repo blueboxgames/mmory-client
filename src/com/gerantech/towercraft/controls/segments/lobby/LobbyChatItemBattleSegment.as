@@ -40,21 +40,21 @@ override public function init():void
 override public function commitData(_data:ISFSObject, index:int):void
 {
 	super.commitData(_data, index);
-	actionButton.visible = data.getShort("st") < 2;
-	messageLayout.right = data.getShort("st") < 2 ? (actionButton.width + 20) : 10;
+	actionButton.visible = data.getInt("st") < 2;
+	messageLayout.right = data.getInt("st") < 2 ? (actionButton.width + 20) : 10;
 	
-	if( data.getShort("st") == 0 )
+	if( data.getInt("st") == 0 )
 	{
 		//actionButton.styleName = itsMe ? "neutral" : "danger";
 		actionButton.label = loc( itsMe ? "popup_cancel_label" : "lobby_battle_accept" );
 		messageDisplay.text = loc( itsMe ? "lobby_battle_me" : "lobby_battle_request", [data.getUtfString("s")]);
 	}
-	else if( data.getShort("st") == 1 )
+	else if( data.getInt("st") == 1 )
 	{
 		actionButton.label = loc( "lobby_battle_spectate" );
 		messageDisplay.text = loc( "lobby_battle_in", [data.getUtfString("s"), data.getUtfString("o")]);
 	}	
-	else if( data.getShort("st") == 2 )
+	else if( data.getInt("st") == 2 )
 	{
 		messageDisplay.text = loc( "lobby_battle_ended", [data.getUtfString("s"), data.getUtfString("o")]);
 	}

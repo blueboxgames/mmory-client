@@ -10,13 +10,16 @@ import com.gerantech.towercraft.views.effects.BattleParticleSystem;
 import com.gerantech.towercraft.views.weapons.BulletView;
 import com.gt.towers.battle.BattleField;
 import com.gt.towers.battle.GameObject;
+import com.gt.towers.battle.bullets.Bullet;
 import com.gt.towers.battle.units.Card;
 import com.gt.towers.battle.units.Unit;
 import com.gt.towers.constants.CardTypes;
 import com.gt.towers.events.BattleEvent;
 import com.gt.towers.utils.CoreUtils;
 import com.gt.towers.utils.Point3;
+
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -212,7 +215,7 @@ override public function fireEvent(dispatcherId:int, type:String, data:*) : void
 		fireOffset = ArtRules.getFlamePosition(card.type, Math.atan2(x - enemy.x, y - enemy.y));
 		var b:BulletView = new BulletView(battleField, enemy.bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, enemy.x, enemy.y, 0);
 		b.targetId = enemy.id;
-		battleField.bullets.set(enemy.bulletId, b);
+		battleField.bullets.set(enemy.bulletId, b as Bullet);
 		enemy.bulletId ++;
 		switchAnimation("s_", battleField.units.get(enemy.id).getSideX(), __x, battleField.units.get(enemy.id).getSideY(), __y);
 	}
@@ -350,8 +353,8 @@ protected function defaultSummonEffectFactory() : void
 
 	var summonParticle:BattleParticleSystem = new BattleParticleSystem("summon-base", "summons/summon-base", 1, false, true);
 	summonParticle.scaleY = BattleField.CAMERA_ANGLE;
-	summonParticle.x = x;
-	summonParticle.y = y;
+	summonParticle.x = getSideX();
+	summonParticle.y = getSideY();
 	summonParticle.alpha = 0.06;
 	summonParticle.start(-1);
 	fieldView.unitsContainer.addChildAt(summonParticle, 0);

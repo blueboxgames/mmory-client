@@ -68,7 +68,6 @@ override protected function commitData():void
 		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, isComment ? 80 : 60);
 		labelDisplay.alpha = isComment ? 0.7 : 1;
 		addChild(labelDisplay);
-		
 	}
 	_owner.addEventListener(FeathersEventType.CREATION_COMPLETE, owner_createCompleteHandler);
 }

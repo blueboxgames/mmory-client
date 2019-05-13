@@ -17,6 +17,7 @@ import com.gt.towers.constants.ResourceType;
 import com.gt.towers.exchanges.Exchanger;
 import com.gt.towers.scripts.ScriptEngine;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.ScrollContainer;
@@ -29,8 +30,10 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.TiledRowsLayout;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Quad;
@@ -260,9 +263,9 @@ private function pushToDeck(cardIndex:int):void
 	player.getSelectedDeck().set(cardIndex, draggableCard.type);
 	
 	var params:SFSObject = new SFSObject();
-	params.putShort("index", cardIndex);
-	params.putShort("type", draggableCard.type);
-	params.putShort("deckIndex", player.selectedDeckIndex);
+	params.putInt("index", cardIndex);
+	params.putInt("type", draggableCard.type);
+	params.putInt("deckIndex", player.selectedDeckIndex);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.CHANGE_DECK, params);
 	
 	setEditMode(false, -1);
