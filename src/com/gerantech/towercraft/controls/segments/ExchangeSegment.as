@@ -4,6 +4,7 @@ import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 import com.gerantech.towercraft.models.vo.ShopLine;
 import com.gt.towers.constants.ExchangeType;
 import com.gt.towers.exchanges.ExchangeItem;
+
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.renderers.IListItemRenderer;
@@ -13,6 +14,7 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import starling.events.Event;
 
 public class ExchangeSegment extends Segment
@@ -32,15 +34,16 @@ override public function init():void
 	var listLayout:VerticalLayout = new VerticalLayout();
 	listLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
 	listLayout.hasVariableItemDimensions = true;
-	listLayout.paddingTop = 120;
-	listLayout.paddingBottom = 50;
 	listLayout.useVirtualLayout = true;
+	listLayout.padding = 50;
+	listLayout.paddingTop = 180;
+	listLayout.gap = 80;
 	
 	updateData();
 	itemslist = new List();
 	itemslist.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
 	itemslist.layout = listLayout;
-	itemslist.layoutData = new AnchorLayoutData(0, 0, 0, 0);
+	itemslist.layoutData = new AnchorLayoutData(0, paddingH, 0, paddingH);
 	itemslist.itemRendererFactory = function():IListItemRenderer { return new ExCategoryItemRenderer(); }
 	itemslist.dataProvider = itemslistData;
 	itemslist.addEventListener(FeathersEventType.FOCUS_IN, list_changeHandler);
@@ -51,14 +54,14 @@ override public function init():void
 
 override public function focus():void
 {
-	if( !initializeCompleted )
+	//if( !initializeCompleted )
 		return;
 	///////////////////////showTutorial();
 	//var time:Number = Math.abs(focusedCategory * 520 - itemslist.verticalScrollPosition) * 0.003;
 	if( SELECTED_CATEGORY == 0 )
 		itemslist.scrollToPosition(0, 0, 0.5);
 	else
-		itemslist.scrollToPosition(0, SELECTED_CATEGORY * ExCategoryItemRenderer.HEIGHT_NORMAL + scrollPaddingTop, 0.5);
+		itemslist.scrollToPosition(0, SELECTED_CATEGORY * ExCategoryItemRenderer.GET_HEIGHT(0) + scrollPaddingTop, 0.5);
 	SELECTED_CATEGORY = 0;
 }
 
@@ -90,17 +93,17 @@ override public function updateData():void
 			softs.add(itemKeys[i]);
 	}
 	
-	scrollPaddingTop = ExCategoryItemRenderer.HEIGHT_C120_MAGICS;
+	scrollPaddingTop = ExCategoryItemRenderer.GET_HEIGHT(120) + 100;
 	var categoreis:Array = new Array();
 	if( bundles.items.length > 0 )
 	{
 		categoreis.push(bundles);
-		scrollPaddingTop += ExCategoryItemRenderer.HEIGHT_C30_BUNDLES;
+		scrollPaddingTop += ExCategoryItemRenderer.GET_HEIGHT(30);
 	}
 	if( specials.items.length > 0 )
 	{
 		categoreis.push(specials);
-		scrollPaddingTop += ExCategoryItemRenderer.HEIGHT_C20_SPECIALS;
+		scrollPaddingTop += ExCategoryItemRenderer.GET_HEIGHT(20);
 	}
 	if( magics.items.length > 0 )
 		categoreis.push(magics);
@@ -115,7 +118,7 @@ override public function updateData():void
 		categoreis[i].items.sort();
 	
 	itemslistData = new ListCollection(categoreis);
-	scrollPaddingTop = ExCategoryItemRenderer.HEIGHT_C120_MAGICS;
+	scrollPaddingTop = ExCategoryItemRenderer.GET_HEIGHT(120);
 }
 
 private function list_changeHandler(event:Event) : void

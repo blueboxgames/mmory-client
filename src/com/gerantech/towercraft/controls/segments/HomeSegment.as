@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.towercraft.Game;
-import com.gerantech.towercraft.controls.TileBackground;
 import com.gerantech.towercraft.controls.buttons.BattleButton;
 import com.gerantech.towercraft.controls.buttons.CollectableLeaguesButton;
 import com.gerantech.towercraft.controls.buttons.CollectableQuestsButton;
@@ -58,7 +57,6 @@ override public function init():void
 	super.init();
 	if( initializeCompleted || appModel.loadingManager.state < LoadingManager.STATE_LOADED )
 		return;
-	var padding:int = 32;
 	league = player.get_arena(0);
 	initializeCompleted = true;
 	layout = new AnchorLayout();
@@ -77,12 +75,15 @@ override public function init():void
 	eventsButton.horizontalScrollPolicy = eventsButton.verticalScrollPolicy = ScrollPolicy.OFF;
 	eventsButton.itemRendererFactory = function () : IListItemRenderer { return new ChallengeIndexItemRenderer(); };
 	eventsButton.dataProvider = new ListCollection([UserData.instance.challengeIndex]);
-	eventsButton.layoutData = new AnchorLayoutData(NaN, 100, NaN, 100, NaN, -stageHeight * 0.05);
+	eventsButton.layoutData = new AnchorLayoutData(NaN, paddingH + 100, NaN, paddingH + 100, NaN, -stageHeight * 0.05);
 	eventsButton.height = listLayout.typicalItemHeight + listLayout.padding + listLayout.paddingTop;
 	addButton(eventsButton, "eventsButton");
 	
 	// battle button
-	var battleButton:BattleButton = new BattleButton("button-battle", loc("button_battle"), stageWidth * 0.5 - 210, stageHeight * 0.64 - Math.min(130, stageHeight * 0.08), 420, Math.min(260, stageHeight * 0.16), new Rectangle(75, 75, 1, 35), new Rectangle(0, 0, 0, 30));
+	var battleButton:BattleButton = new BattleButton("button-battle", loc("button_battle"), new Rectangle(75, 75, 1, 35), new Rectangle(0, 0, 0, 30));
+	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, stageHeight * 0.14);
+	battleButton.height = Math.min(260, stageHeight * 0.16);
+	battleButton.width = 420;
 	addButton(battleButton, "battleButton");
 	
 	// bookline
@@ -90,7 +91,7 @@ override public function init():void
 	function showBookline() : void
 	{
 		var bookLine:HomeBooksLine = new HomeBooksLine();
-		bookLine.layoutData = new AnchorLayoutData(NaN, 0, stageHeight * 0.015, 0);
+		bookLine.layoutData = new AnchorLayoutData(NaN, paddingH, stageHeight * 0.015, paddingH);
 		bookLine.alpha = 0;
 		Starling.juggler.tween(bookLine, 0.2, {alpha:1});
 		addChild(bookLine);
@@ -103,7 +104,7 @@ override public function init():void
 			adminButton.longPressDuration = 1;
 			adminButton.width = adminButton.height = 200;
 			adminButton.addEventListener(FeathersEventType.LONG_PRESS, function():void{appModel.navigator.pushScreen(Game.ADMIN_SCREEN)});
-			adminButton.layoutData = new AnchorLayoutData(NaN, 0, bookLine.height);
+			adminButton.layoutData = new AnchorLayoutData(NaN, paddingH, bookLine.height);
 			addChild(adminButton);
 		}
 	}
@@ -133,34 +134,34 @@ override public function init():void
 	}
 	
 	var profile:Profile  = new Profile();
-	profile.layoutData = new AnchorLayoutData(130, 32, NaN, 120);
+	profile.layoutData = new AnchorLayoutData(130, paddingH + 32, NaN, paddingH + 120);
 	profile.name = "profile";
 	addChild(profile);
 
 	var leaguesButton:CollectableLeaguesButton = new CollectableLeaguesButton();
-	leaguesButton.layoutData = new AnchorLayoutData(120, NaN, NaN, padding);
+	leaguesButton.layoutData = new AnchorLayoutData(120, NaN, NaN, paddingH + 32);
 	addButton(leaguesButton, "leaguesButton");
 	
 	var starsButton:CollectableStarsButton = new CollectableStarsButton();
-	starsButton.layoutData = new AnchorLayoutData(330, padding);
+	starsButton.layoutData = new AnchorLayoutData(330, paddingH + 32);
 	starsButton.height = 140;
 	starsButton.width = 410;
 	addButton(starsButton, "starsButton");
 	
 	questsButton = new CollectableQuestsButton();
-	questsButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, padding, NaN, stageHeight * 0.15);
+	questsButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, paddingH + 32, NaN, stageHeight * 0.15);
 	questsButton.width = questsButton.height = 140;
 	addButton(questsButton, "questsButton");
 	
 	var rankButton:IconButton = new IconButton(Assets.getTexture("home/ranking"), 0.6, Assets.getTexture("home/button-bg-0"), new Rectangle(22, 38, 4, 4));
-	rankButton.layoutData = new AnchorLayoutData(NaN, padding, NaN, NaN, NaN, stageHeight * 0.15);
+	rankButton.layoutData = new AnchorLayoutData(NaN, paddingH + 32, NaN, NaN, NaN, stageHeight * 0.15);
 	rankButton.width = rankButton.height = 140;
 	addButton(rankButton, "rankButton");
 	
 	if( player.get_battleswins() > 5 && !player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE) )
 	{
 		googleButton = new IconButton(Assets.getTexture("settings/41"), 0.6, Assets.getTexture("home/button-bg-0"), new Rectangle(22, 38, 4, 4));
-		googleButton.layoutData = new AnchorLayoutData(330, padding * 1.7 + starsButton.width);
+		googleButton.layoutData = new AnchorLayoutData(330, paddingH + 36 + starsButton.width);
 		googleButton.width = googleButton.height = 140;
 		addButton(googleButton, "googleButton");
 		

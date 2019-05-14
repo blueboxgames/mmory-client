@@ -23,6 +23,7 @@ import com.gt.towers.constants.SegmentType;
 
 import feathers.controls.AutoSizeMode;
 import feathers.controls.ImageLoader;
+import feathers.controls.LayoutGroup;
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.ScrollPolicy;
@@ -39,19 +40,18 @@ import flash.desktop.NativeApplication;
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
 
-import starling.animation.Transitions;
-import starling.core.Starling;
 import starling.events.Event;
 
 public class DashboardScreen extends BaseCustomScreen
 {
 static public const FOOTER_SIZE:int = 200;
 static public var TAB_INDEX:int = 2;
+private var tabSize:int;
 private var pageList:List;
 private var tabsList:List;
-private var tabSize:int;
-private var segmentsCollection:ListCollection;
+private var toolbar:LayoutGroup;
 private var tabSelection:ImageLoader;
+private var segmentsCollection:ListCollection;
 
 public function DashboardScreen()
 {
@@ -103,9 +103,9 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 		return;
 	}
 
-		// =-=-=-=-=-=-=-=-=-=-=-=- page -=-=-=-=-=-=-=-=-=-=-=-=
+	// =-=-=-=-=-=-=-=-=-=-=-=- page -=-=-=-=-=-=-=-=-=-=-=-=
 	var pageLayout:HorizontalLayout = new HorizontalLayout();
-	pageLayout.gap = 0;
+	pageLayout.typicalItemHeight = 150;
 	pageLayout.horizontalAlign = HorizontalAlign.CENTER;
 	pageLayout.verticalAlign = VerticalAlign.JUSTIFY;
 	pageLayout.typicalItemWidth = stage.stageWidth;
@@ -114,10 +114,9 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	pageList = new List();
 	pageList.snapToPages = true;
 	pageList.layout = pageLayout;
-	pageList.layoutData = new AnchorLayoutData(0, 0, FOOTER_SIZE, 0);
-	pageList.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
-	pageList.addEventListener(FeathersEventType.FOCUS_IN, pageList_focusInHandler);
 	pageList.verticalScrollPolicy = ScrollPolicy.OFF;
+	pageList.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
+	pageList.layoutData = new AnchorLayoutData(0, -pageLayout.typicalItemHeight, FOOTER_SIZE, -pageLayout.typicalItemHeight);
 	pageList.itemRendererFactory = function ():IListItemRenderer { return new SegmentsItemRenderer(); }
 	addChild(pageList);
 	
@@ -178,19 +177,24 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	tabsList.itemRendererFactory = function ():IListItemRenderer { return new DashboardTabItemRenderer(tabSize); }
 	addChild(tabsList);
 	
+	toolbar = new LayoutGroup();
+	toolbar.layout = new AnchorLayout();
+	toolbar.layoutData = new AnchorLayoutData(0, 0, NaN, 0);
+	addChild(toolbar);
+	
 	var indicatorHC:Indicator = new Indicator("rtl", ResourceType.R4_CURRENCY_HARD);
 	indicatorHC.layoutData = new AnchorLayoutData(18, 36);
-	addChild(indicatorHC);
+	toolbar.addChild(indicatorHC);
 	
 	var indicatorSC:Indicator = new Indicator("rtl", ResourceType.R3_CURRENCY_SOFT);
 	indicatorSC.layoutData = new AnchorLayoutData(18, NaN, NaN, NaN, 0);
-	addChild(indicatorSC);
+	toolbar.addChild(indicatorSC);
 	
 	if( player.get_arena(0) > 0 )
 	{
 		var indicatorCT:Indicator = new Indicator("rtl", ResourceType.R6_TICKET);
 		indicatorCT.layoutData = new AnchorLayoutData(18, NaN, NaN, 42);
-		addChild(indicatorCT);
+		toolbar.addChild(indicatorCT);
 	}
 	
 	// tutorial mode
@@ -207,8 +211,9 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 
 	pageList.dataProvider = segmentsCollection;
 	pageList.horizontalScrollPolicy = player.dashboadTabEnabled(-1) ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+	pageList.addEventListener(FeathersEventType.FOCUS_IN, pageList_focusInHandler);
 	pageList.addEventListener(Event.READY, pageList_readyHandler);
-	pageList.addEventListener(FeathersEventType.SCROLL_COMPLETE, pageList_scrollCompleteHandler);
+	pageList.addEventListener(Event.SCROLL, pageList_scrollHandler);
 	tabsList.dataProvider = segmentsCollection;
 	setTimeout(gotoPage, 10, TAB_INDEX, 0.1);
 	visible = true;
@@ -221,18 +226,6 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	SFSConnection.instance.lobbyManager.addEventListener(Event.UPDATE, lobbyManager_updateHandler);
 }
 
-private function pageList_readyHandler(event:Event):void
-{
-	tabsList.isEnabled = event.data;
-	pageList.horizontalScrollPolicy = event.data ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
-}
-protected function exchangeManager_endHandler(event:Event):void
-{
-	if( ExchangeType.getCategory(event.data.type) == ExchangeType.C110_BATTLES )//open first pack
-		segmentsCollection.updateItemAt(1);
-	else if( event.data.type == -100 )//upgrade initial card
-		segmentsCollection.updateItemAt(2);
-}
 private function getListData():ListCollection
 {
 	var ret:ListCollection = new ListCollection();
@@ -241,28 +234,6 @@ private function getListData():ListCollection
 	return ret;
 }
 
-private function pageList_scrollCompleteHandler(e:Event):void 
-{
-	if( !pageList.hasEventListener(FeathersEventType.FOCUS_IN) )
-		pageList.addEventListener(FeathersEventType.FOCUS_IN, pageList_focusInHandler);
-}
-
-private function pageList_focusInHandler(event:Event):void
-{
-	tabsList.removeEventListeners(Event.SELECT);
-	var focusIndex:int = event.data as int;
-	if( tabsList.selectedIndex != focusIndex )
-		gotoPage(focusIndex, 0.5, false);
-	tabsList.addEventListener(Event.SELECT, tabsList_selectHandler);
-}
-
-private function tabsList_selectHandler(event:Event):void
-{
-	if( !player.dashboadTabEnabled(tabsList.selectedIndex) )
-		return;
-	pageList.removeEventListeners(FeathersEventType.FOCUS_IN);
-	gotoPage(tabsList.selectedIndex);
-}
 public function gotoPage(pageIndex:int, animDuration:Number = 0.3, scrollPage:Boolean = true):void
 {
 	trace("gotoPage", TAB_INDEX, pageIndex, ExchangeSegment.SELECTED_CATEGORY, pageList.selectedIndex, tabsList.selectedIndex)
@@ -272,10 +243,40 @@ public function gotoPage(pageIndex:int, animDuration:Number = 0.3, scrollPage:Bo
 	if( animDuration > 0 )
 		appModel.sounds.addAndPlay("tab");
 	appModel.navigator.dispatchEventWith("dashboardTabChanged", false, animDuration);
-	Starling.juggler.tween(tabSelection, animDuration, {x:pageIndex * tabSize - tabSize * 0.1, transition:Transitions.EASE_OUT});
 }
 
-private function lobbyManager_updateHandler(event:Event):void
+protected function pageList_readyHandler(event:Event):void
+{
+	tabsList.isEnabled = event.data;
+	pageList.horizontalScrollPolicy = event.data ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+}
+protected function exchangeManager_endHandler(event:Event):void
+{
+	if( ExchangeType.getCategory(event.data.type) == ExchangeType.C110_BATTLES ) //open first pack
+		segmentsCollection.updateItemAt(1);
+	else if( event.data.type == -100 ) //upgrade initial card
+		segmentsCollection.updateItemAt(2);
+}
+protected function pageList_scrollHandler(event:Event):void
+{
+	this.tabSelection.x = (this.pageList.horizontalScrollPosition / this.pageList.maxHorizontalScrollPosition) * this.stageWidth * 0.8 - this.tabSize * 0.1;
+}
+protected function pageList_focusInHandler(event:Event):void
+{
+	tabsList.removeEventListener(Event.SELECT, tabsList_selectHandler);
+	var focusIndex:int = event.data as int;
+	trace(focusIndex, tabsList.selectedIndex)
+	if( tabsList.selectedIndex != focusIndex )
+		gotoPage(focusIndex, 0, false);
+	tabsList.addEventListener(Event.SELECT, tabsList_selectHandler);
+}
+protected function tabsList_selectHandler(event:Event):void
+{
+	if( !player.dashboadTabEnabled(tabsList.selectedIndex) )
+		return;
+	gotoPage(tabsList.selectedIndex);
+}
+protected function lobbyManager_updateHandler(event:Event):void
 {
 	TabItemData(segmentsCollection.getItemAt(3)).badgeNumber = SFSConnection.instance.lobbyManager.numUnreads();
 }
@@ -296,8 +297,11 @@ override protected function backButtonFunction():void
 
 override public function dispose():void
 {
-	if( appModel != null )
-		appModel.loadingManager.removeEventListener(LoadingEvent.LOADED, loadingManager_loadedHandler);
+	tabsList.removeEventListener(Event.SELECT, tabsList_selectHandler);
+	pageList.removeEventListener(Event.READY, pageList_readyHandler);
+	pageList.removeEventListener(Event.SCROLL, pageList_scrollHandler);
+	pageList.removeEventListener(FeathersEventType.FOCUS_IN, pageList_focusInHandler);
+	exchangeManager.removeEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
 	super.dispose();
 }
 }

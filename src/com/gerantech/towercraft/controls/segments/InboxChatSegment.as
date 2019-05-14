@@ -12,6 +12,7 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.layout.AnchorLayout;
+import feathers.layout.AnchorLayoutData;
 
 import flash.utils.setTimeout;
 
@@ -47,6 +48,7 @@ override protected function showElements() : void
 	chatLayout.gap = -10;
 	chatList.itemRendererFactory = function ():IListItemRenderer { return new InboxChatItemRenderer(myId)};
 	chatList.dataProvider = threadCollection;
+    chatTextInput.layoutData = new AnchorLayoutData(NaN, padding, padding, padding + 240);
 	//manager.addEventListener(Event.UPDATE, manager_updateHandler);
 }
 

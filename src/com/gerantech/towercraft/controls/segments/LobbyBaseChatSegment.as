@@ -5,6 +5,8 @@ import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
+import com.gerantech.towercraft.controls.texts.RTLLabel;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.controls.toasts.EmoteToast;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
@@ -49,6 +51,25 @@ override public function init():void
 	
 	super.init();
 	layout = new AnchorLayout();
+
+	var ban:ISFSObject = appModel.loadingManager.serverData.containsKey("ban") ? appModel.loadingManager.serverData.getSFSObject("ban") : null;
+	if( false)//ban != null && ban.getInt("mode") > 1 )// banned user
+	{
+		// backgroundSkin = new Image(appModel.theme.backgroundDisabledSkinTexture);
+		// Image(backgroundSkin).scale9Grid = MainTheme.DEFAULT_BACKGROUND_SCALE9_GRID;
+		// backgroundSkin.alpha = 0.6;
+		
+		var labelDisplay:ShadowLabel = new ShadowLabel(loc("lobby_banned", [StrUtils.toTimeFormat(ban.getLong("until"))]), 1, 0, "center", null, true, null, 0.9);
+		labelDisplay.width = width;
+		labelDisplay.layoutData = new AnchorLayoutData(NaN, paddingH + 20, NaN, paddingH + 20, NaN, 0);
+		addChild(labelDisplay);
+		
+		var descDisplay:RTLLabel = new RTLLabel(ban.getUtfString("message"), 1, null, null, true, null, 0.6);
+		descDisplay.layoutData = new AnchorLayoutData(NaN, paddingH + 20, NaN, paddingH + 20, NaN, 0);
+		addChild(descDisplay);
+		return;
+	}
+
 	loadData();
 }
 

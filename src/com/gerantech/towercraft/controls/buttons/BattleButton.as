@@ -7,12 +7,13 @@ import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.towers.constants.PrefsTypes;
 import com.gt.towers.socials.Challenge;
 import com.gt.towers.utils.maps.IntIntMap;
+
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
-import starling.core.Starling;
 
 /**
 * ...
@@ -31,23 +32,21 @@ private var _y:Number;
 private var _width:Number;
 private var _height:Number;
 
-public function BattleButton(background:String, label:String, x:Number, y:Number, width:Number, height:Number, scale9Grid:Rectangle = null, shadowRect:Rectangle = null) 
+public function BattleButton(background:String, label:String, scale9Grid:Rectangle = null, shadowRect:Rectangle = null) 
 {
 	super();
 	this.label = label;
 	this.background = background;
 	this.scale9Grid = scale9Grid;
 	this.shadowRect = shadowRect;
-	_x = this.x = x;
-	_y = this.y = y;
-	_width = this.width = width;
-	_height = this.height = height;
-	pivotY = this.height * 0.5;
 }
 
 override protected function initialize() : void
 {
 	super.initialize();
+	_width = this.width;
+	_height = this.height;
+//	this.pivotY = this.height * 0.5;
 	layout = new AnchorLayout();
 	
 	backgroundDisplay = new ImageLoader();
@@ -102,18 +101,18 @@ override protected function trigger() : void
 
 override public function set currentState(value:String):void
 {
-	super.currentState = value;
+	super.currentState = value;return
 	if ( value == ButtonState.DOWN )
 	{
-		this.x = _x + 20;
-		this.y = _y + 20;
+		// this.x = _x + 20;
+		// this.y = _y + 20;
 		this.width = _width - 40;
 		this.height = _height - 40;
 	}
 	else
 	{
-		this.x = _x;
-		this.y = _y;
+		// this.x = _x;
+		// this.y = _y;
 		this.width = _width;
 		this.height = _height;
 	}
