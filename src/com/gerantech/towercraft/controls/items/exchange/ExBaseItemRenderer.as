@@ -1,16 +1,16 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
-import com.gerantech.towercraft.controls.buttons.ExchangeButton;
 import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
-import com.gerantech.towercraft.controls.texts.CountdownLabel;
-import com.gerantech.towercraft.themes.MainTheme;
+import com.gerantech.towercraft.models.Assets;
 import com.gt.towers.exchanges.ExchangeItem;
-import dragonBones.starling.StarlingArmatureDisplay;
+
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.TiledRowsLayout;
 import feathers.skins.ImageSkin;
+
 import flash.geom.Rectangle;
+
 import starling.events.Event;
 
 public class ExBaseItemRenderer extends AbstractTouchableListItemRenderer
@@ -26,13 +26,8 @@ override protected function initialize():void
 	
 	layout = new AnchorLayout();
 	padding = 12;
-	
-	skin = new ImageSkin(appModel.theme.itemRendererDisabledSkinTexture);
-	skin.setTextureForState(STATE_NORMAL, appModel.theme.itemRendererDisabledSkinTexture);
-	skin.setTextureForState(STATE_DOWN, appModel.theme.itemRendererSelectedSkinTexture);
-	skin.setTextureForState(STATE_SELECTED, appModel.theme.itemRendererSelectedSkinTexture);
-	skin.scale9Grid = MainTheme.ITEM_RENDERER_SCALE9_GRID;
-	skin.alpha = 0.5;
+
+	skin = new ImageSkin();
 	backgroundSkin = skin;
 }
 
@@ -46,7 +41,6 @@ override protected function commitData():void
 		firstCommit = false;
 	}
 	exchange = exchanger.items.get(_data as int);
-
 	super.commitData();
 }
 

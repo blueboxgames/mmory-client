@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.items.challenges 
 {
 import com.gerantech.towercraft.controls.buttons.IconButton;
+import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
 import com.gerantech.towercraft.controls.items.AbstractListItemRenderer;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
@@ -9,16 +10,20 @@ import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
 import com.gerantech.towercraft.events.GameEvent;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
+import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.towers.constants.PrefsTypes;
 import com.gt.towers.socials.Challenge;
+
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
+
 import starling.core.Starling;
 import starling.events.Event;
 
@@ -43,7 +48,7 @@ private var challenge:Challenge;
 private var titleDisplay:RTLLabel;
 private var messageDisplay:RTLLabel;
 private var bannerDisplay:ImageLoader;
-private var infoButton:IconButton;
+private var infoButton:IndicatorButton;
 private var rankButton:IconButton;
 private var costIconDisplay:ImageLoader;
 private var costLabelDisplay:ShadowLabel;
@@ -114,12 +119,17 @@ private function infoFactory() : void
 {
 	if( !SHOW_INFO || locked || infoButton != null )
 		return;
-	infoButton = new IconButton(Assets.getTexture("events/info"), 0.6, Assets.getTexture("events/badge"));
+
+	infoButton = new IndicatorButton();
 	infoButton.name = challenge.mode.toString();
-	infoButton.width = 96;
-	infoButton.height = 103;
-	infoButton.layoutData = new AnchorLayoutData(-24, appModel.isLTR? -24 : NaN, NaN, appModel.isLTR? NaN : -24);
+	infoButton.labelOffsetY = 5;
+	infoButton.label = "?";
+	infoButton.width = 64;
+	infoButton.height = 68;
+	infoButton.fixed = false;
+	infoButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
 	infoButton.addEventListener(Event.TRIGGERED, infoButton_triggeredHandler);
+	infoButton.layoutData = new AnchorLayoutData(20, appModel.isLTR?20:NaN, NaN, appModel.isLTR?NaN:20);
 	addChild(infoButton);
 }
 
