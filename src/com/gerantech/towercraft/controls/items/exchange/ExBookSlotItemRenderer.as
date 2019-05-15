@@ -1,6 +1,5 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
-import com.gerantech.towercraft.controls.buttons.ExchangeButton;
 import com.gerantech.towercraft.controls.groups.GradientHilight;
 import com.gerantech.towercraft.controls.overlays.HandPoint;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
@@ -35,9 +34,9 @@ import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.events.Event;
 
-public class ExBookSlotItemRenderer extends ExBookBaseItemRenderer
+public class ExBookSlotItemRenderer extends ExBaseItemRenderer
 {
-private var state:int = -2;
+protected var bookArmature:StarlingArmatureDisplay;
 private var countdownDisplay:CountdownLabel;
 private var backgroundDisplay:ImageLoader;
 private var emptyLabel:RTLLabel;
@@ -49,12 +48,12 @@ private var hardLabel:ShadowLabel;
 private var handPoint:HandPoint;
 private var ribbonImage:ImageLoader;
 private var hilight:GradientHilight;
+private var state:int = -2;
 
 public function ExBookSlotItemRenderer(){}
 override protected function initialize():void
 {
 	super.initialize();
-	padding = 16;
 	backgroundSkin = skin = null;
 }
 override protected function commitData():void
@@ -71,6 +70,7 @@ override protected function commitData():void
 	state = exchange.getState(timeManager.now);
 	backgroundFactory();
 	super.commitData();
+	bookFactory();
 	emptyGroupFactory();
 	waitGroupFactory();
 	busyGroupFactory();
@@ -103,7 +103,7 @@ private function createComplteHandler(event:Event):void
 /**
  * add, remove or update armature depends on type and state
  */
-override protected function bookFactory() : StarlingArmatureDisplay
+protected function bookFactory() : StarlingArmatureDisplay
 {
 	clearTimeout(timeoutId);
 	if( state != ExchangeItem.CHEST_STATE_EMPTY ) 
@@ -124,11 +124,6 @@ override protected function bookFactory() : StarlingArmatureDisplay
 		addChild(bookArmature as DisplayObject);
 	}
 	return bookArmature;
-}
-
-override protected function buttonFactory() : ExchangeButton
-{
-	return null;
 }
 
 protected function backgroundFactory() : ImageLoader
@@ -244,15 +239,15 @@ protected function busyGroupFactory() : LayoutGroup
 		var hardImage:ImageLoader = new ImageLoader();
 		hardImage.source = Assets.getTexture("res-" + ResourceType.R4_CURRENCY_HARD, "gui");
 		hardImage.width = height * 0.2;
-		hardImage.layoutData = new AnchorLayoutData(padding * 5, NaN, NaN, NaN, -padding * 2.2);
+		hardImage.layoutData = new AnchorLayoutData(80, NaN, NaN, NaN, -36);
 		busyGroup.addChild(hardImage);
 		
 		countdownDisplay = new CountdownLabel();
-		countdownDisplay.layoutData = new AnchorLayoutData(padding * 0.6, padding, NaN, padding * 0.4);
+		countdownDisplay.layoutData = new AnchorLayoutData(10, 16, NaN, 6);
 		busyGroup.addChild(countdownDisplay);
 		
 		hardLabel = new ShadowLabel("", 1, 0, null, null, false, null, 0.9);
-		hardLabel.layoutData = new AnchorLayoutData(padding * 5, NaN, NaN, NaN, padding * 2);
+		hardLabel.layoutData = new AnchorLayoutData(80, NaN, NaN, NaN, 32);
 		busyGroup.addChild(hardLabel);
 	}
 
@@ -267,8 +262,8 @@ protected function readyGroupFactory() : ShadowLabel
 	if( readyLabel == null )
 	{
 		readyLabel = new  ShadowLabel(loc("open_label"));
-		readyLabel.shadowDistance = padding * 0.25;
-		readyLabel.layoutData = new AnchorLayoutData(padding * 2, NaN, NaN, NaN, 0);
+		readyLabel.shadowDistance = 4;
+		readyLabel.layoutData = new AnchorLayoutData(32, NaN, NaN, NaN, 0);
 	}
 	addChild(readyLabel);
 	return readyLabel;
@@ -362,7 +357,6 @@ private function reset() : void
 	removeChildren(0, -1);
 	backgroundDisplay = null;
 	bookArmature = null;
-	buttonDisplay = null;
 	countdownDisplay = null;
 	waitGroup = null;
 	readyLabel = null;

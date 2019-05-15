@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
 import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
-import com.gerantech.towercraft.models.Assets;
 import com.gt.towers.exchanges.ExchangeItem;
 
 import feathers.events.FeathersEventType;
@@ -17,7 +16,6 @@ public class ExBaseItemRenderer extends AbstractTouchableListItemRenderer
 {
 protected var firstCommit:Boolean = true;
 protected var exchange:ExchangeItem;
-protected var padding:int;
 
 public function ExBaseItemRenderer(){super();}
 override protected function initialize():void
@@ -25,8 +23,6 @@ override protected function initialize():void
 	super.initialize();
 	
 	layout = new AnchorLayout();
-	padding = 12;
-
 	skin = new ImageSkin();
 	backgroundSkin = skin;
 }

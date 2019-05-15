@@ -87,7 +87,7 @@ override public function updateData():void
 			magics.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS && player.unlocked_challenge() )
 			tickets.add(itemKeys[i]);
-		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C0_HARD && itemKeys[i] != ExchangeType.C0_HARD )//test
+		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C0_HARD && itemKeys[i] != ExchangeType.C0_HARD )
 			hards.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C10_SOFT )
 			softs.add(itemKeys[i]);
