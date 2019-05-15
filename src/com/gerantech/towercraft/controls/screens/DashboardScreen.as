@@ -183,17 +183,17 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	addChild(toolbar);
 	
 	var indicatorHC:Indicator = new Indicator("rtl", ResourceType.R4_CURRENCY_HARD);
-	indicatorHC.layoutData = new AnchorLayoutData(18, 36);
+	indicatorHC.layoutData = new AnchorLayoutData(20, 70);
 	toolbar.addChild(indicatorHC);
 	
 	var indicatorSC:Indicator = new Indicator("rtl", ResourceType.R3_CURRENCY_SOFT);
-	indicatorSC.layoutData = new AnchorLayoutData(18, NaN, NaN, NaN, 0);
+	indicatorSC.layoutData = new AnchorLayoutData(20, NaN, NaN, NaN, 0);
 	toolbar.addChild(indicatorSC);
 	
 	if( player.get_arena(0) > 0 )
 	{
 		var indicatorCT:Indicator = new Indicator("rtl", ResourceType.R6_TICKET);
-		indicatorCT.layoutData = new AnchorLayoutData(18, NaN, NaN, 42);
+		indicatorCT.layoutData = new AnchorLayoutData(20, NaN, NaN, 70);
 		toolbar.addChild(indicatorCT);
 	}
 	
@@ -259,7 +259,10 @@ protected function exchangeManager_endHandler(event:Event):void
 }
 protected function pageList_scrollHandler(event:Event):void
 {
-	this.tabSelection.x = (this.pageList.horizontalScrollPosition / this.pageList.maxHorizontalScrollPosition) * this.stageWidth * 0.8 - this.tabSize * 0.1;
+	var ratio:Number = this.pageList.horizontalScrollPosition / this.pageList.maxHorizontalScrollPosition;
+	this.toolbar.alpha = 3 - ratio * 4;
+	this.toolbar.visible = this.toolbar.alpha > 0.01
+	this.tabSelection.x = ratio * this.stageWidth * 0.8 - this.tabSize * 0.1;
 }
 protected function pageList_focusInHandler(event:Event):void
 {

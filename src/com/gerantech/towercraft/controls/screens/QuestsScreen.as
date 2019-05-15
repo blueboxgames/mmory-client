@@ -31,15 +31,15 @@ override protected function initialize():void
 	super.initialize();
 	
 	var indicatorHC:Indicator = new Indicator("rtl", ResourceType.R4_CURRENCY_HARD);
-	indicatorHC.layoutData = new AnchorLayoutData(22, 40);
+	indicatorHC.layoutData = new AnchorLayoutData(20, 70);
 	addChild(indicatorHC);
 	
 	var indicatorSC:Indicator = new Indicator("rtl", ResourceType.R3_CURRENCY_SOFT);
-	indicatorSC.layoutData = new AnchorLayoutData(22, 360);
+	indicatorSC.layoutData = new AnchorLayoutData(20, 390);
 	addChild(indicatorSC);
 	
 	var indicatorXP:IndicatorXP = new IndicatorXP("ltr");
-	indicatorXP.layoutData = new AnchorLayoutData(22, NaN, NaN, 40);
+	indicatorXP.layoutData = new AnchorLayoutData(20, NaN, NaN, 70);
 	addChild(indicatorXP);
 	
 	showQuests(true);

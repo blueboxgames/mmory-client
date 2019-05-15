@@ -7,19 +7,18 @@ import com.gerantech.towercraft.managers.SoundManager;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.RewardData;
-import com.gerantech.towercraft.themes.MainTheme;
 import com.gt.towers.constants.ExchangeType;
 import com.gt.towers.constants.ResourceType;
 import com.gt.towers.events.CoreEvent;
 import com.gt.towers.utils.CoreUtils;
-import feathers.controls.Button;
+
 import feathers.controls.ImageLoader;
-import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import feathers.skins.ImageSkin;
+
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.events.Event;
@@ -47,7 +46,7 @@ public function Indicator(direction:String, type:int, hasProgressbar:Boolean = f
 	this.hasProgressbar = hasProgressbar;
 	this.hasIncreaseButton = hasIncreaseButton;
 	this.autoApdate = autoApdate;
-	this.width = 240;
+	this.width = 180;
 	this.height = 64;
 	addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
 }
@@ -77,13 +76,13 @@ override protected function initialize():void
 	iconDisplay.pivotX = iconDisplay.pivotY = iconDisplay.width * 0.5;
 	iconDisplay.source = Assets.getTexture("res-" + type, "gui");
 	iconDisplay.width = iconDisplay.height = height + 24;
-	iconDisplay.layoutData = new AnchorLayoutData(NaN, direction == "ltr"?NaN: -height / 2, NaN, direction == "ltr"? -height / 2:NaN, NaN, 0);
+	iconDisplay.layoutData = new AnchorLayoutData(NaN, direction == "ltr"?NaN: -height, NaN, direction == "ltr"? -height:NaN, NaN, 0);
 	addChild(iconDisplay);
 	
 	if( hasIncreaseButton )
 	{
 		var increaseButton:IndicatorButton = new IndicatorButton();
-		increaseButton.layoutData = new AnchorLayoutData(NaN, direction == "ltr"? -height / 2:NaN, NaN, direction == "ltr"?NaN: -height / 2, NaN, 0); 
+		increaseButton.layoutData = new AnchorLayoutData(NaN, direction == "ltr"? -height:NaN, NaN, direction == "ltr"?NaN: -height, NaN, 0); 
 		increaseButton.addEventListener(Event.TRIGGERED, addButton_triggerHandler);
 		increaseButton.width = increaseButton.height = height + 12;
 		increaseButton.label = "+";
