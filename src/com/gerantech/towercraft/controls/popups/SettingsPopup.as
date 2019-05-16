@@ -32,7 +32,7 @@ public class SettingsPopup extends SimpleHeaderPopup
 private var list:FastList;
 public function SettingsPopup()
 {
-	var _h:int = 1140;
+	var _h:int = 1250;
 	var _p:int = 48;
 	transitionIn = new TransitionData();
 	transitionOut = new TransitionData();
@@ -53,7 +53,7 @@ override protected function showElements():void
 	list.dataProvider = getSettingsData();
 	list.verticalScrollPolicy = ScrollPolicy.OFF;
 	list.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
-	list.layoutData = new AnchorLayoutData(120, 10, 70, 10);
+	list.layoutData = new AnchorLayoutData(150, 40, 70, 40);
 	list.addEventListener(FeathersEventType.FOCUS_IN, list_focusInHandler);
 	list.itemRendererFactory = function():IListItemRenderer { return new SettingsItemRenderer(); }
 	addChild(list);
