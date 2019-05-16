@@ -3,7 +3,9 @@ package com.gerantech.towercraft.controls.buttons
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.towers.battle.units.Card;
+
 import feathers.layout.AnchorLayoutData;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 /**
@@ -22,7 +24,8 @@ override protected function initialize():void
 	super.initialize();
 	iconDisplay.maintainAspectRatio = false;
 	iconDisplay.source = Assets.getTexture("theme/upgrade-ready");
-	AnchorLayoutData(iconDisplay.layoutData).verticalCenter = NaN;
+	iconDisplay.layoutData = new AnchorLayoutData(NaN, direction == "ltr"?NaN: -height*0.5, NaN, direction == "ltr"? -height*0.5:NaN);
+
 	iconDisplay.y = -10;
 	iconDisplay.width = 70;
 	iconDisplay.height = 80;

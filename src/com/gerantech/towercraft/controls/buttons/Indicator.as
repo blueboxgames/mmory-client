@@ -82,7 +82,7 @@ override protected function initialize():void
 	if( hasIncreaseButton )
 	{
 		var increaseButton:IndicatorButton = new IndicatorButton();
-		increaseButton.layoutData = new AnchorLayoutData(NaN, direction == "ltr"? -height:NaN, NaN, direction == "ltr"?NaN: -height, NaN, 0); 
+		increaseButton.layoutData = new AnchorLayoutData(NaN, direction=="ltr"?-height:NaN, NaN, direction=="ltr"?NaN:-height, NaN, 0); 
 		increaseButton.addEventListener(Event.TRIGGERED, addButton_triggerHandler);
 		increaseButton.width = increaseButton.height = height + 12;
 		increaseButton.label = "+";
