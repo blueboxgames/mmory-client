@@ -55,6 +55,7 @@ private var segmentsCollection:ListCollection;
 
 public function DashboardScreen()
 {
+	visible = false;	
 	if( !Assets.animationAssetsLoaded )
 		Assets.loadAnimationAssets(initialize, "factions", "packs");
 }
@@ -83,7 +84,6 @@ protected function addedToStageHandler(event:Event):void
 	
 	autoSizeMode = AutoSizeMode.STAGE;
 	layout = new AnchorLayout();
-	visible = false;	
 	
 	if( appModel.loadingManager.state < LoadingManager.STATE_LOADED )
 		appModel.loadingManager.addEventListener(LoadingEvent.LOADED, loadingManager_loadedHandler);
@@ -95,6 +95,16 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 {
 	appModel.loadingManager.removeEventListener(LoadingEvent.LOADED, loadingManager_loadedHandler);
 	UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_000_FIRST_RUN);
+
+	// tutorial mode
+	if( player.get_battleswins() == 0 )
+	{
+		if( player.tutorialMode == 0 )
+			appModel.navigator.pushScreen(Game.OPERATIONS_SCREEN);
+		else if( player.tutorialMode == 1 )
+			appModel.navigator.runBattle(0);
+		return;
+	}
 
 	// return to last open game
 	if( appModel.loadingManager.serverData.getBool("inBattle") )
@@ -108,7 +118,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	pageLayout.typicalItemHeight = 150;
 	pageLayout.horizontalAlign = HorizontalAlign.CENTER;
 	pageLayout.verticalAlign = VerticalAlign.JUSTIFY;
-	pageLayout.typicalItemWidth = stage.stageWidth;
+	// pageLayout.typicalItemWidth = stage.stageWidth;
 	pageLayout.useVirtualLayout = false;
 	
 	pageList = new List();
@@ -197,16 +207,6 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 		toolbar.addChild(indicatorCT);
 	}
 	
-	// tutorial mode
-	if( player.get_battleswins() == 0 )
-	{
-		if( player.tutorialMode == 0 )
-			appModel.navigator.pushScreen(Game.OPERATIONS_SCREEN);
-		else if( player.tutorialMode == 1 )
-			appModel.navigator.runBattle(0);
-		return;
-	}
-	
 	segmentsCollection = getListData();
 
 	pageList.dataProvider = segmentsCollection;
@@ -268,7 +268,6 @@ protected function pageList_focusInHandler(event:Event):void
 {
 	tabsList.removeEventListener(Event.SELECT, tabsList_selectHandler);
 	var focusIndex:int = event.data as int;
-	trace(focusIndex, tabsList.selectedIndex)
 	if( tabsList.selectedIndex != focusIndex )
 		gotoPage(focusIndex, 0, false);
 	tabsList.addEventListener(Event.SELECT, tabsList_selectHandler);
@@ -300,11 +299,16 @@ override protected function backButtonFunction():void
 
 override public function dispose():void
 {
-	tabsList.removeEventListener(Event.SELECT, tabsList_selectHandler);
-	pageList.removeEventListener(Event.READY, pageList_readyHandler);
-	pageList.removeEventListener(Event.SCROLL, pageList_scrollHandler);
-	pageList.removeEventListener(FeathersEventType.FOCUS_IN, pageList_focusInHandler);
+	if( tabsList != null )
+		tabsList.removeEventListener(Event.SELECT, tabsList_selectHandler);
+	if( pageList != null )
+	{
+		pageList.removeEventListener(Event.READY, pageList_readyHandler);
+		pageList.removeEventListener(Event.SCROLL, pageList_scrollHandler);
+		pageList.removeEventListener(FeathersEventType.FOCUS_IN, pageList_focusInHandler);
+	}
 	exchangeManager.removeEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
+	appModel.loadingManager.removeEventListener(LoadingEvent.LOADED, loadingManager_loadedHandler);
 	super.dispose();
 }
 }
