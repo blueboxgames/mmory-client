@@ -11,14 +11,17 @@ import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.events.Event;
@@ -92,7 +95,7 @@ override protected function showElements() : void
 	{
 		var header:TabsHeader = new TabsHeader();
 		header.height = 110;
-		header.layoutData = new AnchorLayoutData(150, 80, NaN, 80);
+		header.layoutData = new AnchorLayoutData(150, 102, NaN, 102);
 		header.dataProvider = new ListCollection([ { label: loc("ranking_tab_0")}, { label: loc("ranking_tab_1")} ]);
 		header.selectedIndex = 0;
 		header.addEventListener(Event.CHANGE, header_changeHandler);

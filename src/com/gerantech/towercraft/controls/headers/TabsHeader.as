@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.headers 
 {
 import com.gerantech.towercraft.controls.items.TabsHeaderItemRenderer;
+
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.ScrollPolicy;
@@ -22,7 +23,7 @@ public function TabsHeader()
 	var hlayout:HorizontalLayout = new HorizontalLayout();
 	hlayout.hasVariableItemDimensions = true;
 	hlayout.verticalAlign = VerticalAlign.JUSTIFY;
-	hlayout.gap = 6;
+	hlayout.gap = 10;
 	
 	layout = hlayout;
 	scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
