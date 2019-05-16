@@ -3,18 +3,15 @@ package com.gerantech.towercraft.controls.popups
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.BuildingCard;
 import com.gerantech.towercraft.controls.FastList;
-import com.gerantech.towercraft.controls.buttons.CustomButton;
 import com.gerantech.towercraft.controls.buttons.Indicator;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorXP;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
-import com.gerantech.towercraft.controls.groups.RewardsPalette;
 import com.gerantech.towercraft.controls.headers.BattleHeader;
 import com.gerantech.towercraft.controls.items.CardItemRenderer;
 import com.gerantech.towercraft.controls.items.ProfileBuildingItemRenderer;
 import com.gerantech.towercraft.controls.items.ProfileFeatureItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
-import com.gerantech.towercraft.controls.screens.IssuesScreen;
 import com.gerantech.towercraft.controls.segments.InboxSegment;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
@@ -23,13 +20,13 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.CardTypes;
 import com.gt.towers.constants.ResourceType;
 import com.gt.towers.scripts.ScriptEngine;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
@@ -44,7 +41,9 @@ import feathers.layout.HorizontalAlign;
 import feathers.layout.TiledRowsLayout;
 import feathers.layout.VerticalAlign;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
+
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
@@ -234,14 +233,14 @@ private function showProfile():void
 
 	var indicatorXP:IndicatorXP = new IndicatorXP("ltr", false);
 	indicatorXP.setData(NaN, xp, NaN);
-	indicatorXP.width = padding * 7;
+	indicatorXP.width = padding * 6;
 	indicatorXP.height = padding * 1.5;
-	indicatorXP.layoutData = new AnchorLayoutData(padding, appModel.isLTR?padding * 1.5:NaN, NaN, appModel.isLTR?NaN:padding * 1.5);
+	indicatorXP.layoutData = new AnchorLayoutData(padding, appModel.isLTR?padding * 2:NaN, NaN, appModel.isLTR?NaN:padding * 2);
 	addChild(indicatorXP);
 	
 	var indicatorPoint:Indicator = new Indicator("ltr", ResourceType.R2_POINT, false, false, false);
 	indicatorPoint.setData(0, point, Number.MAX_VALUE);
-	indicatorPoint.width = padding * 7;
+	indicatorPoint.width = padding * 6;
 	indicatorPoint.height = padding * 1.5;
 	indicatorPoint.layoutData = new AnchorLayoutData(padding * 3, appModel.isLTR?padding * 1.5:NaN, NaN, appModel.isLTR?NaN:padding * 1.5);
 	addChild(indicatorPoint);

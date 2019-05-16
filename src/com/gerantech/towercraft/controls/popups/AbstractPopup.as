@@ -86,6 +86,7 @@ public override function close(dispose:Boolean=true):void
 			onCompleteArgs:[dispose]
 		}
 	);
+	appModel.sounds.addAndPlay("whoosh");
 }
 }
 }
