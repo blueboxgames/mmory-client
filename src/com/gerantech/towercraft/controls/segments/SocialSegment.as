@@ -66,10 +66,10 @@ override public function init():void
 	refreshListData();
 	
 	pageList = new List();
+	pageList.snapToPages = true;
 	pageList.layout = pageLayout;
 	pageList.layoutData = new AnchorLayoutData(tabsHeight + 10, paddingH, 0, paddingH);
 	pageList.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
-	pageList.snapToPages = true;
 	pageList.horizontalScrollPolicy = pageList.verticalScrollPolicy = ScrollPolicy.OFF;
 	pageList.itemRendererFactory = function ():IListItemRenderer { return new SegmentsItemRenderer(); }
 	pageList.dataProvider = listCollection;
@@ -78,10 +78,9 @@ override public function init():void
 	tabsList = new TabsHeader();
 	tabsList.layoutData = new AnchorLayoutData(10, paddingH + 10, NaN, paddingH + 10);
 	tabsList.height = tabsHeight;
-	//tabsList.itemRendererFactory = function ():IListItemRenderer { return new SocialTabItemRenderer(tabSize); }
 	tabsList.dataProvider = listCollection;
-	tabsList.selectedIndex = TAB_INDEX;
 	tabsList.addEventListener(Event.CHANGE, tabsList_changeHandler);
+	tabsList.selectedIndex = TAB_INDEX;
 	addChild(tabsList);
 	
 	pageList.addEventListener(Event.UPDATE, pageList_updateHandler);
@@ -98,7 +97,11 @@ private function pageList_readyHandler(event:Event):void
 private function pageList_updateHandler(event:Event):void
 {
 	listCollection.removeAll();
-	setTimeout(refreshListData, 1000);
+	setTimeout(function():void{
+		tabsList.selectedIndex = -1;
+		refreshListData();
+		tabsList.selectedIndex = 0;
+	}, 100);
 }
 
 private function tabsList_changeHandler(event:Event):void
