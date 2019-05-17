@@ -100,7 +100,8 @@ private function pageList_updateHandler(event:Event):void
 	setTimeout(function():void{
 		tabsList.selectedIndex = -1;
 		refreshListData();
-		tabsList.selectedIndex = 0;
+		tabsList.selectedIndex = 0
+		;
 	}, 100);
 }
 
