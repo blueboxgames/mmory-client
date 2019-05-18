@@ -113,8 +113,6 @@ override protected function initialize():void
 	
 	draggableCard = new Draggable();
 	
-	placeHolder = new CardPlaceHolder();
-	
 	stage.addEventListener(TouchEvent.TOUCH, stage_touchHandler);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_elixirUpdateHandler);
 }
@@ -195,6 +193,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 		touchId = touch.id;
 		selectedCard.visible = false;
 		
+		placeHolder = new CardPlaceHolder();
 		selectedCardPosition = selectedCard.getBounds(stage);
 		draggableCard.x = placeHolder.x = selectedCardPosition.x += selectedCard.width * 0.50;
 		draggableCard.y = placeHolder.y = selectedCardPosition.y += selectedCard.height * 0.44;
@@ -222,7 +221,6 @@ protected function stage_touchHandler(event:TouchEvent) : void
 		else if( touch.phase == TouchPhase.ENDED && selectedCard != null )
 		{
 			appModel.battleFieldView.mapBuilder.setSummonAreaEnable(false);
-			placeHolder.removeFromParent();
 			setTouchPosition(touch);
 			touchPosition.x -= (appModel.battleFieldView.x - BattleField.WIDTH * 0.5);
 			touchPosition.y -= (appModel.battleFieldView.y - BattleField.HEIGHT * 0.5);
@@ -234,6 +232,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 					touchPosition.y = task.points[1].y - (appModel.battleFieldView.y - BattleField.HEIGHT * 0.5);	
 				}
 				
+				placeHolder.summon();
 				cardQueue.push(selectedCard.cardType);
 				selectedCard.setData(cardQueue.shift());
 				preparedCard.setData(cardQueue[0]);
@@ -255,7 +254,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 				{
 					battleField.numSummonedUnits ++;
 					
-					if ( battleField.numSummonedUnits == 1 ) // pause battle
+					if( battleField.numSummonedUnits == 1 ) // pause battle
 					{
 						battleField.pauseTime = battleField.now + 2500;
 						showSummonTutorial(1, new Point(300, 1200), 2000);
@@ -268,6 +267,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 			}
 			else
 			{
+				placeHolder.removeFromParent();
 				draggableCard.x = selectedCardPosition.x;
 				draggableCard.y = selectedCardPosition.y;
 				draggableCard.scale = 1;
