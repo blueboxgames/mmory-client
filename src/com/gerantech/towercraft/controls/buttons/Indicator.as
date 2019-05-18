@@ -35,7 +35,8 @@ public var hasIncreaseButton:Boolean;
 public var autoApdate:Boolean;
 public var iconDisplay:ImageLoader;
 public var labelOffsetX:Number = 0;
-protected var progressBar:LabeledProgressBar;
+public var progressBar:LabeledProgressBar;
+public var progressBarFactory:Function;
 
 private var _displayValue:Number = Number.MIN_VALUE;
 
@@ -57,21 +58,13 @@ override protected function initialize():void
 	this.isQuickHitAreaEnabled = false;
 	layout = new AnchorLayout();
 	
-	progressBar = new LabeledProgressBar();
-	progressBar.clampValue = this._clampValue;
-	progressBar.formatValueFactory = this._formatValueFactory;;
-	progressBar.layoutData = new AnchorLayoutData(0, 0, 0, 0);
-	progressBar.labelOffsetX = labelOffsetX;
-	progressBar.isEnabled = false;
-	progressBar.minimum = minimum;
-	progressBar.maximum = maximum;
-	progressBar.value = value;
+	if( progressBarFactory == null )
+		progressBarFactory = defaultProgressBarFactory;
+	progressBar = progressBarFactory();
 	addChild(progressBar);
-	
 	if( !hasProgressbar )
 		progressBar.fillSkin.visible = false;
-//	progressLabel.layoutData = new AnchorLayoutData(NaN, (direction == "rtl" || (direction == "ltr" && hasIncreaseButton)) ? 40 : 0, NaN, direction == "ltr"||(direction == "rtl"&&hasIncreaseButton) ? 40 : 0, NaN, -1);
-	
+
 	iconDisplay = new ImageLoader();
 	iconDisplay.pivotX = iconDisplay.pivotY = iconDisplay.width * 0.5;
 	iconDisplay.source = Assets.getTexture("res-" + type, "gui");
@@ -172,6 +165,21 @@ public function set displayValue(v:Number) : void
 	
 	if( progressBar != null )
 		progressBar.value = v;
+}
+
+protected function defaultProgressBarFactory():LabeledProgressBar
+{
+	var ret:LabeledProgressBar = new LabeledProgressBar();
+	ret.clampValue = this._clampValue;
+	ret.formatValueFactory = this._formatValueFactory;;
+	ret.layoutData = new AnchorLayoutData(0, 0, 0, 0);
+	ret.labelOffsetX = labelOffsetX;
+	ret.isEnabled = false;
+	ret.minimum = minimum;
+	ret.maximum = maximum;
+	ret.value = value;
+//	progressLabel.layoutData = new AnchorLayoutData(NaN, (direction == "rtl" || (direction == "ltr" && hasIncreaseButton)) ? 40 : 0, NaN, direction == "ltr"||(direction == "rtl"&&hasIncreaseButton) ? 40 : 0, NaN, -1);
+	return ret;
 }
 
 private var _clampValue:Boolean = true;

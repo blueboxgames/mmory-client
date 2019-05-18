@@ -40,6 +40,7 @@ import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
+import com.gerantech.towercraft.controls.CardView;
 
 public class CardsSegment extends Segment
 {
@@ -167,7 +168,7 @@ private function unlocksList_focusInHandler(event:Event):void
 }
 private function deckHeader_selectHandler(event:Event):void
 {
-	var item:BuildingCard = event.data as BuildingCard;
+	var item:CardView = event.data as CardView;
 	selectCard(item.type, item.getBounds(stage));
 }
 private function selectCard(cardType:int, cardBounds:Rectangle):void
@@ -254,7 +255,7 @@ private function pushToDeck(cardIndex:int):void
 		setEditMode(false, -1);
 		return;
 	}
-	deckHeader.cards[cardIndex].iconDisplay.setData(draggableCard.type);
+	deckHeader.cards[cardIndex].iconDisplay.type = draggableCard.type;
 	player.getSelectedDeck().set(cardIndex, draggableCard.type);
 	
 	var params:SFSObject = new SFSObject();
