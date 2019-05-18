@@ -1,13 +1,7 @@
 package com.gerantech.towercraft.controls.buttons 
 {
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.towers.battle.units.Card;
-
-import feathers.layout.AnchorLayoutData;
-
-import starling.animation.Transitions;
-import starling.core.Starling;
 /**
 * @author Mansour Djawadi
 */
@@ -22,15 +16,18 @@ public function IndicatorCard(direction:String, type:int, autoApdate:Boolean = t
 override protected function initialize():void
 {
 	super.initialize();
-	iconDisplay.maintainAspectRatio = false;
+/* 	iconDisplay.maintainAspectRatio = false;
 	iconDisplay.source = Assets.getTexture("theme/upgrade-ready");
 	iconDisplay.layoutData = new AnchorLayoutData(NaN, direction == "ltr"?NaN: -height*0.5, NaN, direction == "ltr"? -height*0.5:NaN);
 
 	iconDisplay.y = -10;
 	iconDisplay.width = 70;
 	iconDisplay.height = 80;
-	formatValueFactory = function(value:Number, minimum:Number, maximum:Number) : String
+ */	
+	this.formatValueFactory = function(value:Number, minimum:Number, maximum:Number) : String
 	{
+		if( value >= maximum )
+			return loc("upgrade_label");
 		return StrUtils.getNumber(Math.round(value) + "/" + maximum);
 	}
 }
@@ -40,7 +37,9 @@ override public function setData(minimum:Number, value:Number, maximum:Number, c
 	var card:Card = player.cards.get(type);
 	maximum = Card.get_upgradeCards(card == null?1:card.level, card == null?0:card.rarity);
 	super.setData(minimum, value, maximum, changeDuration);
-	var _upgradable:Boolean = this.value >= maximum;
+	if( this.progressBar != null )
+		this.progressBar.isEnabled = this.value >= maximum;
+/* 	var _upgradable:Boolean = this.value >= maximum;
 
 	if( iconDisplay == null ) 
 		return;
@@ -50,9 +49,10 @@ override public function setData(minimum:Number, value:Number, maximum:Number, c
 		Starling.juggler.delayCall(punchArrow, changeDuration);
 	else
 		reset();
+ */
 }
 
-private function reset():void 
+/* private function reset():void 
 {
 	stopPunching();
 	iconDisplay.removeFromParent();
@@ -87,11 +87,11 @@ private function stopPunching():void
 	Starling.juggler.removeDelayedCalls(animateIconDisplay);
 	if( iconDisplay != null )
 		Starling.juggler.removeTweens(iconDisplay);
-}
+} */
 
 override public function dispose():void
 {
-	stopPunching();
+	// stopPunching();
 	super.dispose();
 }
 }
