@@ -10,7 +10,6 @@ import com.gt.towers.constants.MessageTypes;
 import com.gt.towers.constants.ResourceType;
 import com.gt.towers.others.Quest;
 import com.smartfoxserver.v2.core.SFSEvent;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.controls.renderers.IListItemRenderer;
@@ -20,9 +19,11 @@ import feathers.layout.AnchorLayoutData;
 import flash.geom.Rectangle;
 
 import starling.events.Event;
+import com.gt.towers.exchanges.ExchangeItem;
 
 public class QuestsScreen extends ListScreen
 {
+public var questsCollection:ListCollection;
 override protected function initialize():void
 {
 	title = loc("button_quests");
@@ -54,8 +55,12 @@ private function showQuests(needsLoad:Boolean):void
 		return;
 	}
 
+	questsCollection = new ListCollection();
 	for each( var q:Quest in player.quests )
+	{
 		q.current = Quest.getCurrent(player, q.type, q.key);
+		questsCollection.addItem(q);
+	}
 	
 	listLayout.gap = 40;
 	listLayout.padding = 50
@@ -66,7 +71,7 @@ private function showQuests(needsLoad:Boolean):void
 	list.itemRendererFactory = function():IListItemRenderer { return new QuestItemRenderer(); }
 	list.addEventListener(Event.SELECT, list_selectHandler);
 	list.addEventListener(Event.UPDATE, list_updateHandler);
-	list.dataProvider = new ListCollection(player.quests);
+	list.dataProvider = questsCollection;
 }
 
 private function loadQuests():void 
@@ -112,7 +117,8 @@ protected function list_selectHandler(e:Event):void
 
 private function passQuest(questItem:QuestItemRenderer):void 
 {
-	var response:int = exchanger.exchange(Quest.getExchangeItem(questItem.quest.type, questItem.quest.nextStep), 0, 0);
+	var ex:ExchangeItem = Quest.getExchangeItem(questItem.quest.type, questItem.quest.nextStep);
+	var response:int = exchanger.exchange(ex, 0, 0);
 	if( response != MessageTypes.RESPONSE_SUCCEED )
 	{
 		trace("quests response:", response);
@@ -128,13 +134,12 @@ private function passQuest(questItem:QuestItemRenderer):void
 	appModel.sounds.addAndPlay("upgrade");
 }
 
-
 private function list_updateHandler(e:Event):void 
 {
 	var questItem:QuestItemRenderer = e.data as QuestItemRenderer;
-	list.dataProvider.removeItemAt(questItem.index);
+	questsCollection.removeItemAt(questItem.index);
 	player.quests.removeAt(questItem.index);
-	var sfs:ISFSObject = new SFSObject();
+	var sfs:SFSObject = new SFSObject();
 	sfs.putInt("id", questItem.quest.id);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_rewardCollectHandler);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.QUEST_REWARD_COLLECT, sfs);
@@ -148,12 +153,12 @@ private function sfs_rewardCollectHandler(e:SFSEvent):void
 	if( e.params.params.getInt("response") != MessageTypes.RESPONSE_SUCCEED )
 		return;
 	
-	var q:ISFSObject = e.params.params.getSFSObject("quest");
+	var q:SFSObject = e.params.params.getSFSObject("quest");
 	var quest:Quest = new Quest(q.getInt("id"), q.getInt("type"), q.getInt("key"), q.getInt("nextStep"), q.getInt("current"), q.getInt("target"), SFSConnection.ToMap(q.getSFSArray("rewards")));
-	//list.dataProvider.addItem(quest);
 	player.quests.push(quest);
 	if( list.dataProvider != null )
-		list.dataProvider.updateAll();
+		questsCollection.addItem(quest);
 }
+
 }
 }
