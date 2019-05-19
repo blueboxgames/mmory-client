@@ -237,6 +237,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 				selectedCard.setData(cardQueue.shift());
 				preparedCard.setData(cardQueue[0]);
 				pushNewCardToDeck(selectedCard);
+				
 				Starling.juggler.tween(draggableCard, 0.1, {scale:0, onComplete:draggableCard.removeFromParent});
 				selectedCard = null;
 				

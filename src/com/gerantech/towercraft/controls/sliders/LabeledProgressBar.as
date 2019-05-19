@@ -103,7 +103,7 @@ protected function defaultTextRendererFactory() : ITextRenderer
 		return null;
 	}
 	
-	return new ShadowLabel(null, 1, 0, "center", "ltr", false, null, 0.7);
+	return new ShadowLabel(null, 1, 0, "center", "ltr", false, null, 0.65);
 }
 
 private var _formatValueFactory:Function;

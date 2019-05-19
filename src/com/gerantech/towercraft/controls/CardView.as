@@ -24,6 +24,7 @@ package com.gerantech.towercraft.controls
 	{
 		static public const RARITY_COLORS:Object = {0:0x4296FD, 1:0xF98900, 2:0xD016FF};
 		static private var FRAME_SCALEGRID:Rectangle = new Rectangle(27, 25, 1, 1);
+		static private var SLIDER_SCALEGRID:Rectangle = new Rectangle(16, 16, 1, 1);
 		static public var VERICAL_SCALE:Number = 1.35;
 
 		protected var _type:int = -1;
@@ -34,12 +35,13 @@ package com.gerantech.towercraft.controls
 		protected var _hasSlider:Boolean;
 
 		protected var levelDisplay:RTLLabel;
+		protected var sliderDisplay:Indicator;
 		protected var iconDisplay:ImageLoader;
 		protected var frameDisplay:ImageLoader;
+		protected var elixirDisplay:ShadowLabel;
 		protected var levelBackground:ImageLoader;
 		protected var elixirBackground:ImageLoader;
 		protected var quantityDisplay:ShadowLabel;
-		protected var sliderDisplay:Indicator;
 
 		public function CardView()
 		{
@@ -211,12 +213,23 @@ package com.gerantech.towercraft.controls
 		{
 			if( this._elixir <= 0 || this.availablity == CardTypes.AVAILABLITY_NOT || this._level <= 0 )
 			{
-				if( this.elixirBackground != null )
+				if( this.elixirDisplay != null )
 				{
+					this.elixirDisplay.removeFromParent(true);
+					this.elixirDisplay = null;
+
 					this.elixirBackground.removeFromParent(true);
 					this.elixirBackground = null;
 				}
 				return;
+			}
+
+			if( this.elixirDisplay == null )
+			{
+				this.elixirDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 0.8);
+				this.elixirDisplay.width = elixirDisplay.height = 90;
+				this.elixirDisplay.layoutData = new AnchorLayoutData(-15, NaN, NaN, -10);
+				this.addChild(this.elixirDisplay as DisplayObject);
 			}
 			
 			if( this.elixirBackground == null )
@@ -268,9 +281,9 @@ package com.gerantech.towercraft.controls
 				else
 					this.sliderDisplay = new Indicator("ltr", this._type, false, false);
 				this.sliderDisplay.progressBarFactory = slider_progressbarFactory;
-				this.sliderDisplay.layoutData = new AnchorLayoutData(NaN, 0, 0, 0);
+				this.sliderDisplay.layoutData = new AnchorLayoutData(NaN, 2, 23, 2);
 				this.addChild(this.sliderDisplay as DisplayObject);
-				this.sliderDisplay.height = 92;
+				this.sliderDisplay.height = 68;
 			}
 			this.sliderDisplay.setData(0, -1, this.sliderDisplay.maximum);
 		}
@@ -278,20 +291,19 @@ package com.gerantech.towercraft.controls
 		protected function slider_progressbarFactory():LabeledProgressBar
 		{
 			var ret:LabeledProgressBar = new LabeledProgressBar();
-			var bg:Image = new Image(Assets.getTexture("cards/frame", "gui"));
+			var bg:Image = new Image(Assets.getTexture("cards/slider-background", "gui"));
+			bg.scale9Grid = SLIDER_SCALEGRID;
 			bg.color = RARITY_COLORS[this._rarity];
-			bg.scale9Grid = FRAME_SCALEGRID;
 			ret.backgroundSkin = bg;
 			ret.backgroundDisabledSkin = bg;
 
-			ret.fillPaddingTop = ret.fillPaddingRight = ret.fillPaddingLeft = 10;
-			ret.fillPaddingBottom = 30;
+			ret.fillPaddingTop = ret.fillPaddingRight = ret.fillPaddingBottom = ret.fillPaddingLeft = 8;
 
 			ret.clampValue = false;
 			ret.formatValueFactory = sliderDisplay.formatValueFactory;;
 			ret.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 			ret.labelOffsetX = 0;
-			ret.labelOffsetY = -9;
+			ret.labelOffsetY = 1;
 			ret.isEnabled = false;
 			return ret;
 		}

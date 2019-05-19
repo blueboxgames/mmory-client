@@ -6,8 +6,12 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.towers.battle.BattleField;
 import com.gt.towers.battle.units.Card;
+import com.gt.towers.constants.CardFeatureType;
 import com.gt.towers.constants.CardTypes;
+import com.gt.towers.scripts.ScriptEngine;
 import com.gt.towers.utils.CoreUtils;
+
+import starling.core.Starling;
 import starling.display.Image;
 import starling.display.Sprite;
 
@@ -20,7 +24,7 @@ public class CardPlaceHolder extends Sprite
 private var _type:int;
 private var unitDisplay:Image;
 private var titleDisplay:ShadowLabel;
-private var labelDisplay:ShadowLabel;
+private var levelDisplay:ShadowLabel;
 private var unitsContainer:Sprite;
 private var zoneDisplay:Image;
 public function CardPlaceHolder() 
@@ -46,12 +50,12 @@ public function CardPlaceHolder()
 	titleDisplay.y = -250;
 	addChild(titleDisplay);
 	
-	labelDisplay = new ShadowLabel("", 1, 0, "center", null, false, null, 0.8);
-	labelDisplay.width = 500;
-	labelDisplay.height = 100;
-	labelDisplay.pivotX = labelDisplay.width * 0.5;
-	labelDisplay.y = -180;
-	addChild(labelDisplay);
+	levelDisplay = new ShadowLabel("", 1, 0, "center", null, false, null, 0.8);
+	levelDisplay.width = 500;
+	levelDisplay.height = 100;
+	levelDisplay.pivotX = levelDisplay.width * 0.5;
+	levelDisplay.y = -180;
+	addChild(levelDisplay);
 }
 
 public function set type(value:int) : void
@@ -77,7 +81,7 @@ public function set type(value:int) : void
 	
 	
 	titleDisplay.text = StrUtils.loc("card_title_" + _type);
-	labelDisplay.text = StrUtils.loc("level_label", [card.level]);
+	levelDisplay.text = StrUtils.loc("level_label", [card.level]);
 	
 	unitsContainer.removeChildren();
 	if( isSpell )
@@ -99,6 +103,15 @@ public function set type(value:int) : void
 public function get type() : int
 {
 	return _type;
+}
+
+public function summon() : void
+{
+	zoneDisplay.visible = false;
+	titleDisplay.visible = false;
+	levelDisplay.visible = false;
+	var dely:Number = ScriptEngine.getInt(CardFeatureType.F04_SUMMON_TIME, this._type, AppModel.instance.game.player.cards.get(_type).level) * 0.001;
+	Starling.juggler.tween(unitsContainer, 0.2, {alpha:0, delay:dely, onComplete:removeFromParent, onCompleteArgs:[true]});
 }
 }
 }
