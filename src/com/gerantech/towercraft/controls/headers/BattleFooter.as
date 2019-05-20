@@ -11,6 +11,7 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;
+import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.views.MapBuilder;
 import com.gerantech.towercraft.views.units.CardPlaceHolder;
 import com.gt.towers.battle.BattleField;
@@ -42,7 +43,7 @@ import starling.events.TouchPhase;
 
 public class BattleFooter extends TowersLayout
 {
-static public var HEIGHT:int = 380;
+static public var HEIGHT:int = 360;
 public var stickerButton:MMOryButton;
 private var padding:int;
 private var cardsContainer:LayoutGroup;
@@ -91,6 +92,7 @@ override protected function initialize():void
 	preparedCard = new CardView();
 	preparedCard.touchable = false;
 	preparedCard.width = 160;
+	preparedCard.height = preparedCard.width * CardView.VERICAL_SCALE;
 	preparedCard.layoutData = new AnchorLayoutData(NaN, NaN, 0, 0);
 	preparedCard.type = cardQueue[0];
 	addChild(preparedCard);
@@ -98,8 +100,9 @@ override protected function initialize():void
 	if( appModel.battleFieldView.battleData.userType == 0 )
 	{
 		stickerButton = new MMOryButton();
-		stickerButton.height = 120;
-		stickerButton.width = preparedCard.width - padding * 2;
+		stickerButton.height = 110;
+		stickerButton.width = preparedCard.width;
+		stickerButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
 		stickerButton.iconTexture = Assets.getTexture("tooltip-bg-bot-left");
 		stickerButton.layoutData = new AnchorLayoutData(padding, NaN, NaN, padding);
 		stickerButton.addEventListener(Event.TRIGGERED, stickerButton_triggeredHandler);

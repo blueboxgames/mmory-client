@@ -8,6 +8,7 @@ import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gt.towers.constants.MessageTypes;
 import com.gt.towers.constants.ResourceType;
+import com.gt.towers.exchanges.ExchangeItem;
 import com.gt.towers.others.Quest;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -19,7 +20,6 @@ import feathers.layout.AnchorLayoutData;
 import flash.geom.Rectangle;
 
 import starling.events.Event;
-import com.gt.towers.exchanges.ExchangeItem;
 
 public class QuestsScreen extends ListScreen
 {
@@ -64,7 +64,7 @@ private function showQuests(needsLoad:Boolean):void
 	
 	listLayout.gap = 40;
 	listLayout.padding = 50
-	listLayout.paddingBottom = footerSize;
+	listLayout.paddingBottom = footerSize + 20;
 	listLayout.paddingTop = headerSize + 40;
 	listLayout.hasVariableItemDimensions = true;
 	

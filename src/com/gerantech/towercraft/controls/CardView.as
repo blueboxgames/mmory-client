@@ -232,7 +232,7 @@ package com.gerantech.towercraft.controls
 				this.levelBackground.source = appModel.theme.roundSmallSkin;
 				this.levelBackground.scale9Grid = MainTheme.ROUND_SMALL_SCALE9_GRID;
 				this.levelBackground.layoutData = new AnchorLayoutData(NaN, 0, this._showSlider ? 85 : 30);
-				this.addChildAt(levelBackground, Math.min(1, numChildren));
+				this.addChildAt(this.levelBackground as DisplayObject, 1);
 			}
 		}
 		
@@ -256,7 +256,7 @@ package com.gerantech.towercraft.controls
 				this.elixirBackground = new ImageLoader();
 				this.elixirBackground.width = elixirBackground.height = 90;
 				this.elixirBackground.layoutData = new AnchorLayoutData(-22, NaN, NaN, -12);
-				this.addChild(this.elixirBackground as DisplayObject);
+				this.addChildAt(this.elixirBackground as DisplayObject, 3);
 
 				this.elixirDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 0.9);
 				this.elixirDisplay.width = elixirDisplay.height = 90;
@@ -307,7 +307,7 @@ package com.gerantech.towercraft.controls
 					this.sliderDisplay = new Indicator("ltr", this._type, false, false);
 				this.sliderDisplay.progressBarFactory = slider_progressbarFactory;
 				this.sliderDisplay.layoutData = new AnchorLayoutData(NaN, 2, 23, 2);
-				this.addChild(this.sliderDisplay as DisplayObject);
+				this.addChildAt(this.sliderDisplay as DisplayObject, 3);
 				this.sliderDisplay.height = 68;
 			}
 			this.sliderDisplay.setData(0, -1, this.sliderDisplay.maximum);
@@ -331,6 +331,11 @@ package com.gerantech.towercraft.controls
 			ret.labelOffsetY = 1;
 			ret.isEnabled = false;
 			return ret;
+		}
+
+		override public function addChildAt(child:starling.display.DisplayObject, index:int):starling.display.DisplayObject
+		{
+			return super.addChildAt(child, Math.min(index, numChildren));
 		}
 	}
 }
