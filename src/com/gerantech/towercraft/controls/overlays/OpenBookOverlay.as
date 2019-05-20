@@ -20,6 +20,7 @@ import dragonBones.objects.DragonBonesData;
 import dragonBones.starling.StarlingArmatureDisplay;
 import dragonBones.starling.StarlingEvent;
 import dragonBones.starling.StarlingFactory;
+import dragonBones.starling.StarlingTextureAtlasData;
 import dragonBones.starling.StarlingTextureData;
 
 import feathers.controls.AutoSizeMode;
@@ -243,13 +244,20 @@ private function pullCard() : void
 	// change card
 	var texture:Texture = Assets.getTexture("cards/" + rewardType, "gui");
 	var subtexture:SubTexture = new SubTexture(texture, new Rectangle(0, 0, texture.width, texture.height));
-	StarlingTextureData(bookArmature.armature.getSlot("template-card").skinSlotData.getDisplay("cards/template-card").texture).texture = subtexture;
+	StarlingTextureData(bookArmature.armature.getSlot("template").skinSlotData.getDisplay("cards/template-card").texture).texture = subtexture;
 	
 	// change rarity color
-	texture = Assets.getTexture("cards/bevel-card-back-" + rewardRarity, "gui");
-	subtexture = new SubTexture(texture, new Rectangle(0, 0, texture.width, texture.height));
-	StarlingTextureData(bookArmature.armature.getSlot("bevel-card-back").skinSlotData.getDisplay("cards/bevel-card").texture).texture = subtexture;
+	var atlas:StarlingTextureAtlasData = factory.getTextureAtlasData("packs")[0] as StarlingTextureAtlasData;
+
+	var std:StarlingTextureData =  atlas.textures["cards/back-" + rewardRarity];
+	subtexture = new SubTexture(atlas.texture, std.region);
+	StarlingTextureData(bookArmature.armature.getSlot("back").skinSlotData.getDisplay("cards/back").texture).texture = subtexture
+
+	std =  atlas.textures["cards/frame-" + rewardRarity];
+	subtexture = new SubTexture(atlas.texture, std.region);
+	StarlingTextureData(bookArmature.armature.getSlot("frame").skinSlotData.getDisplay("cards/frame").texture).texture = subtexture;
 	
+
 	var cardDisply:CardView = new CardView();
 	cardDisply.width = 328;
 	cardDisply.height = cardDisply.width * CardView.VERICAL_SCALE;
