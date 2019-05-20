@@ -3,9 +3,11 @@ package com.gerantech.towercraft.controls.segments
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.items.InboxThreadItemRenderer;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.InboxService;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.InboxThread;
+
 import feathers.controls.StackScreenNavigatorItem;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
@@ -13,6 +15,7 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import starling.events.Event;
 /**
 * @author Mansour Djawadi
@@ -34,6 +37,14 @@ override public function init():void
 	if( threadsCollection == null )
 		threadsCollection = InboxService.instance.threads;
 	
+	if( threadsCollection.length == 0 )
+	{
+		var labelDisplay:ShadowLabel = new ShadowLabel(loc("inbox_empty_label"));
+		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
+		addChild(labelDisplay);
+		return;
+	}
+
 	listLayout = new VerticalLayout();
 	listLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
 	listLayout.gap = listLayout.padding = 10;	
@@ -43,10 +54,10 @@ override public function init():void
 	
 	list = new FastList();
 	list.layout = listLayout;
-	list.layoutData = new AnchorLayoutData(0, 0, 0, 0);
-	list.addEventListener(Event.CHANGE, list_changeHandler);
-	list.itemRendererFactory = function():IListItemRenderer { return new InboxThreadItemRenderer(); }
 	list.dataProvider = threadsCollection;
+	list.addEventListener(Event.CHANGE, list_changeHandler);
+	list.layoutData = new AnchorLayoutData(0, paddingH, 0, paddingH);
+	list.itemRendererFactory = function():IListItemRenderer { return new InboxThreadItemRenderer(); }
 	addChild(list);
 }
 

@@ -2,6 +2,7 @@
 call bats/SetupSDK.bat
 call bats/SetupApp.bat
 
+%ANDROID_SDK%\adb devices
 cd dist
 set /P APK_FILE=TAP TO SELECT APK: 
 cd ..

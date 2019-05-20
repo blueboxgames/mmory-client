@@ -3,6 +3,7 @@ package com.gerantech.towercraft.controls.sliders
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.controls.ProgressBar;
 import feathers.core.ITextRenderer;
 import feathers.layout.Direction;
@@ -11,6 +12,11 @@ import feathers.utils.math.clamp;
 
 public class LabeledProgressBar extends ProgressBar
 {
+public var fillPaddingTop:Number = 0;
+public var fillPaddingRight:Number = 0;
+public var fillPaddingBottom:Number = 0;
+public var fillPaddingLeft:Number = 0;
+
 public var horizontalAlign:String = "left";
 public var labelTextRenderer:RTLLabel;
 public var labelOffsetX:Number = 0;
@@ -97,7 +103,7 @@ protected function defaultTextRendererFactory() : ITextRenderer
 		return null;
 	}
 	
-	return new ShadowLabel(null, 1, 0, "center", "ltr", false, null, 0.7);
+	return new ShadowLabel(null, 1, 0, "center", "ltr", false, null, 0.65);
 }
 
 private var _formatValueFactory:Function;
@@ -290,18 +296,18 @@ override protected function layoutChildren() : void
 	}
 	if( this._direction === Direction.VERTICAL )
 	{
-		this.currentFill.width = this.actualWidth - this._paddingLeft - this._paddingRight;
-		this.currentFill.height = this._originalFillHeight + percentage * (this.actualHeight - this._paddingTop - this._paddingBottom - this._originalFillHeight);
-		this.currentFill.x = this._paddingLeft;
-		this.currentFill.y = this.actualHeight - this._paddingBottom - this.currentFill.height;
+		this.currentFill.width = this.actualWidth - this._paddingLeft - this._paddingRight - this.fillPaddingLeft - this.fillPaddingRight;
+		this.currentFill.height = this._originalFillHeight + percentage * (this.actualHeight - this._paddingTop - this._paddingBottom  - this.fillPaddingTop - this.fillPaddingBottom - this._originalFillHeight);
+		this.currentFill.x = this._paddingLeft + this.fillPaddingLeft;
+		this.currentFill.y = this.actualHeight - this._paddingBottom - this.fillPaddingBottom - this.currentFill.height;
 	}
 	else //horizontal
 	{
-		this.currentFill.width = this._originalFillWidth + percentage * (this.actualWidth - this._paddingLeft - this._paddingRight - this._originalFillWidth);
-		this.currentFill.height = this.actualHeight - this._paddingTop - this._paddingBottom;
+		this.currentFill.width = this._originalFillWidth + percentage * (this.actualWidth - this._paddingLeft - this._paddingRight - this.fillPaddingLeft - this.fillPaddingRight - this._originalFillWidth);
+		this.currentFill.height = this.actualHeight - this._paddingTop - this._paddingBottom - this.fillPaddingTop - this.fillPaddingBottom;
 		
-		this.currentFill.x =  this._paddingLeft + ( horizontalAlign == HorizontalAlign.RIGHT ? actualWidth - currentFill.width : 0 );
-		this.currentFill.y = this._paddingTop;
+		this.currentFill.x =  this._paddingLeft + this.fillPaddingLeft + ( horizontalAlign == HorizontalAlign.RIGHT ? actualWidth - currentFill.width : 0 );
+		this.currentFill.y = this._paddingTop + this.fillPaddingTop;
 	}
 	
 	if( this.labelTextRenderer != null )

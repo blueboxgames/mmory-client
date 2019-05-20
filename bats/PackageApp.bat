@@ -9,6 +9,7 @@ echo Select server
 echo.
 echo  [1] iran
 echo  [2] local
+echo  [3] yoga
 
 :choice
 set /P S=[Choice]: 
@@ -17,6 +18,7 @@ echo.
 set SERVER=iran
 if "%S%"=="1" set SERVER=iran
 if "%S%"=="2" set SERVER=local
+if "%S%"=="3" set SERVER=yoga
 
 
 :menu

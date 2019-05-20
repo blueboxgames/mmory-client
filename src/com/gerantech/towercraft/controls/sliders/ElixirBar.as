@@ -1,17 +1,17 @@
 package com.gerantech.towercraft.controls.sliders
 {
 import com.gerantech.towercraft.controls.TowersLayout;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
+import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.towers.battle.BattleField;
 import com.gt.towers.battle.ElixirUpdater;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
-import feathers.controls.text.BitmapFontTextRenderer;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import feathers.text.BitmapFontTextFormat;
 
 import starling.animation.Transitions;
 import starling.core.Starling;
@@ -19,10 +19,10 @@ import starling.display.Image;
 
 public class ElixirBar extends TowersLayout
 {
-private var elixirBottle:LayoutGroup;
+private var elixirIconDisplay:LayoutGroup;
 private var fillDisplay:ImageLoader;
 private var realtimeDisplay:ImageLoader;
-private var elixirCountDisplay:BitmapFontTextRenderer;
+private var elixirCountDisplay:ShadowLabel;
 private var _value:Number;
 
 public function ElixirBar()
@@ -40,7 +40,7 @@ override protected function initialize():void
 	
 	layout = new AnchorLayout();
 	//width = 280;
-	height = 72;
+	height = 48;
 	var padding:int = 12;
 	
 	backgroundSkin = new Image(appModel.theme.backgroundSliderSkin);
@@ -73,20 +73,21 @@ override protected function initialize():void
 		addChild(slot);
 	}
 	
-	elixirBottle = new LayoutGroup();
-	elixirBottle.touchable = false;
-	elixirBottle.pivotX = elixirBottle.width * 0.5;
-	elixirBottle.pivotY = elixirBottle.height * 0.5;
-	elixirBottle.layout = new AnchorLayout();
-	//elixirBottle.backgroundSkin = new Image (Assets.getTexture("elixir"));
-	elixirBottle.layoutData = new AnchorLayoutData(NaN, NaN, padding, padding);
-	addChild(elixirBottle);
+	elixirIconDisplay = new LayoutGroup();
+	elixirIconDisplay.touchable = false;
+	elixirIconDisplay.width = 90;
+	elixirIconDisplay.height = 96;
+	elixirIconDisplay.y = height * 0.5;
+	elixirIconDisplay.pivotX = elixirIconDisplay.width * 0.5;
+	elixirIconDisplay.pivotY = elixirIconDisplay.height * 0.7;
+	elixirIconDisplay.layout = new AnchorLayout();
+	elixirIconDisplay.backgroundSkin = new Image (Assets.getTexture("cards/elixir", "gui"));
+	addChild(elixirIconDisplay);
 	
-	elixirCountDisplay = new BitmapFontTextRenderer();
-	elixirCountDisplay.textFormat = new BitmapFontTextFormat(Assets.getFont(), 110)
-	elixirCountDisplay.pixelSnapping = elixirCountDisplay.touchable = false;
-	elixirCountDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
-	elixirBottle.addChild(elixirCountDisplay);
+	elixirCountDisplay = new ShadowLabel(null, 1, 0, null, null, false, null, 0.9);
+	elixirCountDisplay.pixelSnapping = false;
+	elixirCountDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 15);
+	elixirIconDisplay.addChild(elixirCountDisplay);
 }
 
 public function get value():Number
@@ -100,16 +101,16 @@ public function set value(newValue:Number):void
 		return;
 	_value = __v;
 
-	if( elixirCountDisplay != null )
-	{
-		elixirCountDisplay.text = _value.toString();
-		elixirBottle.scale = 1.4;
-		Starling.juggler.tween(elixirBottle, 0.8, {scale:1, transition:Transitions.EASE_OUT_ELASTIC});
-	}
-	
 	var last:Number = (_value + 0) / ElixirUpdater.MAX_VALUE * this.width;
 	var next:Number = (_value + 1) / ElixirUpdater.MAX_VALUE * this.width;
 	var time:Number = 1 / (battleField.getDuration() > battleField.getTime(1) ? battleField.elixirUpdater.finalSpeeds[battleField.side] : battleField.elixirUpdater.normalSpeeds[battleField.side]) / 1000;
+
+	if( elixirIconDisplay != null )
+	{
+		elixirCountDisplay.text = StrUtils.getNumber(_value);
+		Starling.juggler.tween(elixirIconDisplay, 0.8, {x:last, transition:Transitions.EASE_OUT_ELASTIC});
+	}
+	
 	if( fillDisplay != null )
 	{
 		Starling.juggler.removeTweens(fillDisplay);
@@ -132,7 +133,7 @@ private function get battleField() : BattleField
 override public function dispose():void
 {
 	Starling.juggler.removeTweens(fillDisplay);
-	Starling.juggler.removeTweens(elixirBottle);
+	Starling.juggler.removeTweens(elixirIconDisplay);
 	super.dispose();
 }
 }

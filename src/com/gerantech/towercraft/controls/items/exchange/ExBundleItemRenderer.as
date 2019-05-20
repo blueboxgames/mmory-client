@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.buttons.DiscountButton;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
@@ -36,14 +36,14 @@ override protected function commitData():void
 		createOutcome(outKeys, i, rowH);
 	
 	var availabledLabel:RTLLabel = new RTLLabel(exchange.numExchanges + "/3", 0, null, "right", false, null, 0.7);
-	availabledLabel.layoutData = new AnchorLayoutData(padding, padding * 2);
+	availabledLabel.layoutData = new AnchorLayoutData(12, 24);
 	addChild(availabledLabel);
 	
 	var outValue:int = Exchanger.toReal(exchange.outcomes);
 	var discount:int = Math.round((1 - (exchange.requirements.values()[0] / outValue)) * 100)
 	
 	var buttonDisplay:DiscountButton = new DiscountButton();
-	buttonDisplay.layoutData = new AnchorLayoutData(NaN, NaN, padding * 2, NaN, 0);
+	buttonDisplay.layoutData = new AnchorLayoutData(NaN, NaN, 24, NaN, 0);
 	buttonDisplay.width = 320;
 	if( exchange.requirements.keys()[0] == ResourceType.R5_CURRENCY_REAL )
 		buttonDisplay.currency = "ت";
@@ -55,7 +55,7 @@ override protected function commitData():void
 	var ribbonDisplay:ImageLoader = new ImageLoader();
 	ribbonDisplay.source = Assets.getTexture("cards/empty-badge");
 	ribbonDisplay.layoutData = new AnchorLayoutData( -14, NaN, NaN, -14);
-	ribbonDisplay.height = ribbonDisplay.width = padding * 18;
+	ribbonDisplay.height = ribbonDisplay.width = 220;
 	addChild(ribbonDisplay);
 	ribbonDisplay.addEventListener(FeathersEventType.CREATION_COMPLETE, function():void
 	{
@@ -75,7 +75,7 @@ private function createOutcome(outKeys:Vector.<int>, i:int, rowH:int):void
 	if( ResourceType.isBook(outKeys[i]) ) 
 	{
 		var bookArmature:StarlingArmatureDisplay = OpenBookOverlay.factory.buildArmatureDisplay(outKeys[i].toString());
-		bookArmature.width = padding * 24;
+		bookArmature.width = 260;
 		bookArmature.scaleY = bookArmature.scaleX;
 		bookArmature.animation.gotoAndStopByProgress("appear", 1);
 		bookArmature.animation.timeScale = 0;
@@ -84,27 +84,27 @@ private function createOutcome(outKeys:Vector.<int>, i:int, rowH:int):void
 	}
 	else
 	{
-		var cardDisplay:BuildingCard = new BuildingCard(false, false, false, false);
-		cardDisplay.width = padding * 18;
+		var cardDisplay:CardView = new CardView();
+		cardDisplay.width = 220;
 		addChild(cardDisplay);
-		cardDisplay.setData(outKeys[i]);
+		cardDisplay.type = outKeys[i]
 		cardDisplay.pivotX = cardDisplay.width * 0.5;
-		cardDisplay.pivotY = cardDisplay.pivotX * BuildingCard.VERICAL_SCALE;	
+		cardDisplay.pivotY = cardDisplay.pivotX * CardView.VERICAL_SCALE;	
 		
 		var countDisplay:ShadowLabel = new ShadowLabel(exchange.outcomes.get(outKeys[i]).toString(), 1, 0, "center", null, false, null, 0.9);
-		countDisplay.layoutData = new AnchorLayoutData(padding, padding * 2, NaN, padding * 2);
+		countDisplay.layoutData = new AnchorLayoutData(12, 24, NaN, 24);
 		setTimeout(cardDisplay.addChild, 10, countDisplay);
 		outcome = cardDisplay;
 	}
 
 	outcome.x = i * rowH + rowH * 0.5;
-	outcome.y = padding * 16;
+	outcome.y = 190;
 	
 	var labelDisplay:ShadowLabel = new ShadowLabel(loc((ResourceType.isCard(outKeys[i]) ? "card_title_" : (ResourceType.isBook(outKeys[i])?"exchange_title_":"resource_title_")) + outKeys[i]), 1, 0, "center");
 	labelDisplay.width = rowH;
 	labelDisplay.pivotX = rowH * 0.5;
 	labelDisplay.x = i * rowH + rowH * 0.5;
-	labelDisplay.y = padding * 27;
+	labelDisplay.y = 320;
 	addChild(labelDisplay);
 }
 

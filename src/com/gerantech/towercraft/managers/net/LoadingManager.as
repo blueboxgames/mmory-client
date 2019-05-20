@@ -173,11 +173,10 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 
 public function loadCore():void
 {
+	state = STATE_CORE_LOADING;			
 	var coreLoader:CoreLoader = new CoreLoader(serverData);
 	UserData.instance.prefs.addEventListener(Event.COMPLETE, prefs_completeHandler);
 	UserData.instance.prefs.init();
-
-	state = STATE_CORE_LOADING;			
 }
 
 protected function prefs_completeHandler(e:*):void 

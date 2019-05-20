@@ -27,10 +27,14 @@ override protected function initialize():void
 	super.initialize();
 	
 	chatBox = new InboxChatSegment(myId);
-	chatBox.layoutData = new AnchorLayoutData(headerSize, 0, footerSize, 0);
+	chatBox.layoutData = new AnchorLayoutData(headerSize, 0, 0, 0);
 	addChild(chatBox);
 	if( sfsData != null )
 		chatBox.setData(sfsData.getSFSArray("data"), thread);
+
+	closeButton.height = 126;
+	closeButton.layoutData = new AnchorLayoutData( NaN, NaN, 8, 16);
+	addChild(closeButton);
 }
 
 protected function inboxService_completeHandler(event:Event) : void 
