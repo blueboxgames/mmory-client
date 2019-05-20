@@ -93,7 +93,7 @@ override protected function initialize():void
 	preparedCard.touchable = false;
 	preparedCard.width = 160;
 	preparedCard.height = preparedCard.width * CardView.VERICAL_SCALE;
-	preparedCard.layoutData = new AnchorLayoutData(NaN, NaN, 0, 0);
+	preparedCard.layoutData = new AnchorLayoutData(NaN, NaN, 0, padding);
 	preparedCard.type = cardQueue[0];
 	addChild(preparedCard);
 	

@@ -282,7 +282,7 @@ package com.gerantech.towercraft.controls
 			if( this.quantityDisplay == null )
 			{
 				this.quantityDisplay = new ShadowLabel(null, 1, 0, null, "ltr", false, null, 1.3);
-				this.quantityDisplay.layoutData = new AnchorLayoutData(NaN, 46, 20);
+				this.quantityDisplay.layoutData = new AnchorLayoutData(NaN, 30, 20);
 				this.addChild(this.quantityDisplay as DisplayObject);
 			}
 			this.quantityDisplay.text = (ResourceType.isCard(type) ? "x" : "+") + StrUtils.getNumber(quantity);
