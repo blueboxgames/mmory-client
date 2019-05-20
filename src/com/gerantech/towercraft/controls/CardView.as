@@ -8,8 +8,10 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.models.Assets;
 	import com.gerantech.towercraft.themes.MainTheme;
 	import com.gerantech.towercraft.utils.StrUtils;
+	import com.gt.towers.constants.CardFeatureType;
 	import com.gt.towers.constants.CardTypes;
 	import com.gt.towers.constants.ResourceType;
+	import com.gt.towers.scripts.ScriptEngine;
 
 	import feathers.controls.ImageLoader;
 	import feathers.layout.AnchorLayout;
@@ -19,20 +21,24 @@ package com.gerantech.towercraft.controls
 
 	import starling.display.DisplayObject;
 	import starling.display.Image;
+	import starling.filters.ColorMatrixFilter;
 
 	public class CardView extends TowersLayout
 	{
 		static public const RARITY_COLORS:Object = {0:0x4296FD, 1:0xF98900, 2:0xD016FF};
 		static private var FRAME_SCALEGRID:Rectangle = new Rectangle(27, 25, 1, 1);
 		static private var SLIDER_SCALEGRID:Rectangle = new Rectangle(16, 16, 1, 1);
-		static public var VERICAL_SCALE:Number = 1.35;
+		static public var VERICAL_SCALE:Number = 1.44;
 
 		protected var _type:int = -1;
 		protected var _level:int = -1;
 		protected var _rarity:int = 0;
 		protected var _elixir:int = -1;
 		protected var _quantity:int = -1;
-		protected var _hasSlider:Boolean;
+		protected var _availablity:int = 0;
+		protected var _showRarity:Boolean;
+		protected var _showSlider:Boolean;
+		protected var _showElixir:Boolean;
 
 		protected var levelDisplay:RTLLabel;
 		protected var sliderDisplay:Indicator;
@@ -51,7 +57,7 @@ package com.gerantech.towercraft.controls
 		override protected function initialize():void
 		{
 			super.initialize();
-			layout= new AnchorLayout();
+			this.layout= new AnchorLayout();
 		}		
 
 		/**
@@ -66,6 +72,12 @@ package com.gerantech.towercraft.controls
 			if( this._type == value )
 				return;
 			this._type = value;
+			if( this._type > 100 )
+			{
+				this._availablity = player.getAvailablity(this._type)
+				this._rarity = ScriptEngine.getInt(CardFeatureType.F00_RARITY, this._type)
+				this._elixir = ScriptEngine.getInt(CardFeatureType.F02_ELIXIR_SIZE, this._type)
+			}
 			this.invalidate(INVALIDATION_FLAG_DATA);
 		}
 
@@ -85,23 +97,22 @@ package com.gerantech.towercraft.controls
 		{
 			return this._rarity;
 		}
-		public function set rarity(value:int):void
-		{
-			if( this._rarity == value )
-				return;
-			this._rarity = value;
-			this.invalidate(INVALIDATION_FLAG_DATA);
-		}
 
 		public function get elixir():int
 		{
 			return this._elixir;
 		}
-		public function set elixir(value:int):void
+		public function get showElixir():Boolean
 		{
-			if( this._elixir == value )
+			return this._showElixir;
+		}
+		public function set showElixir(value:Boolean):void
+		{
+			if( this._showElixir == value )
 				return;
-			this._elixir = value;
+			this._showElixir = value;
+			if( this._showElixir && this._type > 100 )
+				this._elixir = ScriptEngine.getInt(CardFeatureType.F02_ELIXIR_SIZE, this._type);
 			this.invalidate(INVALIDATION_FLAG_DATA);
 		}
 
@@ -117,21 +128,21 @@ package com.gerantech.towercraft.controls
 			this.invalidate(INVALIDATION_FLAG_DATA);
 		}
 
-		public function get hasSlider():Boolean
+		public function get showSlider():Boolean
 		{
-			return this._hasSlider;
+			return this._showSlider;
 		}
-		public function set hasSlider(value:Boolean):void
+		public function set showSlider(value:Boolean):void
 		{
-			if( this._hasSlider == value )
+			if( this._showSlider == value )
 				return;
-			this._hasSlider = value;
+			this._showSlider = value;
 			this.invalidate(INVALIDATION_FLAG_DATA);
 		}
 
 		public function get availablity():int
 		{
-			return CardTypes.AVAILABLITY_EXISTS;
+			return _availablity;
 		}
 
 
@@ -156,10 +167,10 @@ package com.gerantech.towercraft.controls
 			if( this.iconDisplay == null )
 			{
 				this.iconDisplay = new ImageLoader();
-				this.iconDisplay.layoutData = new AnchorLayoutData(18, 18, 36, 18);
+				this.iconDisplay.layoutData = new AnchorLayoutData(12, 12, NaN, 12);
 				this.addChildAt(this.iconDisplay as DisplayObject, 0);
 			}
-			iconDisplay.source = Assets.getTexture("cards/" + this._type, "gui");
+			this.iconDisplay.source = Assets.getTexture("cards/" + this._type, "gui");
 
 			if( this.frameDisplay == null )
 			{
@@ -169,12 +180,28 @@ package com.gerantech.towercraft.controls
 				this.frameDisplay.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 				this.addChildAt(this.frameDisplay, 1);
 			}
-			this.frameDisplay.color = RARITY_COLORS[this._rarity];
+
+			// disable effect
+			if( availablity != CardTypes.AVAILABLITY_EXISTS )
+			{
+				if( iconDisplay.filter == null )
+				{
+					var f:ColorMatrixFilter = new ColorMatrixFilter();
+					f.adjustSaturation(-1);
+					iconDisplay.filter = f;
+				}
+			}
+			else
+			{
+				iconDisplay.filter = null;
+			}
+
+			this.frameDisplay.color = this._availablity != CardTypes.AVAILABLITY_EXISTS ? 0x7777AA : RARITY_COLORS[this._rarity];
 		}
 
 		protected function levelDisplayFactory():void
 		{
-			if( !ResourceType.isCard(this._type) || this.availablity != CardTypes.AVAILABLITY_EXISTS || this._type < 0 || this._level <= 0 )
+			if( !ResourceType.isCard(this._type) || this._availablity != CardTypes.AVAILABLITY_EXISTS || this._type < 0 || this._level <= 0 )
 			{
 				if( this.levelDisplay != null )
 				{
@@ -190,8 +217,8 @@ package com.gerantech.towercraft.controls
 			if( this.levelDisplay == null )
 			{
 				this.levelDisplay = new RTLLabel(null, 1, "center", null, false, null, 0.65);
-				this.levelDisplay.width = 44;
-				this.levelDisplay.layoutData = new AnchorLayoutData(NaN, 20, this._hasSlider ? 85 : 30);
+				this.levelDisplay.width = 42;
+				this.levelDisplay.layoutData = new AnchorLayoutData(NaN, 20, this._showSlider ? 82 : 27);
 				this.addChild(this.levelDisplay);
 			}
 			this.levelDisplay.text = StrUtils.getNumber(this._level);
@@ -204,14 +231,14 @@ package com.gerantech.towercraft.controls
 				this.levelBackground.height = 45;
 				this.levelBackground.source = appModel.theme.roundSmallSkin;
 				this.levelBackground.scale9Grid = MainTheme.ROUND_SMALL_SCALE9_GRID;
-				this.levelBackground.layoutData = new AnchorLayoutData(NaN, 0, this._hasSlider ? 85 : 30);
+				this.levelBackground.layoutData = new AnchorLayoutData(NaN, 0, this._showSlider ? 85 : 30);
 				this.addChildAt(levelBackground, Math.min(1, numChildren));
 			}
 		}
 		
 		protected function elixirDisplayFactory():void
 		{
-			if( this._elixir <= 0 || this.availablity == CardTypes.AVAILABLITY_NOT || this._level <= 0 )
+			if( !this._showElixir || this.availablity == CardTypes.AVAILABLITY_NOT || this._level <= 0 )
 			{
 				if( this.elixirDisplay != null )
 				{
@@ -226,20 +253,18 @@ package com.gerantech.towercraft.controls
 
 			if( this.elixirDisplay == null )
 			{
-				this.elixirDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 0.8);
-				this.elixirDisplay.width = elixirDisplay.height = 90;
-				this.elixirDisplay.layoutData = new AnchorLayoutData(-15, NaN, NaN, -10);
-				this.addChild(this.elixirDisplay as DisplayObject);
-			}
-			
-			if( this.elixirBackground == null )
-			{
 				this.elixirBackground = new ImageLoader();
 				this.elixirBackground.width = elixirBackground.height = 90;
-				this.elixirBackground.layoutData = new AnchorLayoutData(-15, NaN, NaN, -10);
+				this.elixirBackground.layoutData = new AnchorLayoutData(-22, NaN, NaN, -12);
 				this.addChild(this.elixirBackground as DisplayObject);
+
+				this.elixirDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 0.9);
+				this.elixirDisplay.width = elixirDisplay.height = 90;
+				this.elixirDisplay.layoutData = new AnchorLayoutData(1, NaN, NaN, -10);
+				this.addChild(this.elixirDisplay as DisplayObject);
 			}
-			this.elixirBackground.source = Assets.getTexture("cards/elixir-" + this._elixir, "gui");
+			this.elixirDisplay.text =  StrUtils.getNumber(this._elixir);
+			this.elixirBackground.source = Assets.getTexture("cards/elixir", "gui");
 		}
 		
 		protected function quantityDisplayFactory():void
@@ -256,8 +281,8 @@ package com.gerantech.towercraft.controls
 			
 			if( this.quantityDisplay == null )
 			{
-				this.quantityDisplay = new ShadowLabel(null, 1, 0, null, "ltr", false, null, 1.35);
-				this.quantityDisplay.layoutData = new AnchorLayoutData(NaN, 50, 20);
+				this.quantityDisplay = new ShadowLabel(null, 1, 0, null, "ltr", false, null, 1.3);
+				this.quantityDisplay.layoutData = new AnchorLayoutData(NaN, 46, 20);
 				this.addChild(this.quantityDisplay as DisplayObject);
 			}
 			this.quantityDisplay.text = (ResourceType.isCard(type) ? "x" : "+") + StrUtils.getNumber(quantity);
@@ -265,7 +290,7 @@ package com.gerantech.towercraft.controls
 
 		protected function sliderDisplayFactory():void
 		{
-			if( !this._hasSlider || this.availablity < CardTypes.AVAILABLITY_WAIT )
+			if( !this._showSlider || this.availablity < CardTypes.AVAILABLITY_WAIT )
 			{
 				if( this.sliderDisplay != null )
 				{

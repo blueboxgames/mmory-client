@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.towercraft.Game;
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.buttons.Indicator;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
@@ -277,7 +277,7 @@ private function showProfile():void
 		listLayout.useSquareTiles = false;
 		listLayout.requestedColumnCount = 10;
 		listLayout.typicalItemWidth = (width - listLayout.padding * (listLayout.requestedColumnCount + 1)) / listLayout.requestedColumnCount;
-		listLayout.typicalItemHeight = listLayout.typicalItemWidth * BuildingCard.VERICAL_SCALE;
+		listLayout.typicalItemHeight = listLayout.typicalItemWidth * CardView.VERICAL_SCALE;
 		
 		var buildingslist:FastList = new FastList();
 		buildingslist.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
@@ -304,7 +304,7 @@ private function showProfile():void
     deckLayout.useVirtualLayout = false;
     deckLayout.requestedColumnCount = 4;
     deckLayout.typicalItemWidth = (width - deckLayout.gap * (deckLayout.requestedColumnCount - 1) - padding * 4) / deckLayout.requestedColumnCount;
-    deckLayout.typicalItemHeight = deckLayout.typicalItemWidth * BuildingCard.VERICAL_SCALE;
+    deckLayout.typicalItemHeight = deckLayout.typicalItemWidth * CardView.VERICAL_SCALE;
 	
 	var deckList:List = new List();
     deckList.layout = deckLayout;

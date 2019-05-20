@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
@@ -55,18 +55,19 @@ override protected function commitData() : void
 }
 override protected function iconFactory() : void
 {
-	var iconBGDisplay:ImageLoader = new ImageLoader();
-	iconBGDisplay.width = 160;
-	iconBGDisplay.source = appModel.theme.roundSmallSkin;
-	iconBGDisplay.scale9Grid = MainTheme.ROUND_SMALL_SCALE9_GRID;
-	iconBGDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -40);
-	iconBGDisplay.height = iconBGDisplay.width * BuildingCard.VERICAL_SCALE;
-	this.addChild(iconBGDisplay);
-
 	this.iconDisplay = new ImageLoader();
-	this.iconDisplay.width = 152;
-	this.iconDisplay.layoutData = iconBGDisplay.layoutData;
-	this.iconDisplay.height = this.iconDisplay.width * BuildingCard.VERICAL_SCALE;
+	this.iconDisplay.width = 150;
+	this.iconDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -40);
+	this.iconDisplay.height = this.iconDisplay.width * CardView.VERICAL_SCALE;
+
+	var iconBGDisplay:ImageLoader = new ImageLoader();
+	iconBGDisplay.width = this.iconDisplay.width + 6;
+	iconBGDisplay.source = appModel.theme.roundSmallSkin;
+	iconBGDisplay.layoutData = this.iconDisplay.layoutData;
+	iconBGDisplay.scale9Grid = MainTheme.ROUND_SMALL_SCALE9_GRID;
+	iconBGDisplay.height = this.iconDisplay.width * CardView.VERICAL_SCALE + 6;
+
+	this.addChild(iconBGDisplay);
 	this.addChild(this.iconDisplay);
 }
 

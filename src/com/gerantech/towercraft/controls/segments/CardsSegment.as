@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.controls.segments
 {
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.headers.DeckHeader;
 import com.gerantech.towercraft.controls.items.CardItemRenderer;
 import com.gerantech.towercraft.controls.overlays.BuildingUpgradeOverlay;
@@ -40,7 +40,7 @@ import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
-import com.gerantech.towercraft.controls.CardView;
+import starling.filters.ColorMatrixFilter;
 
 public class CardsSegment extends Segment
 {
@@ -48,7 +48,7 @@ private var availableList:List;
 private var unavailableList:List;
 private var deckHeader:DeckHeader;
 private var scroller:ScrollContainer;
-private var draggableCard:BuildingCard;
+private var draggableCard:CardView;
 private var selectPopup:CardSelectPopup;
 private var detailsPopup:CardDetailsPopup;
 private var availableCollection:ListCollection;
@@ -92,13 +92,13 @@ override public function init():void
 	var foundLayout:TiledRowsLayout = new TiledRowsLayout();
 	var unavailabledLayout:TiledRowsLayout = new TiledRowsLayout();
 	unavailabledLayout.gap = foundLayout.gap = foundLayout.paddingTop = 16;
-	unavailabledLayout.verticalGap = foundLayout.verticalGap = 72;
+	unavailabledLayout.verticalGap = foundLayout.verticalGap = 52;
 	unavailabledLayout.paddingBottom = foundLayout.paddingBottom = 52;
 	unavailabledLayout.useSquareTiles = foundLayout.useSquareTiles = false;
 	unavailabledLayout.useVirtualLayout = foundLayout.useVirtualLayout = false;
 	unavailabledLayout.requestedColumnCount = foundLayout.requestedColumnCount = 4;
 	unavailabledLayout.typicalItemWidth = foundLayout.typicalItemWidth = (stageWidth - foundLayout.gap * (foundLayout.requestedColumnCount - 1) - 64) / foundLayout.requestedColumnCount;
-	unavailabledLayout.typicalItemHeight = foundLayout.typicalItemHeight = foundLayout.typicalItemWidth * BuildingCard.VERICAL_SCALE;
+	unavailabledLayout.typicalItemHeight = foundLayout.typicalItemHeight = foundLayout.typicalItemWidth * CardView.VERICAL_SCALE;
 
 	availableList = new List();
 	availableList.verticalScrollPolicy = ScrollPolicy.OFF;
@@ -114,11 +114,16 @@ override public function init():void
 		
 		unavailableList = new List();
 		unavailableList.verticalScrollPolicy = ScrollPolicy.OFF;
-		unavailableList.alpha = 0.8;
+		// unavailableList.alpha = 0.7;
 		unavailableList.layout = unavailabledLayout;
 		unavailableList.itemRendererFactory = function():IListItemRenderer { return new CardItemRenderer(false, false, false, scroller); }
 		unavailableList.dataProvider = unavailableCollection;
 		scroller.addChild(unavailableList);
+
+/* 		var f:ColorMatrixFilter = new ColorMatrixFilter();
+		f.adjustSaturation( -1 );
+		unavailableList.filter = f;
+ */
 	}
 	
 	initializeCompleted = true;
@@ -280,9 +285,9 @@ private function setEditMode(value:Boolean, type:int):void
 		deckHeader.removeEventListener(Event.SELECT, deckHeader_selectHandler);
 		deckHeader.startHanging();
 		
-		draggableCard = new BuildingCard(false, false, false, false);
+		draggableCard = new CardView();
 		draggableCard.width = 240;
-		draggableCard.height = draggableCard.width * BuildingCard.VERICAL_SCALE;
+		draggableCard.height = draggableCard.width * CardView.VERICAL_SCALE;
 		draggableCard.pivotX = draggableCard.width * 0.5;
 		draggableCard.pivotY = draggableCard.height * 0.5;
 		draggableCard.x = width * 0.5;
@@ -290,7 +295,7 @@ private function setEditMode(value:Boolean, type:int):void
 		draggableCard.alpha = 0;
 		Starling.juggler.tween(draggableCard, 0.5, {alpha:1, y:stage.stageHeight * 0.6, transition:Transitions.EASE_OUT});
 		addChild(draggableCard);
-		draggableCard.setData(type);
+		draggableCard.type = type;
 		
 		stage.addEventListener(TouchEvent.TOUCH, stage_touchHandler);
 		return;

@@ -35,15 +35,14 @@ override protected function initialize():void
 	layout = new AnchorLayout();
 	
 	iconDisplay = new CardView();
-	iconDisplay.type = card.type;
-	iconDisplay.rarity = card.rarity;
-	iconDisplay.level = card.level;
-	iconDisplay.hasSlider = true;
-	iconDisplay.elixir = ScriptEngine.getInt(CardFeatureType.F02_ELIXIR_SIZE, card.type, 1);
 	iconDisplay.width = 240;
-	iconDisplay.height = iconDisplay.width * CardView.VERICAL_SCALE;
+	iconDisplay.type = card.type;
+	iconDisplay.level = card.level;
+	iconDisplay.showSlider = true;
+	iconDisplay.showElixir = true;
 	iconDisplay.x = iconDisplay.pivotX = iconDisplay.width * 0.5;
 	iconDisplay.y = iconDisplay.pivotY = iconDisplay.height * 0.5;
+	iconDisplay.height = iconDisplay.width * CardView.VERICAL_SCALE;
 	addChild(iconDisplay);
 	
 	addEventListener(FeathersEventType.CREATION_COMPLETE, createCompleteHandler);

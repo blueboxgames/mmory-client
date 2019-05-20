@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.headers
 {
 import com.gerantech.towercraft.controls.BattleDeckCard;
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.overlays.TutorialSwipeOverlay;
@@ -47,7 +47,7 @@ public var stickerButton:MMOryButton;
 private var padding:int;
 private var cardsContainer:LayoutGroup;
 private var draggableCard:Draggable;
-private var preparedCard:BuildingCard;
+private var preparedCard:CardView;
 private var placeHolder:CardPlaceHolder;
 private var cards:Vector.<BattleDeckCard>;
 private var touchId:int;
@@ -88,11 +88,11 @@ override protected function initialize():void
 	for ( var i:int = 0; i < minDeckSize; i++ ) 
 		createDeckItem(cardQueue.shift());
 	
-	preparedCard = new BuildingCard(false, false, false, false);
+	preparedCard = new CardView();
 	preparedCard.touchable = false;
 	preparedCard.width = 160;
 	preparedCard.layoutData = new AnchorLayoutData(NaN, NaN, 0, 0);
-	preparedCard.setData(cardQueue[0]);
+	preparedCard.type = cardQueue[0];
 	addChild(preparedCard);
 	
 	if( appModel.battleFieldView.battleData.userType == 0 )
@@ -108,7 +108,7 @@ override protected function initialize():void
 	
 	elixirBar = new ElixirBar();
 	elixirBar.value = ElixirUpdater.INIT_VALUE;
-	elixirBar.layoutData = new AnchorLayoutData(NaN, padding, padding, preparedCard.width);
+	elixirBar.layoutData = new AnchorLayoutData(NaN, padding * 2, padding, preparedCard.width + padding * 2);
 	addChild(elixirBar);
 	
 	draggableCard = new Draggable();
@@ -199,7 +199,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 		draggableCard.y = placeHolder.y = selectedCardPosition.y += selectedCard.height * 0.44;
 		Starling.juggler.tween(draggableCard, 0.1, {scale:1});
 		draggableCard.visible = true;
-		draggableCard.setData(placeHolder.type = selectedCard.cardType);
+		draggableCard.type = placeHolder.type = selectedCard.type;
 		stage.addChild(draggableCard);
 		stage.addChild(placeHolder);
 		
@@ -224,7 +224,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 			setTouchPosition(touch);
 			touchPosition.x -= (appModel.battleFieldView.x - BattleField.WIDTH * 0.5);
 			touchPosition.y -= (appModel.battleFieldView.y - BattleField.HEIGHT * 0.5);
-			if( validateSummonPosition() && appModel.battleFieldView.battleData.getAlliseEllixir() >= draggableCard.elixirSize )
+			if( validateSummonPosition() && appModel.battleFieldView.battleData.getAlliseEllixir() >= draggableCard.elixir )
 			{
 				if( task != null )
 				{
@@ -233,15 +233,15 @@ protected function stage_touchHandler(event:TouchEvent) : void
 				}
 				
 				placeHolder.summon();
-				cardQueue.push(selectedCard.cardType);
-				selectedCard.setData(cardQueue.shift());
-				preparedCard.setData(cardQueue[0]);
+				cardQueue.push(selectedCard.type);
+				selectedCard.type = cardQueue.shift();
+				preparedCard.type = cardQueue[0];
 				pushNewCardToDeck(selectedCard);
 				
 				Starling.juggler.tween(draggableCard, 0.1, {scale:0, onComplete:draggableCard.removeFromParent});
 				selectedCard = null;
 				
-				elixirBar.value -= draggableCard.elixirSize;
+				elixirBar.value -= draggableCard.elixir;
 				for( var i:int=0; i < cards.length; i++ )
 					cards[i].updateData();
 					
@@ -284,7 +284,7 @@ private function validateSummonPosition() : Boolean
 	if( touchPosition.y < 0 || touchPosition.y > BattleField.HEIGHT )
 		return false;
 	
-	if( CardTypes.isSpell(selectedCard.cardType) )
+	if( CardTypes.isSpell(selectedCard.type) )
 		return true;
 	return true;
 /*	if( touchPosition.y 
@@ -296,7 +296,7 @@ private function setTouchPosition(touch:Touch) : void
 	touchPosition.x = Math.max(BattleField.PADDING, Math.min(stageWidth - BattleField.PADDING, touch.globalX));
 	
 	var limitY:Number = -0.5;
-	if( !CardTypes.isSpell(selectedCard.cardType) )
+	if( !CardTypes.isSpell(selectedCard.type) )
 	{
 		if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN )
 		{
@@ -317,12 +317,12 @@ private function setTouchPosition(touch:Touch) : void
 
 private function pushNewCardToDeck(deckSelected:BattleDeckCard) : void 
 {
-	var card:BuildingCard = new BuildingCard(false, false, false, false);
+	var card:CardView = new CardView();
 	card.touchable = false;
 	card.x = preparedCard.x;
 	card.y = preparedCard.y;
 	card.width = preparedCard.width;
-	card.setData(deckSelected.cardType);
+	card.type = deckSelected.type;
 	addChild(card);
 	var b:Rectangle = deckSelected.getBounds(this);
 	Starling.juggler.tween(card, 0.4, {x:b.x, y:b.y, width:b.width, height:b.height, transition:Transitions.EASE_IN_OUT, onComplete:pushAnimationCompleted});
@@ -348,26 +348,25 @@ private function get battleField() : BattleField
 }
 }
 
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.models.Assets;
 
-import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayoutData;
 
 import flash.geom.Rectangle;
-class Draggable extends BuildingCard
+class Draggable extends CardView
 {
 public function Draggable()
 {
-	super(false, false, false, false);
+	super();
 	touchable = false;
-	showRarity = false;
+	// showRarity = false;
 	width = 220;
-	height = width * BuildingCard.VERICAL_SCALE;
+	height = width * CardView.VERICAL_SCALE;
 	pivotX = width * 0.5;
 	pivotY = height * 0.5;
 }
-override protected function createCompleteHandler():void
+/* override protected function createCompleteHandler():void
 {
 	super.createCompleteHandler();
 	
@@ -378,4 +377,4 @@ override protected function createCompleteHandler():void
 	hilight.source = Assets.getTexture("cards/hilight", "gui");
 	addChild(hilight);
 }
-}
+ */}

@@ -60,7 +60,7 @@ static public function GET_COLOR(category:int) : uint
 	return COLORS.hasOwnProperty(category) ? COLORS[category] : COLORS[-1];
 }
 
-static private const HEIGHTS:Object = {-1:400, 0:420, 10:420, 30:500};
+static private const HEIGHTS:Object = {-1:400, 0:420, 10:420, 20:420, 30:500};
 static public function GET_HEIGHT(category:int) : int
 {
 	return HEIGHTS.hasOwnProperty(category) ? HEIGHTS[category] : HEIGHTS[-1];

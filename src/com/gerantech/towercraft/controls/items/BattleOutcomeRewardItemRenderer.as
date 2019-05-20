@@ -1,6 +1,5 @@
 package com.gerantech.towercraft.controls.items
 {
-import com.gerantech.towercraft.controls.BuildingCard;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.Assets;
@@ -29,7 +28,6 @@ private var reward:SFSObject;
 private var iconDisplay:Image;
 private var labelDisplay:RTLLabel;
 private var battleData:BattleData;
-private var buildingCrad:BuildingCard;
 private var armatureDisplay:StarlingArmatureDisplay;
 
 public function BattleOutcomeRewardItemRenderer(battleData:BattleData){ this.battleData = battleData; }

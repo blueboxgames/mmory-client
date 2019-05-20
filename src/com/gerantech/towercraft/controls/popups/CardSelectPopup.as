@@ -1,15 +1,18 @@
 package com.gerantech.towercraft.controls.popups
 {
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gt.towers.battle.units.Card;
+
 import feathers.controls.Button;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
-import starling.animation.Transitions;
+
 import starling.core.Starling;
+import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
 import starling.events.Touch;
@@ -37,12 +40,14 @@ override protected function initialize():void
 	backgroundSkin = skin;
 	
 	card = player.cards.get(cardType);
-
-	var buildingIcon:BuildingCard = new BuildingCard(true, false, false, true);
-	buildingIcon.layoutData = new AnchorLayoutData(4, 4, data?140:265, 4);
-	addChild(buildingIcon);
-//	buildingIcon.height = (transitionIn.destinationBound.width - 8) * BuildingCard.VERICAL_SCALE;
-	buildingIcon.setData(card.type, card.level, card.count());
+	
+	var iconDisplay:CardView = new CardView();
+	// iconDisplay.showSlider = true;
+	iconDisplay.showElixir = true;
+	iconDisplay.type = card.type;
+	iconDisplay.level = card.level;
+	iconDisplay.layoutData = new AnchorLayoutData(10, 10, data?145:270, 10);
+	addChild(iconDisplay as DisplayObject);
 
 	var upgradable:Boolean = Card.get_upgradeCards(card.level, card.rarity) <= player.getResource(card.type);
 	detailsButton = new MMOryButton();

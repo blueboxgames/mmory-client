@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.buttons.DiscountButton;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
@@ -84,12 +84,12 @@ private function createOutcome(outKeys:Vector.<int>, i:int, rowH:int):void
 	}
 	else
 	{
-		var cardDisplay:BuildingCard = new BuildingCard(false, false, false, false);
+		var cardDisplay:CardView = new CardView();
 		cardDisplay.width = 220;
 		addChild(cardDisplay);
-		cardDisplay.setData(outKeys[i]);
+		cardDisplay.type = outKeys[i]
 		cardDisplay.pivotX = cardDisplay.width * 0.5;
-		cardDisplay.pivotY = cardDisplay.pivotX * BuildingCard.VERICAL_SCALE;	
+		cardDisplay.pivotY = cardDisplay.pivotX * CardView.VERICAL_SCALE;	
 		
 		var countDisplay:ShadowLabel = new ShadowLabel(exchange.outcomes.get(outKeys[i]).toString(), 1, 0, "center", null, false, null, 0.9);
 		countDisplay.layoutData = new AnchorLayoutData(12, 24, NaN, 24);

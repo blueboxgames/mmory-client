@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.controls.headers
 {
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.buttons.CardButton;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
@@ -58,7 +58,7 @@ private function createDeckItem(i:int):void
 {
 	var button:CardButton = new CardButton(player.getSelectedDeck().get(i));
 	button.x = 32 + 256 * (i % 4);
-	button.y = 220 + 290 * BuildingCard.VERICAL_SCALE * Math.floor(i / 4);
+	button.y = 220 + 260 * CardView.VERICAL_SCALE * Math.floor(i / 4);
 	button.addEventListener(Event.TRIGGERED, buttons_triggeredHandler);
 	addChildAt(button, 1)
 	cards.push(button);
