@@ -238,7 +238,7 @@ package com.gerantech.towercraft.controls
 		
 		protected function elixirDisplayFactory():void
 		{
-			if( !this._showElixir || this.availablity == CardTypes.AVAILABLITY_NOT || this._level <= 0 )
+			if( !this._showElixir || this.availablity == CardTypes.AVAILABLITY_NOT || !ResourceType.isCard(this._type) )
 			{
 				if( this.elixirDisplay != null )
 				{
