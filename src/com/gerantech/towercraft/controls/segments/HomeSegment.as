@@ -63,6 +63,7 @@ override public function init():void
 
 	// events button
 	ChallengeIndexItemRenderer.IN_HOME = true;
+	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
 	ChallengeIndexItemRenderer.SHOW_INFO = false;
 	ChallengeIndexItemRenderer.ARENA = league;
 	var listLayout:VerticalLayout = new VerticalLayout();
