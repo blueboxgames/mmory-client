@@ -157,7 +157,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	footerBG.height = FOOTER_SIZE;
 	footerBG.source = Assets.getTexture("home/dash-bg");
 	footerBG.scale9Grid = new Rectangle(13, 10, 5, 66);
-	footerBG.layoutData = new AnchorLayoutData(NaN, 0, 0, 0);
+	footerBG.layoutData = new AnchorLayoutData(NaN, 0, -1, 0);
 	footerBG.touchable = false;
 	addChild(footerBG);
 	
