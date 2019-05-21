@@ -76,7 +76,7 @@ override protected function initialize():void
 	
 	var gradient:ImageLoader = new ImageLoader();
 	gradient.scale9Grid = MainTheme.SHADOW_SIDE_SCALE9_GRID;
-    gradient.color = Color.BLACK;
+	gradient.color = Color.BLACK;
 	gradient.alpha = 0.5;
 	gradient.width = 440;
 	gradient.height = 140;
@@ -128,7 +128,7 @@ override protected function initialize():void
 	else
 	{
 		timerSlider = new BattleCountdown();
-		timerSlider.layoutData = new AnchorLayoutData(padding, padding);
+		timerSlider.layoutData = new AnchorLayoutData(10, 10);
 	}
 	addChild(timerSlider);
 	
@@ -159,7 +159,7 @@ override protected function initialize():void
 	bubbleAxis.layoutData = new AnchorLayoutData(140 + padding, NaN, NaN, padding);
 	
 	scoreBoard = new BattleScoreBoard();
-	scoreBoard.layoutData = new AnchorLayoutData(NaN, -15, NaN, NaN, NaN, -BattleFooter.HEIGHT * 0.2);
+	scoreBoard.layoutData = new AnchorLayoutData(NaN, -16, NaN, NaN, NaN, -BattleFooter.HEIGHT * 0.2);
 	//scoreBoard.y = appModel.battleFieldView.y - scoreBoard.height * 0.5;
 	addChild(scoreBoard);
 	updateScores(1, 0, battleData.allise.getInt("score"), battleData.axis.getInt("score"), -1);

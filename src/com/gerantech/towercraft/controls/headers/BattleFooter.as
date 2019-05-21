@@ -78,7 +78,7 @@ override protected function initialize():void
 	addChild(cardsContainer);
 	
 	var hlayout:HorizontalLayout = new HorizontalLayout();
-	hlayout.padding = hlayout.gap = 16;
+	hlayout.padding = hlayout.gap = 24;
 	hlayout.verticalAlign = VerticalAlign.JUSTIFY;
 	hlayout.horizontalAlign = HorizontalAlign.RIGHT;
 	cardsContainer.layout = hlayout;
@@ -101,6 +101,7 @@ override protected function initialize():void
 	{
 		stickerButton = new MMOryButton();
 		stickerButton.height = 110;
+		// stickerButton.iconSize = MMOryButton.DEFAULT_ICON_SIZE
 		stickerButton.width = preparedCard.width;
 		stickerButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
 		stickerButton.iconTexture = Assets.getTexture("tooltip-bg-bot-left");
@@ -233,6 +234,8 @@ protected function stage_touchHandler(event:TouchEvent) : void
 				{
 					touchPosition.x = task.points[1].x - (appModel.battleFieldView.x - BattleField.WIDTH * 0.5);
 					touchPosition.y = task.points[1].y - (appModel.battleFieldView.y - BattleField.HEIGHT * 0.5);	
+					placeHolder.x = task.points[1].x;
+					placeHolder.y = task.points[1].y;
 				}
 				
 				placeHolder.summon();
