@@ -25,6 +25,7 @@ override protected function initialize():void
 	
 	cardView = new CardView();
 	cardView.type = this._type;
+	cardView.showElixir = true;
 	cardView.height = width * CardView.VERICAL_SCALE;
 	cardView.layoutData = new AnchorLayoutData(0, 0, NaN, 0);
 	addChild(cardView);

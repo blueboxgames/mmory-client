@@ -4,6 +4,7 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -19,7 +20,7 @@ private var axisScoreDisplay:ShadowLabel;
 public function BattleScoreBoard() 
 {
 	super();
-	width = 120;
+	width = 80;
 	height = 500;
 }
 override protected function initialize():void
@@ -29,20 +30,20 @@ override protected function initialize():void
 	layout = new AnchorLayout();
 	
 	var allisBG:ImageLoader = new ImageLoader();
-	allisBG.color = 0x000044;
+	allisBG.color = 0;
 	allisBG.source = appModel.theme.roundMediumInnerSkin;
 	allisBG.scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;
 	allisBG.height = 140;
-	allisBG.alpha = 0.8;
+	allisBG.alpha = 0.7;
 	allisBG.layoutData = new AnchorLayoutData(NaN, 0, 0, 0);
 	addChild(allisBG);
 
 	var axisBG:ImageLoader = new ImageLoader();
-	axisBG.color = 0x440000;
+	axisBG.color = 0;
 	axisBG.source = appModel.theme.roundMediumInnerSkin;
 	axisBG.scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;
 	axisBG.height = 140;
-	axisBG.alpha = 0.8;
+	axisBG.alpha = 0.7;
 	axisBG.layoutData = new AnchorLayoutData(0, 0, NaN, 0);
 	addChild(axisBG);	
 	
@@ -58,7 +59,7 @@ override protected function initialize():void
 	axisIcon.height = 70;
 	addChild(axisIcon);
 	
-	allisScoreDisplay = new ShadowLabel(StrUtils.getNumber(0), 0x3333FF, 0, null, null, false, null, 1.2);
+	allisScoreDisplay = new ShadowLabel(StrUtils.getNumber(0), 0x017FDA, 0, null, null, false, null, 1.2);
 	allisScoreDisplay .layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, -8, 190 + 5);
 	allisScoreDisplay.pixelSnapping = false;
 	addChild(allisScoreDisplay);

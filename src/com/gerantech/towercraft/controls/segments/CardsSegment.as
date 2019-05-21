@@ -40,7 +40,6 @@ import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
-import starling.filters.ColorMatrixFilter;
 
 public class CardsSegment extends Segment
 {
@@ -93,6 +92,7 @@ override public function init():void
 	var unavailabledLayout:TiledRowsLayout = new TiledRowsLayout();
 	unavailabledLayout.gap = foundLayout.gap = foundLayout.paddingTop = 16;
 	unavailabledLayout.verticalGap = foundLayout.verticalGap = 52;
+	unavailabledLayout.paddingTop = foundLayout.paddingTop = 52;
 	unavailabledLayout.paddingBottom = foundLayout.paddingBottom = 52;
 	unavailabledLayout.useSquareTiles = foundLayout.useSquareTiles = false;
 	unavailabledLayout.useVirtualLayout = foundLayout.useVirtualLayout = false;
@@ -119,11 +119,6 @@ override public function init():void
 		unavailableList.itemRendererFactory = function():IListItemRenderer { return new CardItemRenderer(false, false, false, scroller); }
 		unavailableList.dataProvider = unavailableCollection;
 		scroller.addChild(unavailableList);
-
-/* 		var f:ColorMatrixFilter = new ColorMatrixFilter();
-		f.adjustSaturation( -1 );
-		unavailableList.filter = f;
- */
 	}
 	
 	initializeCompleted = true;

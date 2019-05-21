@@ -21,7 +21,6 @@ package com.gerantech.towercraft.controls
 
 	import starling.display.DisplayObject;
 	import starling.display.Image;
-	import starling.filters.ColorMatrixFilter;
 
 	public class CardView extends TowersLayout
 	{
@@ -170,7 +169,7 @@ package com.gerantech.towercraft.controls
 				this.iconDisplay.layoutData = new AnchorLayoutData(12, 12, NaN, 12);
 				this.addChildAt(this.iconDisplay as DisplayObject, 0);
 			}
-			this.iconDisplay.source = Assets.getTexture("cards/" + this._type, "gui");
+			this.iconDisplay.source = Assets.getTexture("cards/" + this._type, "gui", availablity != CardTypes.AVAILABLITY_EXISTS);
 
 			if( this.frameDisplay == null )
 			{
@@ -179,21 +178,6 @@ package com.gerantech.towercraft.controls
 				this.frameDisplay.source = Assets.getTexture("cards/frame", "gui");
 				this.frameDisplay.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 				this.addChildAt(this.frameDisplay, 1);
-			}
-
-			// disable effect
-			if( availablity != CardTypes.AVAILABLITY_EXISTS )
-			{
-				if( iconDisplay.filter == null )
-				{
-					var f:ColorMatrixFilter = new ColorMatrixFilter();
-					f.adjustSaturation(-1);
-					iconDisplay.filter = f;
-				}
-			}
-			else
-			{
-				iconDisplay.filter = null;
 			}
 
 			this.frameDisplay.color = this._availablity != CardTypes.AVAILABLITY_EXISTS ? 0x7777AA : RARITY_COLORS[this._rarity];
@@ -238,7 +222,7 @@ package com.gerantech.towercraft.controls
 		
 		protected function elixirDisplayFactory():void
 		{
-			if( !this._showElixir || this.availablity == CardTypes.AVAILABLITY_NOT || this._level <= 0 )
+			if( !this._showElixir || this.availablity == CardTypes.AVAILABLITY_NOT || !ResourceType.isCard(this._type) )
 			{
 				if( this.elixirDisplay != null )
 				{
@@ -255,12 +239,12 @@ package com.gerantech.towercraft.controls
 			{
 				this.elixirBackground = new ImageLoader();
 				this.elixirBackground.width = elixirBackground.height = 90;
-				this.elixirBackground.layoutData = new AnchorLayoutData(-22, NaN, NaN, -12);
+				this.elixirBackground.layoutData = new AnchorLayoutData(-25, NaN, NaN, -12);
 				this.addChildAt(this.elixirBackground as DisplayObject, 3);
 
-				this.elixirDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 0.9);
-				this.elixirDisplay.width = elixirDisplay.height = 90;
-				this.elixirDisplay.layoutData = new AnchorLayoutData(1, NaN, NaN, -10);
+				this.elixirDisplay = new ShadowLabel(null, 1, 0x660000, "center", null, false, null, 0.9);
+				this.elixirDisplay.width = 100;
+				this.elixirDisplay.layoutData = new AnchorLayoutData(-3, NaN, NaN, -15);
 				this.addChild(this.elixirDisplay as DisplayObject);
 			}
 			this.elixirDisplay.text =  StrUtils.getNumber(this._elixir);
