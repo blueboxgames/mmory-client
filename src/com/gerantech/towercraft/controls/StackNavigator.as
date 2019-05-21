@@ -119,7 +119,8 @@ package com.gerantech.towercraft.controls
 				return;
 			}
 			var item:StackScreenNavigatorItem = getScreen(Game.BATTLE_SCREEN);
-			item.properties.waitingOverlay = new BattleWaitingOverlay(cancelable && AppModel.instance.game.player.get_arena(0) > 0);
+			var arena:int =  AppModel.instance.game.player.get_arena(0);
+			item.properties.waitingOverlay = new BattleWaitingOverlay(cancelable && arena > 0, spectatedUser != null, arena > 0);
 			item.properties.spectatedUser = spectatedUser;
 			item.properties.friendlyMode = friendlyMode;
 			item.properties.index = index;

@@ -83,6 +83,12 @@ override public function init():void
 	scroller.addEventListener(Event.SCROLL, scroller_scrollHandler);
 	addChildAt(scroller, 0);
 	
+	initializeCompleted = true;
+	Starling.juggler.tween(scroller, 0.5, {delay:0.5, alpha:1, onStart:initCollection});
+}
+
+protected function initCollection() : void
+{
 	//var deckSize:int = player.getSelectedDeck().keys().length;
 	//var foundLabel:RTLLabel = new RTLLabel(loc("found_cards", [deckSize+foundCollection.length, deckSize+foundCollection.length ]), 0xBBCCDD, null, null, false, null, 0.8);
 	//scroller.addChild(foundLabel);
@@ -121,7 +127,6 @@ override public function init():void
 		scroller.addChild(unavailableList);
 	}
 	
-	initializeCompleted = true;
 	exchangeManager.addEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
 }
 protected function exchangeManager_endHandler(event:Event):void

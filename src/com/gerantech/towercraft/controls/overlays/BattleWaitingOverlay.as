@@ -7,9 +7,12 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;
+
 import feathers.controls.AutoSizeMode;
 import feathers.controls.Button;
+
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -19,18 +22,20 @@ import starling.events.Event;
 public class BattleWaitingOverlay extends BaseOverlay
 {
 public var ready:Boolean;
-public var cancelable:Boolean = true;
+public var showTips:Boolean;
+public var cancelable:Boolean;
+public var spactateMode:Boolean;
 
-private var padding:int;
 private var waitingIcon:Image;
 private var cancelButton:Button;
 private var waitingLabel:RTLLabel;
 
-public function BattleWaitingOverlay(cancelable:Boolean)
+public function BattleWaitingOverlay(cancelable:Boolean, spactateMode:Boolean, showTips:Boolean)
 {
 	super();
-	padding = 48;
+	this.showTips = showTips;
 	this.cancelable = cancelable;
+	this.spactateMode = spactateMode;
 }
 
 override protected function initialize():void
@@ -51,9 +56,9 @@ override protected function initialize():void
 	if( cancelable )
 	{
 		cancelButton = new Button();
-		cancelButton.label = loc("cancel_button");
 		cancelButton.width = 280;
 		cancelButton.height = 140;
+		cancelButton.label = loc("cancel_button");
 		cancelButton.pivotX = cancelButton.width * 0.5;
 		cancelButton.pivotY = cancelButton.height * 0.5;
 		cancelButton.styleName = MainTheme.STYLE_BUTTON_SMALL_DANGER;
@@ -67,21 +72,21 @@ override protected function initialize():void
 	
 	var arena:int = player.get_arena(0);
 	
-	waitingLabel = new RTLLabel(loc(arena ? "tip_over" : "tip_over_tutor"), 1, "center", null, false, null, 1.2);
-	waitingLabel.x = padding;
-	waitingLabel.y = stageHeight * 0.55;
+	waitingLabel = new RTLLabel(loc(arena > 0 && !spactateMode ? "tip_over" : "tip_over_tutor"), 1, "center", null, false, null, 1.2);
 	waitingLabel.alpha = 0;
-	waitingLabel.width = stageWidth - padding * 2;
+	waitingLabel.x = 48;
+	waitingLabel.y = stageHeight * 0.55;
+	waitingLabel.width = stageWidth - 96;
 	waitingLabel.touchable = false;
 	addChild(waitingLabel);
 	Starling.juggler.tween(waitingLabel, 0.5, {delay: 2, alpha: 1, y: stage.stageHeight * 0.6, transition: Transitions.EASE_OUT_BACK});
 	
-	if( arena > 0 )
+	if( showTips )
 	{
 		var tipDisplay:RTLLabel = new RTLLabel(loc("tip_" + Math.min(arena - 1, 2) + "_" + Math.floor(Math.random() * 10)), 1, "justify", null, true, "center", 0.8);
-		tipDisplay.x = padding;
-		tipDisplay.y = stage.stageHeight - padding * 5;
-		tipDisplay.width = stage.stageWidth - padding * 2;
+		tipDisplay.x = 48;
+		tipDisplay.y = stage.stageHeight - 240;
+		tipDisplay.width = stage.stageWidth - 96;
 		tipDisplay.touchable = false;
 		addChild(tipDisplay);
 	}
