@@ -255,12 +255,12 @@ package com.gerantech.towercraft.controls
 			{
 				this.elixirBackground = new ImageLoader();
 				this.elixirBackground.width = elixirBackground.height = 90;
-				this.elixirBackground.layoutData = new AnchorLayoutData(-22, NaN, NaN, -12);
+				this.elixirBackground.layoutData = new AnchorLayoutData(-25, NaN, NaN, -12);
 				this.addChildAt(this.elixirBackground as DisplayObject, 3);
 
-				this.elixirDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 0.9);
-				this.elixirDisplay.width = elixirDisplay.height = 90;
-				this.elixirDisplay.layoutData = new AnchorLayoutData(1, NaN, NaN, -10);
+				this.elixirDisplay = new ShadowLabel(null, 1, 0x660000, "center", null, false, null, 0.9);
+				this.elixirDisplay.width = 100;
+				this.elixirDisplay.layoutData = new AnchorLayoutData(-3, NaN, NaN, -15);
 				this.addChild(this.elixirDisplay as DisplayObject);
 			}
 			this.elixirDisplay.text =  StrUtils.getNumber(this._elixir);
