@@ -34,6 +34,7 @@ public class ChallengeIndexItemRenderer extends AbstractListItemRenderer
 {
 static public var ARENA:int;
 static public var IN_HOME:Boolean;
+static public var IS_FRIENDLY:Boolean;
 static public var SHOW_INFO:Boolean;
 static private const BG_SCALE_GRID:Rectangle = new Rectangle(23, 22, 2, 2);
 static private const COLORS:Array = [0x30e465, 0xffa400, 0xff4200, 0xe720ff];
@@ -86,7 +87,7 @@ override protected function commitData() : void
 
 private function costFactory() : void 
 {
-	if( locked )
+	if( locked || IS_FRIENDLY )
 		return;
 	challenge.runRequirements = Challenge.getRunRequiements(chIndex);
 	var costType:int = challenge.runRequirements.keys()[0];
