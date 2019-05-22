@@ -36,7 +36,7 @@ public class Segment extends TowersLayout implements ISegment
 	public function init():void
 	{
 		initializeStarted = true;
-		focus();
+		//focus();
 	}
 	public function Segment() { super(); }
 	public function updateData():void {}

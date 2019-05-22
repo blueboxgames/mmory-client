@@ -41,6 +41,7 @@ import flash.geom.Rectangle;
 import flash.utils.setTimeout;
 
 import starling.events.Event;
+import starling.filters.ColorMatrixFilter;
 
 public class DashboardScreen extends BaseCustomScreen
 {
@@ -249,6 +250,16 @@ protected function pageList_readyHandler(event:Event):void
 {
 	tabsList.isEnabled = event.data;
 	pageList.horizontalScrollPolicy = event.data ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+	if( event.data )
+	{
+		tabsList.filter = null;
+	}
+	else
+	{
+		var filter:ColorMatrixFilter = new ColorMatrixFilter();
+		filter.adjustSaturation(-1);
+		tabsList.filter = filter;
+	}
 }
 protected function exchangeManager_endHandler(event:Event):void
 {

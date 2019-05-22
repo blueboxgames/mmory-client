@@ -44,7 +44,7 @@ public function SelectNamePopup()
 override protected function initialize():void
 {
 	// create transition in data
-	var _h:int = 540;
+	var _h:int = 580;
 	var _p:int = 84;
 	transitionIn = new TransitionData();
 	transitionOut = new TransitionData();

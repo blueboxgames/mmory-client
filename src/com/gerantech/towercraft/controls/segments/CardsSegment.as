@@ -62,9 +62,6 @@ override public function init():void
 	super.init();
 	updateData();
 	
-	// backgroundSkin = new Quad(1,1);
-	// backgroundSkin.alpha = 0;
-	
 	deckHeader = new DeckHeader();
 	deckHeader.addEventListener(Event.SELECT, deckHeader_selectHandler);
 	deckHeader.layoutData = new AnchorLayoutData(NaN, paddingH, NaN, paddingH);
@@ -77,6 +74,7 @@ override public function init():void
 	scrollerLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
 	
 	scroller = new ScrollContainer();
+	scroller.alpha = 0;
 	scroller.layout = scrollerLayout;
 	scroller.layoutData = new AnchorLayoutData(0, paddingH, 0, paddingH);
 	scroller.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
@@ -84,15 +82,6 @@ override public function init():void
 	addChildAt(scroller, 0);
 	
 	initializeCompleted = true;
-	Starling.juggler.tween(scroller, 0.5, {delay:0.5, alpha:1, onStart:initCollection});
-}
-
-protected function initCollection() : void
-{
-	//var deckSize:int = player.getSelectedDeck().keys().length;
-	//var foundLabel:RTLLabel = new RTLLabel(loc("found_cards", [deckSize+foundCollection.length, deckSize+foundCollection.length ]), 0xBBCCDD, null, null, false, null, 0.8);
-	//scroller.addChild(foundLabel);
-	
 	layout = new AnchorLayout();
 	var foundLayout:TiledRowsLayout = new TiledRowsLayout();
 	var unavailabledLayout:TiledRowsLayout = new TiledRowsLayout();
@@ -120,7 +109,6 @@ protected function initCollection() : void
 		
 		unavailableList = new List();
 		unavailableList.verticalScrollPolicy = ScrollPolicy.OFF;
-		// unavailableList.alpha = 0.7;
 		unavailableList.layout = unavailabledLayout;
 		unavailableList.itemRendererFactory = function():IListItemRenderer { return new CardItemRenderer(false, false, false, scroller); }
 		unavailableList.dataProvider = unavailableCollection;
@@ -128,6 +116,7 @@ protected function initCollection() : void
 	}
 	
 	exchangeManager.addEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
+	Starling.juggler.tween(scroller, 0.5, {alpha:1});
 }
 protected function exchangeManager_endHandler(event:Event):void
 {
