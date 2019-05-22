@@ -4,6 +4,9 @@
 	"compilerOptions": {
 		"default-frame-rate": 60,
 		"default-background-color": "0x000000",
+		"strict": true,
+		"advanced-telemetry": false,
+		// "warnings": false,
 		"library-path": [
 			"libs",
 			"exts"
@@ -14,7 +17,7 @@
 		"output": "bin/release.swf",
 		// "optimize": true
 	},
-	"application": "src/application.xml",
+	"application": "bin/application.xml",
 	"files": [
 		"src/Main.as",
 	],
@@ -47,10 +50,11 @@
 		},
 		"ios": {
 			"output": "dist/app.ipa",
+			"target": "ipa-ad-hoc",
 			"signingOptions": {
 				"storetype": "pkcs12",
-				"keystore": "ios_certificate.p12",
-				"provisioning-profile": "example.mobileprovision"
+				"keystore": "files/cert/TOD-Distribution-Certificate.p12",
+				"provisioning-profile": "files/cert/Bluebox_K2K_Adhoc_Profile.mobileprovision"
 			}
 		}
 	}

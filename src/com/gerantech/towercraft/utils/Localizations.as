@@ -2,9 +2,9 @@ package com.gerantech.towercraft.utils
 {
 import flash.filesystem.File;
 import flash.system.Capabilities;
+
 import starling.events.Event;
 import starling.events.EventDispatcher;
-import starling.utils.AssetManager;
 
 /**
  * ...
@@ -17,7 +17,6 @@ public class Localizations extends EventDispatcher
     static private var _instance:Localizations;
     public var locale:String;
     public var localeDictionary:Object;
-    public var assetManager:AssetManager;
     static public function get instance() : Localizations
     {
         if( _instance == null )
@@ -25,22 +24,24 @@ public class Localizations extends EventDispatcher
         return _instance;
     }
 
-    public function changeLocale(locale:String = "en_US", assetManager:AssetManager = null) : void
+    public function changeLocale(locale:String = "en_US") : void
     {
-        if( assetManager != null )
-            this.assetManager = assetManager;
+		if( this.localeDictionary != null && this.locale == locale )
+		{
+			if( hasEventListener(Event.CHANGE) )
+				dispatchEventWith(Event.CHANGE, false, locale);
+			return;
+		}
+
         this.locale = locale;
-		
-        this.assetManager.enqueue(File.applicationDirectory.resolvePath("locale/" + locale + ".json"));
-        this.assetManager.loadQueue(assetManager_localeCallback);
+		new GTStreamer(File.applicationDirectory.resolvePath("locale/" + locale + ".json"), fileLoadedCallback)
     }
 
-    protected function assetManager_localeCallback(ratio:Number) : void 
+    protected function fileLoadedCallback(streamer:GTStreamer) : void 
     {
-        if( ratio < 1 )
-            return;
-        localeDictionary = this.assetManager.getObject(locale);
-        dispatchEventWith(Event.CHANGE, false, locale);
+        localeDictionary = JSON.parse(streamer.utfBytes);
+		if( hasEventListener(Event.CHANGE) )
+        	dispatchEventWith(Event.CHANGE, false, locale);
     }
 
     public function get(key:String, parameters:Array = null) : String

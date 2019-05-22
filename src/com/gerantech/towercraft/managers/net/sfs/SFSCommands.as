@@ -7,6 +7,7 @@ public static const BATTLE_CANCEL:String = "battleCancel";
 public static const BATTLE_LEAVE:String = "battleLeave";
 public static const BATTLE_END:String = "battleEnd";
 public static const BATTLE_SEND_STICKER:String = "ss";
+public static const BATTLE_ELIXIR_UPDATE:String = "x";
 public static const BATTLE_NEW_ROUND:String = "battleNewRound";
 public static const BATTLE_SUMMON_UNIT:String = "s";
 public static const BATTLE_HIT:String = "h";

@@ -5,6 +5,8 @@ import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
+import com.gerantech.towercraft.controls.texts.RTLLabel;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.controls.toasts.EmoteToast;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
@@ -17,11 +19,11 @@ import com.gt.towers.constants.MessageTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import feathers.controls.Button;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.core.Starling;
-import starling.display.Image;
 import starling.events.Event;
 
 public class LobbyBaseChatSegment extends ChatSegment
@@ -49,6 +51,25 @@ override public function init():void
 	
 	super.init();
 	layout = new AnchorLayout();
+
+	var ban:ISFSObject = appModel.loadingManager.serverData.containsKey("ban") ? appModel.loadingManager.serverData.getSFSObject("ban") : null;
+	if( false)//ban != null && ban.getInt("mode") > 1 )// banned user
+	{
+		// backgroundSkin = new Image(appModel.theme.backgroundDisabledSkinTexture);
+		// Image(backgroundSkin).scale9Grid = MainTheme.DEFAULT_BACKGROUND_SCALE9_GRID;
+		// backgroundSkin.alpha = 0.6;
+		
+		var labelDisplay:ShadowLabel = new ShadowLabel(loc("lobby_banned", [StrUtils.toTimeFormat(ban.getLong("until"))]), 1, 0, "center", null, true, null, 0.9);
+		labelDisplay.width = width;
+		labelDisplay.layoutData = new AnchorLayoutData(NaN, paddingH + 20, NaN, paddingH + 20, NaN, 0);
+		addChild(labelDisplay);
+		
+		var descDisplay:RTLLabel = new RTLLabel(ban.getUtfString("message"), 1, null, null, true, null, 0.6);
+		descDisplay.layoutData = new AnchorLayoutData(NaN, paddingH + 20, NaN, paddingH + 20, NaN, 0);
+		addChild(descDisplay);
+		return;
+	}
+
 	loadData();
 }
 
@@ -93,19 +114,19 @@ override protected function chatList_changeHandler(event:Event) : void
 	if( chatList.selectedItem == null )
 		return;
 	var msgPack:ISFSObject = chatList.selectedItem as SFSObject;
-	if( msgPack.getShort("m") == MessageTypes.M30_FRIENDLY_BATTLE  )
+	if( msgPack.getInt("m") == MessageTypes.M30_FRIENDLY_BATTLE  )
 	{
 		var myBattleId:int = manager.getMyRequestBattleId();
 		if( myBattleId > -1 && msgPack.getInt("bid") != myBattleId )
 			return;
 		
-		if( msgPack.getShort("st") > 1 )
+		if( msgPack.getInt("st") > 1 )
 			return;
 		
 		var params:SFSObject = new SFSObject();
-		params.putShort("m", MessageTypes.M30_FRIENDLY_BATTLE);
+		params.putInt("m", MessageTypes.M30_FRIENDLY_BATTLE);
 		params.putInt("bid", msgPack.getInt("bid"));
-		params.putShort("st", msgPack.getShort("st"));
+		params.putInt("st", msgPack.getInt("st"));
 		SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby );
 	}
 }
@@ -126,7 +147,7 @@ override protected function chatList_focusInHandler(event:Event):void
 	
 	var msgPack:ISFSObject = selectedItem.data as ISFSObject;
 	// prevent hints for my messages
-	if( msgPack.getInt("i") != player.id && msgPack.getShort("m") == MessageTypes.M0_TEXT )
+	if( msgPack.getInt("i") != player.id && msgPack.getInt("m") == MessageTypes.M0_TEXT )
 		showSimpleListPopup(msgPack, selectedItem, buttonsPopup_selectHandler, buttonsPopup_selectHandler, "lobby_report", "lobby_profile", "lobby_reply");
 }
 
@@ -214,7 +235,7 @@ protected function emoteToast_changeHandler(event:Event) : void
 {
 	event.currentTarget.removeEventListener(Event.CHANGE, emoteToast_changeHandler);
 	var emote:SFSObject = new SFSObject();
-	emote.putShort("m", MessageTypes.M51_EMOTE);
+	emote.putInt("m", MessageTypes.M51_EMOTE);
 	emote.putInt("e", event.data as int);
 	emote.putInt("i", player.id);
 	emote.putUtfString("s", player.nickName);

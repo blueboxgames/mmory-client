@@ -27,6 +27,7 @@ import flash.utils.getTimer;
 import haxe.Log;
 
 import starling.core.Starling;
+import com.gerantech.towercraft.utils.Localizations;
 
 public class Main extends Sprite
 {
@@ -37,6 +38,7 @@ private var splash:SplashScreen;
 public function Main()
 {
 	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) +"|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
+	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(AppModel.instance.descriptor.market));
 	/*var str:String = "";
 	var ret:Number = -0.05;
 	for( var level:int=1; level<=13; level++ )

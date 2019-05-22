@@ -2,17 +2,18 @@ package com.gerantech.towercraft.controls
 {
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.filters.ColorMatrixFilter;
 public class BattleDeckCard extends TowersLayout
 {
-public var cardType:int;
-private var cardView:BuildingCard;
+private var _type:int;
+private var cardView:CardView;
 private var _filter:ColorMatrixFilter;
-public function BattleDeckCard(cardType:int)
+public function BattleDeckCard(type:int)
 {
 	super();
 	touchGroup = true;
-	this.cardType = cardType;
+	this.type = type;
 	_filter = new ColorMatrixFilter();
 	_filter.adjustSaturation(-1);
 }
@@ -22,22 +23,28 @@ override protected function initialize():void
 	super.initialize();
 	layout = new AnchorLayout();
 	
-	cardView = new BuildingCard(false, false, false, true);
+	cardView = new CardView();
+	cardView.type = this._type;
+	cardView.showElixir = true;
+	cardView.height = width * CardView.VERICAL_SCALE;
 	cardView.layoutData = new AnchorLayoutData(0, 0, NaN, 0);
 	addChild(cardView);
-	cardView.setData(cardType);
 }
 
 public function updateData():void
 {
-	isEnabled = appModel.battleFieldView.battleData.getAlliseEllixir() >= cardView.elixirSize;
+	isEnabled = appModel.battleFieldView.battleData.getAlliseEllixir() >= cardView.elixir;
 }
 
-public function setData(cardType:int) : void 
+public function set type(value:int) : void 
 {
-	this.cardType = cardType;
+	this._type = value;
 	if( cardView != null )
-		cardView.setData(cardType);	
+		cardView.type = this._type;	
+}
+public function get type() : int 
+{
+	return this._type;
 }
 
 override public function set isEnabled(value:Boolean) : void 

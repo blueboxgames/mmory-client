@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.items.challenges 
 {
 import com.gerantech.towercraft.controls.buttons.IconButton;
+import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
 import com.gerantech.towercraft.controls.items.AbstractListItemRenderer;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
@@ -9,16 +10,20 @@ import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
 import com.gerantech.towercraft.events.GameEvent;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
+import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.towers.constants.PrefsTypes;
 import com.gt.towers.socials.Challenge;
+
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
+
 import starling.core.Starling;
 import starling.events.Event;
 
@@ -29,6 +34,7 @@ public class ChallengeIndexItemRenderer extends AbstractListItemRenderer
 {
 static public var ARENA:int;
 static public var IN_HOME:Boolean;
+static public var IS_FRIENDLY:Boolean;
 static public var SHOW_INFO:Boolean;
 static private const BG_SCALE_GRID:Rectangle = new Rectangle(23, 22, 2, 2);
 static private const COLORS:Array = [0x30e465, 0xffa400, 0xff4200, 0xe720ff];
@@ -43,7 +49,7 @@ private var challenge:Challenge;
 private var titleDisplay:RTLLabel;
 private var messageDisplay:RTLLabel;
 private var bannerDisplay:ImageLoader;
-private var infoButton:IconButton;
+private var infoButton:IndicatorButton;
 private var rankButton:IconButton;
 private var costIconDisplay:ImageLoader;
 private var costLabelDisplay:ShadowLabel;
@@ -81,7 +87,7 @@ override protected function commitData() : void
 
 private function costFactory() : void 
 {
-	if( locked )
+	if( locked || IS_FRIENDLY )
 		return;
 	challenge.runRequirements = Challenge.getRunRequiements(chIndex);
 	var costType:int = challenge.runRequirements.keys()[0];
@@ -114,12 +120,17 @@ private function infoFactory() : void
 {
 	if( !SHOW_INFO || locked || infoButton != null )
 		return;
-	infoButton = new IconButton(Assets.getTexture("events/info"), 0.6, Assets.getTexture("events/badge"));
+
+	infoButton = new IndicatorButton();
 	infoButton.name = challenge.mode.toString();
-	infoButton.width = 96;
-	infoButton.height = 103;
-	infoButton.layoutData = new AnchorLayoutData(-24, appModel.isLTR? -24 : NaN, NaN, appModel.isLTR? NaN : -24);
+	infoButton.labelOffsetY = 5;
+	infoButton.label = StrUtils.getNumber("?");
+	infoButton.width = 64;
+	infoButton.height = 68;
+	infoButton.fixed = false;
+	infoButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
 	infoButton.addEventListener(Event.TRIGGERED, infoButton_triggeredHandler);
+	infoButton.layoutData = new AnchorLayoutData(20, appModel.isLTR?20:NaN, NaN, appModel.isLTR?NaN:20);
 	addChild(infoButton);
 }
 

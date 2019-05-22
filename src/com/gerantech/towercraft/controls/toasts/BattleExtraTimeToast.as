@@ -4,14 +4,16 @@ import com.gerantech.towercraft.controls.BattleHUD;
 import com.gerantech.towercraft.controls.screens.BattleScreen;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
-import feathers.controls.Screen;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalAlign;
+
 import flash.geom.Rectangle;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Quad;
@@ -55,7 +57,7 @@ override protected function initialize():void
 	addChild(timeLine);
 	
 	var extraIcon:ImageLoader = new ImageLoader();
-	extraIcon.width = 200;
+	extraIcon.width = 120;
 	extraIcon.source = Assets.getTexture("extra-time");
 	extraIcon.pixelSnapping = false;
 	
@@ -81,7 +83,7 @@ override protected function initialize():void
 	
 	var elixirIcon:ImageLoader = new ImageLoader();
 	elixirIcon.width = 200;
-	elixirIcon.source = Assets.getTexture("elixir");
+	elixirIcon.source = Assets.getTexture("cards/elixir", "gui");
 	elixirIcon.pixelSnapping = false;
 	
 	var elixirLabel:ShadowLabel = new ShadowLabel("2x", 0x27E0DC, 0, null, null, false, null, 2.2);

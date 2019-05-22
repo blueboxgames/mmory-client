@@ -3,6 +3,7 @@ package com.gerantech.towercraft.controls.popups
 import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.ScrollPolicy;
@@ -12,7 +13,9 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
+
 import starling.display.Image;
 import starling.events.Event;
 /**
@@ -35,6 +38,7 @@ override protected function initialize():void
 	super.initialize();
 	layout = new AnchorLayout();
 	ChallengeIndexItemRenderer.IN_HOME = false;
+	ChallengeIndexItemRenderer.IS_FRIENDLY = true;
 	ChallengeIndexItemRenderer.SHOW_INFO = false;
 	
 	var skin:Image = new Image(appModel.theme.roundMediumInnerSkin);

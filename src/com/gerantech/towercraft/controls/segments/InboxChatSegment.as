@@ -1,26 +1,21 @@
 package com.gerantech.towercraft.controls.segments 
 {
 import com.gerantech.towercraft.controls.items.InboxChatItemRenderer;
-import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
-import com.gerantech.towercraft.controls.popups.ConfirmPopup;
-import com.gerantech.towercraft.controls.popups.ProfilePopup;
-import com.gerantech.towercraft.controls.popups.SimpleListPopup;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.InboxThread;
-import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.MessageTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
-import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.layout.AnchorLayout;
+import feathers.layout.AnchorLayoutData;
+
 import flash.utils.setTimeout;
-import starling.core.Starling;
+
 import starling.events.Event;
 /**
 * @author Mansour Djawadi
@@ -53,6 +48,7 @@ override protected function showElements() : void
 	chatLayout.gap = -10;
 	chatList.itemRendererFactory = function ():IListItemRenderer { return new InboxChatItemRenderer(myId)};
 	chatList.dataProvider = threadCollection;
+    chatTextInput.layoutData = new AnchorLayoutData(NaN, padding, padding, padding + 240);
 	//manager.addEventListener(Event.UPDATE, manager_updateHandler);
 }
 
@@ -67,7 +63,7 @@ override protected function chatList_focusInHandler(event:Event):void
 	
 	var msgPack:ISFSObject = selectedItem.data as ISFSObject;
 	// prevent hints for my messages
-	if( msgPack.getInt("i") != player.id && msgPack.getShort("m") == MessageTypes.M0_TEXT )
+	if( msgPack.getInt("i") != player.id && msgPack.getInt("m") == MessageTypes.M0_TEXT )
 		showSimpleListPopup(msgPack, selectedItem, buttonsPopup_selectHandler, buttonsPopup_selectHandler, "lobby_report", "lobby_profile", "lobby_reply");
 }
 
@@ -153,7 +149,7 @@ override protected function sendButton_triggeredHandler(event:Event):void
 	}
 	
 	var params:SFSObject = new SFSObject();
-	params.putShort("type", 0);
+	params.putInt("type", 0);
 	params.putInt("senderId", myId);
     params.putUtfString("text", preText + StrUtils.getSimpleString(chatTextInput.text));
 	params.putIntArray("receiverIds", [thread.ownerId]);

@@ -2,9 +2,11 @@ package com.gerantech.towercraft.controls.screens
 {
 import com.gerantech.towercraft.controls.segments.InboxSegment;
 import com.gerantech.towercraft.managers.InboxService;
+
 import feathers.data.ListCollection;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.events.Event;
 
 public class IssuesScreen extends SimpleScreen
@@ -64,8 +66,8 @@ protected function sfs_issuesResponseHandler(event:SFSEvent):void
 		var sfs:ISFSObject = issueList.getSFSObject(i);
 		var msg:SFSObject = new SFSObject();
 		msg.putInt("id", sfs.getInt("id"));
-		msg.putShort("read", sfs.getInt("status"));
-		msg.putShort("type", 41);
+		msg.putInt("read", sfs.getInt("status"));
+		msg.putInt("type", 41);
 		msg.putUtfString("text", sfs.getUtfString("description"));
 		msg.putUtfString("sender", sfs.getUtfString("sender"));
 		msg.putInt("senderId", sfs.getInt("player_id"));
@@ -88,7 +90,7 @@ private function list_eventsHandler(event:Event):void
 		appModel.navigator.addPopup(msgPopup);
 		function msgPopup_selectHandler(e:Event):void
 		{
-			msg.putShort("read", 1);
+			msg.putInt("read", 1);
 			changeStatus(msg.getInt("id"), 1);
 			list.selectedIndex = -1;
 			msgPopup.close();
@@ -96,7 +98,7 @@ private function list_eventsHandler(event:Event):void
 	}
 	else if ( event.type == Event.CANCEL )
 	{
-		msg.putShort("read", 2);
+		msg.putInt("read", 2);
 		changeStatus(msg.getInt("id"), 2);
 		list.selectedIndex = -1;
 	}
@@ -110,7 +112,7 @@ private function changeStatus(id:int, status:int):void
 {
 	var params:SFSObject = new SFSObject();
 	params.putInt("id", id);
-	params.putShort("status", status);
+	params.putInt("status", status);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.ISSUE_TRACK , params);	
 }*/
 }

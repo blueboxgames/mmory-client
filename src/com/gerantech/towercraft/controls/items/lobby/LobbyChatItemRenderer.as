@@ -2,18 +2,20 @@ package com.gerantech.towercraft.controls.items.lobby
 {
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
+import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBalloonEmoteSegment;
+import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBalloonSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBalloonTextSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBattleSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemCommentSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemConfirmSegment;
-import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBalloonEmoteSegment;
-import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBalloonSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemSegment;
 import com.gt.towers.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.events.Event;
 import starling.events.Touch;
 
@@ -68,7 +70,7 @@ override protected function commitData():void
 		//segment = null;		
 	}
 
-	type = SFSObject(_data).getShort("m");
+	type = SFSObject(_data).getInt("m");
 	if( MessageTypes.isComment(type) )
 		type = TYPE_COMMENT;
 	else if( MessageTypes.isConfirm(type) )
@@ -81,7 +83,7 @@ override protected function commitData():void
 private function confirmSegment_triggeredHandler(event:Event):void
 {
 	
-	segment.data.putShort( "pr", int(event.data.name));
+	segment.data.putInt( "pr", int(event.data.name));
 	_owner.dispatchEventWith(Event.ROOT_CREATED, false, [this, segment.data]);
 }
 

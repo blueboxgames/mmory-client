@@ -14,6 +14,7 @@ import flash.utils.setTimeout;
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.events.Event;
+import starling.display.DisplayObject;
 
 public class FortuneOverlay extends EarnOverlay
 {
@@ -45,7 +46,7 @@ override protected function initialize():void
 	for (var i:int = 0; i < 6; i++ )
 	{
 		var spinner:Spinner = new Spinner();
-		spinner.display = OpenBookOverlay.factory.buildArmatureDisplay("" + (51 + i));
+		spinner.display = OpenBookOverlay.factory.buildArmatureDisplay("" + (51 + i)) as DisplayObject;
 		spinner.scaleFactor = OpenBookOverlay.getBookScale(51 + i) * 2;
 		StarlingArmatureDisplay(spinner.display).animation.gotoAndStopByProgress("appear", 1);
 		StarlingArmatureDisplay(spinner.display).animation.timeScale = 0;
@@ -103,7 +104,7 @@ protected function rotationCompleted() : void
 	shineArmature.x = width * 0.5;
 	shineArmature.y = height * 0.5;
 	shineArmature.animation.gotoAndPlayByTime("rotate", 0, 10);
-	addChild(shineArmature);
+	addChild(shineArmature as DisplayObject);
 	Starling.juggler.tween(shineArmature, 0.3, {scale:4, transition:Transitions.EASE_OUT_BACK});
 
 	// book animation
@@ -115,7 +116,7 @@ protected function rotationCompleted() : void
 	bookArmature.animation.gotoAndStopByProgress("appear", 1);
 	bookArmature.animation.timeScale = 0;
 	Starling.juggler.tween(bookArmature, 0.3, {scale:2.5, transition:Transitions.EASE_OUT_BACK});
-	addChild(bookArmature);
+	addChild(bookArmature as DisplayObject);
 	
 	var buttonOverlay:SimpleLayoutButton = new SimpleLayoutButton();
 	buttonOverlay.addEventListener(Event.TRIGGERED, buttonOverlay_triggeredHandler);

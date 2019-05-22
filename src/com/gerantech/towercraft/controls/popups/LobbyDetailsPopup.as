@@ -1,10 +1,7 @@
 package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.extensions.NativeAbilities;
-import com.gerantech.towercraft.controls.FastList;
-import com.gerantech.towercraft.controls.buttons.CustomButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
-import com.gerantech.towercraft.controls.buttons.LobbyTabButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.headers.TabsHeader;
 import com.gerantech.towercraft.controls.items.lobby.LobbyFeatureItemRenderer;
@@ -22,6 +19,7 @@ import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
@@ -31,7 +29,9 @@ import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
+
 import starling.animation.Transitions;
 import starling.events.Event;
 
@@ -370,19 +370,19 @@ private function buttonsPopup_selectHandler(event:Event):void
 			params.putUtfString("name", buttonsPopup.data.name);
 			if ( confirm.data == "lobby_promote" )
 			{
-				params.putShort("pr", MessageTypes.M13_COMMENT_PROMOTE);
+				params.putInt("pr", MessageTypes.M13_COMMENT_PROMOTE);
 				buttonsPopup.data.permission ++;
 				membersCollection.updateItemAt(buttonsPopup.data.index);
 			}
 			else if ( confirm.data == "lobby_demote" )
 			{
-				params.putShort("pr", MessageTypes.M14_COMMENT_DEMOTE);
+				params.putInt("pr", MessageTypes.M14_COMMENT_DEMOTE);
 				buttonsPopup.data.permission --;
 				membersCollection.updateItemAt(buttonsPopup.data.index);
 			}
 			else
 			{
-				params.putShort("pr", MessageTypes.M12_COMMENT_KICK);
+				params.putInt("pr", MessageTypes.M12_COMMENT_KICK);
 				membersCollection.removeItemAt(buttonsPopup.data.index);
 			}
 			SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_MODERATION, params, SFSConnection.instance.lobbyManager.lobby);

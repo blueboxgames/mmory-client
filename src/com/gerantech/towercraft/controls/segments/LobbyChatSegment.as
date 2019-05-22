@@ -4,20 +4,19 @@ import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.headers.LobbyHeader;
 import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.popups.FriendlyBattleModePopup;
-import com.gerantech.towercraft.controls.popups.SimpleListPopup;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.battle.fieldes.FieldData;
 import com.gt.towers.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import feathers.controls.Button;
+
 import feathers.layout.AnchorLayoutData;
+
 import flash.utils.setTimeout;
-import starling.display.Image;
+
 import starling.events.Event;
 
 public class LobbyChatSegment extends LobbyBaseChatSegment
@@ -72,7 +71,7 @@ protected function chatList_triggeredHandler(event:Event):void
 	var selectedItem:LobbyChatItemRenderer = event.data[0] as LobbyChatItemRenderer;
 	var params:SFSObject = event.data[1] as SFSObject;
 	// show info
-	if( params.getShort("pr") == MessageTypes.M10_COMMENT_JOINT )
+	if( params.getInt("pr") == MessageTypes.M10_COMMENT_JOINT )
 	{
 		var sfs:SFSObject = new SFSObject();
 		sfs.putInt("i", params.getInt("o"));
@@ -81,7 +80,7 @@ protected function chatList_triggeredHandler(event:Event):void
 		return;
 	}
 	// accept or reject
-	if( MessageTypes.isConfirm(params.getShort("m")) )
+	if( MessageTypes.isConfirm(params.getInt("m")) )
 		SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby );
 }
 
@@ -107,8 +106,8 @@ protected function battleModePopup_selectHandler(event:Event):void
 	
 	setTimeout(function():void{ buttonsEnabled = false}, 1);
 	var params:SFSObject = new SFSObject();
-	params.putShort("m", MessageTypes.M30_FRIENDLY_BATTLE);
-	params.putShort("st", 0);
+	params.putInt("m", MessageTypes.M30_FRIENDLY_BATTLE);
+	params.putInt("st", 0);
 	if( event.data == 1 )
 		params.putBool("bt", true);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby);

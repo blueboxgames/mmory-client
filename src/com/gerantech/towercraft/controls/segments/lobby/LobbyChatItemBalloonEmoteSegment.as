@@ -4,10 +4,12 @@ import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.segments.ChatSegment;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
+
 import dragonBones.events.EventObject;
 import dragonBones.starling.StarlingArmatureDisplay;
 import dragonBones.starling.StarlingEvent;
-import feathers.layout.AnchorLayoutData;
+
+import starling.display.DisplayObject;
 import starling.events.Event;
 
 public class LobbyChatItemBalloonEmoteSegment extends LobbyChatItemBalloonSegment
@@ -25,7 +27,7 @@ override public function init():void
 	emoteArmature = ChatSegment.factory.buildArmatureDisplay("emote");
 	emoteArmature.touchable = false;
 	emoteArmature.y = height - 20;
-	addChild(emoteArmature);
+	addChild(emoteArmature as DisplayObject);
 	
 	addEventListener(Event.TRIGGERED, triggeredHandler);
 }

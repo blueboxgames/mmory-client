@@ -8,6 +8,7 @@ import com.gerantech.towercraft.utils.Localizations;
 import com.gt.towers.constants.PrefsTypes;
 import com.marpies.ane.gameanalytics.GameAnalytics;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import starling.events.Event;
 import starling.events.EventDispatcher;
 
@@ -37,7 +38,7 @@ public function changeLocale(locale:String, forced:Boolean=false) : void
 	}
 	
 	Localizations.instance.addEventListener(Event.CHANGE, localizations_changeHandler);
-	Localizations.instance.changeLocale(locale, AppModel.instance.assets);
+	Localizations.instance.changeLocale(locale);
 }
 
 protected function localizations_changeHandler(event:Event) : void 
@@ -67,7 +68,6 @@ public function setInt(key:int, value:int):void
 	setString(key, value.toString());
     if( key == PrefsTypes.TUTOR )
 		GameAnalytics.addDesignEvent("tutorial:step-" + value);
-
 }
 public function setFloat(key:int, value:Number):void
 {

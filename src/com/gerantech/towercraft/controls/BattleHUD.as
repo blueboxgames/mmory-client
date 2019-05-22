@@ -76,14 +76,14 @@ override protected function initialize():void
 	
 	var gradient:ImageLoader = new ImageLoader();
 	gradient.scale9Grid = MainTheme.SHADOW_SIDE_SCALE9_GRID;
-    gradient.color = Color.BLACK;
+	gradient.color = Color.BLACK;
 	gradient.alpha = 0.5;
 	gradient.width = 440;
 	gradient.height = 140;
 	gradient.source = Assets.getTexture("theme/gradeint-left");
 	addChild(gradient);
 	
-	var hasQuit:Boolean = battleData.battleField.field.isOperation() || SFSConnection.instance.mySelf.isSpectator;
+	var hasQuit:Boolean = battleData.battleField.field.isOperation() || appModel.battleFieldView.battleData.userType == 1;
 	padding = 16;
 	var leftPadding:int = (hasQuit ? 150 : 0);
 	if( hasQuit )
@@ -104,7 +104,7 @@ override protected function initialize():void
 	opponentHeader.layoutData = new AnchorLayoutData(0, NaN, NaN, leftPadding );
 	addChild(opponentHeader);
 	
-	if( SFSConnection.instance.mySelf.isSpectator )
+	if( appModel.battleFieldView.battleData.userType == 1 )
 	{
 		_name = battleData.allise.getUtfString("name");
 		_point = battleData.allise.getInt("point");
@@ -128,7 +128,7 @@ override protected function initialize():void
 	else
 	{
 		timerSlider = new BattleCountdown();
-		timerSlider.layoutData = new AnchorLayoutData(padding, padding);
+		timerSlider.layoutData = new AnchorLayoutData(10, 10);
 	}
 	addChild(timerSlider);
 	
@@ -136,19 +136,8 @@ override protected function initialize():void
 	
 	if( battleData.battleField.field.isOperation() )
 		return;
-
-	/*if( !SFSConnection.instance.mySelf.isSpectator )
-	{
-		stickerButton = new CustomButton();
-		stickerButton.icon = Assets.getTexture("tooltip-bg-bot-right");
-		stickerButton.iconLayout = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -4);
-		stickerButton.width = 140;
-		stickerButton.layoutData = new AnchorLayoutData(NaN, padding * 2, padding);
-		stickerButton.addEventListener(Event.TRIGGERED, stickerButton_triggeredHandler);
-		addChild(stickerButton);
-	}*/
 	
-	if( !SFSConnection.instance.mySelf.isSpectator )
+	if( false )
 	{
 		if( player.get_arena(player.get_point()) > 4 )
 		{
@@ -170,7 +159,7 @@ override protected function initialize():void
 	bubbleAxis.layoutData = new AnchorLayoutData(140 + padding, NaN, NaN, padding);
 	
 	scoreBoard = new BattleScoreBoard();
-	scoreBoard.layoutData = new AnchorLayoutData(NaN, -15, NaN, NaN, NaN, -BattleFooter.HEIGHT * 0.2);
+	scoreBoard.layoutData = new AnchorLayoutData(NaN, -16, NaN, NaN, NaN, -BattleFooter.HEIGHT * 0.2);
 	//scoreBoard.y = appModel.battleFieldView.y - scoreBoard.height * 0.5;
 	addChild(scoreBoard);
 	updateScores(1, 0, battleData.allise.getInt("score"), battleData.axis.getInt("score"), -1);
@@ -243,7 +232,7 @@ protected function timeManager_changeHandler(event:Event):void
 	}
 }
 
-public function animateShadow(alphaSeed:Number, shadow:Image = null, color:uint = 0) : void
+public function animateShadow(alphaSeed:Number, shadow:Image, color:uint = 0) : void
 {
 	if( shadow == null )
 	{
@@ -378,7 +367,7 @@ public function showBubble(type:int, itsMe:Boolean=true):void
 private function hideBubble(bubble:StickerBubble):void
 {
 	bubble.removeFromParent();
-	if( SFSConnection.instance.lastJoinedRoom != null && !SFSConnection.instance.mySelf.isSpectator )
+	if( appModel.battleFieldView.battleData.userType == 0 )
 		deck.stickerButton.visible = true;
 }
 

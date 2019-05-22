@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.models.vo
 {
 import com.gerantech.towercraft.managers.TimeManager;
-import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
 import com.gt.towers.Game;
 import com.gt.towers.InitData;
@@ -14,12 +13,11 @@ import com.gt.towers.socials.Challenge;
 import com.gt.towers.utils.maps.IntCardMap;
 import com.gt.towers.utils.maps.IntIntCardMap;
 import com.gt.towers.utils.maps.IntIntMap;
-import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
 public class BattleData
 {
-public var room:Room;
+public var roomId:int = -1;
 public var singleMode:Boolean;
 public var battleField:BattleField;
 public var isLeft:Boolean;
@@ -28,14 +26,17 @@ public var axis:ISFSObject;
 public var outcomes:Vector.<RewardData>;
 public var stars:Vector.<int>;
 public var sfsData:ISFSObject;
+public var userType:int;
 
-public function BattleData(data:ISFSObject)
+public function BattleData(sfsData:ISFSObject)
 {
-	this.sfsData = data;
-	this.room = SFSConnection.instance.getRoomById(data.getInt("roomId"));
-	this.singleMode = data.getBool("singleMode");
-	this.allise = data.getSFSObject("p" + data.getInt("side"));
-	this.axis = data.getSFSObject(data.getInt("side") == 0 ? "p1" : "p0");
+	this.sfsData = sfsData;
+	var side:int = sfsData.getInt("side");
+	this.roomId = sfsData.getInt("roomId");
+	this.userType = sfsData.getInt("userType");
+	this.singleMode = sfsData.getBool("singleMode");
+	this.allise = sfsData.getSFSObject("p" + side);
+	this.axis = sfsData.getSFSObject(side == 0 ? "p1" : "p0");
 	
 	var alliseGame:Game =	instantiateGame(allise);
 	var axisGame:Game =		instantiateGame(axis);
@@ -48,7 +49,7 @@ public function BattleData(data:ISFSObject)
 		initData.cardsLevel = new IntIntMap(			gameSFS.getText("deck"));
 		game.init(initData);
 		
-		var cards:Array = gameSFS.getText("deck").split(",");
+		var cards:Array = gameSFS.getText("deck").split(",");trace(cards)
 		game.loginData.deck = new Array();
 		var deck:Array = new Array();
 		var i:int = 0;
@@ -62,29 +63,29 @@ public function BattleData(data:ISFSObject)
 
 	// reduce battle cost
 	var game:Game = AppModel.instance.game;
-	var cost:IntIntMap = Challenge.getRunRequiements(data.getInt("mode"));
-	var exItem:ExchangeItem = Challenge.getExchangeItem(data.getInt("mode"), cost, game.player.get_arena(0));
-	var response:int = game.exchanger.exchange(exItem, data.getInt("startAt"), 0);
+	var cost:IntIntMap = Challenge.getRunRequiements(sfsData.getInt("mode"));
+	var exItem:ExchangeItem = Challenge.getExchangeItem(sfsData.getInt("mode"), cost, game.player.get_arena(0));
+	var response:int = game.exchanger.exchange(exItem, sfsData.getInt("startAt"), 0);
 	if( response != MessageTypes.RESPONSE_SUCCEED )
 		trace("battle cost data from server server is invalid!");
 	
-	var f:FieldData = new FieldData(data.getInt("mode"), data.getText("map"), "60,120,180,240");
+	var f:FieldData = new FieldData(sfsData.getInt("mode"), sfsData.getText("map"), "60,120,180,240");
 	this.battleField = new BattleField();
-	this.battleField.initialize(this.battleField.side == 0 ? alliseGame : axisGame, this.battleField.side == 0 ? axisGame : alliseGame, f, data.getInt("side"), data.getInt("startAt"), data.getDouble("now"), false, data.getInt("friendlyMode"));
+	this.battleField.initialize(side == 0 ? alliseGame : axisGame, side == 0 ? axisGame : alliseGame, f, side, sfsData.getInt("startAt"), sfsData.getDouble("now"), false, sfsData.getInt("friendlyMode"));
 	this.battleField.state = BattleField.STATE_1_CREATED;
 	this.battleField.decks = new IntIntCardMap();
 	this.battleField.decks.set(0, BattleField.getDeckCards(this.battleField.games[0], this.battleField.games[0].loginData.deck, this.battleField.friendlyMode));
 	this.battleField.decks.set(1, BattleField.getDeckCards(this.battleField.games[1], this.battleField.games[1].loginData.deck, this.battleField.friendlyMode));
-	TimeManager.instance.setNow(Math.ceil(data.getDouble("now") / 1000));
+	TimeManager.instance.setNow(Math.ceil(sfsData.getDouble("now") / 1000));
 }
 
 public function getAlliseDeck():IntCardMap 
 {
-	return battleField.decks.get(battleField.side);
+	return battleField.decks.get(this.battleField.side);
 }
 public function getAlliseEllixir():Number
 {
-	return battleField.elixirBar[battleField.side];
+	return battleField.elixirUpdater.bars[this.battleField.side];
 }
 
 public function getBattleStep() : int

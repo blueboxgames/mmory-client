@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.utils
 {
 import com.gerantech.towercraft.models.AppModel;
+
 import flash.utils.Dictionary;
 
 public class StrUtils
@@ -66,6 +67,7 @@ public static function getArabicNumber(input:Object):String
 	_str = _str.split('8').join('٨');
 	_str = _str.split('9').join('٩');
 	_str = _str.split('/').join('٫');
+	_str = _str.split('?').join('؟');
 	return _str;
 }
 public static function getPersianNumber(input:Object):String
@@ -82,6 +84,7 @@ public static function getPersianNumber(input:Object):String
 	_str = _str.split('8').join('۸');
 	_str = _str.split('9').join('۹');
 	_str = _str.split('/').join('٫');
+	_str = _str.split('?').join('؟');
 	return _str;
 }
 public static function getNumber(input:Object):String

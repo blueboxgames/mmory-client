@@ -16,11 +16,14 @@ import com.gt.towers.constants.ResourceType;
 import com.gt.towers.exchanges.ExchangeItem;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.events.FeathersEventType;
+
 import flash.geom.Rectangle;
 import flash.text.ReturnKeyLabel;
 import flash.text.SoftKeyboardType;
 import flash.utils.setTimeout;
+
 import starling.core.Starling;
 import starling.events.Event;
 
@@ -41,7 +44,7 @@ public function SelectNamePopup()
 override protected function initialize():void
 {
 	// create transition in data
-	var _h:int = 540;
+	var _h:int = 580;
 	var _p:int = 84;
 	transitionIn = new TransitionData();
 	transitionOut = new TransitionData();
@@ -145,7 +148,7 @@ private function isBad(name:String) : Boolean
 	if( name.substr(name.length - 2) == " " || name.substr(0, 1) == " " )
 		return true;
 	
-	var badNames:Array = ["  ", "admin", "super-", "root", "koot", "oot", "koo", "ko ", "manager", "bot", "sex", "ادمین", "کوت", "سازنده", "مدیر", "کیر", "کون", "جنده", "بات"];
+	var badNames:Array = ["  ", "admin", "super-", "root", "koot", "oot", "koo", "ko ", "manager", "bot", "sex", "pistol", "ادمین", "کوت", "سازنده", "مدیر", "کیر", "کون", "جنده", "بات", "تپانچه"];
 	for each( var b:String in badNames )
 		if( name.search(b) > -1 )
 			return true;

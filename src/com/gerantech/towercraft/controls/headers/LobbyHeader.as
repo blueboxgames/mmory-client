@@ -1,18 +1,19 @@
 package com.gerantech.towercraft.controls.headers
 {
-import com.gerantech.towercraft.controls.buttons.IconButton;
+import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
 import com.gerantech.towercraft.controls.popups.LobbyDetailsPopup;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.smartfoxserver.v2.core.SFSEvent;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.events.Event;
 
 public class LobbyHeader extends SimpleLayoutButton
@@ -21,7 +22,7 @@ static public const HEIGHT:int = 220;
 static public const PADDING:int = 20;
 private var usersDisplay:RTLLabel;
 private var scoreDisplay:RTLLabel;
-private var infoButton:IconButton;
+private var infoButton:IndicatorButton;
 private var manager:LobbyManager;
 public function LobbyHeader()
 {
@@ -58,12 +59,16 @@ override protected function initialize():void
 	usersDisplay = new RTLLabel(loc("lobby_onlines", [manager.lobby.userCount, manager.members.size()]) , 0x0077B4, null, null, false, null, 0.65);
 	usersDisplay.layoutData = new AnchorLayoutData(NaN, appModel.isLTR?HEIGHT * 0.76:NaN, NaN, appModel.isLTR?NaN:HEIGHT * 0.76, NaN, 0);
 	addChild(usersDisplay);
-	
-	infoButton = new IconButton(Assets.getTexture("events/info"), 0.6, Assets.getTexture("events/badge"));
+
+	infoButton = new IndicatorButton();
+	infoButton.labelOffsetY = 5;
+	infoButton.label = StrUtils.getNumber("?");
+	infoButton.width = 64;
+	infoButton.height = 68;
+	infoButton.fixed = false;
+	infoButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
 	infoButton.layoutData = new AnchorLayoutData(NaN, appModel.isLTR?HEIGHT * 0.28:NaN, NaN, appModel.isLTR?NaN:HEIGHT * 0.28, NaN, -3);
-	infoButton.height = 86;
-	infoButton.width = 80;
-	addChild(infoButton); 
+	addChild(infoButton);
 }
 
 protected function sfsConnection_roomVariablesUpdateHandler(event:SFSEvent):void

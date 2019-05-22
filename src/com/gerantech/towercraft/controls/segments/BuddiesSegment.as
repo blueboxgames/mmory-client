@@ -13,7 +13,6 @@ import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.battle.fieldes.FieldData;
 import com.gt.towers.socials.Lobby;
 import com.smartfoxserver.v2.core.SFSBuddyEvent;
 import com.smartfoxserver.v2.core.SFSEvent;
@@ -22,6 +21,7 @@ import com.smartfoxserver.v2.entities.SFSBuddy;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.entities.variables.SFSBuddyVariable;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.events.FeathersEventType;
@@ -29,7 +29,9 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
+
 import starling.animation.Transitions;
 import starling.events.Event;
 
@@ -193,9 +195,9 @@ protected function sfs_buddyBattleHandler(event:SFSEvent):void
 	if( event.params.cmd != SFSCommands.BUDDY_BATTLE )
 		return;
 	var p:ISFSObject = event.params.params as SFSObject;
-	if( p.getShort("bs") == 0 && p.getInt("s") != AppModel.instance.game.player.id )
+	if( p.getInt("bs") == 0 && p.getInt("s") != AppModel.instance.game.player.id )
 		return;
-	buttonsEnabled = p.getShort("bs") > 0;
+	buttonsEnabled = p.getInt("bs") > 0;
 }
 
 private function spectate(buddy:Buddy):void
