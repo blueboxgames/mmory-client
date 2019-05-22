@@ -124,7 +124,7 @@ private function infoFactory() : void
 	infoButton = new IndicatorButton();
 	infoButton.name = challenge.mode.toString();
 	infoButton.labelOffsetY = 5;
-	infoButton.label = "?";
+	infoButton.label = StrUtils.getNumber("?");
 	infoButton.width = 64;
 	infoButton.height = 68;
 	infoButton.fixed = false;

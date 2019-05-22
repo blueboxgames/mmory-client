@@ -151,7 +151,7 @@ protected function socialManager_eventsHandler(event:Event):void
 
 private function navigateTo(key:int):void
 {
-	navigateToURL(new URLRequest(loc("setting_value_" + key)));	
+	navigateToURL(new URLRequest(Localizations.instance.get("setting_value_" + key)));	
 }
 
 private function getSettingsData():ListCollection

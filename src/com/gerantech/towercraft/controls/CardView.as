@@ -21,7 +21,6 @@ package com.gerantech.towercraft.controls
 
 	import starling.display.DisplayObject;
 	import starling.display.Image;
-	import starling.filters.ColorMatrixFilter;
 
 	public class CardView extends TowersLayout
 	{
@@ -170,7 +169,7 @@ package com.gerantech.towercraft.controls
 				this.iconDisplay.layoutData = new AnchorLayoutData(12, 12, NaN, 12);
 				this.addChildAt(this.iconDisplay as DisplayObject, 0);
 			}
-			this.iconDisplay.source = Assets.getTexture("cards/" + this._type, "gui");
+			this.iconDisplay.source = Assets.getTexture("cards/" + this._type, "gui", availablity != CardTypes.AVAILABLITY_EXISTS);
 
 			if( this.frameDisplay == null )
 			{
@@ -179,21 +178,6 @@ package com.gerantech.towercraft.controls
 				this.frameDisplay.source = Assets.getTexture("cards/frame", "gui");
 				this.frameDisplay.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 				this.addChildAt(this.frameDisplay, 1);
-			}
-
-			// disable effect
-			if( availablity != CardTypes.AVAILABLITY_EXISTS )
-			{
-				if( iconDisplay.filter == null )
-				{
-					var f:ColorMatrixFilter = new ColorMatrixFilter();
-					f.adjustSaturation(-1);
-					iconDisplay.filter = f;
-				}
-			}
-			else
-			{
-				iconDisplay.filter = null;
 			}
 
 			this.frameDisplay.color = this._availablity != CardTypes.AVAILABLITY_EXISTS ? 0x7777AA : RARITY_COLORS[this._rarity];

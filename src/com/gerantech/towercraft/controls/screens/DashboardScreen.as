@@ -41,6 +41,7 @@ import flash.geom.Rectangle;
 import flash.utils.setTimeout;
 
 import starling.events.Event;
+import starling.filters.ColorMatrixFilter;
 
 public class DashboardScreen extends BaseCustomScreen
 {
@@ -157,7 +158,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	footerBG.height = FOOTER_SIZE;
 	footerBG.source = Assets.getTexture("home/dash-bg");
 	footerBG.scale9Grid = new Rectangle(13, 10, 5, 66);
-	footerBG.layoutData = new AnchorLayoutData(NaN, 0, 0, 0);
+	footerBG.layoutData = new AnchorLayoutData(NaN, 0, -1, 0);
 	footerBG.touchable = false;
 	addChild(footerBG);
 	
@@ -249,6 +250,16 @@ protected function pageList_readyHandler(event:Event):void
 {
 	tabsList.isEnabled = event.data;
 	pageList.horizontalScrollPolicy = event.data ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+	if( event.data )
+	{
+		tabsList.filter = null;
+	}
+	else
+	{
+		var filter:ColorMatrixFilter = new ColorMatrixFilter();
+		filter.adjustSaturation(-1);
+		tabsList.filter = filter;
+	}
 }
 protected function exchangeManager_endHandler(event:Event):void
 {

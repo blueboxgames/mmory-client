@@ -9,6 +9,7 @@ import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.ShopLine;
 import com.gerantech.towercraft.themes.MainTheme;
+import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.towers.constants.ExchangeType;
 import com.gt.towers.exchanges.ExchangeItem;
 
@@ -80,7 +81,7 @@ override protected function initialize():void
 	addChild(labelDisplay as DisplayObject);
 	
 	var infoButton:IndicatorButton = new IndicatorButton();
-	infoButton.label = "?";
+	infoButton.label = StrUtils.getNumber("?");
 	infoButton.width = 64;
 	infoButton.height = 68;
 	infoButton.fixed = false;
