@@ -2,6 +2,7 @@ package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryPlaceHolder;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.vo.ShopLine;
 import com.gt.towers.constants.ExchangeType;
 import com.gt.towers.exchanges.ExchangeItem;
@@ -31,6 +32,15 @@ override public function init():void
 	super.init();
 
 	layout = new AnchorLayout();
+
+	if( player.get_arena(0) < 1 )
+	{
+		var labelDisplay:ShadowLabel = new ShadowLabel(loc("availableat_messeage", [loc("tab-0"), loc("arena_text") + " " + loc("num_2")]), 1, 0, "center");
+		labelDisplay.width = width;
+		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, NaN, 0);
+		addChild(labelDisplay);
+		return;
+	}
 
 	var listLayout:VerticalLayout = new VerticalLayout();
 	listLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
