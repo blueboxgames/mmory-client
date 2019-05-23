@@ -127,7 +127,7 @@ override protected function transitionInCompleted():void
 		appModel.sounds.addAndPlay(event.eventObject.name);
 	}
 	
-	if( player.get_battleswins() < 4 )
+	if( player.get_battleswins() < 2 )
 	{
 		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_012_SLOT_OPENED);
 		actionButton.showTutorHint();
@@ -289,7 +289,7 @@ protected function batton_triggeredHandler(event:Event) : void
 	if( state == ExchangeItem.CHEST_STATE_BUSY )
 	{
 		update(state);
-		if( player.get_battleswins() < 4 )
+		if( player.get_battleswins() < 2 )
 			setTimeout(actionButton.showTutorHint, 100);
 		return;
 	}
