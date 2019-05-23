@@ -60,6 +60,7 @@ public function BattleScreen()
 	addChild(appModel.battleFieldView);
 	
 	backgroundSkin = new Image(appModel.theme.quadSkin);
+	Image(backgroundSkin).scale9Grid = MainTheme.QUAD_SCALE9_GRID;
 	Image(backgroundSkin).color = 0xCCB3A3;
 }
 
