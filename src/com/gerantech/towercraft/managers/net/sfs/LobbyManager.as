@@ -93,7 +93,10 @@ protected function sfs_getLobbyInfoHandler(event:SFSEvent):void
 	if( data.containsKey("messages") )
 	{
 		var u:ISFSObject = findUser(player.id);
-		messages = new ListCollection();
+		if( messages == null )
+			messages = new ListCollection();
+		else
+			messages.removeAll();
 		for( var i:int=0; i<data.getSFSArray("messages").size(); i++ )
 		{
 			var msg:ISFSObject = data.getSFSArray("messages").getSFSObject(i);
