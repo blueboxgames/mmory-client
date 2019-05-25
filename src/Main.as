@@ -1,13 +1,17 @@
 package
 {
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.screens.BattleScreen;
 import com.gerantech.towercraft.controls.screens.SplashScreen;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.towercraft.utils.Localizations;
 import com.marpies.ane.gameanalytics.GameAnalytics;
 import com.marpies.ane.gameanalytics.data.GAErrorSeverity;
+import com.tuarua.FirebaseANE;
+import com.tuarua.firebase.FirebaseOptions;
+import com.tuarua.fre.ANEError;
 
 import feathers.events.FeathersEventType;
 
@@ -27,7 +31,6 @@ import flash.utils.getTimer;
 import haxe.Log;
 
 import starling.core.Starling;
-import com.gerantech.towercraft.utils.Localizations;
 
 public class Main extends Sprite
 {
@@ -76,6 +79,33 @@ public function Main()
 	loaderInfo.addEventListener(Event.COMPLETE, loaderInfo_completeHandler);
 	loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, loaderInfo_uncaughtErrorHandler);
 	NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, nativeApplication_invokeHandler);
+
+	if (AppModel.instance.platform == AppModel.PLATFORM_ANDROID)
+	{
+		try
+		{
+			/**
+			 * Here we will initalize firebase native extension, required for 
+			 * Firebase Cloud Messaging.
+			 */
+			FirebaseANE.init();
+			if(!FirebaseANE.isGooglePlayServicesAvailable)
+			{
+				trace("Google Play Service is not installed on device");
+				// TODO: Requires handle method.
+			}
+			var firebaseOptions:FirebaseOptions = FirebaseANE.options;
+			if (firebaseOptions)
+			{
+				trace("apiKey", firebaseOptions.apiKey);
+				trace("googleAppId", firebaseOptions.googleAppId);
+			}
+		}
+		catch (e:ANEError)
+		{
+			trace(e.errorID, e.message, e.getStackTrace(), e.source);
+		}
+	}
 }
 
 private function loaderInfo_completeHandler(event:Event):void

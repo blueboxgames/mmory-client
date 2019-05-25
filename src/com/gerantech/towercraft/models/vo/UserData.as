@@ -2,6 +2,7 @@ package com.gerantech.towercraft.models.vo
 {
 import com.gerantech.towercraft.managers.UserPrefs;
 import com.gerantech.towercraft.models.AppModel;
+
 import flash.net.SharedObject;
 
 public class UserData
