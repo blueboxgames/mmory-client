@@ -242,7 +242,7 @@ private function showProfile():void
 	indicatorPoint.setData(0, point, Number.MAX_VALUE);
 	indicatorPoint.width = padding * 6;
 	indicatorPoint.height = padding * 1.5;
-	indicatorPoint.layoutData = new AnchorLayoutData(padding * 3, appModel.isLTR?padding * 1.5:NaN, NaN, appModel.isLTR?NaN:padding * 1.5);
+	indicatorPoint.layoutData = new AnchorLayoutData(padding * 3, appModel.isLTR?padding * 2:NaN, NaN, appModel.isLTR?NaN:padding * 2);
 	addChild(indicatorPoint);
 	
 	var scroller:ScrollContainer = new ScrollContainer();
