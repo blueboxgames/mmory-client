@@ -82,13 +82,13 @@ override protected function initialize():void
 	titleDisplay.layoutData = new AnchorLayoutData(85, NaN, NaN, NaN, 220);
 
 	var numCards:int = ExchangeType.getNumTotalCards(item.outcome, arena, player.splitTestCoef, 0);
-	var cardsPalette:IconGroup = new IconGroup(Assets.getTexture("cards"), int(numCards * 0.9) + " - " + int(numCards * 1.1));
+	var cardsPalette:IconGroup = new IconGroup(Assets.getTexture("cards"), int(numCards * 0.9) + " - " + int(numCards * 1.1 + 1));
 	cardsPalette.width = transitionIn.destinationBound.width * 0.42;
 	cardsPalette.layoutData = new AnchorLayoutData(290, NaN, NaN, 50);
 	addChild(cardsPalette);
 	
 	var numSofts:int = ExchangeType.getNumSofts(item.outcome, arena, player.splitTestCoef);
-	var softsPalette:IconGroup = new IconGroup(Assets.getTexture("res-" + ResourceType.R3_CURRENCY_SOFT, "gui"), int(numSofts * 0.9) + " - " + int(numSofts * 1.1));
+	var softsPalette:IconGroup = new IconGroup(Assets.getTexture("res-" + ResourceType.R3_CURRENCY_SOFT, "gui"), int(numSofts * 0.9) + " - " + int(numSofts * 1.1 + 1));
 	softsPalette.textColor = 0xFFFF99;
 	softsPalette.width = transitionIn.destinationBound.width * 0.42;
 	softsPalette.layoutData = new AnchorLayoutData(290, 40);

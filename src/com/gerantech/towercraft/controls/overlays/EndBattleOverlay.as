@@ -11,6 +11,7 @@ import com.gt.towers.constants.ResourceType;
 import com.gt.towers.exchanges.ExchangeItem;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
+
 import feathers.controls.Button;
 import feathers.controls.List;
 import feathers.controls.renderers.IListItemRenderer;
@@ -19,6 +20,7 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalAlign;
+
 import starling.core.Starling;
 import starling.display.Quad;
 import starling.events.Event;
