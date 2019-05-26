@@ -47,11 +47,9 @@ protected function exchangeManager_endInteractionHandler(event:Event):void
 
 protected function resetData(item:ExchangeItem):void 
 {
-	if( item.type != exchange.type )
-		return;
-	removeChildren();
 	commitData();
-	showAchieveAnimation(item);
+	if( item.type == exchange.type )
+		showAchieveAnimation(item);
 }
 
 protected function showAchieveAnimation(item:ExchangeItem):void 

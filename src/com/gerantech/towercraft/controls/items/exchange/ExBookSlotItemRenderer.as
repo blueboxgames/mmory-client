@@ -297,7 +297,7 @@ private function achieve():void
 	for ( var i:int = 0; i < appModel.battleFieldView.battleData.outcomes.length; i++ )
 	{
 		rd = appModel.battleFieldView.battleData.outcomes[i];
-		if ( rd.value == exchange.type )
+		if( rd.value == exchange.type )
 		{
 			achieved = i;
 			break;
@@ -361,13 +361,6 @@ private function reset() : void
 	waitGroup = null;
 	readyLabel = null;
 	clearTimeout(timeoutId);
-}
-
-
-override protected function resetData(item:ExchangeItem):void 
-{
-	showOpenWarn();
-	super.resetData(item);
 }
 
 override protected function showAchieveAnimation(item:ExchangeItem):void {}

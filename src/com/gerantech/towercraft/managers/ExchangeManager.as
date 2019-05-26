@@ -182,7 +182,7 @@ private function exchange( item:ExchangeItem, params:SFSObject ) : int
 	var bookType:int = -1;
 	if( item.category == ExchangeType.C30_BUNDLES )
 		bookType = item.containBook(); // reterive a book from bundle. if not found show golden book
-	else 
+	else
 		bookType = item.category == ExchangeType.BOOKS_50 ? item.type : item.outcome; // reserved because outcome changed after exchange
 
 	var response:int = exchanger.exchange(item, timeManager.now, params.containsKey("hards") ? params.getInt("hards") : 0);
