@@ -40,9 +40,9 @@ override protected function initialize():void
 	iconDisplay.level = card.level;
 	iconDisplay.showSlider = true;
 	iconDisplay.showElixir = true;
+	iconDisplay.height = iconDisplay.width * CardView.VERICAL_SCALE;
 	iconDisplay.x = iconDisplay.pivotX = iconDisplay.width * 0.5;
 	iconDisplay.y = iconDisplay.pivotY = iconDisplay.height * 0.5;
-	iconDisplay.height = iconDisplay.width * CardView.VERICAL_SCALE;
 	addChild(iconDisplay);
 	
 	addEventListener(FeathersEventType.CREATION_COMPLETE, createCompleteHandler);
