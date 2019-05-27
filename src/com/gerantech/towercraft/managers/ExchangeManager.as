@@ -53,24 +53,8 @@ public function process(item : ExchangeItem) : void
 		return;// disalble all items in tutorial
 	}
 
-	var reqType:int = item.requirements.keys()[0];
 	var params:SFSObject = new SFSObject();
 	params.putInt("type", item.type);
-
-	//     _-_-_-_-_-_- special offers -_-_-_-_-_-_
-	if( item.category == ExchangeType.C20_SPECIALS )
-	{
-		if( item.numExchanges > 0 )
-			return;
-		if( !player.has(item.requirements) )
-		{
-			appModel.navigator.addLog(loc("log_not_enough", [loc("resource_title_" + reqType)]));
-			dispatchCustomEvent(FeathersEventType.ERROR, item);
-			return;
-		}
-		exchange(item, params);
-		return;
-	}
 
 	//     _-_-_-_-_-_- all books -_-_-_-_-_-_
 	if( item.isBook() )
@@ -112,6 +96,22 @@ public function process(item : ExchangeItem) : void
 			if( response != MessageTypes.RESPONSE_SUCCEED )
 				details.close();
 		}
+		return;
+	}
+
+	var reqType:int = item.requirements.keys()[0];
+	//     _-_-_-_-_-_- special offers -_-_-_-_-_-_
+	if( item.category == ExchangeType.C20_SPECIALS )
+	{
+		if( item.numExchanges > 0 )
+			return;
+		if( !player.has(item.requirements) )
+		{
+			appModel.navigator.addLog(loc("log_not_enough", [loc("resource_title_" + reqType)]));
+			dispatchCustomEvent(FeathersEventType.ERROR, item);
+			return;
+		}
+		exchange(item, params);
 		return;
 	}
 

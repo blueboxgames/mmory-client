@@ -2,6 +2,7 @@ package com.gerantech.towercraft.managers.net
 {
 import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.towercraft.Game;
+import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.BillingManager;
@@ -62,7 +63,8 @@ public function load():void
 	{
 		appModel.navigator.popAll();
 		appModel.navigator.removeAllPopups();
-        appModel.navigator.rootScreenID = Game.DASHBOARD_SCREEN;
+		appModel.navigator.rootScreenID = Game.DASHBOARD_SCREEN;
+		ExCategoryItemRenderer.placeholders = null;
 	}
 	if( UserData.instance.prefs == null )
 		UserData.instance.prefs = new UserPrefs();

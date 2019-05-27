@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
+import com.gerantech.towercraft.controls.items.exchange.ExCategoryPlaceHolder;
 import com.gerantech.towercraft.models.vo.ShopLine;
 import com.gt.towers.constants.ExchangeType;
 import com.gt.towers.exchanges.ExchangeItem;
@@ -61,7 +62,7 @@ override public function focus():void
 	if( SELECTED_CATEGORY == 0 )
 		itemslist.scrollToPosition(0, 0, 0.5);
 	else
-		itemslist.scrollToPosition(0, SELECTED_CATEGORY * ExCategoryItemRenderer.GET_HEIGHT(0) + scrollPaddingTop, 0.5);
+		itemslist.scrollToPosition(0, SELECTED_CATEGORY * ExCategoryPlaceHolder.GET_HEIGHT(0) + scrollPaddingTop, 0.5);
 	SELECTED_CATEGORY = 0;
 }
 
@@ -93,17 +94,17 @@ override public function updateData():void
 			softs.add(itemKeys[i]);
 	}
 	
-	scrollPaddingTop = ExCategoryItemRenderer.GET_HEIGHT(120) + 100;
+	scrollPaddingTop = ExCategoryPlaceHolder.GET_HEIGHT(120) + 100;
 	var categoreis:Array = new Array();
 	if( bundles.items.length > 0 )
 	{
 		categoreis.push(bundles);
-		scrollPaddingTop += ExCategoryItemRenderer.GET_HEIGHT(30);
+		scrollPaddingTop += ExCategoryPlaceHolder.GET_HEIGHT(30);
 	}
 	if( specials.items.length > 0 )
 	{
 		categoreis.push(specials);
-		scrollPaddingTop += ExCategoryItemRenderer.GET_HEIGHT(20);
+		scrollPaddingTop += ExCategoryPlaceHolder.GET_HEIGHT(20);
 	}
 	if( magics.items.length > 0 )
 		categoreis.push(magics);
@@ -118,7 +119,7 @@ override public function updateData():void
 		categoreis[i].items.sort();
 	
 	itemslistData = new ListCollection(categoreis);
-	scrollPaddingTop = ExCategoryItemRenderer.GET_HEIGHT(120);
+	scrollPaddingTop = ExCategoryPlaceHolder.GET_HEIGHT(120);
 }
 
 private function list_changeHandler(event:Event) : void

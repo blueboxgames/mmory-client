@@ -41,18 +41,18 @@ override protected function commitData() : void
 	availabledLabel.layoutData = new AnchorLayoutData(12, 24);
 	addChild(availabledLabel);*/
  	
-	var outKeys:Vector.<int> = exchange.outcomes.keys();
+	var outKeys:Vector.<int> = this.exchange.outcomes.keys();
 	var p:int = 140;
 	var rowH:int = (width + p * 2) / (outKeys.length + 1);
 	for ( var i:int = 0; i < outKeys.length; i++ )
 		this.createOutcome(outKeys, i, rowH, p);
 
 	var outValue:int = Exchanger.toReal(exchange.outcomes);
-	var discount:int = Math.round((1 - (exchange.requirements.values()[0] / outValue)) * 100)
+	var discount:int = Math.round((1 - (this.reqCount / outValue)) * 100)
 	var ribbonDisplay:ImageLoader = new ImageLoader();
 	ribbonDisplay.source = Assets.getTexture("cards/empty-badge", "gui");
 	ribbonDisplay.layoutData = new AnchorLayoutData(0, NaN, NaN, 0);
-	ribbonDisplay.height = ribbonDisplay.width = 180;
+	ribbonDisplay.height = ribbonDisplay.width = 172;
 	this.addChild(ribbonDisplay);
 	ribbonDisplay.addEventListener(FeathersEventType.CREATION_COMPLETE, function():void
 	{
@@ -74,10 +74,11 @@ private function createOutcome(outKeys:Vector.<int>, i:int, rowH:int, _padding:i
 
 	var itemIcon:ImageLoader = new ImageLoader();
 	itemIcon.width = _width;
-	itemIcon.height = itemIcon.width * CardView.VERICAL_SCALE;trace(outKeys[i])
+	itemIcon.height = itemIcon.width * CardView.VERICAL_SCALE;
 	itemIcon.source = Assets.getTexture((book ? "books/" : "cards/") + outKeys[i], "gui");
 	itemIcon.x = point.x;
 	itemIcon.y = point.y;
+	this.addChildAt(itemIcon, 0);
 
 	if( !book )
 	{
@@ -89,14 +90,12 @@ private function createOutcome(outKeys:Vector.<int>, i:int, rowH:int, _padding:i
 		bgDisplay.source = appModel.theme.roundSmallSkin;
 		bgDisplay.x = point.x - p;
 		bgDisplay.y = point.y - p;
-		this.addChild(bgDisplay);
-	}
-	this.addChild(itemIcon);
+		this.addChildAt(bgDisplay, 0);
 
-	var itemCount:ShadowLabel = new ShadowLabel(null, 1, 0, null, null, false, null, 0.9);
-	itemCount.x = point.x;
-	itemCount.y = point.y - 10;
-	this.addChild(itemCount);
+		var itemCount:ShadowLabel = new ShadowLabel(this.titleFormatter(this.exchange.outcomes.get(outKeys[i])), 1, 0, null, null, false, null, 0.9);
+		itemCount.layoutData = new AnchorLayoutData(itemIcon.y + itemIcon.height - 64, width - itemIcon.x - itemIcon.width + 12);
+		this.addChild(itemCount);
+	}
 }
 
 override protected function buttonLabelFactory() : ITextRenderer
