@@ -30,19 +30,24 @@ public function ExDefaultItemRenderer(category:int){ this.category = category}
 override protected function commitData():void
 {
 	super.commitData();
-	skinFactory();
-	iconFactory();
-	buttonFactory();
-	titleFactory();
+	this.skinFactory();
+	this.iconFactory();
+	this.buttonFactory();
+	this.titleFactory();
 
 	this.reqType = this.exchange.requirements.keys()[0];
 	this.reqCount = this.exchange.requirements.get(reqType);
 	
-	if( this.reqType != ResourceType.R5_CURRENCY_REAL )
-		this.buttonDisplay.iconTexture = MMOryButton.getIcon(this.reqType, this.reqCount);
-	this.buttonDisplay.label = MMOryButton.getLabel(this.reqType, this.reqCount);
-	this.iconDisplay.source = Assets.getTexture(this.iconSourceProvider(), "gui");
-	this.titleDisplay.text = titleFormatter(this.exchange.outcomes.values()[0]);
+	if( this.buttonDisplay != null )
+	{
+		if( this.reqType != ResourceType.R5_CURRENCY_REAL )
+			this.buttonDisplay.iconTexture = MMOryButton.getIcon(this.reqType, this.reqCount);
+		this.buttonDisplay.label = MMOryButton.getLabel(this.reqType, this.reqCount);
+	}
+	if( this.iconDisplay != null )
+		this.iconDisplay.source = Assets.getTexture(this.iconSourceProvider(), "gui");
+	if( this.titleDisplay != null )
+		this.titleDisplay.text = titleFormatter(this.exchange.outcomes.values()[0]);
 }
 
 override public function set currentState(value:String) : void
@@ -64,7 +69,7 @@ private function iconSourceProvider() : String
 
 protected function titleFormatter(count:int) : String
 {
-	if( category == ExchangeType.C120_MAGICS )
+	if( this.category == ExchangeType.C120_MAGICS )
 		return loc("arena_text") + " " + loc("num_" + (count + 1));
 	return "x" + StrUtils.getNumber(count);
 }
@@ -88,7 +93,7 @@ protected function titleFactory() : void
 {
 	this.titleDisplay = new ShadowLabel(null, ExCategoryItemRenderer.GET_TEXT_COLORS(this.category), 0, null, null, false, null, category==ExchangeType.C120_MAGICS?0.8:1.1);
 	this.titleDisplay.layoutData = new AnchorLayoutData(20, NaN, NaN, NaN, 0);
-	addChild(this.titleDisplay);
+	this.addChild(this.titleDisplay);
 }
 protected function buttonFactory() : void
 {

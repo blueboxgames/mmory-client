@@ -1,9 +1,7 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
-import com.gerantech.towercraft.controls.headers.ExchangeHeader;
 import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
-import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
 import com.gerantech.towercraft.models.Assets;
@@ -34,11 +32,8 @@ public class ExCategoryItemRenderer extends AbstractTouchableListItemRenderer
 {
 private var line:ShopLine;
 private var list:List;
-private var labelDisplay:ShadowLabel;
-private var listLayout:TiledRowsLayout;
-private var headerDisplay:ExchangeHeader;
-private var descriptionDisplay:RTLLabel;
 private var categoryCollection:ListCollection = new ListCollection();
+
 static public const HEADER_SIZE:int = 110;
 static public const BACKGROUND_SCALEGRID:Rectangle = new Rectangle(16, 104, 1, 1);
 
@@ -68,15 +63,18 @@ static public function GET_HEIGHT(category:int) : int
 }
 
 public function ExCategoryItemRenderer() { super(); }
-override protected function initialize():void
+override protected function commitData():void
 {
-	super.initialize();
+	super.commitData();
+	if ( _data == null || line != null )
+		return;
 	layout = new AnchorLayout();
+	line = _data as ShopLine;
 	
-	backgroundSkin = new Image(null);
+	backgroundSkin = new Image(Assets.getTexture(GET_BG(line.category), "gui"));
 	Image(backgroundSkin).scale9Grid = BACKGROUND_SCALEGRID;
 
-	labelDisplay = new ShadowLabel(null, 1, 0, null, null, false, null, 0.8, null, "bold");
+	var labelDisplay:ShadowLabel = new ShadowLabel(loc("exchange_title_" + line.category), 1, 0, null, null, false, null, 0.8, null, "bold");
 	labelDisplay.layoutData = new AnchorLayoutData(20, NaN, NaN, NaN, 0);
 	addChild(labelDisplay as DisplayObject);
 	
@@ -90,16 +88,18 @@ override protected function initialize():void
 	infoButton.layoutData = new AnchorLayoutData(20, appModel.isLTR?20:NaN, NaN, appModel.isLTR?NaN:20);
 	addChild(infoButton);
 
-	listLayout = new TiledRowsLayout();
+	var listLayout:TiledRowsLayout = new TiledRowsLayout();
+	listLayout.verticalGap = 32;
+	listLayout.horizontalGap = 42;
+	listLayout.useSquareTiles = false;
+	listLayout.useVirtualLayout = false;
+	listLayout.requestedColumnCount = 3;
 	listLayout.paddingLeft = listLayout.paddingRight = 28;
 	listLayout.paddingBottom = listLayout.paddingTop = 46;
+	listLayout.typicalItemHeight = GET_HEIGHT(line.category);
 	listLayout.tileVerticalAlign = listLayout.verticalAlign = VerticalAlign.TOP;
 	listLayout.tileHorizontalAlign = listLayout.horizontalAlign = HorizontalAlign.LEFT;
-	listLayout.useVirtualLayout = false;
-	listLayout.useSquareTiles = false;
-	listLayout.requestedColumnCount = 3;
-	listLayout.horizontalGap = 42;
-	listLayout.verticalGap = 32;
+	listLayout.typicalItemWidth = Math.floor((width - listLayout.paddingLeft - listLayout.paddingRight - listLayout.horizontalGap * 2) / 3);
 	
 	list = new List();
 	list.layout = listLayout;
@@ -108,31 +108,18 @@ override protected function initialize():void
 	list.addEventListener(Event.CHANGE, list_changeHandler);
 	list.dataProvider = categoryCollection;
 	addChild(list);
-}
 
-override protected function commitData():void
-{
-	super.commitData();
-	if ( _data == null )
-		return;
-	line = _data as ShopLine;
-	var cellHeight:int = GET_HEIGHT(line.category);
-	labelDisplay.text = loc("exchange_title_" + line.category);
-	Image(backgroundSkin).texture = Assets.getTexture(GET_BG(line.category), "gui");
-
-	//descriptionDisplay.visible = false;
 	switch( line.category )
 	{
 		case ExchangeType.C20_SPECIALS:
 			// headerDisplay.showCountdown(line.items[0]);
-			if( list.itemRendererFactory == null )// init first item in feathers two called
-				list.itemRendererFactory = function ():IListItemRenderer{ return new ExSpecialItemRenderer(line.category);}
+			list.itemRendererFactory = function ():IListItemRenderer{ return new ExSpecialItemRenderer(line.category);}
 			break;
 		
 		case ExchangeType.C30_BUNDLES:
-			listLayout.typicalItemWidth = Math.floor((width - listLayout.gap * 2)) ;
+			listLayout.typicalItemWidth = Math.floor((width - listLayout.paddingLeft - listLayout.paddingRight)) ;
 			// headerDisplay.showCountdown(line.items[0]);
-			list.itemRendererFactory = function ():IListItemRenderer{ return new ExBundleItemRenderer();}
+			list.itemRendererFactory = function ():IListItemRenderer{ return new ExBundleItemRenderer(line.category);}
 			break;
 		
 		default:
@@ -141,9 +128,7 @@ override protected function commitData():void
 	}
 	
 	var numLines:int = Math.ceil(line.items.length / listLayout.requestedColumnCount);
-	listLayout.typicalItemWidth = Math.floor((width - listLayout.paddingLeft - listLayout.paddingRight - listLayout.horizontalGap * 2) / 3);
-	listLayout.typicalItemHeight = cellHeight;
-	height = cellHeight * numLines + listLayout.verticalGap * (numLines - 1) + listLayout.paddingTop + listLayout.paddingBottom + HEADER_SIZE;
+	height = listLayout.typicalItemHeight * numLines + listLayout.verticalGap * (numLines - 1) + listLayout.paddingTop + listLayout.paddingBottom + HEADER_SIZE;
 	categoryCollection.data = line.items;
 }
 

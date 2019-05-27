@@ -27,7 +27,9 @@ import com.marpies.ane.gameanalytics.data.GAResourceFlowType;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.events.FeathersEventType;
+
 import starling.events.Event;
 /**
 * @author Mansour Djawadi
@@ -51,9 +53,70 @@ public function process(item : ExchangeItem) : void
 		return;// disalble all items in tutorial
 	}
 
+	var reqType:int = item.requirements.keys()[0];
 	var params:SFSObject = new SFSObject();
 	params.putInt("type", item.type);
-	if( item.category == ExchangeType.C0_HARD || item.category == ExchangeType.C30_BUNDLES )
+
+	//     _-_-_-_-_-_- special offers -_-_-_-_-_-_
+	if( item.category == ExchangeType.C20_SPECIALS )
+	{
+		if( item.numExchanges > 0 )
+			return;
+		if( !player.has(item.requirements) )
+		{
+			appModel.navigator.addLog(loc("log_not_enough", [loc("resource_title_" + reqType)]));
+			dispatchCustomEvent(FeathersEventType.ERROR, item);
+			return;
+		}
+		exchange(item, params);
+		return;
+	}
+
+	//     _-_-_-_-_-_- all books -_-_-_-_-_-_
+	if( item.isBook() )
+	{
+		item.enabled = true;
+		var _state:int = item.getState(timeManager.now);
+		if( item.category == ExchangeType.C110_BATTLES && _state == ExchangeItem.CHEST_STATE_EMPTY )
+			return;
+		
+		if( ( item.category == ExchangeType.C100_FREES || item.category == ExchangeType.C110_BATTLES ) && _state == ExchangeItem.CHEST_STATE_READY  )
+		{
+			item.outcomes = new IntIntMap();
+			exchange(item, params);
+			return;
+		}
+		else if( item.category == ExchangeType.C100_FREES && _state != ExchangeItem.CHEST_STATE_READY )
+		{
+			if( item.type == ExchangeType.C104_STARS )
+			{
+				if( _state == ExchangeItem.CHEST_STATE_BUSY )
+					appModel.navigator.addLog(loc("popup_chest_message_110", [""]));
+				else
+					appModel.navigator.addLog(loc("exchange_hint_104", [10]));
+				return;
+			}
+		}
+		
+		var details:BookDetailsPopup = new BookDetailsPopup(item);
+		details.addEventListener(Event.SELECT, details_selectHandler);
+		appModel.navigator.addPopup(details);
+		function details_selectHandler(event:Event):void
+		{
+			_state = item.getState(timeManager.now);
+			if( _state != ExchangeItem.CHEST_STATE_WAIT )
+				details.removeEventListener(Event.SELECT, details_selectHandler);
+			if( _state == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
+				params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+			var response:int = exchange(item, params);
+			if( response != MessageTypes.RESPONSE_SUCCEED )
+				details.close();
+		}
+		return;
+	}
+
+	//     _-_-_-_-_-_- purchase automation -_-_-_-_-_-_
+	if( reqType == ResourceType.R5_CURRENCY_REAL )
 	{
 		BillingManager.instance.addEventListener(FeathersEventType.END_INTERACTION, billinManager_endInteractionHandler);
 		BillingManager.instance.purchase((item.category == ExchangeType.C30_BUNDLES ? "k2k.bundle_" : "k2k.item_") + item.type);
@@ -84,7 +147,8 @@ public function process(item : ExchangeItem) : void
 		return;
 	}
 	
-	if( item.category == ExchangeType.C10_SOFT || item.category == ExchangeType.C70_TICKETS )
+	//     _-_-_-_-_-_- other gem consumption -_-_-_-_-_-_
+	if( reqType == ResourceType.R4_CURRENCY_HARD )
 	{
 		if( !player.has(item.requirements) )
 		{
@@ -106,71 +170,6 @@ public function process(item : ExchangeItem) : void
 			confirm1.removeEventListener(Event.SELECT, confirm1_selectHandler);
 			confirm1.removeEventListener(Event.CLOSE, confirm1_closeHandler);
 			dispatchCustomEvent(FeathersEventType.ERROR, item);
-		}
-		return;
-	}
-	
-	if( item.category == ExchangeType.C20_SPECIALS )
-	{
-		if( item.numExchanges > 0 )
-			return;
-		if( !player.has(item.requirements) )
-		{
-			appModel.navigator.addLog(loc("log_not_enough", [loc("resource_title_" + item.requirements.keys()[0])]));
-			dispatchCustomEvent(FeathersEventType.ERROR, item);
-			return;
-		}
-		exchange(item, params);
-		return;
-	}
-
-	if( item.isBook() )
-	{
-		item.enabled = true;
-		var _state:int = item.getState(timeManager.now);
-		if( item.category == ExchangeType.C110_BATTLES && _state == ExchangeItem.CHEST_STATE_EMPTY )
-			return;
-		
-		if( ( item.category == ExchangeType.C100_FREES || item.category == ExchangeType.C110_BATTLES ) && _state == ExchangeItem.CHEST_STATE_READY  )
-		{
-			item.outcomes = new IntIntMap();
-			exchange(item, params);
-			return;
-		}
-		else if( item.category == ExchangeType.C100_FREES && _state != ExchangeItem.CHEST_STATE_READY )
-		{
-			if( item.type == ExchangeType.C104_STARS )
-			{
-				if( _state == ExchangeItem.CHEST_STATE_BUSY )
-					appModel.navigator.addLog(loc("popup_chest_message_110", [""]));
-				else
-					appModel.navigator.addLog(loc("exchange_hint_104", [10]));
-				return;
-			}
-			/*var dailyPopup:FortuneSkipPopup = new FortuneSkipPopup(item);
-			dailyPopup.addEventListener(Event.SELECT, dailyPopup_selectHandler);
-			appModel.navigator.addPopup(dailyPopup);
-			function dailyPopup_selectHandler(event:Event):void{
-				dailyPopup.removeEventListener(Event.SELECT, dailyPopup_selectHandler);
-				exchange(item, params);
-			}
-			dispatchCustomEvent(FeathersEventType.ERROR, item);
-			return;*/
-		}
-		
-		var details:BookDetailsPopup = new BookDetailsPopup(item);
-		details.addEventListener(Event.SELECT, details_selectHandler);
-		appModel.navigator.addPopup(details);
-		function details_selectHandler(event:Event):void
-		{
-			_state = item.getState(timeManager.now);
-			if( _state != ExchangeItem.CHEST_STATE_WAIT )
-				details.removeEventListener(Event.SELECT, details_selectHandler);
-			if( _state == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
-				params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
-			var response:int = exchange(item, params);
-			if( response != MessageTypes.RESPONSE_SUCCEED )
-				details.close();
 		}
 	}
 }

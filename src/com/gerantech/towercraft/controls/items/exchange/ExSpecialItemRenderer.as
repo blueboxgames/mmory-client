@@ -27,6 +27,7 @@ override protected function initialize() : void
 
 override protected function commitData() : void
 {
+	this.removeChildren();
 	super.commitData();
 	if( this.exchange.numExchanges > 0 )
 	{
@@ -38,7 +39,7 @@ override protected function commitData() : void
 	var outValue:int = exchange.requirements.keys()[0] == ResourceType.R4_CURRENCY_HARD ? Exchanger.toHard(exchange.outcomes) : Exchanger.toSoft(exchange.outcomes);
 	var discount:int = Math.round((1 - (exchange.requirements.values()[0] / outValue)) * 100);
 	var ribbonDisplay:ImageLoader = new ImageLoader();
-	ribbonDisplay.source = Assets.getTexture("cards/empty-badge");
+	ribbonDisplay.source = Assets.getTexture("cards/empty-badge", "gui");
 	ribbonDisplay.layoutData = new AnchorLayoutData(0, NaN, NaN, 0);
 	ribbonDisplay.height = ribbonDisplay.width = width * 0.6;
 	addChild(ribbonDisplay);
