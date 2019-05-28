@@ -94,15 +94,15 @@ protected function sfsConnection_roomDataHandler(event:SFSEvent):void
 	if( roomServerData.containsKey("name") )
 		roomData.name = roomServerData.getText("name");
 	if( roomServerData.containsKey("max") )
-		roomData.name = roomServerData.getInt("max");
+		roomData.max = roomServerData.getInt("max");
 	if( roomServerData.containsKey("num") )
-		roomData.name = roomServerData.getInt("num");
+		roomData.num = roomServerData.getInt("num");
 	if( roomServerData.containsKey("sum") )
-		roomData.name = roomServerData.getInt("sum");
+		roomData.sum = roomServerData.getInt("sum");
 	if( roomServerData.containsKey("pic") )
-		roomData.name = roomServerData.getInt("pic");
+		roomData.pic = roomServerData.getInt("pic");
 	if( roomServerData.containsKey("act") )
-		roomData.name = roomServerData.getInt("act");
+		roomData.act = roomServerData.getInt("act");
 	if( roomServerData.containsKey("all") )
 		roomData.all = roomServerData.getSFSArray("all");
 	

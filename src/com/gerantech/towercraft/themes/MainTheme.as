@@ -2335,11 +2335,11 @@ protected function setTextCalloutStyles(callout:TextCallout):void
 
 protected function setBaseTextInputStyles(input:TextInput):void
 {
-	var skin:ImageSkin = new ImageSkin(this.backgroundInsetSkinTexture);
-	skin.setTextureForState(TextInputState.DISABLED, this.backgroundInsetDisabledSkinTexture);
-	skin.setTextureForState(TextInputState.FOCUSED, this.backgroundInsetFocusedSkinTexture);
-	skin.setTextureForState(TextInputState.ERROR, this.backgroundInsetDangerSkinTexture);
-	skin.scale9Grid = DEFAULT_BACKGROUND_SCALE9_GRID;
+	var skin:ImageSkin = new ImageSkin(this.roundMediumInnerSkin);
+	skin.setTextureForState(TextInputState.DISABLED, this.roundMediumInnerSkin);
+	skin.setTextureForState(TextInputState.FOCUSED, this.roundMediumInnerSkin);
+	skin.setTextureForState(TextInputState.ERROR, this.roundMediumInnerSkin);
+	skin.scale9Grid = ROUND_MEDIUM_SCALE9_GRID;
 	skin.width = this.wideControlSize;
 	skin.height = this.controlSize;
 	skin.minWidth = this.controlSize;
