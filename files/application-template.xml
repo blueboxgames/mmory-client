@@ -160,7 +160,6 @@
     <requestedDisplayResolution>high</requestedDisplayResolution>
   </iPhone>
   <extensions>
-		<extensionID>com.marpies.ane.gameanalytics</extensionID>
 		<extensionID>com.marpies.ane.gameServices</extensionID>
 		<extensionID>com.marpies.ane.googleplayservices.ads</extensionID>
 		<extensionID>com.marpies.ane.googleplayservices.games</extensionID>
@@ -183,5 +182,8 @@
     <extensionID>com.google.firebase.firebase-analytics</extensionID>
     <extensionID>com.google.firebase.firebase-iid</extensionID>
     <extensionID>com.google.firebase.firebase-messaging</extensionID>
+
+		<!-- Game Analytics -->
+		<extensionID>com.gameanalytics.sdk</extensionID>
   </extensions>
 </application>

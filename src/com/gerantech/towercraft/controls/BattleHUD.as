@@ -28,7 +28,7 @@ import com.gerantech.mmory.core.battle.fieldes.FieldData;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.StickerType;
 import com.gerantech.mmory.core.socials.Challenge;
-import com.marpies.ane.gameanalytics.GameAnalytics;
+import com.gameanalytics.sdk.GameAnalytics;
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
