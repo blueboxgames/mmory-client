@@ -28,7 +28,7 @@ import com.gt.towers.battle.fieldes.FieldData;
 import com.gt.towers.constants.PrefsTypes;
 import com.gt.towers.constants.StickerType;
 import com.gt.towers.socials.Challenge;
-import com.marpies.ane.gameanalytics.GameAnalytics;
+import com.gameanalytics.sdk.GameAnalytics;
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
