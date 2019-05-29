@@ -8,6 +8,7 @@ import com.gerantech.towercraft.controls.texts.CustomTextInput;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gt.towers.constants.MessageTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
@@ -43,7 +44,7 @@ override protected function initialize():void
 	padding = 128;
 	controlWidth = 420;
 	
-	var tilteDisplay:RTLLabel = new RTLLabel(loc("lobby_create_message"), 1, "center", null, false, null, 0.8);
+	var tilteDisplay:RTLLabel = new RTLLabel(loc("lobby_create_message"), 1, "center", null, true, null, 0.8);
 	tilteDisplay.layoutData = new AnchorLayoutData(padding, padding, NaN, padding);
 	addChild(tilteDisplay);
 
@@ -116,7 +117,7 @@ private function createButton_triggeredHandler(event:Event):void
 		errorDisplay.text = loc("lobby_create_error_message_point", [200]);
 		return;
 	}
-	
+	errorDisplay.text = "";
 	var params:SFSObject = new SFSObject();
 	params.putUtfString("name", nameInput.text);
 	params.putUtfString("bio", bioInput.text);
@@ -162,16 +163,13 @@ protected function sfsConnectionroomCreateRresponseHandler(event:SFSEvent):void
 		return;
 	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnectionroomCreateRresponseHandler);
 	var data:SFSObject = event.params.params as SFSObject;
-	if( data.getInt("response") >= 0 )
+	if( data.getInt("response") == MessageTypes.RESPONSE_SUCCEED )
 	{
 		game.lobby.create();
 		dispatchEventWith(Event.UPDATE, true);
 		return;
 	}
-	if( data.getInt("response") == -1 )
-		appModel.navigator.addLog(loc("lobby_create_exits_message"));
-	else 
-		appModel.navigator.addLog(loc("lobby_create_error_message"));
+	errorDisplay.text = loc("lobby_create_" + data.getInt("response"));
 }
 }
 }

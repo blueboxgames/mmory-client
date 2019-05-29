@@ -4,7 +4,7 @@ import com.gerantech.towercraft.controls.TowersLayout;
 
 public class Segment extends TowersLayout implements ISegment
 {
-	private var _paddingH:Number;
+	private var _paddingH:Number = 0;
 	public function get paddingH():Number
 	{
 		return _paddingH;

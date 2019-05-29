@@ -16,7 +16,7 @@ override public function init():void
 {
 	super.init();
 	height = 50;
-	labelDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 0.65); 
+	labelDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 0.6); 
 	labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
 	addChild(labelDisplay);
 }
