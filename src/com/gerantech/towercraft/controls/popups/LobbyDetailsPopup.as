@@ -34,6 +34,7 @@ import flash.geom.Rectangle;
 
 import starling.animation.Transitions;
 import starling.events.Event;
+import com.gerantech.towercraft.utils.Localizations;
 
 public class LobbyDetailsPopup extends SimplePopup
 {
@@ -268,8 +269,8 @@ private function removeButton_triggeredHandler(e:Event):void
 
 private function shareButton_triggeredHandler():void
 {
-	NativeAbilities.instance.shareText(loc("lobby_invite"), loc("lobby_invite_message")+ "\n" + loc("lobby_invite_url", [roomData.id, player.invitationCode]));
-	trace(loc("lobby_invite_url", [roomData.id, player.invitationCode]))
+	NativeAbilities.instance.shareText(loc("lobby_invite"), loc("lobby_invite_message")+ "\n" + Localizations.instance.get("lobby_invite_url", [roomData.id, player.invitationCode]));
+	trace(Localizations.instance.get("lobby_invite_url", [roomData.id, player.invitationCode]))
 }
 
 private function header_changeHandler(event:Event):void

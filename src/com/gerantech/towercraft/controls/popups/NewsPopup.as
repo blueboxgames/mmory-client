@@ -1,12 +1,13 @@
 package com.gerantech.towercraft.controls.popups
 {
 	import com.gerantech.towercraft.controls.buttons.CustomButton;
-	
-	import flash.geom.Rectangle;
-	
+	import com.gerantech.towercraft.utils.Localizations;
+
 	import feathers.controls.WebView;
 	import feathers.layout.AnchorLayoutData;
-	
+
+	import flash.geom.Rectangle;
+
 	import starling.core.Starling;
 	import starling.events.Event;
 
@@ -28,7 +29,7 @@ package com.gerantech.towercraft.controls.popups
 			
 			webView = new WebView();
 			webView.layoutData = new AnchorLayoutData(padding*4, padding, padding*5, padding);
-			webView.loadURL(loc("popup_news_url"));
+			webView.loadURL(Localizations.instance.get("popup_news_url"));
 			webView.addEventListener(Event.COMPLETE, webView_completeHandler);
 		}
 		
