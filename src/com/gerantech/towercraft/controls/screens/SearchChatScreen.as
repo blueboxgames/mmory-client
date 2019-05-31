@@ -1,15 +1,15 @@
 package com.gerantech.towercraft.controls.screens
 {
-import com.gerantech.towercraft.controls.items.PlayersItemRenderer;
 import com.gerantech.towercraft.controls.items.SearchChatItemRenderer;
-import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.events.FeathersEventType;
+
 import starling.events.Event;
 
 public class SearchChatScreen extends SearchScreen
@@ -47,8 +47,15 @@ protected function sfs_issuesResponseHandler(event:SFSEvent):void
 	var chats:SFSArray = SFSArray(SFSObject(event.params.params).getSFSArray("result"));
 	for (var i:int = 0; i < chats.size(); i++)
 		result.addItem(chats.getSFSObject(i));
+	result.sortCompareFunction = sortChats;
 //	trace(event.params.params.getDump())
 }
+
+private function sortChats ( a:SFSObject, b:SFSObject ):int
+{
+	return b.getInt("u") - a.getInt("u");
+}
+
 
 protected function list_focusHandler(event:Event) : void
 {

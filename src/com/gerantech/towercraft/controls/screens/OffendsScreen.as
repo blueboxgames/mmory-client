@@ -1,17 +1,19 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.towercraft.controls.items.InfractionItemRenderer;
 import com.gerantech.towercraft.controls.popups.AdminBanPopup;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
+
 import starling.events.Event;
 
 public class OffendsScreen extends ListScreen
@@ -28,7 +30,8 @@ override protected function initialize():void
 	infractions = new ListCollection();
 	requestInfractions();
 	
-	listLayout.paddingRight = listLayout.paddingLeft = listLayout.gap = 2;	
+	listLayout.gap = 5;
+	listLayout.paddingRight = listLayout.paddingLeft = 12;	
 	//listLayout.hasVariableItemDimensions = true;
 	list.itemRendererFactory = function():IListItemRenderer { return new InfractionItemRenderer(); }
 	list.addEventListener(Event.SELECT, list_eventsHandler);
