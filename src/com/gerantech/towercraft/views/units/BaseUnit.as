@@ -3,10 +3,10 @@ package com.gerantech.towercraft.views.units
 import com.gerantech.towercraft.managers.TutorialManager;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.views.BattleFieldView;
-import com.gt.towers.Game;
-import com.gt.towers.Player;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.battle.units.Unit;
+import com.gerantech.mmory.core.Game;
+import com.gerantech.mmory.core.Player;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.battle.units.Unit;
 
 /**
 * ...

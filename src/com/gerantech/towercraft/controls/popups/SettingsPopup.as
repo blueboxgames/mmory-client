@@ -12,7 +12,7 @@ import com.gerantech.towercraft.managers.oauth.OAuthManager;
 import com.gerantech.towercraft.models.vo.SettingsData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.Localizations;
-import com.gt.towers.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.ScrollPolicy;

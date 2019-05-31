@@ -258,6 +258,30 @@ public static function toTimeFormat(seconds:int):String
 	return seconds + "s";
 }
 
+public static function toElapsed(seconds:int):String
+{
+	if( seconds < 300 )
+		return loc("ago_moments");
+
+	var minutes:int = Math.round( seconds / 60 );
+	if( minutes < 60 )
+		return loc("ago_minutes", [minutes]);
+
+	var hours:int = Math.floor( minutes / 60 );
+	if( hours < 24 )
+		return loc("ago_hours", [hours]);
+	
+	var days:int = Math.floor( hours / 24 );
+	if( days < 31 )
+		return loc("ago_days", [days]);
+	
+	var months:int = Math.floor( days / 30 );
+	if( months < 13 )
+		return loc("ago_months", [months]);
+
+	return loc("ago_years", [Math.floor( hours / 12 )]);
+}
+
 public static function getDateString(_date:Date, isTime:Boolean = false):String
 {
 	var ret:String = _date.fullYear + '-' + uint(_date.month + 1) + "-" + _date.date;

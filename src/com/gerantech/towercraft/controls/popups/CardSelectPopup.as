@@ -3,7 +3,7 @@ package com.gerantech.towercraft.controls.popups
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.battle.units.Card;
+import com.gerantech.mmory.core.battle.units.Card;
 
 import feathers.controls.Button;
 import feathers.layout.AnchorLayout;

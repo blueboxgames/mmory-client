@@ -3,9 +3,9 @@ package com.gerantech.towercraft.controls.popups
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.exchanges.Exchanger;
-import com.gt.towers.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.Exchanger;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import feathers.events.FeathersEventType;
 import starling.events.Event;
 

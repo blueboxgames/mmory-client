@@ -27,6 +27,7 @@ package com.gerantech.towercraft.themes
 
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
+
 import feathers.controls.Alert;
 import feathers.controls.AutoComplete;
 import feathers.controls.Button;
@@ -86,14 +87,13 @@ import feathers.layout.HorizontalLayout;
 import feathers.layout.RelativePosition;
 import feathers.layout.VerticalAlign;
 import feathers.layout.VerticalLayout;
-import feathers.media.FullScreenToggleButton;
-import feathers.media.MuteToggleButton;
-import feathers.media.PlayPauseToggleButton;
 import feathers.media.SeekSlider;
 import feathers.skins.ImageSkin;
 import feathers.system.DeviceCapabilities;
 import feathers.themes.StyleNameFunctionTheme;
+
 import flash.geom.Rectangle;
+
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Quad;
@@ -170,6 +170,7 @@ static public const POPUP_HEADERED_SCALE9_GRID:Rectangle = new Rectangle(14, 112
 static public const POPUP_INSIDE_SCALE9_GRID:Rectangle = new Rectangle(14, 15, 2, 1);
 static public const CALLOUT_SCALE9_GRID:Rectangle = new Rectangle(14, 14, 2, 16);
 static public const ITEM_RENDERER_SCALE9_GRID:Rectangle = new Rectangle(17, 22, 4, 10);
+static public const ITEM_RENDERER_BULGY_SCALE9_GRID:Rectangle = new Rectangle(30, 30, 2, 2);
 static public const ITEM_RENDERER_RANK_SCALE9_GRID:Rectangle = new Rectangle(270, 50, 2, 1);
 static public const INSET_ITEM_RENDERER_MIDDLE_SCALE9_GRID:Rectangle = new Rectangle(2, 2, 1, 40);
 static public const INSET_ITEM_RENDERER_FIRST_SCALE9_GRID:Rectangle = new Rectangle(7, 7, 1, 35);
@@ -540,7 +541,7 @@ public function get backgroundSkinTexture() : Texture { return Assets.getTexture
 public function get backgroundDisabledSkinTexture() : Texture { return Assets.getTexture("theme/background-disabled-skin", "gui"); }
 public function get backgroundInsetSkinTexture() : Texture { return Assets.getTexture("theme/background-inset-skin", "gui"); }
 public function get backgroundInsetDisabledSkinTexture() : Texture { return Assets.getTexture("theme/background-inset-disabled-skin", "gui"); }
-public function get backgroundInsetFocusedSkinTexture() : Texture { return Assets.getTexture("theme/background-focused-skin", "gui"); }
+public function get backgroundInsetFocusedSkinTexture() : Texture { return Assets.getTexture("theme/background-inset-focused-skin", "gui"); }
 public function get backgroundInsetDangerSkinTexture() : Texture { return Assets.getTexture("theme/background-inset-danger-skin", "gui"); }
 public function get backgroundLightBorderSkinTexture() : Texture { return Assets.getTexture("theme/background-light-border-skin", "gui"); }
 public function get backgroundDarkBorderSkinTexture() : Texture { return Assets.getTexture("theme/background-dark-border-skin", "gui"); }
@@ -613,6 +614,10 @@ public function get itemRendererUpSkinTexture() : Texture { return Assets.getTex
 public function get itemRendererSelectedSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-selected-skin", "gui"); }
 public function get itemRendererDisabledSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-disabled-skin", "gui"); }
 public function get itemRendererDangerSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-danger-skin", "gui"); }
+public function get itemRendererBulgyUpSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-bulgy-up-skin", "gui"); }
+public function get itemRendererBulgySelectedSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-bulgy-selected-skin", "gui"); }
+public function get itemRendererBulgyDisabledSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-bulgy-disabled-skin", "gui"); }
+public function get itemRendererBulgyDangerSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-bulgy-danger-skin", "gui"); } 
 public function get insetItemRendererUpSkinTexture() : Texture { return Assets.getTexture("theme/inset-item-renderer-up-skin", "gui"); }
 public function get insetItemRendererSelectedSkinTexture() : Texture { return Assets.getTexture("theme/inset-item-renderer-selected-up-skin", "gui"); }
 public function get insetItemRendererFirstUpSkinTexture() : Texture { return Assets.getTexture("theme/first-inset-item-renderer-up-skin", "gui"); }
@@ -2339,7 +2344,7 @@ protected function setBaseTextInputStyles(input:TextInput):void
 	skin.setTextureForState(TextInputState.DISABLED, this.backgroundInsetDisabledSkinTexture);
 	skin.setTextureForState(TextInputState.FOCUSED, this.backgroundInsetFocusedSkinTexture);
 	skin.setTextureForState(TextInputState.ERROR, this.backgroundInsetDangerSkinTexture);
-	skin.scale9Grid = DEFAULT_BACKGROUND_SCALE9_GRID;
+	skin.scale9Grid = ROUND_MEDIUM_SCALE9_GRID;
 	skin.width = this.wideControlSize;
 	skin.height = this.controlSize;
 	skin.minWidth = this.controlSize;

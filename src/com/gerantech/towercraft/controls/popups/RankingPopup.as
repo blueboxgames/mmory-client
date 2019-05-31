@@ -62,7 +62,7 @@ private function sendCommand(rankType:String) : void
 	if( rankType == SFSCommands.LOBBY_DATA )
 	{
 		params.putUtfString("name", "!@#$");
-		params.putInt("mode", 1);
+		params.putInt("mode", 2);
 	}
 	SFSConnection.instance.sendExtensionRequest(rankType, params);			
 }

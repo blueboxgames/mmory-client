@@ -2,8 +2,8 @@ package com.gerantech.towercraft.controls.groups
 {
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.items.exchange.ExBookSlotItemRenderer;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
 import feathers.controls.renderers.IListItemRenderer;

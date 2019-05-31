@@ -2,7 +2,7 @@ package com.gerantech.towercraft.managers
 {
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.models.AppModel;
-import com.gt.towers.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import flash.events.Event;
 import flash.media.Sound;
 import flash.media.SoundChannel;

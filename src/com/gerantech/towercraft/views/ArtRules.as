@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.views 
 {
-import com.gt.towers.utils.CoreUtils;
-import com.gt.towers.utils.Point3;
+import com.gerantech.mmory.core.utils.CoreUtils;
+import com.gerantech.mmory.core.utils.Point3;
 import flash.utils.Dictionary;
 /**
 * ...

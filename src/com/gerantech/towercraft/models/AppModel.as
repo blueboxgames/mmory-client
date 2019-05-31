@@ -8,7 +8,7 @@ import com.gerantech.towercraft.models.vo.Descriptor;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.BattleFieldView;
-import com.gt.towers.Game;
+import com.gerantech.mmory.core.Game;
 import flash.desktop.NativeApplication;
 import flash.system.Capabilities;
 import starling.utils.AssetManager;

@@ -3,7 +3,7 @@ package com.gerantech.towercraft.views
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.battle.fieldes.FieldData;
+import com.gerantech.mmory.core.battle.fieldes.FieldData;
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.DisplayObject;

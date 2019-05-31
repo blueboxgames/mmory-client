@@ -1,13 +1,15 @@
 package com.gerantech.towercraft.controls.segments 
 {
 import com.gerantech.towercraft.Game;
-import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.items.InboxThreadItemRenderer;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.InboxService;
 import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.InboxThread;
 
+import feathers.controls.ImageLoader;
+import feathers.controls.List;
 import feathers.controls.StackScreenNavigatorItem;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
@@ -15,6 +17,8 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
+import flash.geom.Rectangle;
 
 import starling.events.Event;
 /**
@@ -25,7 +29,7 @@ public class InboxSegment extends Segment
 public var threadsCollection:ListCollection;
 public var issueMode:Boolean;
 private var listLayout:VerticalLayout;
-private var list:FastList;
+private var list:List;
 public function InboxSegment() { super(); }
 override public function init():void
 {
@@ -39,20 +43,32 @@ override public function init():void
 	
 	if( threadsCollection.length == 0 )
 	{
-		var labelDisplay:ShadowLabel = new ShadowLabel(loc("inbox_empty_label"));
-		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
-		addChild(labelDisplay);
+		var emptyDisplay:ShadowLabel = new ShadowLabel(loc("inbox_empty_label"));
+		emptyDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
+		addChild(emptyDisplay);
 		return;
 	}
 
+	var headerDisplay:ImageLoader = new ImageLoader();
+	headerDisplay.source = Assets.getTexture("socials/header", "gui");
+	headerDisplay.layoutData = new AnchorLayoutData(-10, -10, NaN, -10);
+	headerDisplay.scale9Grid = new Rectangle(1, 1, 1, 1);
+	headerDisplay.height = 180;
+	addChild(headerDisplay);
+
+	var titleDisplay:ShadowLabel = new ShadowLabel(loc("tab-4"));
+	titleDisplay.layoutData = new AnchorLayoutData(44, NaN, NaN, NaN, 0);
+	addChild(titleDisplay);
+
 	listLayout = new VerticalLayout();
 	listLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
-	listLayout.gap = listLayout.padding = 10;	
-	listLayout.paddingTop = 100;
+	listLayout.gap = 10;
+	listLayout.padding = 20;	
+	listLayout.paddingTop = 200;
 	listLayout.useVirtualLayout = true;
 	listLayout.typicalItemHeight = 164;
 	
-	list = new FastList();
+	list = new List();
 	list.layout = listLayout;
 	list.dataProvider = threadsCollection;
 	list.addEventListener(Event.CHANGE, list_changeHandler);

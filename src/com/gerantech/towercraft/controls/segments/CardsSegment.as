@@ -11,11 +11,11 @@ import com.gerantech.towercraft.controls.popups.RequirementConfirmPopup;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gt.towers.Player;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.exchanges.Exchanger;
-import com.gt.towers.scripts.ScriptEngine;
+import com.gerantech.mmory.core.Player;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.Exchanger;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.controls.List;
@@ -40,6 +40,7 @@ import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
+import starling.display.Quad;
 
 public class CardsSegment extends Segment
 {
@@ -61,6 +62,9 @@ override public function init():void
 {
 	super.init();
 	updateData();
+
+	backgroundSkin = new Quad(1, 1);
+	backgroundSkin.alpha = 0;
 	
 	deckHeader = new DeckHeader();
 	deckHeader.addEventListener(Event.SELECT, deckHeader_selectHandler);
@@ -216,7 +220,7 @@ private function selectPopup_selectHandler(event:Event):void
 private function stage_touchHandler(event:TouchEvent):void
 {
 	var touch:Touch = event.getTouch(this);
-	if( touch == null )
+	if( touch == null || draggableCard == null )
 		return;
 	
 	if( touch.phase == TouchPhase.BEGAN)
@@ -233,7 +237,7 @@ private function stage_touchHandler(event:TouchEvent):void
 		draggableCard.y = touch.globalY;
 		deckHeader.getCardIndex(touch.globalX, touch.globalY);
 	}
-	else if(touch.phase == TouchPhase.ENDED)
+	else if( touch.phase == TouchPhase.ENDED)
 	{
 		var cardIndex:int = deckHeader.getCardIndex(touch.globalX, touch.globalY);
 		if( touchId == -1 && cardIndex > -1 )
@@ -286,7 +290,7 @@ private function setEditMode(value:Boolean, type:int):void
 		addChild(draggableCard);
 		draggableCard.type = type;
 		
-		stage.addEventListener(TouchEvent.TOUCH, stage_touchHandler);
+		addEventListener(TouchEvent.TOUCH, stage_touchHandler);
 		return;
 	}
 

@@ -14,7 +14,7 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSArray;
@@ -34,6 +34,7 @@ import flash.geom.Rectangle;
 
 import starling.animation.Transitions;
 import starling.events.Event;
+import com.gerantech.towercraft.utils.Localizations;
 
 public class LobbyDetailsPopup extends SimplePopup
 {
@@ -94,15 +95,15 @@ protected function sfsConnection_roomDataHandler(event:SFSEvent):void
 	if( roomServerData.containsKey("name") )
 		roomData.name = roomServerData.getText("name");
 	if( roomServerData.containsKey("max") )
-		roomData.name = roomServerData.getInt("max");
+		roomData.max = roomServerData.getInt("max");
 	if( roomServerData.containsKey("num") )
-		roomData.name = roomServerData.getInt("num");
+		roomData.num = roomServerData.getInt("num");
 	if( roomServerData.containsKey("sum") )
-		roomData.name = roomServerData.getInt("sum");
+		roomData.sum = roomServerData.getInt("sum");
 	if( roomServerData.containsKey("pic") )
-		roomData.name = roomServerData.getInt("pic");
+		roomData.pic = roomServerData.getInt("pic");
 	if( roomServerData.containsKey("act") )
-		roomData.name = roomServerData.getInt("act");
+		roomData.act = roomServerData.getInt("act");
 	if( roomServerData.containsKey("all") )
 		roomData.all = roomServerData.getSFSArray("all");
 	
@@ -268,8 +269,8 @@ private function removeButton_triggeredHandler(e:Event):void
 
 private function shareButton_triggeredHandler():void
 {
-	NativeAbilities.instance.shareText(loc("lobby_invite"), loc("lobby_invite_message")+ "\n" + loc("lobby_invite_url", [roomData.id, player.invitationCode]));
-	trace(loc("lobby_invite_url", [roomData.id, player.invitationCode]))
+	NativeAbilities.instance.shareText(loc("lobby_invite"), loc("lobby_invite_message")+ "\n" + Localizations.instance.get("lobby_invite_url", [roomData.id, player.invitationCode]));
+	trace(Localizations.instance.get("lobby_invite_url", [roomData.id, player.invitationCode]))
 }
 
 private function header_changeHandler(event:Event):void

@@ -7,14 +7,17 @@ import com.gerantech.towercraft.models.Assets;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.layout.AnchorLayout;
+
 import flash.geom.Rectangle;
+
 import starling.display.Image;
 
 
 public class LobbyChatItemSegment extends Segment
 {
-static public var BALLOON_RECT:Rectangle = new Rectangle(49, 32, 2, 2);
+static public var BALLOON_RECT:Rectangle = new Rectangle(44, 68, 2, 2);
 public var data:ISFSObject;
 public var owner:FastList;
 protected var itsMe:Boolean;

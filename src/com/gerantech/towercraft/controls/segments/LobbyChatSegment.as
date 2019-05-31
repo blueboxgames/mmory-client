@@ -10,7 +10,7 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.layout.AnchorLayoutData;
@@ -54,7 +54,7 @@ override protected function showElements():void
 	battleButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
 	battleButton.width = battleButton.height = footerSize;
 	battleButton.iconTexture = Assets.getTexture("socials/icon-battle", "gui");
-    battleButton.layoutData = new AnchorLayoutData(NaN, NaN, padding, padding);
+	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, padding, padding);
 	battleButton.addEventListener(Event.TRIGGERED, battleButton_triggeredHandler);
 	addChild(battleButton);
 	
@@ -96,7 +96,7 @@ protected function battleButton_triggeredHandler(event:Event):void
 	battleModePopup.addEventListener(Event.SELECT, battleModePopup_selectHandler);
 	appModel.navigator.addPopup(battleModePopup);
 	//showSimpleListPopup(null, battleButton, battlebutton_selectHandler, battlebutton_selectHandler, "button_battle_left", "button_battle_right");
-    scrollToEnd();
+	scrollToEnd();
 }
 
 protected function battleModePopup_selectHandler(event:Event):void 
@@ -121,8 +121,8 @@ protected function manager_triggerHandler(event:Event):void
 
 override public function enabledChatting(value:Boolean):void
 {
-    super.enabledChatting(value);
-    battleButton.visible = !value;
+	super.enabledChatting(value);
+	battleButton.visible = !value;
 }
 
 override public function set buttonsEnabled(value:Boolean):void

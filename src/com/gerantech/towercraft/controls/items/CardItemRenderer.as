@@ -2,8 +2,8 @@ package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.models.Assets;
-import com.gt.towers.constants.CardFeatureType;
-import com.gt.towers.scripts.ScriptEngine;
+import com.gerantech.mmory.core.constants.CardFeatureType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.ScrollContainer;

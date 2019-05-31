@@ -7,10 +7,10 @@ import com.gerantech.towercraft.managers.SoundManager;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.RewardData;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.events.CoreEvent;
-import com.gt.towers.utils.CoreUtils;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.events.CoreEvent;
+import com.gerantech.mmory.core.utils.CoreUtils;
 
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
@@ -102,7 +102,8 @@ protected function loadingManager_loadedHandler(event:LoadingEvent) : void
 protected function navigator_achieveResourceHandler(event:Event) : void 
 {
 	var params:Array = event.data as Array;
-	addResourceAnimation(params[0], params[1], params[2], params[3]);
+	if( !ResourceType.isBook(params[2]) )
+		addResourceAnimation(params[0], params[1], params[2], params[3]);
 }
 
 protected function addedToStageHandler(event:Event):void 
@@ -230,6 +231,7 @@ public function addResourceAnimation(x:Number, y:Number, type:int, count:int, de
 			rect = iconDisplay.getBounds(stage);
 		
 		appModel.sounds.addAndPlay("res-appear-" + type, null, SoundManager.CATE_SFX, SoundManager.SINGLE_FORCE_THIS, 1);
+		trace("typetypetype", type);
 		appModel.navigator.addAnimation(x, y, 130, Assets.getTexture("res-" + type, "gui"), count, rect, 0.02, punch);
 	}, delay * 1000);
 }

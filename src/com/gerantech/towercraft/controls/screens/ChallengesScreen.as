@@ -4,7 +4,7 @@ import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRend
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;
-import com.gt.towers.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;

@@ -16,10 +16,10 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.constants.SegmentType;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.constants.SegmentType;
 
 import feathers.controls.AutoSizeMode;
 import feathers.controls.ImageLoader;
@@ -130,17 +130,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	pageList.layoutData = new AnchorLayoutData(0, -pageLayout.typicalItemHeight, FOOTER_SIZE, -pageLayout.typicalItemHeight);
 	pageList.itemRendererFactory = function ():IListItemRenderer { return new SegmentsItemRenderer(); }
 	addChild(pageList);
-	
-	var shadowTop:ImageLoader = new ImageLoader();
-	shadowTop.source = Assets.getTexture("theme/gradeint-top", "gui");
-	shadowTop.layoutData = new AnchorLayoutData(-30, -30, NaN, -30);
-	shadowTop.maintainAspectRatio = false;
-	shadowTop.touchable = false;
-	shadowTop.height = 200;
-	shadowTop.alpha = 0.4;
-	shadowTop.color = 0;
-	addChild(shadowTop);
-	
+		
 	var shadowBottom:ImageLoader = new ImageLoader();
 	shadowBottom.source = Assets.getTexture("theme/gradeint-bottom", "gui");
 	shadowBottom.layoutData = new AnchorLayoutData(NaN, -20, FOOTER_SIZE - 20, -20);
@@ -193,6 +183,16 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	toolbar.layoutData = new AnchorLayoutData(0, 0, NaN, 0);
 	addChild(toolbar);
 	
+	var shadowTop:ImageLoader = new ImageLoader();
+	shadowTop.source = Assets.getTexture("theme/gradeint-top", "gui");
+	shadowTop.layoutData = new AnchorLayoutData(-30, -30, NaN, -30);
+	shadowTop.maintainAspectRatio = false;
+	shadowTop.touchable = false;
+	shadowTop.height = 200;
+	shadowTop.alpha = 0.4;
+	shadowTop.color = 0;
+	toolbar.addChild(shadowTop);
+
 	var indicatorHC:Indicator = new Indicator("rtl", ResourceType.R4_CURRENCY_HARD);
 	indicatorHC.layoutData = new AnchorLayoutData(20, 70);
 	toolbar.addChild(indicatorHC);

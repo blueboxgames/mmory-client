@@ -2,7 +2,7 @@ package com.gerantech.towercraft.controls.sliders.battle
 {
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.views.BattleFieldView;
-import com.gt.towers.utils.CoreUtils;
+import com.gerantech.mmory.core.utils.CoreUtils;
 import starling.display.Image;
 /**
 * ...

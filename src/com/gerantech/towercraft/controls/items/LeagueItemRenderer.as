@@ -6,9 +6,9 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.MessageTypes;
-import com.gt.towers.others.Arena;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.others.Arena;
 
 import feathers.controls.Button;
 import feathers.controls.ImageLoader;
