@@ -14,7 +14,7 @@ import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.Localizations;
-import com.gt.towers.socials.Lobby;
+import com.gerantech.mmory.core.socials.Lobby;
 import com.smartfoxserver.v2.core.SFSBuddyEvent;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Buddy;

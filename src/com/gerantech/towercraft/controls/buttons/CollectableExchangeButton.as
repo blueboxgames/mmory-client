@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.buttons 
 {
 import com.gerantech.towercraft.controls.texts.CountdownLabel;
-import com.gt.towers.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;

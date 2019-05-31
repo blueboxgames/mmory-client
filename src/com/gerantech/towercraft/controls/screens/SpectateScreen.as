@@ -2,7 +2,7 @@ package com.gerantech.towercraft.controls.screens
 {
 import com.gerantech.towercraft.controls.items.BattleItemRenderer;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gt.towers.battle.fieldes.FieldData;
+import com.gerantech.mmory.core.battle.fieldes.FieldData;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.data.ISFSArray;

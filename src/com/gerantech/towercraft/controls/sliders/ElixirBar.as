@@ -5,8 +5,8 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.battle.BattleField;
-import com.gt.towers.battle.ElixirUpdater;
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.ElixirUpdater;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;

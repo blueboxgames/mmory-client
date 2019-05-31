@@ -4,8 +4,8 @@ import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryPlaceHolder;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.vo.ShopLine;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;

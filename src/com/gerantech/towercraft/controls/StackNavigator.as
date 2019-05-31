@@ -28,11 +28,11 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.models.vo.UserData;
 	import com.gerantech.towercraft.utils.StrUtils;
 	import com.gerantech.towercraft.utils.Utils;
-	import com.gt.towers.constants.PrefsTypes;
-	import com.gt.towers.constants.ResourceType;
-	import com.gt.towers.socials.Challenge;
-	import com.gt.towers.utils.maps.IntIntMap;
-	import com.gt.towers.utils.maps.IntStrMap;
+	import com.gerantech.mmory.core.constants.PrefsTypes;
+	import com.gerantech.mmory.core.constants.ResourceType;
+	import com.gerantech.mmory.core.socials.Challenge;
+	import com.gerantech.mmory.core.utils.maps.IntIntMap;
+	import com.gerantech.mmory.core.utils.maps.IntStrMap;
 	import com.smartfoxserver.v2.core.SFSEvent;
 	import com.smartfoxserver.v2.entities.Buddy;
 	import com.smartfoxserver.v2.entities.data.ISFSObject;

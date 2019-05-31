@@ -8,7 +8,7 @@ import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.others.Quest;
+import com.gerantech.mmory.core.others.Quest;
 
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;

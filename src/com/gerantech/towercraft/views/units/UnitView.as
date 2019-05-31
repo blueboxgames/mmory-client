@@ -8,15 +8,15 @@ import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.UnitMC;
 import com.gerantech.towercraft.views.effects.BattleParticleSystem;
 import com.gerantech.towercraft.views.weapons.BulletView;
-import com.gt.towers.battle.BattleField;
-import com.gt.towers.battle.GameObject;
-import com.gt.towers.battle.bullets.Bullet;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.battle.units.Unit;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.events.BattleEvent;
-import com.gt.towers.utils.CoreUtils;
-import com.gt.towers.utils.Point3;
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.GameObject;
+import com.gerantech.mmory.core.battle.bullets.Bullet;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.battle.units.Unit;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.events.BattleEvent;
+import com.gerantech.mmory.core.utils.CoreUtils;
+import com.gerantech.mmory.core.utils.Point3;
 
 import flash.utils.setTimeout;
 

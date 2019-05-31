@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.buttons 
 {
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.battle.units.Card;
+import com.gerantech.mmory.core.battle.units.Card;
 /**
 * @author Mansour Djawadi
 */

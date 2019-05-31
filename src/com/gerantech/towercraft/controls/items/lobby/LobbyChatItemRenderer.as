@@ -9,7 +9,7 @@ import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBattleSegme
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemCommentSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemConfirmSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemSegment;
-import com.gt.towers.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.events.FeathersEventType;

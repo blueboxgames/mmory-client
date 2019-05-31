@@ -7,10 +7,10 @@ import com.gerantech.towercraft.managers.SoundManager;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.RewardData;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.events.CoreEvent;
-import com.gt.towers.utils.CoreUtils;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.events.CoreEvent;
+import com.gerantech.mmory.core.utils.CoreUtils;
 
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;

@@ -4,8 +4,8 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 
 import feathers.controls.ImageLoader;
 import feathers.core.ITextRenderer;

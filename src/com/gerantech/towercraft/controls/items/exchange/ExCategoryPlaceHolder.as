@@ -9,8 +9,8 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.ShopLine;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;

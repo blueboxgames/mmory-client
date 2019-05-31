@@ -6,7 +6,7 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.models.vo.RewardData;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.ResourceType;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import dragonBones.starling.StarlingArmatureDisplay;

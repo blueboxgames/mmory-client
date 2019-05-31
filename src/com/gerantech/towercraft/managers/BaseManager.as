@@ -2,9 +2,9 @@ package com.gerantech.towercraft.managers
 {
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.Game;
-import com.gt.towers.Player;
-import com.gt.towers.exchanges.Exchanger;
+import com.gerantech.mmory.core.Game;
+import com.gerantech.mmory.core.Player;
+import com.gerantech.mmory.core.exchanges.Exchanger;
 import starling.events.EventDispatcher;
 public class BaseManager extends EventDispatcher
 {

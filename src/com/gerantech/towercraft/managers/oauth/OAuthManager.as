@@ -6,7 +6,7 @@ import com.gerantech.towercraft.managers.BaseManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.UserData;
-import com.gt.towers.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.marpies.ane.gameservices.GameServices;
 import com.marpies.ane.gameservices.events.GSAuthEvent;
 import com.marpies.ane.gameservices.events.GSIdentityEvent;

@@ -11,11 +11,11 @@ import com.gerantech.towercraft.controls.popups.RequirementConfirmPopup;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gt.towers.Player;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.exchanges.Exchanger;
-import com.gt.towers.scripts.ScriptEngine;
+import com.gerantech.mmory.core.Player;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.Exchanger;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.controls.List;

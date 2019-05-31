@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.controls.buttons
 {
 import com.gerantech.towercraft.controls.CardView;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.CardFeatureType;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.scripts.ScriptEngine;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.CardFeatureType;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;

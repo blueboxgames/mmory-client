@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.towercraft.models.Assets;
-import com.gt.towers.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.ExchangeType;
 
 import flash.geom.Rectangle;
 

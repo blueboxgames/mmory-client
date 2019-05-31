@@ -2,17 +2,17 @@ package com.gerantech.towercraft.models.vo
 {
 import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.models.AppModel;
-import com.gt.towers.Game;
-import com.gt.towers.InitData;
-import com.gt.towers.battle.BattleField;
-import com.gt.towers.battle.fieldes.FieldData;
-import com.gt.towers.constants.MessageTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.exchanges.ExchangeItem;
-import com.gt.towers.socials.Challenge;
-import com.gt.towers.utils.maps.IntCardMap;
-import com.gt.towers.utils.maps.IntIntCardMap;
-import com.gt.towers.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.Game;
+import com.gerantech.mmory.core.InitData;
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.fieldes.FieldData;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.socials.Challenge;
+import com.gerantech.mmory.core.utils.maps.IntCardMap;
+import com.gerantech.mmory.core.utils.maps.IntIntCardMap;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
 public class BattleData

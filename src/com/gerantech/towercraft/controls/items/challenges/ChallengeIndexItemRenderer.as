@@ -12,8 +12,8 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.socials.Challenge;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.socials.Challenge;
 
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;

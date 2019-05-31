@@ -2,7 +2,7 @@ package com.gerantech.towercraft.controls.buttons
 {
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
-import com.gt.towers.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
