@@ -56,30 +56,8 @@
 		<!-- Google Play -->
 		<meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ 123068560070" />
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
-		
-		<activity android:excludeFromRecents="false">
-		  <intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
-				<category android:name="android.intent.category.LAUNCHER"/>
-				<category android:name="tv.ouya.intent.category.GAME" />
-		  </intent-filter>
-		  <intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
-				<category android:name="android.intent.category.BROWSABLE"/>
-				<category android:name="android.intent.category.DEFAULT"/>
-				<data android:scheme="towers"/>
-		  </intent-filter>
-		</activity>    			
-		<activity android:name="ir.tapsell.sdk.TapsellAdActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
-		<activity android:name="com.gerantech.extensions.IabActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateHidden|adjustResize" />
-		<receiver android:name="com.gerantech.extensions.recievers.LocalNotificationReceiver"/>
-	<!--<receiver android:name="com.gerantech.extensions.recievers.InvokeAppReceiver"/> -->
 
-		<!-- Analytics -->
-		<meta-data
-				android:name="com.google.android.gms.version"
-				android:value="@integer/google_play_services_version" />
-		
+		<!-- Firebase Analytics -->
 		<service android:name="com.google.firebase.components.ComponentDiscoveryService" >
 				<meta-data
 						android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
@@ -146,6 +124,24 @@
 						<action android:name="com.google.firebase.MESSAGING_EVENT"/>
 				</intent-filter>
 		</service>
+		
+		<activity android:excludeFromRecents="false">
+		  <intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
+				<category android:name="tv.ouya.intent.category.GAME" />
+		  </intent-filter>
+		  <intent-filter>
+				<action android:name="android.intent.action.VIEW"/>
+				<category android:name="android.intent.category.BROWSABLE"/>
+				<category android:name="android.intent.category.DEFAULT"/>
+				<data android:scheme="towers"/>
+		  </intent-filter>
+		</activity>    			
+		<activity android:name="ir.tapsell.sdk.TapsellAdActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
+		<activity android:name="com.gerantech.extensions.IabActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateHidden|adjustResize" />
+		<receiver android:name="com.gerantech.extensions.recievers.LocalNotificationReceiver"/>
+	<!--<receiver android:name="com.gerantech.extensions.recievers.InvokeAppReceiver"/> -->
 	</application>
 	
 </manifest>]]></manifestAdditions>
