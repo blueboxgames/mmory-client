@@ -1,5 +1,9 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.constants.SegmentType;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.TileBackground;
 import com.gerantech.towercraft.controls.buttons.Indicator;
@@ -16,10 +20,6 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.constants.SegmentType;
 
 import feathers.controls.AutoSizeMode;
 import feathers.controls.ImageLoader;
@@ -57,13 +57,13 @@ private var segmentsCollection:ListCollection;
 public function DashboardScreen()
 {
 	visible = false;	
-	if( !Assets.animationAssetsLoaded )
-		Assets.loadAnimationAssets(initialize, "factions", "packs");
+	if( appModel.assets.getTexture("packs_tex") == null )
+		Assets.loadAtlas("assets/animations/", "_tex", initialize, "packs");
 }
 
 override protected function initialize():void
 {
-	if( !Assets.animationAssetsLoaded )
+	if( appModel.assets.getTexture("packs_tex") == null )
 		return;
 	OpenBookOverlay.createFactory();
 

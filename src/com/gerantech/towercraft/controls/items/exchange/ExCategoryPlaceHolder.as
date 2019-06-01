@@ -147,7 +147,7 @@ public class ExCategoryPlaceHolder extends TowersLayout
     if( !ei.enabled )
       return;
     ei.enabled = false;
-    this.owner.dispatchEventWith(FeathersEventType.FOCUS_IN, false, ei);
+    this.owner.dispatchEventWith(Event.SELECT, false, ei);
     this.list.removeEventListener(Event.CHANGE, this.list_changeHandler);
     this.list.selectedIndex = -1;
     this.list.addEventListener(Event.CHANGE, this.list_changeHandler);

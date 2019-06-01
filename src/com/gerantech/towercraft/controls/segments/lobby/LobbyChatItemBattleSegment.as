@@ -30,7 +30,7 @@ override public function init():void
 	actionButton.layoutData = new AnchorLayoutData(NaN, 70, NaN, NaN, NaN, 0);
 	addChild(actionButton);
 	
-	messageDisplay = new RTLLabel("", 0, "center", null, false, null, 0.8);
+	messageDisplay = new RTLLabel(null, 0x334455, "center", null, false, null, 0.7);
 	messageLayout = new AnchorLayoutData(NaN, actionButton.width + 90, NaN, 20, NaN, 0);
 	messageDisplay.layoutData = messageLayout;
 	addChild(messageDisplay);

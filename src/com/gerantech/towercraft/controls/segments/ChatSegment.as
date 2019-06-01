@@ -1,5 +1,6 @@
 package com.gerantech.towercraft.controls.segments 
 {
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
@@ -7,7 +8,6 @@ import com.gerantech.towercraft.controls.popups.SimpleListPopup;
 import com.gerantech.towercraft.controls.texts.CustomTextInput;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
 import dragonBones.objects.DragonBonesData;
@@ -32,6 +32,7 @@ import flash.utils.setTimeout;
 import starling.animation.Transitions;
 import starling.display.DisplayObject;
 import starling.events.Event;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 /**
 * ...
 * @author Mansour Djawadi
@@ -55,11 +56,12 @@ private var startScrollBarIndicator:Number = 0;
 public function ChatSegment()
 {
 	super();
-	Assets.loadAnimationAssets(animation_loadCallback, "emotes");
+	Assets.loadAtlas("assets/animations/", "_tex", animation_loadCallback, "emotes");
 }
 
 protected function animation_loadCallback():void 
 {
+	EmblemButton.loadAtlas(null);
 	if( ChatSegment.factory == null )
 	{
 		ChatSegment.factory = new StarlingFactory();

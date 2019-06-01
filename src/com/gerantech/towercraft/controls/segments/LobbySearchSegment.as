@@ -12,6 +12,7 @@ import com.gerantech.towercraft.models.Assets;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.events.FeathersEventType;
@@ -19,9 +20,10 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import flash.text.ReturnKeyLabel;
 import flash.text.SoftKeyboardType;
-import flash.utils.setTimeout;
+
 import starling.events.Event;
 
 public class LobbySearchSegment extends Segment
@@ -33,7 +35,7 @@ private var tabs:Vector.<LobbyTabButton>;
 private var searchPattern:String;
 private var searchMode:int = 2;
 
-public function LobbySearchSegment(){}
+public function LobbySearchSegment() { super(); }
 override protected function initialize():void
 {
 	super.initialize();

@@ -1,17 +1,16 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryPlaceHolder;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.vo.ShopLine;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.exchanges.ExchangeItem;
 
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
-import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
@@ -57,7 +56,7 @@ override public function init():void
 	itemslist.layoutData = new AnchorLayoutData(0, paddingH, 0, paddingH);
 	itemslist.itemRendererFactory = function():IListItemRenderer { return new ExCategoryItemRenderer(); }
 	itemslist.dataProvider = itemslistData;
-	itemslist.addEventListener(FeathersEventType.FOCUS_IN, list_changeHandler);
+	itemslist.addEventListener(Event.SELECT, list_categorySelectHandler);
 	addChild(itemslist);
 	initializeCompleted = true;
 	focus();
@@ -132,7 +131,7 @@ override public function updateData():void
 	scrollPaddingTop = ExCategoryPlaceHolder.GET_HEIGHT(120);
 }
 
-private function list_changeHandler(event:Event) : void
+private function list_categorySelectHandler(event:Event) : void
 {
 	exchangeManager.process(event.data as ExchangeItem);
 }

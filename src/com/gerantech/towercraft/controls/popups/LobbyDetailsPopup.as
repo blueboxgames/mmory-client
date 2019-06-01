@@ -1,6 +1,8 @@
 package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.headers.TabsHeader;
@@ -13,8 +15,7 @@ import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.towercraft.utils.Localizations;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSArray;
@@ -34,7 +35,6 @@ import flash.geom.Rectangle;
 
 import starling.animation.Transitions;
 import starling.events.Event;
-import com.gerantech.towercraft.utils.Localizations;
 
 public class LobbyDetailsPopup extends SimplePopup
 {
@@ -59,6 +59,7 @@ public function LobbyDetailsPopup(roomData:Object, isReadOnly:Boolean = false)
 		params.putBool("all", true);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_roomDataHandler);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_DATA, params);
+	EmblemButton.loadAtlas(null);
 }
 
 override protected function initialize():void
@@ -72,16 +73,6 @@ override protected function initialize():void
 	transitionOut.sourceBound = transitionIn.destinationBound = new Rectangle(_p,	stageHeight* 0.5 - _h * 0.5,	stageWidth - _p * 2,	_h * 1.0);
 
 	super.initialize();
-	
-	var iconDisplay:ImageLoader = new ImageLoader();
-	iconDisplay.height = iconDisplay.width = padding * 4;
-	iconDisplay.source = Assets.getTexture("emblems/emblem-" + StrUtils.getZeroNum(roomData.pic + ""), "gui");
-	iconDisplay.layoutData = new AnchorLayoutData(padding, appModel.isLTR?NaN:padding, NaN, appModel.isLTR?padding:NaN);
-	addChild(iconDisplay);
-	
-	var titleDisplay:ShadowLabel = new ShadowLabel(roomData.name);
-	titleDisplay.layoutData = new AnchorLayoutData(padding * 0.8, appModel.isLTR?padding:padding * 6, NaN, appModel.isLTR?padding * 6:padding);
-	addChild(titleDisplay);
 }
 
 protected function sfsConnection_roomDataHandler(event:SFSEvent):void
@@ -122,6 +113,16 @@ protected override function transitionInCompleted():void
 
 private function showDetails():void
 {
+	var iconDisplay:ImageLoader = new ImageLoader();
+	iconDisplay.height = iconDisplay.width = padding * 4;
+	iconDisplay.source = EmblemButton.getTexture(roomData.pic);
+	iconDisplay.layoutData = new AnchorLayoutData(padding, appModel.isLTR?NaN:padding, NaN, appModel.isLTR?padding:NaN);
+	addChild(iconDisplay);
+	
+	var titleDisplay:ShadowLabel = new ShadowLabel(roomData.name);
+	titleDisplay.layoutData = new AnchorLayoutData(padding * 0.8, appModel.isLTR?padding:padding * 6, NaN, appModel.isLTR?padding * 6:padding);
+	addChild(titleDisplay);
+
 	var bioDisplay:RTLLabel = new RTLLabel(roomData.bio, 0x333333, "justify", null, true, null, 0.55);
 	bioDisplay.layoutData = new AnchorLayoutData(padding * 3, appModel.isLTR?padding:padding * 6, NaN, appModel.isLTR?padding * 6 : padding);
 	addChild(bioDisplay);

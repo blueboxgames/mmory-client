@@ -10,7 +10,6 @@ package com.gerantech.towercraft.models
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
-	import flash.utils.getTimer;
 
 	import starling.display.Image;
 	import starling.text.BitmapFont;
@@ -211,9 +210,8 @@ package com.gerantech.towercraft.models
 			*/
 		}
 		
-		static private var animAssetsLoadCallback:Function;
-		static public var animationAssetsLoaded:Boolean;
-		static public function loadAnimationAssets(callback:Function, ...args) : void
+		static private var loadCallback:Function;
+		static public function loadAtlas(baseURL:String, postFix:String, callback:Function, ...args) : void
 		{
 			for each( var item:String in args )
 				checkLoadingAssets(item);
@@ -222,15 +220,15 @@ package com.gerantech.towercraft.models
 			var needLoading:Boolean;
 			function checkLoadingAssets(item:String) : void
 			{
-				if( AppModel.instance.assets.getTexture(item + "_tex") == null )
+				if( AppModel.instance.assets.getTexture(item + (postFix == null ? "" : postFix)) == null )
 				{
-					AppModel.instance.assets.enqueue(File.applicationDirectory.resolvePath( "assets/animations/" + item ));
+					AppModel.instance.assets.enqueue(File.applicationDirectory.resolvePath((baseURL == null ? "" : baseURL) + item));
 					needLoading = true;
 				}
 			}
 			if( needLoading )
 			{
-				animAssetsLoadCallback = callback;
+				loadCallback = callback;
 				AppModel.instance.assets.loadQueue(assets_loadCallback);
 			}
 			else
@@ -240,11 +238,10 @@ package com.gerantech.towercraft.models
 		}
 		private static function assets_loadCallback(ratio:Number) : void
 		{
-			if( ratio >= 1 && animAssetsLoadCallback != null )
+			if( ratio >= 1 && loadCallback != null )
 			{
-				animationAssetsLoaded = true;
-				animAssetsLoadCallback();
-				animAssetsLoadCallback = null;
+				loadCallback();
+				loadCallback = null;
 			}
 		}
 	}

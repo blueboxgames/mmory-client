@@ -29,7 +29,7 @@ public function TutorialMessageOverlay(task:TutorialTask):void
 {
 	super(task);
 	side = int(task.data) % 2;
-	Assets.loadAnimationAssets(createFactory, "characters");
+	Assets.loadAtlas("assets/animations/", "_tex", createFactory, "characters");
 }
 
 public static function createFactory():void

@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.towercraft.controls.FastList;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.headers.TabsHeader;
 import com.gerantech.towercraft.controls.items.RankItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyItemRenderer;
@@ -46,6 +47,7 @@ public function RankingPopup()
 
 	title = loc("ranking_label", [""]);
 	sendCommand(SFSCommands.RANK);
+	EmblemButton.loadAtlas(null);
 }
 
 private function sendCommand(rankType:String) : void 
