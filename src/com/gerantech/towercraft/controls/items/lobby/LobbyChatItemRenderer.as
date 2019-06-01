@@ -11,7 +11,6 @@ import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemConfirmSegm
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemSegment;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
-import feathers.controls.List;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -102,11 +101,11 @@ private function createSegment(type:int) : LobbyChatItemSegment
 		return segment;
 	switch( type )
 	{
-		case TYPE_MESSAGE:	segment = messageSegment	= new LobbyChatItemBalloonTextSegment(owner);	break;
-		case TYPE_COMMENT:	segment = commentSegment	= new LobbyChatItemCommentSegment(owner);	break;
-		case TYPE_BATTLE:	segment = battleSegment		= new LobbyChatItemBattleSegment(owner); 	break;
-		case TYPE_EMOTE:	segment = emoteSegment		= new LobbyChatItemBalloonEmoteSegment( owner as List); 	break;
-		case TYPE_CONFIRM:	segment = confirmSegment	= new LobbyChatItemConfirmSegment(owner as List); 
+		case TYPE_MESSAGE:	segment = (messageSegment	= new LobbyChatItemBalloonTextSegment(owner)) as LobbyChatItemSegment;	break;
+		case TYPE_COMMENT:	segment = (commentSegment	= new LobbyChatItemCommentSegment(owner)) as LobbyChatItemSegment;			break;
+		case TYPE_BATTLE:		segment = (battleSegment	= new LobbyChatItemBattleSegment(owner)) as LobbyChatItemSegment; 			break;
+		case TYPE_EMOTE:		segment = (emoteSegment		= new LobbyChatItemBalloonEmoteSegment(owner)) as LobbyChatItemSegment; break;
+		case TYPE_CONFIRM:	segment = (confirmSegment	= new LobbyChatItemConfirmSegment(owner)) as LobbyChatItemSegment; 
 			segment.addEventListener(Event.TRIGGERED, confirmSegment_triggeredHandler);
 			break;
 	}
