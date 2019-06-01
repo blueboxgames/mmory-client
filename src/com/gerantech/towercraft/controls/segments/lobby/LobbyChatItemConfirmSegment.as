@@ -1,15 +1,13 @@
 package com.gerantech.towercraft.controls.segments.lobby
 {
-import com.gerantech.towercraft.controls.FastList;
-import com.gerantech.towercraft.controls.buttons.CustomButton;
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
-import feathers.controls.Button;
 
-import feathers.controls.ImageLoader;
+import feathers.controls.Button;
+import feathers.controls.List;
 import feathers.layout.AnchorLayoutData;
 
 import starling.events.Event;
@@ -21,7 +19,7 @@ private var messageDisplay:RTLLabel;
 private var acceptButton:Button;
 private var declineButton:Button;
 
-public function LobbyChatItemConfirmSegment(owner:FastList) { super(owner); }
+public function LobbyChatItemConfirmSegment(owner:List) { super(owner); }
 override public function init():void
 {
 	super.init();

@@ -1,15 +1,13 @@
 package com.gerantech.towercraft.controls.segments.lobby
 {
-import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
+
 import feathers.controls.Button;
-import feathers.controls.ImageLoader;
+import feathers.controls.List;
 import feathers.layout.AnchorLayoutData;
-import starling.display.Image;
 
 public class LobbyChatItemBattleSegment extends LobbyChatItemSegment
 {
@@ -17,7 +15,7 @@ private var labelDisplay:ShadowLabel;
 private var messageDisplay:RTLLabel;
 private var actionButton:Button;
 private var messageLayout:AnchorLayoutData;
-public function LobbyChatItemBattleSegment(owner:FastList) { super(owner); }
+public function LobbyChatItemBattleSegment(owner:List) { super(owner); }
 override public function init():void
 {
 	super.init();

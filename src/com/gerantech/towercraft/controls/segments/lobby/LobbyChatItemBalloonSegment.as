@@ -1,6 +1,5 @@
 package com.gerantech.towercraft.controls.segments.lobby
 {
-import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
@@ -9,6 +8,7 @@ import com.smartfoxserver.v2.entities.data.ISFSObject;
 
 import feathers.controls.AutoSizeMode;
 import feathers.controls.ImageLoader;
+import feathers.controls.List;
 import feathers.controls.text.TextBlockTextRenderer;
 import feathers.layout.AnchorLayoutData;
 
@@ -40,7 +40,7 @@ static private const fontDescription:FontDescription = new FontDescription("Sour
 static public const mySFormat:ElementFormat = new ElementFormat(fontDescription, AppModel.instance.theme.gameFontSize * 0.6, 0xFFFFFF);
 static public const whSFormat:ElementFormat = new ElementFormat(fontDescription, AppModel.instance.theme.gameFontSize * 0.6, 0xAFDCFC);
 
-public function LobbyChatItemBalloonSegment(owner:FastList) { super(owner); }
+public function LobbyChatItemBalloonSegment(owner:List) { super(owner); }
 override public function init():void
 {
 	super.init();
