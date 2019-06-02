@@ -109,12 +109,20 @@ import starling.textures.Texture;
 */
 public class MainTheme extends StyleNameFunctionTheme
 {
-static public const FONT_NAME:String = "SourceSansPro";
 
 /**
  * The stack of fonts to use for controls that don't use embedded fonts.
  */
-static public const FONT_NAME_STACK:String = "SourceSansPro,Helvetica,_sans";
+static public const FONT_NAME_STACK:String = "SourceSansPro, _sans";
+static public const FONT_NAME:String = "SourceSansPro";
+[Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSans", fontWeight="normal", fontStyle="normal", mimeType="application/x-font",embedAsCFF="false")]	
+static protected var SOURCE_SANS_REGULAR:Class;
+[Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSansPro", fontWeight="normal", fontStyle="normal", mimeType="application/x-font",embedAsCFF="true")]
+static protected var SOURCE_SANS_PRO_REGULAR:Class;
+[Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSans", fontWeight="bold", fontStyle="normal", mimeType="application/x-font",embedAsCFF="false")]
+static protected var SOURCE_SANS_BOLD:Class;
+[Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSansPro", fontWeight="bold", fontStyle="normal", mimeType="application/x-font",embedAsCFF="true")]
+static protected var SOURCE_SANS_PRO_BOLD:Class;
 
 static public const PRIMARY_BACKGROUND_COLOR:uint = 0x3d4759;
 static public const LIGHT_TEXT_COLOR:uint = 0xe5e5e5;
@@ -315,7 +323,6 @@ protected static function popUpOverlayFactory():DisplayObject
 public function MainTheme()
 {
 	super();
-	new FontRegistor();
 	initialize();
 }
 
