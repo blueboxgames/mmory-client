@@ -115,10 +115,10 @@ public class MainTheme extends StyleNameFunctionTheme
  */
 static public const FONT_NAME_STACK:String = "SourceSansPro, _sans";
 static public const FONT_NAME:String = "SourceSansPro";
-[Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSans", fontWeight="normal", fontStyle="normal", mimeType="application/x-font",embedAsCFF="false")]	
-static protected var SOURCE_SANS_REGULAR:Class;
-[Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSansPro", fontWeight="normal", fontStyle="normal", mimeType="application/x-font",embedAsCFF="true")]
-static protected var SOURCE_SANS_PRO_REGULAR:Class;
+// [Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSans", fontWeight="normal", fontStyle="normal", mimeType="application/x-font",embedAsCFF="false")]	
+// static protected var SOURCE_SANS_REGULAR:Class;
+// [Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSansPro", fontWeight="normal", fontStyle="normal", mimeType="application/x-font",embedAsCFF="true")]
+// static protected var SOURCE_SANS_PRO_REGULAR:Class;
 [Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSans", fontWeight="bold", fontStyle="normal", mimeType="application/x-font",embedAsCFF="false")]
 static protected var SOURCE_SANS_BOLD:Class;
 [Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSansPro", fontWeight="bold", fontStyle="normal", mimeType="application/x-font",embedAsCFF="true")]
