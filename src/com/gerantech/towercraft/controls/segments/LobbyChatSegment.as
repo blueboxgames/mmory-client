@@ -1,7 +1,9 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.headers.LobbyHeader;
+import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.popups.FriendlyBattleModePopup;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
@@ -10,7 +12,6 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.layout.AnchorLayoutData;
@@ -33,7 +34,7 @@ override public function get manager():LobbyManager
 
 override protected function loadData():void
 {
-	if( !initializeStarted || ChatSegment.factory == null )
+	if( !initializeStarted || EmoteItemRenderer.factory == null )
 		return;
 	
 	if( manager.isReady )

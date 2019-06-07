@@ -2,8 +2,12 @@ package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryPlaceHolder;
+import com.gerantech.towercraft.controls.popups.BookDetailsPopup;
+import com.gerantech.towercraft.controls.popups.EmoteDetailsPopup;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.vo.ShopLine;
 
@@ -29,6 +33,11 @@ public function ExchangeSegment(){ super(); }
 override public function init():void
 {
 	super.init();
+	EmoteItemRenderer.loadEmotes(animation_loadCallback);
+}
+
+protected function animation_loadCallback():void 
+{
 
 	layout = new AnchorLayout();
 
@@ -83,6 +92,7 @@ override public function updateData():void
 	var itemKeys:Vector.<int> = exchanger.items.keys();
 	var bundles:ShopLine = new ShopLine(ExchangeType.C30_BUNDLES);
 	var specials:ShopLine = new ShopLine(ExchangeType.C20_SPECIALS);
+	var emotes:ShopLine = new ShopLine(ExchangeType.C80_EMOTES);
 	var magics:ShopLine = new ShopLine(ExchangeType.C120_MAGICS);
 	var tickets:ShopLine = new ShopLine(ExchangeType.C70_TICKETS);
 	var hards:ShopLine = new ShopLine(ExchangeType.C0_HARD);
@@ -93,6 +103,8 @@ override public function updateData():void
 			bundles.add(itemKeys[i]);
 		if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C20_SPECIALS && itemKeys[i] != ExchangeType.C29_DAILY_BATTLES )
 			specials.add(itemKeys[i]);
+		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C80_EMOTES && player.unlocked_social() )
+			emotes.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C120_MAGICS )
 			magics.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS && player.unlocked_challenge() )
@@ -117,6 +129,8 @@ override public function updateData():void
 	}
 	if( magics.items.length > 0 )
 		categoreis.push(magics);
+	if( emotes.items.length > 0 )
+		categoreis.push(emotes);
 	if( tickets.items.length > 0 )
 		categoreis.push(tickets);
 	if( hards.items.length > 0 )
@@ -133,7 +147,62 @@ override public function updateData():void
 
 private function list_categorySelectHandler(event:Event) : void
 {
-	exchangeManager.process(event.data as ExchangeItem);
+	var item:ExchangeItem = event.data as ExchangeItem
+
+	//     _-_-_-_-_-_- all books -_-_-_-_-_-_
+	if( item.isBook() )
+	{
+		item.enabled = true;
+		var _state:int = item.getState(timeManager.now);
+		if( item.category == ExchangeType.C110_BATTLES && _state == ExchangeItem.CHEST_STATE_EMPTY )
+			return;
+		
+		if( ( item.category == ExchangeType.C100_FREES || item.category == ExchangeType.C110_BATTLES ) && _state == ExchangeItem.CHEST_STATE_READY  )
+		{
+			item.outcomes = new IntIntMap();
+			exchangeManager.process(item);
+			return;
+		}
+		else if( item.category == ExchangeType.C100_FREES && _state != ExchangeItem.CHEST_STATE_READY )
+		{
+			if( item.type == ExchangeType.C104_STARS )
+			{
+				if( _state == ExchangeItem.CHEST_STATE_BUSY )
+					appModel.navigator.addLog(loc("popup_chest_message_110", [""]));
+				else
+					appModel.navigator.addLog(loc("exchange_hint_104", [10]));
+				return;
+			}
+		}
+		
+		var bookDetails:BookDetailsPopup = new BookDetailsPopup(item);
+		bookDetails.addEventListener(Event.SELECT, bookDetails_selectHandler);
+		appModel.navigator.addPopup(bookDetails);
+		function bookDetails_selectHandler(event:Event):void
+		{
+			bookDetails.removeEventListener(Event.SELECT, bookDetails_selectHandler);
+			exchangeManager.process(item);
+		}
+		return;
+	}
+	
+	//     _-_-_-_-_-_- all emote -_-_-_-_-_-_
+	if( item.isEmote() )
+	{
+		item.enabled = true;
+		var emoteDetails:EmoteDetailsPopup = new EmoteDetailsPopup(item);
+		emoteDetails.addEventListener(Event.SELECT, emoteDetails_selectHandler);
+		appModel.navigator.addPopup(emoteDetails);
+		function emoteDetails_selectHandler(event:Event):void
+		{
+			emoteDetails.removeEventListener(Event.SELECT, emoteDetails_selectHandler);
+			exchangeManager.process(item);
+		}
+		return;
+	}
+
+
+	exchangeManager.process(item);
 }
 
 /*private function confirms_closeHandler(event:Event):void

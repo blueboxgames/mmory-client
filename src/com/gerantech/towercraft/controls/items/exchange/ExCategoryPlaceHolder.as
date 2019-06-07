@@ -99,6 +99,11 @@ public class ExCategoryPlaceHolder extends TowersLayout
         // headerDisplay.showCountdown(line.items[0]);
         this.list.itemRendererFactory = function ():IListItemRenderer{ return new ExBundleItemRenderer(line.category);}
         break;
+        
+        case ExchangeType.C80_EMOTES:
+        // headerDisplay.showCountdown(line.items[0]);
+        this.list.itemRendererFactory = function ():IListItemRenderer{ return new ExEmotItemRenderer(line.category);}
+        break;
       
       default:
         this.list.itemRendererFactory = function ():IListItemRenderer{ return new ExDefaultItemRenderer(line.category);}
@@ -121,7 +126,7 @@ public class ExCategoryPlaceHolder extends TowersLayout
     this.addChild(infoButton as DisplayObject);
 
     // countdown display
-    if( this.line.category == ExchangeType.C20_SPECIALS || this.line.category == ExchangeType.C30_BUNDLES )
+    if( this.line.category == ExchangeType.C20_SPECIALS || this.line.category == ExchangeType.C30_BUNDLES  || this.line.category == ExchangeType.C80_EMOTES )
     {
       this.countdownDisplay = new CountdownLabel();
       this.countdownDisplay.width = 250;
