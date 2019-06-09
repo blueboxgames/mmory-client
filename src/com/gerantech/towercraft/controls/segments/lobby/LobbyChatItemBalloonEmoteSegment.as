@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.controls.segments.lobby
 {
-import com.gerantech.towercraft.controls.segments.ChatSegment;
+import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
@@ -25,7 +25,7 @@ override public function init():void
 	height = 280;
 	whoSkinLayout.right = mySkinLayout.left = 600;
 
-	emoteArmature = ChatSegment.factory.buildArmatureDisplay("emote");
+	emoteArmature = EmoteItemRenderer.factory.buildArmatureDisplay("emote");
 	emoteArmature.touchable = false;
 	emoteArmature.y = height - 20;
 	addChild(emoteArmature as DisplayObject);

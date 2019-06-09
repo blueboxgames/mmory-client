@@ -1,12 +1,12 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.constants.ResourceType;
 
 import feathers.controls.ImageLoader;
 import feathers.core.ITextRenderer;
@@ -14,6 +14,8 @@ import feathers.layout.AnchorLayoutData;
 import feathers.skins.ImageSkin;
 
 import flash.geom.Rectangle;
+
+import starling.textures.Texture;
 
 public class ExDefaultItemRenderer extends ExBaseItemRenderer
 {
@@ -45,7 +47,7 @@ override protected function commitData():void
 		this.buttonDisplay.label = MMOryButton.getLabel(this.reqType, this.reqCount);
 	}
 	if( this.iconDisplay != null )
-		this.iconDisplay.source = Assets.getTexture(this.iconSourceProvider(), "gui");
+		this.iconDisplay.source = this.iconSourceProvider();
 	if( this.titleDisplay != null )
 		this.titleDisplay.text = titleFormatter(this.exchange.outcomes.values()[0]);
 }
@@ -57,14 +59,14 @@ override public function set currentState(value:String) : void
 		this.buttonSkin.defaultColor = this.buttonSkin.getColorForState(value);
 }
 
-private function iconSourceProvider() : String
+protected function iconSourceProvider() : Texture
 {
 	switch( this.category )
 	{
-		case 20: return "cards/" + exchange.outcome;
-		case 120: return "books/" + exchange.outcome;
+		case 20: return Assets.getTexture("cards/" + exchange.outcome, "gui");
+		case 120: return Assets.getTexture("books/" + exchange.outcome, "gui");
 	}
-	return "shop/currency-" + exchange.type;
+	return Assets.getTexture("shop/currency-" + exchange.type, "gui");
 }
 
 protected function titleFormatter(count:int) : String

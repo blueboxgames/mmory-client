@@ -6,6 +6,7 @@ import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.headers.TabsHeader;
+import com.gerantech.towercraft.controls.items.TabsHeaderItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyFeatureItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyMemberItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
@@ -146,7 +147,14 @@ private function showDetails():void
 	membersCollection = new ListCollection(membersArray);
 	
 	var header:TabsHeader = new TabsHeader();
-	header.dataProvider = new ListCollection([ { label: loc("lobby_point"), width:210}, { label: loc("lobby_activeness"), width:210} ]);
+	header.itemRendererFactory = function () : IListItemRenderer
+	{
+		var ret:TabsHeaderItemRenderer = new TabsHeaderItemRenderer();
+		ret.iconLayoutData = new AnchorLayoutData(NaN, 20, NaN, NaN, NaN, 0);
+		ret.labelLayoutData.horizontalCenter = -10;
+		return ret;
+	}
+	header.dataProvider = new ListCollection([ { label:loc("lobby_point"), labelSize:0.7, icon:"theme/vertical-scroll-bar-increment-button-icon", iconWidth:18, width:210}, { label:loc("lobby_activeness"), labelSize:0.7, icon:"theme/vertical-scroll-bar-increment-button-icon", iconWidth:18, width:210} ]);
 	header.addEventListener(Event.CHANGE, header_changeHandler);
 	header.layoutData = new AnchorLayoutData(500, appModel.isLTR?40:NaN, NaN, appModel.isLTR?NaN:40);
 	header.selectedIndex = 0;

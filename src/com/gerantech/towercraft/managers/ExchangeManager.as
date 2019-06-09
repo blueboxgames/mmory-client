@@ -1,12 +1,18 @@
 package com.gerantech.towercraft.managers 
 {
 import com.gerantech.extensions.iab.IabResult;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.exchanges.Exchanger;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.overlays.EarnOverlay;
 import com.gerantech.towercraft.controls.overlays.FortuneOverlay;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.popups.AdConfirmPopup;
-import com.gerantech.towercraft.controls.popups.BookDetailsPopup;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.controls.segments.ExchangeSegment;
@@ -15,13 +21,6 @@ import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.models.vo.VideoAd;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.constants.MessageTypes;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.exchanges.ExchangeItem;
-import com.gerantech.mmory.core.exchanges.Exchanger;
-import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.marpies.ane.gameanalytics.GameAnalytics;
 import com.marpies.ane.gameanalytics.data.GAResourceFlowType;
 import com.smartfoxserver.v2.core.SFSEvent;
@@ -56,49 +55,10 @@ public function process(item : ExchangeItem) : void
 	var params:SFSObject = new SFSObject();
 	params.putInt("type", item.type);
 
-	//     _-_-_-_-_-_- all books -_-_-_-_-_-_
-	if( item.isBook() )
-	{
-		item.enabled = true;
-		var _state:int = item.getState(timeManager.now);
-		if( item.category == ExchangeType.C110_BATTLES && _state == ExchangeItem.CHEST_STATE_EMPTY )
-			return;
-		
-		if( ( item.category == ExchangeType.C100_FREES || item.category == ExchangeType.C110_BATTLES ) && _state == ExchangeItem.CHEST_STATE_READY  )
-		{
-			item.outcomes = new IntIntMap();
-			exchange(item, params);
-			return;
-		}
-		else if( item.category == ExchangeType.C100_FREES && _state != ExchangeItem.CHEST_STATE_READY )
-		{
-			if( item.type == ExchangeType.C104_STARS )
-			{
-				if( _state == ExchangeItem.CHEST_STATE_BUSY )
-					appModel.navigator.addLog(loc("popup_chest_message_110", [""]));
-				else
-					appModel.navigator.addLog(loc("exchange_hint_104", [10]));
-				return;
-			}
-		}
-		
-		var details:BookDetailsPopup = new BookDetailsPopup(item);
-		details.addEventListener(Event.SELECT, details_selectHandler);
-		appModel.navigator.addPopup(details);
-		function details_selectHandler(event:Event):void
-		{
-			_state = item.getState(timeManager.now);
-			if( _state != ExchangeItem.CHEST_STATE_WAIT )
-				details.removeEventListener(Event.SELECT, details_selectHandler);
-			if( _state == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
-				params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
-			var response:int = exchange(item, params);
-			if( response != MessageTypes.RESPONSE_SUCCEED )
-				details.close();
-		}
-		return;
-	}
-
+	//   _-_-_-_-_-_- waiting battle books -_-_-_-_-_-_
+	if( item.isBook() && item.getState(timeManager.now) == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
+		params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+	
 	var reqType:int = item.requirements.keys()[0];
 	//     _-_-_-_-_-_- special offers -_-_-_-_-_-_
 	if( item.category == ExchangeType.C20_SPECIALS )
@@ -171,7 +131,10 @@ public function process(item : ExchangeItem) : void
 			confirm1.removeEventListener(Event.CLOSE, confirm1_closeHandler);
 			dispatchCustomEvent(FeathersEventType.ERROR, item);
 		}
+		return;
 	}
+	
+	exchange(item, params);
 }
 
 private function exchange( item:ExchangeItem, params:SFSObject ) : int
