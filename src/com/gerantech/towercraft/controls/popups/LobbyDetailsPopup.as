@@ -232,10 +232,10 @@ private function showDetails():void
 		return;
 	
 	var shareButton:IndicatorButton = new IndicatorButton();
-	shareButton.layoutData = new AnchorLayoutData(20, appModel.isLTR?20:NaN, NaN, appModel.isLTR?NaN:20);
-	shareButton.label = loc("lobby_invite");
 	shareButton.width = 164;
 	shareButton.height = 72;
+	shareButton.label = loc("lobby_invite");
+	shareButton.layoutData = new AnchorLayoutData(20, appModel.isLTR?20:NaN, NaN, appModel.isLTR?NaN:20);
 	shareButton.addEventListener(Event.TRIGGERED, shareButton_triggeredHandler);
 	addChild(shareButton);
 	
