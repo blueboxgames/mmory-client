@@ -93,7 +93,7 @@ protected function iconFactory() : void
 }
 protected function titleFactory() : void
 {
-	this.titleDisplay = new ShadowLabel(null, ExCategoryItemRenderer.GET_TEXT_COLORS(this.category), 0, null, null, false, null, category==ExchangeType.C120_MAGICS?0.8:1.1);
+	this.titleDisplay = new ShadowLabel(null, ExCategoryItemRenderer.GET_TEXT_COLORS(this.category), 0, null, null, false, null, category==ExchangeType.C120_MAGICS?0.65:1.1);
 	this.titleDisplay.layoutData = new AnchorLayoutData(20, NaN, NaN, NaN, 0);
 	this.addChild(this.titleDisplay);
 }

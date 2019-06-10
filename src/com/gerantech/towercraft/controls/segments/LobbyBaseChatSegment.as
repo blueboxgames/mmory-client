@@ -54,19 +54,20 @@ override public function init():void
 	layout = new AnchorLayout();
 
 	var ban:ISFSObject = appModel.loadingManager.serverData.containsKey("ban") ? appModel.loadingManager.serverData.getSFSObject("ban") : null;
-	if( false)//ban != null && ban.getInt("mode") > 1 )// banned user
+	if( ban != null && ban.getInt("mode") > 1 )// banned user
 	{
 		// backgroundSkin = new Image(appModel.theme.backgroundDisabledSkinTexture);
 		// Image(backgroundSkin).scale9Grid = MainTheme.DEFAULT_BACKGROUND_SCALE9_GRID;
 		// backgroundSkin.alpha = 0.6;
 		
 		var labelDisplay:ShadowLabel = new ShadowLabel(loc("lobby_banned", [StrUtils.toTimeFormat(ban.getLong("until"))]), 1, 0, "center", null, true, null, 0.9);
-		labelDisplay.width = width;
-		labelDisplay.layoutData = new AnchorLayoutData(NaN, paddingH + 20, NaN, paddingH + 20, NaN, 0);
+		labelDisplay.width = stageWidth - 200;
+		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
 		addChild(labelDisplay);
 		
-		var descDisplay:RTLLabel = new RTLLabel(ban.getUtfString("message"), 1, null, null, true, null, 0.6);
-		descDisplay.layoutData = new AnchorLayoutData(NaN, paddingH + 20, NaN, paddingH + 20, NaN, 0);
+		var descDisplay:RTLLabel = new RTLLabel(ban.getUtfString("message"), 0xAABBCC, null, null, true, null, 0.65);
+		descDisplay.width = stageWidth - 200;
+		descDisplay.layoutData = labelDisplay.layoutData;
 		addChild(descDisplay);
 		return;
 	}

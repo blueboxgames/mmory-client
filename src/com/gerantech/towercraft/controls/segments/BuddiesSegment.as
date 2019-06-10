@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.mmory.core.socials.Lobby;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.items.BuddyItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
@@ -14,7 +15,6 @@ import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.Localizations;
-import com.gerantech.mmory.core.socials.Lobby;
 import com.smartfoxserver.v2.core.SFSBuddyEvent;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Buddy;
@@ -96,7 +96,7 @@ override public function init():void
 
 private function showTutorials():void
 {
-	if( SFSConnection.instance.buddyManager.buddyList.length >= 3 )
+	if( SFSConnection.instance.buddyManager.buddyList.length >= 3 || game.sessionsCount % 5 != 0 )
 		return;
 	var tutorialData:TutorialData = new TutorialData("buddy_tutorial");
 	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, loc("tutor_buddy_0", [Lobby.buddyInviterReward, Lobby.buddyInviteeReward]), null, 1000, 1000, 0));

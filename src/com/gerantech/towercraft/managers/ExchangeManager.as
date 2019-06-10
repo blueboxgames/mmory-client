@@ -30,6 +30,9 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 import feathers.events.FeathersEventType;
 
 import starling.events.Event;
+import com.gerantech.towercraft.controls.popups.SimpleHeaderPopup;
+import com.gerantech.towercraft.controls.popups.BookDetailsPopup;
+import com.gerantech.towercraft.controls.popups.EmoteDetailsPopup;
 /**
 * @author Mansour Djawadi
 */
@@ -55,11 +58,65 @@ public function process(item : ExchangeItem) : void
 	var params:SFSObject = new SFSObject();
 	params.putInt("type", item.type);
 
-	//   _-_-_-_-_-_- waiting battle books -_-_-_-_-_-_
-	if( item.isBook() && item.getState(timeManager.now) == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
-		params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+	//     _-_-_-_-_-_- all books -_-_-_-_-_-_
+	if( item.isBook() )
+	{
+		item.enabled = true;
+		var _state:int = item.getState(timeManager.now);
+		//  waiting battle books
+		if( _state == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
+			params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+
+		if( item.category == ExchangeType.C110_BATTLES && _state == ExchangeItem.CHEST_STATE_EMPTY )
+			return;
+		
+		if( ( item.category == ExchangeType.C100_FREES || item.category == ExchangeType.C110_BATTLES ) && _state == ExchangeItem.CHEST_STATE_READY  )
+		{
+			item.outcomes = new IntIntMap();
+			exchange(item, params);
+			return;
+		}
+		else if( item.category == ExchangeType.C100_FREES && _state != ExchangeItem.CHEST_STATE_READY )
+		{
+			if( item.type == ExchangeType.C104_STARS )
+			{
+				if( _state == ExchangeItem.CHEST_STATE_BUSY )
+					appModel.navigator.addLog(loc("popup_chest_message_110", [""]));
+				else
+					appModel.navigator.addLog(loc("exchange_hint_104", [10]));
+				return;
+			}
+		}
+
+		var detailsPopup:SimpleHeaderPopup = new BookDetailsPopup(item);
+		detailsPopup.addEventListener(Event.SELECT, detailsPopup_selectHandler);
+		appModel.navigator.addPopup(detailsPopup);
+		return;
+	}
 	
-	var reqType:int = item.requirements.keys()[0];
+	//     _-_-_-_-_-_- all emotes -_-_-_-_-_-_
+	if( item.isEmote() )
+	{
+		item.enabled = true;
+		detailsPopup = new EmoteDetailsPopup(item);
+		detailsPopup.addEventListener(Event.SELECT, detailsPopup_selectHandler);
+		appModel.navigator.addPopup(detailsPopup);
+		return;
+	}
+
+	function detailsPopup_selectHandler(event:Event):void
+	{
+		detailsPopup.removeEventListener(Event.SELECT, detailsPopup_selectHandler);
+		exchange(item, params);
+	}
+
+	var reqs:Vector.<int> = item.requirements.keys();
+	if( reqs == null || reqs.length == 0 )
+	{
+		exchange(item, params);
+		return;
+	}
+
 	//     _-_-_-_-_-_- special offers -_-_-_-_-_-_
 	if( item.category == ExchangeType.C20_SPECIALS )
 	{
@@ -67,7 +124,7 @@ public function process(item : ExchangeItem) : void
 			return;
 		if( !player.has(item.requirements) )
 		{
-			appModel.navigator.addLog(loc("log_not_enough", [loc("resource_title_" + reqType)]));
+			appModel.navigator.addLog(loc("log_not_enough", [loc("resource_title_" + reqs[0])]));
 			dispatchCustomEvent(FeathersEventType.ERROR, item);
 			return;
 		}
@@ -76,7 +133,7 @@ public function process(item : ExchangeItem) : void
 	}
 
 	//     _-_-_-_-_-_- purchase automation -_-_-_-_-_-_
-	if( reqType == ResourceType.R5_CURRENCY_REAL )
+	if( reqs[0] == ResourceType.R5_CURRENCY_REAL )
 	{
 		BillingManager.instance.addEventListener(FeathersEventType.END_INTERACTION, billinManager_endInteractionHandler);
 		BillingManager.instance.purchase((item.category == ExchangeType.C30_BUNDLES ? "k2k.bundle_" : "k2k.item_") + item.type);
@@ -108,7 +165,7 @@ public function process(item : ExchangeItem) : void
 	}
 	
 	//     _-_-_-_-_-_- other gem consumption -_-_-_-_-_-_
-	if( reqType == ResourceType.R4_CURRENCY_HARD )
+	if( reqs[0] == ResourceType.R4_CURRENCY_HARD )
 	{
 		if( !player.has(item.requirements) )
 		{

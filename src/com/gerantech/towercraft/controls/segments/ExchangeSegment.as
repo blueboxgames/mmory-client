@@ -21,6 +21,7 @@ import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
 
 import starling.events.Event;
+import com.gerantech.towercraft.controls.popups.SimpleHeaderPopup;
 
 public class ExchangeSegment extends Segment
 {
@@ -147,62 +148,7 @@ override public function updateData():void
 
 private function list_categorySelectHandler(event:Event) : void
 {
-	var item:ExchangeItem = event.data as ExchangeItem
-
-	//     _-_-_-_-_-_- all books -_-_-_-_-_-_
-	if( item.isBook() )
-	{
-		item.enabled = true;
-		var _state:int = item.getState(timeManager.now);
-		if( item.category == ExchangeType.C110_BATTLES && _state == ExchangeItem.CHEST_STATE_EMPTY )
-			return;
-		
-		if( ( item.category == ExchangeType.C100_FREES || item.category == ExchangeType.C110_BATTLES ) && _state == ExchangeItem.CHEST_STATE_READY  )
-		{
-			item.outcomes = new IntIntMap();
-			exchangeManager.process(item);
-			return;
-		}
-		else if( item.category == ExchangeType.C100_FREES && _state != ExchangeItem.CHEST_STATE_READY )
-		{
-			if( item.type == ExchangeType.C104_STARS )
-			{
-				if( _state == ExchangeItem.CHEST_STATE_BUSY )
-					appModel.navigator.addLog(loc("popup_chest_message_110", [""]));
-				else
-					appModel.navigator.addLog(loc("exchange_hint_104", [10]));
-				return;
-			}
-		}
-		
-		var bookDetails:BookDetailsPopup = new BookDetailsPopup(item);
-		bookDetails.addEventListener(Event.SELECT, bookDetails_selectHandler);
-		appModel.navigator.addPopup(bookDetails);
-		function bookDetails_selectHandler(event:Event):void
-		{
-			bookDetails.removeEventListener(Event.SELECT, bookDetails_selectHandler);
-			exchangeManager.process(item);
-		}
-		return;
-	}
-	
-	//     _-_-_-_-_-_- all emote -_-_-_-_-_-_
-	if( item.isEmote() )
-	{
-		item.enabled = true;
-		var emoteDetails:EmoteDetailsPopup = new EmoteDetailsPopup(item);
-		emoteDetails.addEventListener(Event.SELECT, emoteDetails_selectHandler);
-		appModel.navigator.addPopup(emoteDetails);
-		function emoteDetails_selectHandler(event:Event):void
-		{
-			emoteDetails.removeEventListener(Event.SELECT, emoteDetails_selectHandler);
-			exchangeManager.process(item);
-		}
-		return;
-	}
-
-
-	exchangeManager.process(item);
+	exchangeManager.process(event.data as ExchangeItem);
 }
 
 /*private function confirms_closeHandler(event:Event):void
