@@ -134,8 +134,11 @@ protected function list_focusInHandler(event:Event):void
 	var buddy:Buddy = selectedItem.data as Buddy;
 	if( buddy == null )
 	{
-		NativeAbilities.instance.shareText(loc("invite_friend"), loc("invite_friend_message", [appModel.descriptor.name]) + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]));
-		trace(Localizations.instance.get("buddy_invite_url", [player.invitationCode]))
+		var subject:String = loc("invite_friend");
+		var text:String = loc("invite_friend_message", [appModel.descriptor.name]) + "\n" + Localizations.instance.get("buddy_invite_url0", [player.invitationCode]);
+
+		NativeAbilities.instance.shareText(subject, text);
+		trace(subject, text);
 		return;
 	}
 	
