@@ -2,9 +2,17 @@ package com.gerantech.towercraft.controls.screens
 {
 import com.gerantech.towercraft.controls.segments.InboxChatSegment;
 import com.gerantech.towercraft.managers.InboxService;
+import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.InboxThread;
+import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
+import feathers.controls.ImageLoader;
+import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayoutData;
+
+import flash.geom.Rectangle;
+
 import starling.events.Event;
 
 public class InboxScreen extends SimpleScreen
@@ -24,11 +32,34 @@ override protected function initialize():void
 	title = thread.owner;
 	super.initialize();
 	
+	var backgroundDisplay:ImageLoader = new ImageLoader();
+	backgroundDisplay.source = appModel.theme.popupInsideBackgroundSkinTexture;
+	backgroundDisplay.scale9Grid = MainTheme.POPUP_INSIDE_SCALE9_GRID;
+	backgroundDisplay.layoutData = new AnchorLayoutData(-10, -10, -10, -10);
+	addChildAt(backgroundDisplay, 0);
+
+	var headerDisplay:ImageLoader = new ImageLoader();
+	headerDisplay.source = Assets.getTexture("socials/header", "gui");
+	headerDisplay.layoutData = new AnchorLayoutData(-10, -10, NaN, -10);
+	headerDisplay.scale9Grid = new Rectangle(1, 1, 1, 1);
+	headerDisplay.height = headerSize;
+	addChildAt(headerDisplay, 1);
+
 	chatBox = new InboxChatSegment(myId);
-	chatBox.layoutData = new AnchorLayoutData(headerSize, 0, footerSize, 0);
+	chatBox.layoutData = new AnchorLayoutData(headerSize, 0, 0, 0);
+	chatBox.addEventListener(FeathersEventType.FOCUS_IN, chatBox_focusHandler);
 	addChild(chatBox);
 	if( sfsData != null )
 		chatBox.setData(sfsData.getSFSArray("data"), thread);
+
+	closeButton.height = 126;
+	closeButton.layoutData = new AnchorLayoutData(NaN, NaN, 8, 16);
+	addChild(closeButton);
+}
+
+protected function chatBox_focusHandler(event:Event) : void 
+{
+	closeButton.visible = !event.data as Boolean;
 }
 
 protected function inboxService_completeHandler(event:Event) : void 
@@ -51,10 +82,10 @@ protected function inboxService_completeHandler(event:Event) : void
 	}
 	if( event.type == Event.SELECT )
 	{
-		if( message.getShort("type") == MessageTypes.M50_URL )
+		if( message.getInt("type") == MessageTypes.M50_URL )
 			appModel.navigator.handleURL(message.getText("data"));
 	}
-	if( MessageTypes.isConfirm(message.getShort("type")) )
+	if( MessageTypes.isConfirm(message.getInt("type")) )
 	{
 		message.putBool("isAccept", event.type == Event.SELECT);
 		SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_responseConfirmHandler);

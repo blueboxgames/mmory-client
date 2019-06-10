@@ -20,12 +20,12 @@ import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.models.vo.VideoAd;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.views.BattleFieldView;
-import com.gt.towers.battle.BattleField;
-import com.gt.towers.battle.fieldes.FieldData;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.socials.Challenge;
-import com.gt.towers.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.fieldes.FieldData;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.socials.Challenge;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
@@ -60,6 +60,7 @@ public function BattleScreen()
 	addChild(appModel.battleFieldView);
 	
 	backgroundSkin = new Image(appModel.theme.quadSkin);
+	Image(backgroundSkin).scale9Grid = MainTheme.QUAD_SCALE9_GRID;
 	Image(backgroundSkin).color = 0xCCB3A3;
 }
 

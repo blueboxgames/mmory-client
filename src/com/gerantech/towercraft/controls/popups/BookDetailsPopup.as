@@ -15,12 +15,12 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.constants.MessageTypes;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.exchanges.ExchangeItem;
-import com.gt.towers.exchanges.Exchanger;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.exchanges.Exchanger;
 
 import dragonBones.events.EventObject;
 import dragonBones.starling.StarlingArmatureDisplay;
@@ -82,13 +82,13 @@ override protected function initialize():void
 	titleDisplay.layoutData = new AnchorLayoutData(85, NaN, NaN, NaN, 220);
 
 	var numCards:int = ExchangeType.getNumTotalCards(item.outcome, arena, player.splitTestCoef, 0);
-	var cardsPalette:IconGroup = new IconGroup(Assets.getTexture("cards"), int(numCards * 0.9) + " - " + int(numCards * 1.1));
+	var cardsPalette:IconGroup = new IconGroup(Assets.getTexture("cards"), int(numCards * 0.9) + " - " + int(numCards * 1.1 + 1));
 	cardsPalette.width = transitionIn.destinationBound.width * 0.42;
 	cardsPalette.layoutData = new AnchorLayoutData(290, NaN, NaN, 50);
 	addChild(cardsPalette);
 	
 	var numSofts:int = ExchangeType.getNumSofts(item.outcome, arena, player.splitTestCoef);
-	var softsPalette:IconGroup = new IconGroup(Assets.getTexture("res-" + ResourceType.R3_CURRENCY_SOFT, "gui"), int(numSofts * 0.9) + " - " + int(numSofts * 1.1));
+	var softsPalette:IconGroup = new IconGroup(Assets.getTexture("res-" + ResourceType.R3_CURRENCY_SOFT, "gui"), int(numSofts * 0.9) + " - " + int(numSofts * 1.1 + 1));
 	softsPalette.textColor = 0xFFFF99;
 	softsPalette.width = transitionIn.destinationBound.width * 0.42;
 	softsPalette.layoutData = new AnchorLayoutData(290, 40);
@@ -127,7 +127,7 @@ override protected function transitionInCompleted():void
 		appModel.sounds.addAndPlay(event.eventObject.name);
 	}
 	
-	if( player.get_battleswins() < 4 )
+	if( player.get_battleswins() < 2 )
 	{
 		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_012_SLOT_OPENED);
 		actionButton.showTutorHint();
@@ -289,7 +289,7 @@ protected function batton_triggeredHandler(event:Event) : void
 	if( state == ExchangeItem.CHEST_STATE_BUSY )
 	{
 		update(state);
-		if( player.get_battleswins() < 4 )
+		if( player.get_battleswins() < 2 )
 			setTimeout(actionButton.showTutorHint, 100);
 		return;
 	}

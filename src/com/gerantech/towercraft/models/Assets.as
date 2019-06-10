@@ -1,14 +1,17 @@
 package com.gerantech.towercraft.models
 {
+	import feathers.system.DeviceCapabilities;
+
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
 	import flash.filesystem.File;
+	import flash.filters.ColorMatrixFilter;
 	import flash.geom.Matrix;
+	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.utils.Dictionary;
-	
-	import feathers.system.DeviceCapabilities;
-	
+
+	import starling.display.Image;
 	import starling.text.BitmapFont;
 	import starling.textures.Texture;
 	import starling.textures.TextureAtlas;
@@ -43,6 +46,7 @@ package com.gerantech.towercraft.models
 		
 		public static const BACKGROUND_GRID:Rectangle = new Rectangle(2, 2, 6, 6);
 		
+		private static var allGrays:Dictionary = new Dictionary();
 		private static var allTextures:Dictionary = new Dictionary();
 		private static var allTextureAtlases:Dictionary = new Dictionary();
 		
@@ -83,8 +87,14 @@ package com.gerantech.towercraft.models
 		 * @param name A key that found a texture from atlas.
 		 * @return the Texture instance (there is only oneinstance per app).
 		 */
-		public static function getTexture(texturName:String, atlasName:String ="gui" ):Texture
+		public static function getTexture(texturName:String, atlasName:String ="gui", grayscale:Boolean = false):Texture
 		{
+			if( grayscale )
+			{
+				if( allGrays[texturName] == undefined )
+					allGrays[texturName] = gray(getAtlas(atlasName).getTexture(texturName));
+				return allGrays[texturName];
+			}
 			return getAtlas(atlasName).getTexture(texturName);
 		} 
 		public static function getTextures(texturName:String, atlasName:String ="gui" ):Vector.<Texture>
@@ -116,7 +126,37 @@ package com.gerantech.towercraft.models
 			}
 			return allTextures[name];
 		}
-		
+				
+		public static function gray(texture:Texture):Texture
+		{
+			// var t:int = getTimer() 
+			if( texture == null )
+				return null;
+			var _bitmapData:BitmapData = new Image(texture).drawToBitmapData();
+			const rc:Number = 1/3, gc:Number = 1/3, bc:Number = 1/3;
+			_bitmapData.applyFilter(_bitmapData, _bitmapData.rect, new Point(), new ColorMatrixFilter([rc, gc, bc, 0, 0,		rc, gc, bc, 0, 0,		rc, gc, bc, 0, 0,		0, 0, 0, 1, 0]));
+			/*var pixel:uint;
+			for(var i:int = 0; i < _bitmapData.height; i ++)
+			{
+				for(var j:int = 0; j < _bitmapData.width; j ++)
+				{
+					pixel = _bitmapData.getPixel32(i, j);
+					trace(pixel)
+
+					var alphaValue:uint = pixel >> 24 & 0xFF;
+					var red:uint = pixel >> 16 & 0xFF;
+					var green:uint = pixel >> 8 & 0xFF;
+					var blue:uint = pixel & 0xFF;
+					pixel = blue + blue + 
+
+					bd.setPixel32(i, j, pixel);
+				}
+			}
+ */
+//			trace("gray tile", getTimer() - t);
+			return Texture.fromBitmapData(_bitmapData);
+		}
+
 		/*public static function save(name:String = "skin"):void
 		{
 		var bmp:Bitmap = new Assets[name+"AtlasTexture"]();
@@ -170,9 +210,8 @@ package com.gerantech.towercraft.models
 			*/
 		}
 		
-		static private var animAssetsLoadCallback:Function;
-		static public var animationAssetsLoaded:Boolean;
-		static public function loadAnimationAssets(callback:Function, ...args) : void
+		static private var loadCallback:Function;
+		static public function loadAtlas(baseURL:String, postFix:String, callback:Function, ...args) : void
 		{
 			for each( var item:String in args )
 				checkLoadingAssets(item);
@@ -181,15 +220,15 @@ package com.gerantech.towercraft.models
 			var needLoading:Boolean;
 			function checkLoadingAssets(item:String) : void
 			{
-				if( AppModel.instance.assets.getTexture(item + "_tex") == null )
+				if( AppModel.instance.assets.getTexture(item + (postFix == null ? "" : postFix)) == null )
 				{
-					AppModel.instance.assets.enqueue(File.applicationDirectory.resolvePath( "assets/animations/" + item ));
+					AppModel.instance.assets.enqueue(File.applicationDirectory.resolvePath((baseURL == null ? "" : baseURL) + item));
 					needLoading = true;
 				}
 			}
 			if( needLoading )
 			{
-				animAssetsLoadCallback = callback;
+				loadCallback = callback;
 				AppModel.instance.assets.loadQueue(assets_loadCallback);
 			}
 			else
@@ -199,11 +238,10 @@ package com.gerantech.towercraft.models
 		}
 		private static function assets_loadCallback(ratio:Number) : void
 		{
-			if( ratio >= 1 && animAssetsLoadCallback != null )
+			if( ratio >= 1 && loadCallback != null )
 			{
-				animationAssetsLoaded = true;
-				animAssetsLoadCallback();
-				animAssetsLoadCallback = null;
+				loadCallback();
+				loadCallback = null;
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls
 {
 	import avmplus.getQualifiedClassName;
+
 	import com.gerantech.extensions.NativeAbilities;
 	import com.gerantech.towercraft.Game;
 	import com.gerantech.towercraft.controls.animations.AchievedItem;
@@ -11,7 +12,6 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.popups.AbstractPopup;
 	import com.gerantech.towercraft.controls.popups.InvitationPopup;
 	import com.gerantech.towercraft.controls.popups.LobbyDetailsPopup;
-	import com.gerantech.towercraft.controls.popups.RequirementConfirmPopup;
 	import com.gerantech.towercraft.controls.screens.DashboardScreen;
 	import com.gerantech.towercraft.controls.segments.ExchangeSegment;
 	import com.gerantech.towercraft.controls.segments.InboxSegment;
@@ -28,22 +28,25 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.models.vo.UserData;
 	import com.gerantech.towercraft.utils.StrUtils;
 	import com.gerantech.towercraft.utils.Utils;
-	import com.gt.towers.constants.PrefsTypes;
-	import com.gt.towers.constants.ResourceType;
-	import com.gt.towers.socials.Challenge;
-	import com.gt.towers.utils.maps.IntIntMap;
-	import com.gt.towers.utils.maps.IntStrMap;
+	import com.gerantech.mmory.core.constants.PrefsTypes;
+	import com.gerantech.mmory.core.constants.ResourceType;
+	import com.gerantech.mmory.core.socials.Challenge;
+	import com.gerantech.mmory.core.utils.maps.IntIntMap;
+	import com.gerantech.mmory.core.utils.maps.IntStrMap;
 	import com.smartfoxserver.v2.core.SFSEvent;
 	import com.smartfoxserver.v2.entities.Buddy;
 	import com.smartfoxserver.v2.entities.data.ISFSObject;
 	import com.smartfoxserver.v2.entities.data.SFSObject;
+
 	import feathers.controls.LayoutGroup;
 	import feathers.controls.StackScreenNavigator;
 	import feathers.controls.StackScreenNavigatorItem;
+
 	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
 	import flash.net.navigateToURL;
 	import flash.utils.Dictionary;
+
 	import starling.animation.Transitions;
 	import starling.core.Starling;
 	import starling.events.Event;
@@ -116,7 +119,8 @@ package com.gerantech.towercraft.controls
 				return;
 			}
 			var item:StackScreenNavigatorItem = getScreen(Game.BATTLE_SCREEN);
-			item.properties.waitingOverlay = new BattleWaitingOverlay(cancelable && AppModel.instance.game.player.get_arena(0) > 0);
+			var arena:int =  AppModel.instance.game.player.get_arena(0);
+			item.properties.waitingOverlay = new BattleWaitingOverlay(cancelable && arena > 0, spectatedUser != null, arena > 0);
 			item.properties.spectatedUser = spectatedUser;
 			item.properties.friendlyMode = friendlyMode;
 			item.properties.index = index;
@@ -362,7 +366,7 @@ package com.gerantech.towercraft.controls
 		
 		private function sendBattleRequest(params:ISFSObject, state:int):void
 		{
-			params.putShort("bs", state);
+			params.putInt("bs", state);
 			SFSConnection.instance.sendExtensionRequest(SFSCommands.BUDDY_BATTLE, params);
 		}
 		
@@ -373,7 +377,7 @@ package com.gerantech.towercraft.controls
 			
 			var params:ISFSObject = event.params.params as SFSObject;
 			var imSubject:Boolean = params.getInt("s") == AppModel.instance.game.player.id;
-			switch (params.getShort("bs"))
+			switch (params.getInt("bs"))
 			{
 			case 0: 
 				var acceptLabel:String = imSubject ? null : loc("lobby_battle_accept");
@@ -400,7 +404,7 @@ package com.gerantech.towercraft.controls
 				break;
 			}
 			
-			if (params.getShort("bs") > 0 && battleconfirmToast != null)
+			if (params.getInt("bs") > 0 && battleconfirmToast != null)
 			{
 				battleconfirmToast.close();
 				battleconfirmToast = null;

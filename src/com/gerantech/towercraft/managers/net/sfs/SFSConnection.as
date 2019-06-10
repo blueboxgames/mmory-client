@@ -2,8 +2,6 @@ package com.gerantech.towercraft.managers.net.sfs
 {
 import com.gerantech.towercraft.controls.overlays.LowConnectionOverlay;
 import com.gerantech.towercraft.models.AppModel;
-import com.gt.towers.utils.lists.IntList;
-import com.gt.towers.utils.maps.IntIntMap;
 import com.smartfoxserver.v2.SmartFox;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Room;
@@ -14,12 +12,13 @@ import com.smartfoxserver.v2.requests.ExtensionRequest;
 import com.smartfoxserver.v2.requests.LoginRequest;
 import com.smartfoxserver.v2.requests.LogoutRequest;
 import com.smartfoxserver.v2.util.SFSErrorCodes;
-
 import flash.filesystem.File;
 import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
 
 import haxe.ds.StringMap;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.utils.lists.IntList;
 
 [Event(name="succeed",			type="com.gerantech.towercraft.managers.net.sfs.SFSConnection")]
 [Event(name="failure",			type="com.gerantech.towercraft.managers.net.sfs.SFSConnection")]
@@ -71,10 +70,9 @@ public function load() : void
 {
 	/*var pattern:String = '<?xml version="1.0" encoding="UTF-8"?>\r\n<SmartFoxConfig>';
 	var cnfFile:File = File.applicationStorageDirectory.resolvePath("config.xml");
-	var url:String = "http://gerantech.com/towers/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&t=" + Math.random();
+	var url:String = "http://gerantech.com/towers/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&version=" + AppModel.instance.descriptor.versionCode + "&r=" + Math.round(Math.random() * 1000);
 	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, false, 0, pattern);
 	trace(url);
-	// navigateToURL(new URLRequest(url))
 	cnfLoader.addEventListener(Event.COMPLETE,			cnfLoader_completeHandler);
 	cnfLoader.addEventListener(IOErrorEvent.IO_ERROR,	cnfLoader_ioErrorHandler);
 	cnfLoader.start();

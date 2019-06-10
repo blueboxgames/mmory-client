@@ -1,20 +1,20 @@
 package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
-import com.gerantech.towercraft.controls.groups.Spacer;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.SettingsData;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.Button;
 import feathers.core.ITextRenderer;
 import feathers.events.FeathersEventType;
-import feathers.layout.AnchorLayoutData;
+import feathers.layout.HorizontalAlign;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.HorizontalLayoutData;
 import feathers.layout.VerticalAlign;
-import starling.display.Image;
+
 import starling.events.Event;
 import starling.textures.Texture;
 
@@ -29,19 +29,20 @@ public function SettingsItemRenderer(){}
 override protected function initialize():void
 {
 	super.initialize();
-	height = 120;
+	height = 128;
 	
 	var hlayout:HorizontalLayout = new HorizontalLayout();
-	//hlayout.paddingLeft = hlayout.paddingRight = 48;
-	hlayout.gap = 16;
-	hlayout.padding = 6;
 	hlayout.verticalAlign = VerticalAlign.MIDDLE;
+	hlayout.horizontalAlign = HorizontalAlign.CENTER;
+	hlayout.padding = 10;
+	hlayout.gap = 24;
 	layout = hlayout;
 }
 
 override protected function commitData():void
 {
 	super.commitData();
+	width = _owner.width;
 	if( _data == null )
 		return;
 
@@ -60,8 +61,6 @@ override protected function commitData():void
 	}
 	else if( settingData.type == SettingsData.TYPE_ICON_BUTTONS )
 	{
-		if( !appModel.isLTR )
-			addChild(new Spacer(false));
 		var list:Array = settingData.data as Array;
 		for( var i:int = 0; i < list.length; i++ )
 			addIconButton(list[i]);

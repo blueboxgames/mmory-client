@@ -1,15 +1,14 @@
 package com.gerantech.towercraft.controls.items
 {
-import com.gerantech.towercraft.controls.BuildingCard;
 import com.gerantech.towercraft.controls.buttons.LeagueButton;
 import com.gerantech.towercraft.controls.overlays.NewCardOverlay;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.MessageTypes;
-import com.gt.towers.others.Arena;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.others.Arena;
 
 import feathers.controls.Button;
 import feathers.controls.ImageLoader;
@@ -29,6 +28,7 @@ import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
+import com.gerantech.towercraft.controls.CardView;
 
 public class LeagueItemRenderer extends AbstractListItemRenderer
 {
@@ -119,7 +119,7 @@ private function createElements():void
 	cardsLayout.useVirtualLayout = false;
 	cardsLayout.useSquareTiles = false;
 	cardsLayout.typicalItemWidth = Math.min(CARDS_WIDTH, 680 / cardsLayout.requestedColumnCount - cardsLayout.padding * 2 - (cardsLayout.requestedColumnCount - 1) * cardsLayout.gap);
-	cardsLayout.typicalItemHeight = cardsLayout.typicalItemWidth * (collectable ? 1.7 : BuildingCard.VERICAL_SCALE);
+	cardsLayout.typicalItemHeight = cardsLayout.typicalItemWidth * (collectable ? 1.7 : CardView.VERICAL_SCALE);
 	
 	var listSkin:Image = new Image(appModel.theme.roundMediumInnerSkin);
 	listSkin.scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;

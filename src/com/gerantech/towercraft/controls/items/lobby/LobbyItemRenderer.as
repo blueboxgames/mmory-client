@@ -11,6 +11,7 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import flash.geom.Rectangle;
 import starling.display.Image;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 
 public class LobbyItemRenderer extends AbstractTouchableListItemRenderer
 {
@@ -102,7 +103,7 @@ override protected function commitData():void
 	if( _data == null || _owner == null )
 		return;
 	
-	emblemDisplay.source = Assets.getTexture("emblems/emblem-" + StrUtils.getZeroNum(_data.pic + ""), "gui");
+	emblemDisplay.source = EmblemButton.getTexture(_data.pic as int);
 	rankDisplay.text = StrUtils.getNumber(index + 1);
 	nameDisplay.text = _data.name;
     activityDisplay.text = StrUtils.getNumber(_data.act);

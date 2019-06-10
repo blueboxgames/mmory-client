@@ -2,8 +2,8 @@ package com.gerantech.towercraft.managers.net.sfs
 {
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.UserData;
-import com.gt.towers.Player;
-import com.gt.towers.constants.MessageTypes;
+import com.gerantech.mmory.core.Player;
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
@@ -93,7 +93,10 @@ protected function sfs_getLobbyInfoHandler(event:SFSEvent):void
 	if( data.containsKey("messages") )
 	{
 		var u:ISFSObject = findUser(player.id);
-		messages = new ListCollection();
+		if( messages == null )
+			messages = new ListCollection();
+		else
+			messages.removeAll();
 		for( var i:int=0; i<data.getSFSArray("messages").size(); i++ )
 		{
 			var msg:ISFSObject = data.getSFSArray("messages").getSFSObject(i);
@@ -141,9 +144,9 @@ private function isLegal(msg:ISFSObject, u:ISFSObject):Boolean
 {
 	if( u == null )
 		return player.admin;
-	if( msg.getShort("m") == MessageTypes.M30_FRIENDLY_BATTLE && msg.getShort("st") > 2 )
+	if( msg.getInt("m") == MessageTypes.M30_FRIENDLY_BATTLE && msg.getInt("st") > 2 )
 		return false;
-	if( MessageTypes.isConfirm(msg.getShort("m")) )
+	if( MessageTypes.isConfirm(msg.getInt("m")) )
 		if( u.getInt("permission") < 1 || msg.containsKey("pr") )
 			return false
 	return true;
@@ -154,10 +157,10 @@ protected function sfs_publicMessageHandler(event:SFSEvent):void
 	if( event.params.cmd != SFSCommands.LOBBY_PUBLIC_MESSAGE || lobby != event.params.room )
 		return;
 	var msg:ISFSObject = event.params.params as SFSObject;
-	if( msg.getShort("m") == MessageTypes.M0_TEXT )
+	if( msg.getInt("m") == MessageTypes.M0_TEXT )
 	{
 		var last:SFSObject = messages.length > 0 ? SFSObject(messages.getItemAt(messages.length-1)) : null;
-		if( last != null && last.getShort("m") == MessageTypes.M0_TEXT && last.getInt("i") == msg.getInt("i") )
+		if( last != null && last.getInt("m") == MessageTypes.M0_TEXT && last.getInt("i") == msg.getInt("i") )
 		{
 			last.putInt("u", msg.getInt("u"));
 			last.putUtfString("t", msg.getUtfString("t"));
@@ -168,24 +171,24 @@ protected function sfs_publicMessageHandler(event:SFSEvent):void
 			messages.addItem(msg);
 		}
 	}
-	else if( msg.getShort("m") == MessageTypes.M30_FRIENDLY_BATTLE )
+	else if( msg.getInt("m") == MessageTypes.M30_FRIENDLY_BATTLE )
 	{
 		var lastBattleIndex:int = containBattle(msg.getInt("bid"));
 		if( lastBattleIndex > -1 )
 		{
-			if( msg.getShort("st") > 2 )
+			if( msg.getInt("st") > 2 )
 			{
 				messages.removeItemAt(lastBattleIndex);
 			}
 			else
 			{
 				var battleMsg:ISFSObject = messages.getItemAt(lastBattleIndex) as SFSObject;
-				battleMsg.putShort("st", msg.getShort("st"));
+				battleMsg.putInt("st", msg.getInt("st"));
 				battleMsg.putInt("u", msg.getInt("u"));
 				if( msg.containsKey("o") )
 					battleMsg.putUtfString("o", msg.getUtfString("o"));
 				messages.updateItemAt(lastBattleIndex);
-				if( msg.getShort("st") == 1 && (msg.getUtfString("s") == player.nickName || msg.getUtfString("o") == player.nickName) )
+				if( msg.getInt("st") == 1 && (msg.getUtfString("s") == player.nickName || msg.getUtfString("o") == player.nickName) )
 					dispatchEventWith(Event.TRIGGERED, false, msg);// go to friendly battle
 			}
 		}
@@ -195,11 +198,11 @@ protected function sfs_publicMessageHandler(event:SFSEvent):void
 			dispatchEventWith(Event.OPEN, false, msg.getUtfString("s"));
 		}
 	}
-	else if( MessageTypes.isComment(msg.getShort("m")) || MessageTypes.isEmote(msg.getShort("m"))  )
+	else if( MessageTypes.isComment(msg.getInt("m")) || MessageTypes.isEmote(msg.getInt("m"))  )
 	{
 		messages.addItem(msg);
 	}
-	else if( MessageTypes.isConfirm(msg.getShort("m")) )
+	else if( MessageTypes.isConfirm(msg.getInt("m")) )
 	{
 		var confirmIndex:int = getReplyedConfirm(msg);
 		if( confirmIndex > -1 )
@@ -228,28 +231,28 @@ public function numUnreads():int
 private function getReplyedConfirm(msg:ISFSObject):int
 {
 	for (var i:int = messages.length - 1; i >= 0; i--)
-		if( MessageTypes.isConfirm(messages.getItemAt(i).getShort("m")) && messages.getItemAt(i).getInt("o") == msg.getInt("o") )
+		if( MessageTypes.isConfirm(messages.getItemAt(i).getInt("m")) && messages.getItemAt(i).getInt("o") == msg.getInt("o") )
 			return i;
 	return -1;
 }
 private function containBattle(battleId:int):int
 {
 	for (var i:int = 0; i < messages.length; i++) 
-		if( messages.getItemAt(i).getShort("m") == MessageTypes.M30_FRIENDLY_BATTLE && messages.getItemAt(i).getInt("bid") == battleId )
+		if( messages.getItemAt(i).getInt("m") == MessageTypes.M30_FRIENDLY_BATTLE && messages.getItemAt(i).getInt("bid") == battleId )
 			return i;
 	return -1;
 }
 public function getMyRequestBattleIndex():int
 {
 	for (var i:int = 0; i < messages.length; i++) 
-		if( messages.getItemAt(i).getShort("m") == MessageTypes.M30_FRIENDLY_BATTLE && messages.getItemAt(i).getInt("i") == player.id && messages.getItemAt(i).getShort("st") == 0 )
+		if( messages.getItemAt(i).getInt("m") == MessageTypes.M30_FRIENDLY_BATTLE && messages.getItemAt(i).getInt("i") == player.id && messages.getItemAt(i).getInt("st") == 0 )
 			return i;
 	return -1;
 }
 public function getMyRequestBattleId():int
 {
 	for (var i:int = 0; i < messages.length; i++) 
-		if( messages.getItemAt(i).getShort("m") == MessageTypes.M30_FRIENDLY_BATTLE && messages.getItemAt(i).getInt("i") == player.id && messages.getItemAt(i).getShort("st") == 0 )
+		if( messages.getItemAt(i).getInt("m") == MessageTypes.M30_FRIENDLY_BATTLE && messages.getItemAt(i).getInt("i") == player.id && messages.getItemAt(i).getInt("st") == 0 )
 			return messages.getItemAt(i).getInt("bid");
 	return -1;
 }
@@ -258,7 +261,7 @@ private function traceList():void
 	for (var i:int = 0; i < messages.length; i++) 
 	{
 		var msg:SFSObject =  messages.getItemAt(i) as SFSObject;//trace(i, msg.getText("t"))
-		trace(i, msg.getShort("m"), msg.getShort("st"), msg.getInt("i"), msg.containsKey("bid")?msg.getInt("bid"):"");
+		trace(i, msg.getInt("m"), msg.getInt("st"), msg.getInt("i"), msg.containsKey("bid")?msg.getInt("bid"):"");
 	}
 }
 

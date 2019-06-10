@@ -4,8 +4,10 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -21,6 +23,7 @@ override protected function initialize() : void
 {
 	super.initialize();
 	
+	this.width = 220;
 	var bgImage:Image = new Image(appModel.theme.roundSmallSkin);
 	bgImage.scale9Grid = MainTheme.ROUND_SMALL_SCALE9_GRID;
 	bgImage.alpha = 0.6;
@@ -29,7 +32,7 @@ override protected function initialize() : void
 	
 	layout = new AnchorLayout();
 	
-	var messageLabel:RTLLabel =  new RTLLabel(loc("battle_remain"), 1, "center", null, false, null, 0.75);
+	var messageLabel:RTLLabel =  new RTLLabel(loc("battle_remain"), 1, "center", null, false, null, 0.6);
 	messageLabel.layoutData = new AnchorLayoutData(5, 16, NaN, 16);
 	addChild(messageLabel);
 	

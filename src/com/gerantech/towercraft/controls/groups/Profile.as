@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.controls.groups 
 {
 import com.gerantech.towercraft.controls.TowersLayout;
-import com.gerantech.towercraft.controls.buttons.Indicator;
 import com.gerantech.towercraft.controls.buttons.IndicatorPoint;
 import com.gerantech.towercraft.controls.buttons.IndicatorXP;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
@@ -10,11 +9,12 @@ import com.gerantech.towercraft.controls.popups.SettingsPopup;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.ResourceType;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
+
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
@@ -50,12 +50,12 @@ override protected function initialize() : void
 	indicatorPoint.layoutData = new AnchorLayoutData(NaN, NaN, padding, 70);
 	indicatorPoint.addEventListener(Event.SELECT, buttons_eventsHandler);
 	indicatorPoint.name = "pointIndicator";
-	indicatorPoint.width = 250;
+	indicatorPoint.width = 220;
 	indicatorPoint.height = 60;
 	addChild(indicatorPoint);
 
 	var indicatorXP:IndicatorXP = new IndicatorXP("ltr");
-	indicatorXP.layoutData = new AnchorLayoutData(NaN, 310, padding);
+	indicatorXP.layoutData = new AnchorLayoutData(NaN, 300, padding);
 	indicatorXP.addEventListener(Event.SELECT, buttons_eventsHandler);
 	indicatorXP.name = "xpIndicator";
 	indicatorXP.labelOffsetX = 15;

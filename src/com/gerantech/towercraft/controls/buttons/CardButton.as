@@ -1,17 +1,22 @@
 package com.gerantech.towercraft.controls.buttons
 {
-import com.gerantech.towercraft.controls.BuildingCard;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.CardTypes;
+import com.gerantech.towercraft.controls.CardView;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.CardFeatureType;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
-import starling.events.Event;
+
 import flash.geom.Rectangle;
+
+import starling.events.Event;
 
 public class CardButton extends SimpleLayoutButton
 {
 private var card:Card;
-public var iconDisplay:BuildingCard;
+public var iconDisplay:CardView;
 
 public function CardButton(type:int)
 {
@@ -29,13 +34,16 @@ override protected function initialize():void
 	super.initialize();
 	layout = new AnchorLayout();
 	
-	iconDisplay = new BuildingCard(true, true, false, true);
+	iconDisplay = new CardView();
 	iconDisplay.width = 240;
-	iconDisplay.height = iconDisplay.width * BuildingCard.VERICAL_SCALE;
+	iconDisplay.type = card.type;
+	iconDisplay.level = card.level;
+	iconDisplay.showSlider = true;
+	iconDisplay.showElixir = true;
+	iconDisplay.height = iconDisplay.width * CardView.VERICAL_SCALE;
 	iconDisplay.x = iconDisplay.pivotX = iconDisplay.width * 0.5;
 	iconDisplay.y = iconDisplay.pivotY = iconDisplay.height * 0.5;
 	addChild(iconDisplay);
-	iconDisplay.setData(card.type, card.level, 1);
 	
 	addEventListener(FeathersEventType.CREATION_COMPLETE, createCompleteHandler);
 }
@@ -49,7 +57,7 @@ protected function createCompleteHandler(e:Event):void
 
 public function update():void 
 {
-	iconDisplay.setData(iconDisplay.type, player.cards.get(iconDisplay.type).level, player.resources.get(iconDisplay.type));
+	iconDisplay.level = player.cards.get(iconDisplay.type).level;
 }
 }
 }

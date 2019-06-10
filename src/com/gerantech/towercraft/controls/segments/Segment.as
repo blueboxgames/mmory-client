@@ -1,30 +1,45 @@
 package com.gerantech.towercraft.controls.segments
 {
-
 import com.gerantech.towercraft.controls.TowersLayout;
 
-public class Segment extends TowersLayout
+public class Segment extends TowersLayout implements ISegment
 {
-public var initializeStarted:Boolean;
-public var initializeCompleted:Boolean;
+	private var _paddingH:Number = 0;
+	public function get paddingH():Number
+	{
+		return _paddingH;
+	}
+	public function set paddingH(value:Number):void
+	{
+		_paddingH = value;
+	}
 
-public function Segment()
-{
-	super();
-}
+	private var _initializeStarted:Boolean;
+	public function get initializeStarted():Boolean
+	{
+		return _initializeStarted;
+	}
+	public function set initializeStarted(value:Boolean):void
+	{
+		_initializeStarted = value;
+	}
 
-public function init():void
-{
-	initializeStarted = true;
-	focus();
-}
-
-public function updateData():void
-{
-}
-
-public function focus():void
-{
-}
+	private var _initializeCompleted:Boolean;
+	public function get initializeCompleted():Boolean
+	{
+		return _initializeCompleted;
+	}
+	public function set initializeCompleted(value:Boolean):void
+	{
+		_initializeCompleted = value;
+	}
+	public function init():void
+	{
+		initializeStarted = true;
+		//focus();
+	}
+	public function Segment() { super(); }
+	public function updateData():void {}
+	public function focus():void {}
 }
 }

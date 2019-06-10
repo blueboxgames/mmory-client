@@ -4,6 +4,7 @@ import com.gerantech.towercraft.controls.segments.BuddiesSegment;
 import com.gerantech.towercraft.controls.segments.CardsSegment;
 import com.gerantech.towercraft.controls.segments.ExchangeSegment;
 import com.gerantech.towercraft.controls.segments.HomeSegment;
+import com.gerantech.towercraft.controls.segments.ISegment;
 import com.gerantech.towercraft.controls.segments.InboxSegment;
 import com.gerantech.towercraft.controls.segments.LobbyBaseChatSegment;
 import com.gerantech.towercraft.controls.segments.LobbyChatSegment;
@@ -12,17 +13,21 @@ import com.gerantech.towercraft.controls.segments.LobbySearchSegment;
 import com.gerantech.towercraft.controls.segments.Segment;
 import com.gerantech.towercraft.controls.segments.SocialSegment;
 import com.gerantech.towercraft.models.vo.TabItemData;
-import com.gt.towers.constants.SegmentType;
+import com.gerantech.mmory.core.constants.SegmentType;
+
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+import feathers.layout.HorizontalLayout;
+
 import flash.utils.setTimeout;
+
 import starling.events.Event;
 
 public class SegmentsItemRenderer extends AbstractListItemRenderer
 {
 private var _firstCommit:Boolean = true;
-private var segment:Segment;
+private var segment:ISegment;
 private var _enabled:Boolean;
 public function SegmentsItemRenderer(){}
 override protected function initialize():void
@@ -35,7 +40,7 @@ override protected function commitData():void
 {
 	if( _firstCommit )
 	{
-		width = _owner.width
+		width = _owner.width;
 		height = _owner.height;
 		_firstCommit = false;
 		_owner.addEventListener(Event.SCROLL, owner_scrollHandler);
@@ -55,43 +60,44 @@ override protected function commitData():void
 	switch(tab.index)
 	{
 		case SegmentType.S0_SHOP:
-			segment = new ExchangeSegment();
+			segment = new ExchangeSegment() as Segment;
 			break;
 		case SegmentType.S1_DECK:
-			segment = new CardsSegment();
+			segment = new CardsSegment() as Segment;
 			break;
 		case SegmentType.S2_HOME:
-			segment = new HomeSegment();
+			segment = new HomeSegment() as Segment;
 			break;
 		case SegmentType.S3_SOCIALS:
-			segment = new SocialSegment();
+			segment = new SocialSegment() as Segment;
 			break;
 		case SegmentType.S4_INBOX:
-			segment = new InboxSegment();
+			segment = new InboxSegment() as Segment;
 			break;
 		case SegmentType.S10_LOBBY_MAIN:
-			segment = new LobbyChatSegment();
+			segment = new LobbyChatSegment() as Segment;
 			break;
 		case SegmentType.S11_LOBBY_SEARCH:
-			segment = new LobbySearchSegment();
+			segment = new LobbySearchSegment() as Segment;
 			break;
 		case SegmentType.S12_LOBBY_CREATE:
-			segment = new LobbyCreateSegment();
+			segment = new LobbyCreateSegment() as Segment;
 			break;
 		case SegmentType.S13_FRIENDS:
-			segment = new BuddiesSegment();
+			segment = new BuddiesSegment() as Segment;
 			break;
 		case SegmentType.S14_LOBBY_PUBLIC:
-			segment = new LobbyBaseChatSegment();
+			segment = new LobbyBaseChatSegment() as Segment;
 			break;
 		
 		default:
 			break;
 	}
-	
 	if( segment != null )
 	{
-		segment.layoutData = new AnchorLayoutData(0, 0, 0, 0);
+		var _segment:Segment = segment as Segment; 
+		_segment.paddingH = HorizontalLayout(_owner.layout).typicalItemHeight;
+		_segment.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 		if( index == 0 )
 			setTimeout(owner_scrollCompleteHandler, 1000, null);
 	}
@@ -115,10 +121,10 @@ private function owner_scrollCompleteHandler(event:Event):void
 	if( stage == null )
 		return;
 	
-	enabled = Math.round(stage.getBounds(this).x) == 0;
+	enabled = onScreen(getBounds(stage))
 	if ( !enabled )
 		return;
-	
+
 	owner.dispatchEventWith(FeathersEventType.FOCUS_IN, false, index);
 	if( segment.initializeCompleted )
 		segment.focus();
@@ -126,19 +132,18 @@ private function owner_scrollCompleteHandler(event:Event):void
 		segment.init();
 }
 
-
 public function get enabled():Boolean 
 {
 	return _enabled;
 }
 public function set enabled(value:Boolean):void 
 {
-	if ( _enabled == value )
+	if( _enabled == value )
 		return;
 	_enabled = value;
 	
 	if( _enabled )
-		addChild(segment);
+		addChild(segment as Segment);
 	else
 		segment.removeFromParent();
 }

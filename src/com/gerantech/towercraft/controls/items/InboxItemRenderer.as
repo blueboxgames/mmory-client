@@ -2,10 +2,9 @@ package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.towercraft.controls.buttons.CustomButton;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.layout.AnchorLayout;
@@ -116,7 +115,7 @@ override protected function commitData():void
 	var txt:String = message.getUtfString("text");
 	messageDisplay.text = txt.substr(0,2)=="__"?loc(txt.substr(2), [message.getUtfString("sender")]):txt;
 	dateDisplay.text = StrUtils.getDateString(date);
-	acceptButton.label = loc(message.getShort("type") == MessageTypes.M50_URL ? "go_label" : "popup_accept_label");
+	acceptButton.label = loc(message.getInt("type") == MessageTypes.M50_URL ? "go_label" : "popup_accept_label");
 	updateSkin();
 }
 
@@ -126,7 +125,7 @@ private function updateSkin():void
 		mySkin.texture = appModel.theme.itemRendererUpSkinTexture;
 	else
 	{
-		switch(message.getShort("read"))
+		switch(message.getInt("read"))
 		{
 			case 1:		mySkin.texture = appModel.theme.itemRendererDisabledSkinTexture; break;
 			case 2:		mySkin.texture = appModel.theme.itemRendererDangerSkinTexture; break;
@@ -134,8 +133,8 @@ private function updateSkin():void
 		}
 	}
 	senderDisplay.text = message.getUtfString("sender") + (isSelected && adminMode ? ("  " + message.getInt("senderId")) : "");
-	senderDisplay.alpha = message.getShort("read")==0 || isSelected ? 1 : 0.8;
-	messageDisplay.alpha = message.getShort("read")==0 || isSelected ? 0.92 : 0.8;
+	senderDisplay.alpha = message.getInt("read")==0 || isSelected ? 1 : 0.8;
+	messageDisplay.alpha = message.getInt("read")==0 || isSelected ? 0.92 : 0.8;
 }
 
 override public function set isSelected(value:Boolean):void
@@ -146,9 +145,9 @@ override public function set isSelected(value:Boolean):void
 		return;
 	updateSkin();
 	
-	if( readOnSelect && value && message.getShort("read") == 0 )
+	if( readOnSelect && value && message.getInt("read") == 0 )
 	{
-		message.putShort("read", 1)
+		message.putInt("read", 1)
 		_owner.dispatchEventWith(Event.OPEN, false, message);
 	}
 	
@@ -184,7 +183,7 @@ override public function set isSelected(value:Boolean):void
 			infoButton.removeFromParent();
 	}
 	
-	var hasButton:Boolean = MessageTypes.isConfirm(message.getShort("type")) || message.getShort("type") == MessageTypes.M50_URL;
+	var hasButton:Boolean = MessageTypes.isConfirm(message.getInt("type")) || message.getInt("type") == MessageTypes.M50_URL;
 	var _h:Number = value?(messageDisplay.height+padding*(4/messageDisplay.numLines)+padding+(hasButton?declineButton.height:0) ):(140);
 	Starling.juggler.tween(this, TWEEN_TIME, {height:_h, transition:Transitions.EASE_IN_OUT, onComplete:tweenCompleted, onCompleteArgs:[value]});
 	function tweenCompleted(_selected:Boolean):void
@@ -195,7 +194,7 @@ override public function set isSelected(value:Boolean):void
 		if( hasButton )
 		{
 			appear(acceptButton);
-			if( MessageTypes.isConfirm(message.getShort("type")) )
+			if( MessageTypes.isConfirm(message.getInt("type")) )
 				appear(declineButton)
 		}
 		if( adminMode )

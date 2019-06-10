@@ -1,19 +1,27 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
+import com.gerantech.towercraft.controls.items.exchange.ExCategoryPlaceHolder;
+import com.gerantech.towercraft.controls.popups.BookDetailsPopup;
+import com.gerantech.towercraft.controls.popups.EmoteDetailsPopup;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.vo.ShopLine;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.exchanges.ExchangeItem;
+
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
-import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import starling.events.Event;
+import com.gerantech.towercraft.controls.popups.SimpleHeaderPopup;
 
 public class ExchangeSegment extends Segment
 {
@@ -26,24 +34,39 @@ public function ExchangeSegment(){ super(); }
 override public function init():void
 {
 	super.init();
+	EmoteItemRenderer.loadEmotes(animation_loadCallback);
+}
+
+protected function animation_loadCallback():void 
+{
 
 	layout = new AnchorLayout();
+
+	if( player.get_arena(0) < 1 )
+	{
+		var labelDisplay:ShadowLabel = new ShadowLabel(loc("availableat_messeage", [loc("tab-0"), loc("arena_text") + " " + loc("num_2")]), 1, 0, "center");
+		labelDisplay.width = width;
+		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, NaN, 0);
+		addChild(labelDisplay);
+		return;
+	}
 
 	var listLayout:VerticalLayout = new VerticalLayout();
 	listLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
 	listLayout.hasVariableItemDimensions = true;
-	listLayout.paddingTop = 120;
-	listLayout.paddingBottom = 50;
 	listLayout.useVirtualLayout = true;
+	listLayout.padding = 50;
+	listLayout.paddingTop = 180;
+	listLayout.gap = 80;
 	
 	updateData();
 	itemslist = new List();
 	itemslist.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
 	itemslist.layout = listLayout;
-	itemslist.layoutData = new AnchorLayoutData(0, 0, 0, 0);
+	itemslist.layoutData = new AnchorLayoutData(0, paddingH, 0, paddingH);
 	itemslist.itemRendererFactory = function():IListItemRenderer { return new ExCategoryItemRenderer(); }
 	itemslist.dataProvider = itemslistData;
-	itemslist.addEventListener(FeathersEventType.FOCUS_IN, list_changeHandler);
+	itemslist.addEventListener(Event.SELECT, list_categorySelectHandler);
 	addChild(itemslist);
 	initializeCompleted = true;
 	focus();
@@ -51,14 +74,14 @@ override public function init():void
 
 override public function focus():void
 {
-	if( !initializeCompleted )
+	//if( !initializeCompleted )
 		return;
 	///////////////////////showTutorial();
 	//var time:Number = Math.abs(focusedCategory * 520 - itemslist.verticalScrollPosition) * 0.003;
 	if( SELECTED_CATEGORY == 0 )
 		itemslist.scrollToPosition(0, 0, 0.5);
 	else
-		itemslist.scrollToPosition(0, SELECTED_CATEGORY * ExCategoryItemRenderer.HEIGHT_NORMAL + scrollPaddingTop, 0.5);
+		itemslist.scrollToPosition(0, SELECTED_CATEGORY * ExCategoryPlaceHolder.GET_HEIGHT(0) + scrollPaddingTop, 0.5);
 	SELECTED_CATEGORY = 0;
 }
 
@@ -70,6 +93,7 @@ override public function updateData():void
 	var itemKeys:Vector.<int> = exchanger.items.keys();
 	var bundles:ShopLine = new ShopLine(ExchangeType.C30_BUNDLES);
 	var specials:ShopLine = new ShopLine(ExchangeType.C20_SPECIALS);
+	var emotes:ShopLine = new ShopLine(ExchangeType.C80_EMOTES);
 	var magics:ShopLine = new ShopLine(ExchangeType.C120_MAGICS);
 	var tickets:ShopLine = new ShopLine(ExchangeType.C70_TICKETS);
 	var hards:ShopLine = new ShopLine(ExchangeType.C0_HARD);
@@ -80,30 +104,34 @@ override public function updateData():void
 			bundles.add(itemKeys[i]);
 		if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C20_SPECIALS && itemKeys[i] != ExchangeType.C29_DAILY_BATTLES )
 			specials.add(itemKeys[i]);
+		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C80_EMOTES && player.unlocked_social() )
+			emotes.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C120_MAGICS )
 			magics.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS && player.unlocked_challenge() )
 			tickets.add(itemKeys[i]);
-		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C0_HARD && itemKeys[i] != ExchangeType.C0_HARD )//test
+		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C0_HARD && itemKeys[i] != ExchangeType.C0_HARD )
 			hards.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C10_SOFT )
 			softs.add(itemKeys[i]);
 	}
 	
-	scrollPaddingTop = ExCategoryItemRenderer.HEIGHT_C120_MAGICS;
+	scrollPaddingTop = ExCategoryPlaceHolder.GET_HEIGHT(120) + 100;
 	var categoreis:Array = new Array();
 	if( bundles.items.length > 0 )
 	{
 		categoreis.push(bundles);
-		scrollPaddingTop += ExCategoryItemRenderer.HEIGHT_C30_BUNDLES;
+		scrollPaddingTop += ExCategoryPlaceHolder.GET_HEIGHT(30);
 	}
 	if( specials.items.length > 0 )
 	{
 		categoreis.push(specials);
-		scrollPaddingTop += ExCategoryItemRenderer.HEIGHT_C20_SPECIALS;
+		scrollPaddingTop += ExCategoryPlaceHolder.GET_HEIGHT(20);
 	}
 	if( magics.items.length > 0 )
 		categoreis.push(magics);
+	if( emotes.items.length > 0 )
+		categoreis.push(emotes);
 	if( tickets.items.length > 0 )
 		categoreis.push(tickets);
 	if( hards.items.length > 0 )
@@ -115,10 +143,10 @@ override public function updateData():void
 		categoreis[i].items.sort();
 	
 	itemslistData = new ListCollection(categoreis);
-	scrollPaddingTop = ExCategoryItemRenderer.HEIGHT_C120_MAGICS;
+	scrollPaddingTop = ExCategoryPlaceHolder.GET_HEIGHT(120);
 }
 
-private function list_changeHandler(event:Event) : void
+private function list_categorySelectHandler(event:Event) : void
 {
 	exchangeManager.process(event.data as ExchangeItem);
 }

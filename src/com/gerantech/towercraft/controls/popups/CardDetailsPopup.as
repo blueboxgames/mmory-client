@@ -1,25 +1,22 @@
 package com.gerantech.towercraft.controls.popups
 {
-import com.gerantech.towercraft.controls.BuildingCard;
-import com.gerantech.towercraft.controls.buttons.CustomButton;
-import com.gerantech.towercraft.controls.buttons.ExchangeButton;
-import com.gerantech.towercraft.controls.buttons.ExchangeDButton;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.groups.ColorGroup;
 import com.gerantech.towercraft.controls.groups.Devider;
 import com.gerantech.towercraft.controls.items.CardFeatureItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
-import com.gerantech.towercraft.controls.texts.LTRLable;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.CardFeatureType;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.scripts.ScriptEngine;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.CardFeatureType;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
 import feathers.controls.renderers.IListItemRenderer;
@@ -29,16 +26,15 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.RelativePosition;
 import feathers.layout.TiledRowsLayout;
-import feathers.layout.VerticalLayout;
-import flash.geom.Point;
+
 import flash.geom.Rectangle;
-import starling.animation.Transitions;
+
 import starling.core.Starling;
 import starling.events.Event;
 
 public class CardDetailsPopup extends SimpleHeaderPopup
 {
-private var cardDisplay:BuildingCard;
+private var cardDisplay:CardView;
 public var cardType:int;
 public var showButton:Boolean = true;
 public function CardDetailsPopup(){ super(); }
@@ -63,11 +59,13 @@ override protected function initialize():void
 	insideBG.alpha = 0.5;
 	addChild(insideBG);
 	
-	cardDisplay = new BuildingCard(true, true, false, false);
+	cardDisplay = new CardView();
 	cardDisplay.width = 300;
+	cardDisplay.type = cardType;
+	cardDisplay.showSlider = true;
+	cardDisplay.height = cardDisplay.width * CardView.VERICAL_SCALE;
 	cardDisplay.layoutData = new AnchorLayoutData(150, appModel.isLTR?NaN:padding, NaN, appModel.isLTR?padding:NaN);
 	addChild(cardDisplay);
-	cardDisplay.setData(cardType);
 }
 
 override protected function transitionInCompleted():void
@@ -190,7 +188,7 @@ private function usingButton_triggeredHandler():void
 private function upgradeButton_selectHandler(event:Event):void
 {
 	appModel.navigator.addLog(loc("popup_upgrade_building_error", [loc("card_title_" + cardType)]));
-	cardDisplay.punchSlider()
+	//cardDisplay.punchSlider()
 }
 private function upgradeButton_triggeredHandler():void
 {

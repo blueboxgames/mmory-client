@@ -7,6 +7,7 @@ import com.gerantech.towercraft.managers.VideoAdsManager;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
+
 import feathers.controls.LayoutGroup;
 import feathers.controls.List;
 import feathers.controls.renderers.IListItemRenderer;
@@ -15,6 +16,7 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalAlign;
+
 import starling.core.Starling;
 import starling.display.Quad;
 import starling.events.Event;

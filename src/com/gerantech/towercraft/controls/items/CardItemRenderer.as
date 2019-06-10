@@ -1,7 +1,10 @@
 package com.gerantech.towercraft.controls.items
 {
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.models.Assets;
+import com.gerantech.mmory.core.constants.CardFeatureType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.ScrollContainer;
 import feathers.events.FeathersEventType;
@@ -9,6 +12,7 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.TiledRowsLayout;
+
 import starling.core.Starling;
 import starling.events.Event;
 
@@ -19,7 +23,7 @@ private var _width:Number;
 private var _height:Number;
 private var cardType:int = -1;
 
-private var cardDisplay:BuildingCard;
+private var cardDisplay:CardView;
 private var showLevel:Boolean;
 private var showSlider:Boolean;
 private var showElixir:Boolean;
@@ -68,9 +72,16 @@ override protected function commitData():void
 
 	if( cardDisplay == null )
 	{
-		cardDisplay = new BuildingCard(showLevel, showSlider, false, showElixir);
+		cardDisplay = new CardView();
+		cardDisplay.showElixir = showElixir;
+		cardDisplay.showSlider = showSlider;
 		cardDisplay.layoutData = cardLayoutData;
+		cardDisplay.height = width * CardView.VERICAL_SCALE;
 		addChild(cardDisplay);
+
+		/* cardDisplay = new BuildingCard(showLevel, showSlider, false, showElixir);
+		cardDisplay.layoutData = cardLayoutData;
+		addChild(cardDisplay); */
 	}
 
 	if( _data is int )
@@ -97,15 +108,19 @@ override protected function commitData():void
 		}
 		
 		var l:int = exists ? player.cards.get(cardType).level : 1;
-		var c:int = exists ? player.getResource(cardType) : 1;
-		cardDisplay.setData(cardType, l, c);
+		// var c:int = exists ? player.getResource(cardType) : 1;
+		// cardDisplay.setData(cardType, l, c);
+		cardDisplay.type = cardType;
+		cardDisplay.level = showLevel ? l : -1;
 		Starling.juggler.tween(this, 0.2, {delay:0.05 * index, alpha:1});
 	}
 	else
 	{
 		alpha = 1;
 		cardType = _data.type;
-		cardDisplay.setData(_data.type, _data.level);
+		cardDisplay.type = cardType;
+		cardDisplay.level = showLevel ? l : -1;
+		// cardDisplay.setData(_data.type, _data.level);
 	}	
 }
 

@@ -1,20 +1,20 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.Game;
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.FastList;
-import com.gerantech.towercraft.controls.buttons.CustomButton;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.Indicator;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorXP;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
-import com.gerantech.towercraft.controls.groups.RewardsPalette;
 import com.gerantech.towercraft.controls.headers.BattleHeader;
 import com.gerantech.towercraft.controls.items.CardItemRenderer;
 import com.gerantech.towercraft.controls.items.ProfileBuildingItemRenderer;
 import com.gerantech.towercraft.controls.items.ProfileFeatureItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
-import com.gerantech.towercraft.controls.screens.IssuesScreen;
 import com.gerantech.towercraft.controls.segments.InboxSegment;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
@@ -22,14 +22,11 @@ import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.scripts.ScriptEngine;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
@@ -44,7 +41,9 @@ import feathers.layout.HorizontalAlign;
 import feathers.layout.TiledRowsLayout;
 import feathers.layout.VerticalAlign;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
+
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
@@ -72,6 +71,7 @@ public function ProfilePopup(user:Object, getFullPlayerData:Boolean = false)
 	
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_responceHandler);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.PROFILE, params);
+	EmblemButton.loadAtlas(null);
 }
 
 override protected function initialize():void
@@ -117,7 +117,7 @@ private function showProfile():void
 {
 	var lobbyIconDisplay:ImageLoader = new ImageLoader();
 	lobbyIconDisplay.height = lobbyIconDisplay.width = padding * 3.5;
-	lobbyIconDisplay.source = Assets.getTexture("emblems/emblem-" + StrUtils.getZeroNum(user.lp + ""), "gui");
+	lobbyIconDisplay.source = EmblemButton.getTexture(user.lp as int);
 	lobbyIconDisplay.layoutData = new AnchorLayoutData(padding, appModel.isLTR?NaN:padding, NaN, appModel.isLTR?padding:NaN);
 	addChild(lobbyIconDisplay);
 	
@@ -234,16 +234,16 @@ private function showProfile():void
 
 	var indicatorXP:IndicatorXP = new IndicatorXP("ltr", false);
 	indicatorXP.setData(NaN, xp, NaN);
-	indicatorXP.width = padding * 7;
+	indicatorXP.width = padding * 6;
 	indicatorXP.height = padding * 1.5;
-	indicatorXP.layoutData = new AnchorLayoutData(padding, appModel.isLTR?padding * 1.5:NaN, NaN, appModel.isLTR?NaN:padding * 1.5);
+	indicatorXP.layoutData = new AnchorLayoutData(padding, appModel.isLTR?padding * 2:NaN, NaN, appModel.isLTR?NaN:padding * 2);
 	addChild(indicatorXP);
 	
 	var indicatorPoint:Indicator = new Indicator("ltr", ResourceType.R2_POINT, false, false, false);
 	indicatorPoint.setData(0, point, Number.MAX_VALUE);
-	indicatorPoint.width = padding * 7;
+	indicatorPoint.width = padding * 6;
 	indicatorPoint.height = padding * 1.5;
-	indicatorPoint.layoutData = new AnchorLayoutData(padding * 3, appModel.isLTR?padding * 1.5:NaN, NaN, appModel.isLTR?NaN:padding * 1.5);
+	indicatorPoint.layoutData = new AnchorLayoutData(padding * 3, appModel.isLTR?padding * 2:NaN, NaN, appModel.isLTR?NaN:padding * 2);
 	addChild(indicatorPoint);
 	
 	var scroller:ScrollContainer = new ScrollContainer();
@@ -278,7 +278,7 @@ private function showProfile():void
 		listLayout.useSquareTiles = false;
 		listLayout.requestedColumnCount = 10;
 		listLayout.typicalItemWidth = (width - listLayout.padding * (listLayout.requestedColumnCount + 1)) / listLayout.requestedColumnCount;
-		listLayout.typicalItemHeight = listLayout.typicalItemWidth * BuildingCard.VERICAL_SCALE;
+		listLayout.typicalItemHeight = listLayout.typicalItemWidth * CardView.VERICAL_SCALE;
 		
 		var buildingslist:FastList = new FastList();
 		buildingslist.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
@@ -305,7 +305,7 @@ private function showProfile():void
     deckLayout.useVirtualLayout = false;
     deckLayout.requestedColumnCount = 4;
     deckLayout.typicalItemWidth = (width - deckLayout.gap * (deckLayout.requestedColumnCount - 1) - padding * 4) / deckLayout.requestedColumnCount;
-    deckLayout.typicalItemHeight = deckLayout.typicalItemWidth * BuildingCard.VERICAL_SCALE;
+    deckLayout.typicalItemHeight = deckLayout.typicalItemWidth * CardView.VERICAL_SCALE;
 	
 	var deckList:List = new List();
     deckList.layout = deckLayout;

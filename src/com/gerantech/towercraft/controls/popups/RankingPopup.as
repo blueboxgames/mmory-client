@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.towercraft.controls.FastList;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.headers.TabsHeader;
 import com.gerantech.towercraft.controls.items.RankItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyItemRenderer;
@@ -11,14 +12,17 @@ import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.events.Event;
@@ -43,6 +47,7 @@ public function RankingPopup()
 
 	title = loc("ranking_label", [""]);
 	sendCommand(SFSCommands.RANK);
+	EmblemButton.loadAtlas(null);
 }
 
 private function sendCommand(rankType:String) : void 
@@ -59,7 +64,7 @@ private function sendCommand(rankType:String) : void
 	if( rankType == SFSCommands.LOBBY_DATA )
 	{
 		params.putUtfString("name", "!@#$");
-		params.putInt("mode", 1);
+		params.putInt("mode", 2);
 	}
 	SFSConnection.instance.sendExtensionRequest(rankType, params);			
 }
@@ -92,7 +97,7 @@ override protected function showElements() : void
 	{
 		var header:TabsHeader = new TabsHeader();
 		header.height = 110;
-		header.layoutData = new AnchorLayoutData(150, 80, NaN, 80);
+		header.layoutData = new AnchorLayoutData(150, 102, NaN, 102);
 		header.dataProvider = new ListCollection([ { label: loc("ranking_tab_0")}, { label: loc("ranking_tab_1")} ]);
 		header.selectedIndex = 0;
 		header.addEventListener(Event.CHANGE, header_changeHandler);

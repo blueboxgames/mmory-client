@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.controls.overlays
 {
-import com.gerantech.towercraft.controls.BuildingCard;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.TileBackground;
 import com.gerantech.towercraft.controls.buttons.IndicatorCard;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
@@ -9,17 +9,18 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
-import com.gt.towers.constants.CardFeatureType;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.scripts.ScriptEngine;
-import com.gt.towers.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.constants.CardFeatureType;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 
 import dragonBones.events.EventObject;
 import dragonBones.objects.DragonBonesData;
 import dragonBones.starling.StarlingArmatureDisplay;
 import dragonBones.starling.StarlingEvent;
 import dragonBones.starling.StarlingFactory;
+import dragonBones.starling.StarlingTextureAtlasData;
 import dragonBones.starling.StarlingTextureData;
 
 import feathers.controls.AutoSizeMode;
@@ -45,7 +46,7 @@ public static var factory: StarlingFactory;
 public static var dragonBonesData:DragonBonesData;
 
 private var rewardKeys:Vector.<int>;
-private var rewardItems:Vector.<BuildingCard>;
+private var rewardItems:Vector.<CardView>;
 private var bookArmature:StarlingArmatureDisplay;
 private var shineArmature:StarlingArmatureDisplay;
 private var buttonOverlay:SimpleLayoutButton;
@@ -133,13 +134,13 @@ override protected function addedToStageHandler(event:Event):void
 	sliderDisplay.y = shineArmature.y + 96;
 	addChild(sliderDisplay);
 
-	titleDisplay = new ShadowLabel("", 1, 0, "left", null, false, null, 1.4);
+	titleDisplay = new ShadowLabel(null, 1, 0, "left", null, false, null, 1.4);
 	titleDisplay.touchable = false;
 	titleDisplay.visible = false;
 	titleDisplay.width = 600;
 	addChild(titleDisplay);
 	
-	descriptionDisplay = new ShadowLabel("", 1, 0, "left", null, false, null, 0.9);
+	descriptionDisplay = new ShadowLabel(null, 1, 0, "left", null, false, null, 0.9);
 	descriptionDisplay.y = shineArmature.y - 82;
 	descriptionDisplay.touchable = false;
 	descriptionDisplay.visible = false;
@@ -155,7 +156,7 @@ override public function set outcomes(value:IntIntMap):void
 	buttonOverlay.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 	addChild(buttonOverlay);
 	
-	rewardItems = new Vector.<BuildingCard>();
+	rewardItems = new Vector.<CardView>();
 	rewardKeys = outcomes.keys();
 	if( readyToWait )
 		bookArmature.animation.gotoAndPlayByTime("wait", 0, -1);
@@ -243,29 +244,37 @@ private function pullCard() : void
 	// change card
 	var texture:Texture = Assets.getTexture("cards/" + rewardType, "gui");
 	var subtexture:SubTexture = new SubTexture(texture, new Rectangle(0, 0, texture.width, texture.height));
-	StarlingTextureData(bookArmature.armature.getSlot("template-card").skinSlotData.getDisplay("cards/template-card").texture).texture = subtexture;
+	StarlingTextureData(bookArmature.armature.getSlot("template").skinSlotData.getDisplay("cards/template-card").texture).texture = subtexture;
 	
 	// change rarity color
-	texture = Assets.getTexture("cards/bevel-card-back-" + rewardRarity, "gui");
-	subtexture = new SubTexture(texture, new Rectangle(0, 0, texture.width, texture.height));
-	StarlingTextureData(bookArmature.armature.getSlot("bevel-card-back").skinSlotData.getDisplay("cards/bevel-card").texture).texture = subtexture;
+	var atlas:StarlingTextureAtlasData = factory.getTextureAtlasData("packs")[0] as StarlingTextureAtlasData;
+
+	var std:StarlingTextureData =  atlas.textures["cards/back-" + rewardRarity];
+	subtexture = new SubTexture(atlas.texture, std.region);
+	StarlingTextureData(bookArmature.armature.getSlot("back").skinSlotData.getDisplay("cards/back").texture).texture = subtexture
+
+	std =  atlas.textures["cards/frame-" + rewardRarity];
+	subtexture = new SubTexture(atlas.texture, std.region);
+	StarlingTextureData(bookArmature.armature.getSlot("frame").skinSlotData.getDisplay("cards/frame").texture).texture = subtexture;
 	
-	var cardDisply:BuildingCard = new BuildingCard(false, false, true, false);
+
+	var cardDisply:CardView = new CardView();
 	cardDisply.width = 328;
-	cardDisply.height = cardDisply.width * BuildingCard.VERICAL_SCALE;
+	cardDisply.height = cardDisply.width * CardView.VERICAL_SCALE;
 	cardDisply.x = shineArmature.x - cardDisply.width * 0.5;
 	cardDisply.y = shineArmature.y - cardDisply.height * 0.5;
 	cardDisply.touchable = false;
 	cardDisply.visible = false;
 	addChild(cardDisply);
-	cardDisply.setData(rewardType, 1, outcomes.get(rewardType));
+	cardDisply.type = rewardType;
+	cardDisply.quantity = outcomes.get(rewardType);
 
 	rewardItems[collectedItemIndex] = cardDisply;
 }
 
 private function showDetails() : void 
 {
-	var cardDisply:BuildingCard = rewardItems[collectedItemIndex];
+	var cardDisply:CardView = rewardItems[collectedItemIndex];
 
 	shineArmature.animation.gotoAndPlayByTime("rotate", 0, 10);
 	shineArmature.animation.timeScale = 0.5;
@@ -319,7 +328,7 @@ private function grabLastReward() : void
 {
 	if( rewardItems.length <= 0 )
 		return;
-	var card:BuildingCard = rewardItems[rewardItems.length - 1]
+	var card:CardView = rewardItems[rewardItems.length - 1]
 	if( card == null )
 		return;
 	resetElements();
@@ -334,7 +343,7 @@ private function grabLastReward() : void
 	var cellWidth:int = (stageWidth - ((numCol + 1) * padding) ) / numCol;// ((stageWidth - reward.width * 0.4 * scal - paddingH * 2) / (numCol - 1));
 	var i:int = index % numCol;
 	var j:int = Math.floor(index / numCol);
-	Starling.juggler.tween(card, 0.5, {width:cellWidth, height:cellWidth * BuildingCard.VERICAL_SCALE, x:i * (cellWidth + padding) + padding, y:j * (cellWidth * BuildingCard.VERICAL_SCALE + padding * 1.2) + padding, transition:Transitions.EASE_OUT_BACK});
+	Starling.juggler.tween(card, 0.5, {width:cellWidth, height:cellWidth * CardView.VERICAL_SCALE, x:i * (cellWidth + padding) + padding, y:j * (cellWidth * CardView.VERICAL_SCALE + padding * 1.2) + padding, transition:Transitions.EASE_OUT_BACK});
 }
 
 private function hideAllRewards():void

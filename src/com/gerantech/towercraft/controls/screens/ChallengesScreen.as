@@ -4,10 +4,12 @@ import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRend
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;
-import com.gt.towers.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.layout.VerticalAlign;
+
 import starling.core.Starling;
 import starling.events.Event;
 
@@ -36,6 +38,7 @@ override protected function initialize():void
 	super.initialize();
 	
 	ChallengeIndexItemRenderer.IN_HOME = false;
+	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
 	ChallengeIndexItemRenderer.SHOW_INFO = true;
 	ChallengeIndexItemRenderer.ARENA = player.get_arena(0);
 	

@@ -1,10 +1,13 @@
 package com.gerantech.towercraft.controls.items 
 {
-import com.gerantech.towercraft.controls.segments.ChatSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemSegment;
+import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 
+import dragonBones.objects.DragonBonesData;
 import dragonBones.starling.StarlingArmatureDisplay;
+import dragonBones.starling.StarlingFactory;
+import dragonBones.starling.StarlingTextureAtlasData;
 
 import feathers.layout.TiledRowsLayout;
 
@@ -16,8 +19,28 @@ import starling.display.Image;
 */
 public class EmoteItemRenderer extends AbstractTouchableListItemRenderer 
 {
-private var emoteArmature:StarlingArmatureDisplay;
+static public var dragonBonesData:DragonBonesData;
+static public var factory:StarlingFactory;
+static public var atlas:StarlingTextureAtlasData;
+static private var atlasLoadCalback:Function;
+static public function loadEmotes(loadCallback:Function) : void
+{
+	EmoteItemRenderer.atlasLoadCalback = loadCallback;
+	Assets.loadAtlas("assets/animations/", "_tex", animation_loadCallback, "emotes");
+}
+static private function animation_loadCallback():void 
+{
+	if( EmoteItemRenderer.factory == null )
+	{
+		EmoteItemRenderer.factory = new StarlingFactory();
+		EmoteItemRenderer.dragonBonesData = EmoteItemRenderer.factory.parseDragonBonesData(AppModel.instance.assets.getObject("emotes_ske"));
+		EmoteItemRenderer.factory.parseTextureAtlasData(AppModel.instance.assets.getObject("emotes_tex"), AppModel.instance.assets.getTexture("emotes_tex"));
+		EmoteItemRenderer.atlas = EmoteItemRenderer.factory.getTextureAtlasData("emotes")[0] as StarlingTextureAtlasData
+	}
+	EmoteItemRenderer.atlasLoadCalback();
+}
 
+private var emoteArmature:StarlingArmatureDisplay;
 public function EmoteItemRenderer() 
 {
 	super();
@@ -26,7 +49,7 @@ public function EmoteItemRenderer()
 	background.scale9Grid = LobbyChatItemSegment.BALLOON_RECT;
 	backgroundSkin = background;
 	
-	emoteArmature = ChatSegment.factory.buildArmatureDisplay("emote");
+	emoteArmature = EmoteItemRenderer.factory.buildArmatureDisplay("emote");
 	emoteArmature.scale = 0.7;
 	emoteArmature.touchable = false;
 	addChild(emoteArmature as DisplayObject);

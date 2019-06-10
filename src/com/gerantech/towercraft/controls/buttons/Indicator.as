@@ -7,19 +7,18 @@ import com.gerantech.towercraft.managers.SoundManager;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.RewardData;
-import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.events.CoreEvent;
-import com.gt.towers.utils.CoreUtils;
-import feathers.controls.Button;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.events.CoreEvent;
+import com.gerantech.mmory.core.utils.CoreUtils;
+
 import feathers.controls.ImageLoader;
-import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import feathers.skins.ImageSkin;
+
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.events.Event;
@@ -36,7 +35,8 @@ public var hasIncreaseButton:Boolean;
 public var autoApdate:Boolean;
 public var iconDisplay:ImageLoader;
 public var labelOffsetX:Number = 0;
-protected var progressBar:LabeledProgressBar;
+public var progressBar:LabeledProgressBar;
+public var progressBarFactory:Function;
 
 private var _displayValue:Number = Number.MIN_VALUE;
 
@@ -47,7 +47,7 @@ public function Indicator(direction:String, type:int, hasProgressbar:Boolean = f
 	this.hasProgressbar = hasProgressbar;
 	this.hasIncreaseButton = hasIncreaseButton;
 	this.autoApdate = autoApdate;
-	this.width = 240;
+	this.width = 180;
 	this.height = 64;
 	addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
 }
@@ -58,32 +58,24 @@ override protected function initialize():void
 	this.isQuickHitAreaEnabled = false;
 	layout = new AnchorLayout();
 	
-	progressBar = new LabeledProgressBar();
-	progressBar.clampValue = this._clampValue;
-	progressBar.formatValueFactory = this._formatValueFactory;;
-	progressBar.layoutData = new AnchorLayoutData(0, 0, 0, 0);
-	progressBar.labelOffsetX = labelOffsetX;
-	progressBar.isEnabled = false;
-	progressBar.minimum = minimum;
-	progressBar.maximum = maximum;
-	progressBar.value = value;
+	if( progressBarFactory == null )
+		progressBarFactory = defaultProgressBarFactory;
+	progressBar = progressBarFactory();
 	addChild(progressBar);
-	
 	if( !hasProgressbar )
 		progressBar.fillSkin.visible = false;
-//	progressLabel.layoutData = new AnchorLayoutData(NaN, (direction == "rtl" || (direction == "ltr" && hasIncreaseButton)) ? 40 : 0, NaN, direction == "ltr"||(direction == "rtl"&&hasIncreaseButton) ? 40 : 0, NaN, -1);
-	
+
 	iconDisplay = new ImageLoader();
 	iconDisplay.pivotX = iconDisplay.pivotY = iconDisplay.width * 0.5;
 	iconDisplay.source = Assets.getTexture("res-" + type, "gui");
 	iconDisplay.width = iconDisplay.height = height + 24;
-	iconDisplay.layoutData = new AnchorLayoutData(NaN, direction == "ltr"?NaN: -height / 2, NaN, direction == "ltr"? -height / 2:NaN, NaN, 0);
+	iconDisplay.layoutData = new AnchorLayoutData(NaN, direction == "ltr"?NaN: -height, NaN, direction == "ltr"? -height:NaN, NaN, 0);
 	addChild(iconDisplay);
 	
 	if( hasIncreaseButton )
 	{
 		var increaseButton:IndicatorButton = new IndicatorButton();
-		increaseButton.layoutData = new AnchorLayoutData(NaN, direction == "ltr"? -height / 2:NaN, NaN, direction == "ltr"?NaN: -height / 2, NaN, 0); 
+		increaseButton.layoutData = new AnchorLayoutData(NaN, direction=="ltr"?-height:NaN, NaN, direction=="ltr"?NaN:-height, NaN, 0); 
 		increaseButton.addEventListener(Event.TRIGGERED, addButton_triggerHandler);
 		increaseButton.width = increaseButton.height = height + 12;
 		increaseButton.label = "+";
@@ -110,7 +102,8 @@ protected function loadingManager_loadedHandler(event:LoadingEvent) : void
 protected function navigator_achieveResourceHandler(event:Event) : void 
 {
 	var params:Array = event.data as Array;
-	addResourceAnimation(params[0], params[1], params[2], params[3]);
+	if( !ResourceType.isBook(params[2]) )
+		addResourceAnimation(params[0], params[1], params[2], params[3]);
 }
 
 protected function addedToStageHandler(event:Event):void 
@@ -175,6 +168,21 @@ public function set displayValue(v:Number) : void
 		progressBar.value = v;
 }
 
+protected function defaultProgressBarFactory():LabeledProgressBar
+{
+	var ret:LabeledProgressBar = new LabeledProgressBar();
+	ret.clampValue = this._clampValue;
+	ret.formatValueFactory = this._formatValueFactory;;
+	ret.layoutData = new AnchorLayoutData(0, 0, 0, 0);
+	ret.labelOffsetX = labelOffsetX;
+	ret.isEnabled = false;
+	ret.minimum = minimum;
+	ret.maximum = maximum;
+	ret.value = value;
+//	progressLabel.layoutData = new AnchorLayoutData(NaN, (direction == "rtl" || (direction == "ltr" && hasIncreaseButton)) ? 40 : 0, NaN, direction == "ltr"||(direction == "rtl"&&hasIncreaseButton) ? 40 : 0, NaN, -1);
+	return ret;
+}
+
 private var _clampValue:Boolean = true;
 public function get clampValue():Boolean 
 {
@@ -205,8 +213,8 @@ public function addResourceAnimation(x:Number, y:Number, type:int, count:int, de
 {
 	if( ResourceType.isCard(type) && this.type == ResourceType.R3_CURRENCY_SOFT )
 	{
-		appModel.sounds.addAndPlay("res-appear-1001",null, SoundManager.CATE_SFX, SoundManager.SINGLE_FORCE_THIS);
-		appModel.navigator.addAnimation(x, y, 130, Assets.getTexture("cards", "gui"), count, new Rectangle(320, 1900), delay, null);
+		appModel.sounds.addAndPlay("card-r-0",null, SoundManager.CATE_SFX, SoundManager.SINGLE_FORCE_THIS);
+		appModel.navigator.addAnimation(x, y, 130, Assets.getTexture("res-cards", "gui"), count, new Rectangle(320, 1900), delay, null);
 		return;
 	}
 	
@@ -223,6 +231,7 @@ public function addResourceAnimation(x:Number, y:Number, type:int, count:int, de
 			rect = iconDisplay.getBounds(stage);
 		
 		appModel.sounds.addAndPlay("res-appear-" + type, null, SoundManager.CATE_SFX, SoundManager.SINGLE_FORCE_THIS, 1);
+		trace("typetypetype", type);
 		appModel.navigator.addAnimation(x, y, 130, Assets.getTexture("res-" + type, "gui"), count, rect, 0.02, punch);
 	}, delay * 1000);
 }

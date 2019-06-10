@@ -3,17 +3,16 @@ package com.gerantech.towercraft.controls.overlays
 import com.gerantech.towercraft.controls.TileBackground;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
-import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
-import com.gt.towers.constants.CardFeatureType;
-import com.gt.towers.scripts.ScriptEngine;
+import com.gerantech.mmory.core.constants.CardFeatureType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import dragonBones.events.EventObject;
 import dragonBones.starling.StarlingArmatureDisplay;
 import dragonBones.starling.StarlingEvent;
+import dragonBones.starling.StarlingTextureAtlasData;
 import dragonBones.starling.StarlingTextureData;
 
 import feathers.controls.AutoSizeMode;
@@ -26,6 +25,8 @@ import starling.display.DisplayObject;
 import starling.events.Event;
 import starling.textures.SubTexture;
 import starling.textures.Texture;
+import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 
 public class NewCardOverlay extends EarnOverlay
 {
@@ -45,7 +46,7 @@ override protected function initialize():void
 {
 	super.initialize();
 	layout = new AnchorLayout();
-	appModel.navigator.activeScreen.visible = false;// hide back items for better perfomance
+	appModel.navigator.activeScreen.visible = false;// hide back items for better performance
 }
 override protected function defaultOverlayFactory(color:uint = 0, alpha:Number = 0.4) : DisplayObject
 {
@@ -74,12 +75,18 @@ override protected function addedToStageHandler(event:Event) : void
 	// change card
 	var texture:Texture = Assets.getTexture("cards/" + type, "gui");
 	var subtexture:SubTexture = new SubTexture(texture, new Rectangle(0, 0, texture.width, texture.height));
-	StarlingTextureData(cardArmature.armature.getSlot("template-card").skinSlotData.getDisplay("cards/template-card").texture).texture = subtexture;
+	StarlingTextureData(cardArmature.armature.getSlot("template").skinSlotData.getDisplay("cards/template-card").texture).texture = subtexture;
 	
 	// change rarity color
-	texture = Assets.getTexture("cards/bevel-card-back-" + rarity, "gui");
-	subtexture = new SubTexture(texture, new Rectangle(0, 0, texture.width, texture.height));
-	StarlingTextureData(cardArmature.armature.getSlot("bevel-card-back").skinSlotData.getDisplay("cards/bevel-card").texture).texture = subtexture;
+	var atlas:StarlingTextureAtlasData = OpenBookOverlay.factory.getTextureAtlasData("packs")[0] as StarlingTextureAtlasData;
+
+	var std:StarlingTextureData =  atlas.textures["cards/back-" + rarity];
+	subtexture = new SubTexture(atlas.texture, std.region);
+	StarlingTextureData(cardArmature.armature.getSlot("back").skinSlotData.getDisplay("back").texture).texture = subtexture
+
+	std =  atlas.textures["cards/frame-" + rarity];
+	subtexture = new SubTexture(atlas.texture, std.region);
+	StarlingTextureData(cardArmature.armature.getSlot("frame").skinSlotData.getDisplay("cards/frame-0").texture).texture = subtexture;
 	
 	cardArmature.animation.gotoAndPlayByTime("open", 0, 1);
 	
@@ -99,7 +106,7 @@ protected function armature_soundEventHandler(event:StarlingEvent) : void
 protected function showDetails() : void
 {
 	closeOnStage = true;
-	var bounds:Rectangle = cardArmature.armature.getSlot("template-card").display.getBounds(this);
+	var bounds:Rectangle = cardArmature.armature.getSlot("template").display.getBounds(this);
 	
 	// explode under card
 	var explode:UIParticleSystem = new UIParticleSystem("explode", 0.1);

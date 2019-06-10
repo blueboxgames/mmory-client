@@ -1,8 +1,7 @@
 package com.gerantech.towercraft.controls.items
 {
-import com.gerantech.towercraft.models.Assets;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.utils.StrUtils;
 
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
@@ -45,7 +44,7 @@ override protected function commitData():void
 		return;
 	width = TiledRowsLayout(_owner.layout).typicalItemWidth;
 	height = TiledRowsLayout(_owner.layout).typicalItemHeight;
-	iconDisplay.source = Assets.getTexture("emblems/emblem-"+StrUtils.getZeroNum(_data+""), "gui");
+	iconDisplay.source = EmblemButton.getTexture(_data as int);
 }
 }
 }

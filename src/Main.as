@@ -4,8 +4,8 @@ import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.screens.BattleScreen;
 import com.gerantech.towercraft.controls.screens.SplashScreen;
 import com.gerantech.towercraft.models.AppModel;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.constants.ResourceType;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.marpies.ane.gameanalytics.GameAnalytics;
 import com.marpies.ane.gameanalytics.data.GAErrorSeverity;
 
@@ -27,6 +27,7 @@ import flash.utils.getTimer;
 import haxe.Log;
 
 import starling.core.Starling;
+import com.gerantech.towercraft.utils.Localizations;
 
 public class Main extends Sprite
 {
@@ -37,6 +38,7 @@ private var splash:SplashScreen;
 public function Main()
 {
 	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) +"|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
+	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(AppModel.instance.descriptor.market));
 	/*var str:String = "";
 	var ret:Number = -0.05;
 	for( var level:int=1; level<=13; level++ )
@@ -91,13 +93,13 @@ private function starStarling():void
 {
 	//var _ratio:Number = 1080 / stage.fullScreenWidth;
 	//var _height:Number = Math.min(stage.fullScreenWidth * 2, stage.fullScreenHeight);
-	this.starling = new Starling(Game, stage, new Rectangle(0, 0, stage.fullScreenWidth, stage.fullScreenHeight), null, Context3DRenderMode.AUTO, Context3DProfile.BASELINE_EXTENDED);
+	this.starling = new Starling(Game, stage, null, null, Context3DRenderMode.AUTO, Context3DProfile.BASELINE_EXTENDED);
 	this.starling.addEventListener("rootCreated", starling_rootCreatedHandler);
 	this.starling.supportHighResolutions = true;
 	this.starling.skipUnchangedFrames = true;
 	this.starling.start();
 	this.starling.stage.stageWidth  = 1080;
-	this.starling.stage.stageHeight = stage.fullScreenHeight * (this.starling.stage.stageWidth / stage.fullScreenWidth);
+	this.starling.stage.stageHeight = 1080 * (stage.fullScreenHeight / stage.fullScreenWidth);
 	//NativeAbilities.instance.showToast(stage.fullScreenWidth + "," + stage.fullScreenHeight + "," + this.starling.stage.stageWidth + "," + this.starling.stage.stageHeight + "," + this.starling.contentScaleFactor, 2);
 	//this.starling.showStatsAt("right", "top", 1 / this.starling.contentScaleFactor);
 	trace(stage.fullScreenWidth, stage.fullScreenHeight, this.starling.stage.stageWidth, this.starling.stage.stageHeight, this.starling.contentScaleFactor);

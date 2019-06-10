@@ -4,10 +4,10 @@ import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.LoadAndSaver;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.exchanges.ExchangeItem;
-import com.gt.towers.exchanges.Exchanger;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.exchanges.Exchanger;
 import flash.events.Event;
 import flash.filesystem.File;
 

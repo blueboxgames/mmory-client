@@ -1,5 +1,6 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.items.SettingsItemRenderer;
@@ -12,7 +13,6 @@ import com.gerantech.towercraft.managers.oauth.OAuthManager;
 import com.gerantech.towercraft.models.vo.SettingsData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.Localizations;
-import com.gt.towers.constants.PrefsTypes;
 
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.ScrollPolicy;
@@ -26,13 +26,14 @@ import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
 import starling.events.Event;
+import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 
 public class SettingsPopup extends SimpleHeaderPopup
 {
 private var list:FastList;
 public function SettingsPopup()
 {
-	var _h:int = 1140;
+	var _h:int = 1250;
 	var _p:int = 48;
 	transitionIn = new TransitionData();
 	transitionOut = new TransitionData();
@@ -53,7 +54,7 @@ override protected function showElements():void
 	list.dataProvider = getSettingsData();
 	list.verticalScrollPolicy = ScrollPolicy.OFF;
 	list.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
-	list.layoutData = new AnchorLayoutData(120, 10, 70, 10);
+	list.layoutData = new AnchorLayoutData(150, 40, 70, 40);
 	list.addEventListener(FeathersEventType.FOCUS_IN, list_focusInHandler);
 	list.itemRendererFactory = function():IListItemRenderer { return new SettingsItemRenderer(); }
 	addChild(list);
@@ -140,6 +141,7 @@ protected function prefs_completeHandler(event:Event) : void
 	UserData.instance.prefs.removeEventListener(Event.COMPLETE, prefs_completeHandler);
 	titleDisplay.text = title = loc("settings_page");
 	list.dataProvider.updateAll();
+	ExCategoryItemRenderer.placeholders = null;
 	appModel.navigator.rootScreenID = Game.DASHBOARD_SCREEN;
 }
 
@@ -151,7 +153,7 @@ protected function socialManager_eventsHandler(event:Event):void
 
 private function navigateTo(key:int):void
 {
-	navigateToURL(new URLRequest(loc("setting_value_" + key)));	
+	navigateToURL(new URLRequest(Localizations.instance.get("setting_value_" + key)));	
 }
 
 private function getSettingsData():ListCollection

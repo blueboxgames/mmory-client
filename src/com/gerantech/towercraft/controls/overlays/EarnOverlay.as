@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.controls.overlays 
 {
-import com.gt.towers.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 /**
  * @author Mansour Djawadi
  */

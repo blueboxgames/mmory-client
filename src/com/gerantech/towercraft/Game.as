@@ -35,7 +35,6 @@ public function Game(content:IFeathersControl=null)
 {
 	super(content);
 	AppModel.instance.theme = new MainTheme();
-	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(AppModel.instance.descriptor.market), AppModel.instance.assets);
 }
 
 override protected function initialize():void

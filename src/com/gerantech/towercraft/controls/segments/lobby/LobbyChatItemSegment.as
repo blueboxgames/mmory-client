@@ -1,25 +1,28 @@
 package com.gerantech.towercraft.controls.segments.lobby
 {
-import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.segments.Segment;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
+import feathers.controls.List;
 import feathers.layout.AnchorLayout;
+
 import flash.geom.Rectangle;
+
 import starling.display.Image;
 
 
 public class LobbyChatItemSegment extends Segment
 {
-static public var BALLOON_RECT:Rectangle = new Rectangle(49, 32, 2, 2);
+static public var BALLOON_RECT:Rectangle = new Rectangle(44, 68, 2, 2);
 public var data:ISFSObject;
-public var owner:FastList;
+public var owner:List;
 protected var itsMe:Boolean;
 protected var user:ISFSObject;
-public function LobbyChatItemSegment(owner:FastList) { this.owner = owner; }
+public function LobbyChatItemSegment(owner:List) { this.owner = owner; }
 override public function init():void
 {
 	super.init();

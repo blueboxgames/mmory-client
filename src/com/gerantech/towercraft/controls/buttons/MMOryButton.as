@@ -4,11 +4,14 @@ import com.gerantech.towercraft.controls.overlays.HandPoint;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.controls.Button;
 import feathers.core.ITextRenderer;
 import feathers.layout.RelativePosition;
+
 import flash.geom.Point;
 import flash.utils.setTimeout;
+
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
@@ -59,11 +62,11 @@ public function MMOryButton()
 	this._messageRenderFactory = this.defaultMessageRendererFactory;
 }
 
-public function get messageRenderFactory() : Function 
+public function get messageFactory() : Function 
 {
 	return this._messageRenderFactory;
 }
-public function set messageRenderFactory(value:Function) : void 
+public function set messageFactory(value:Function) : void 
 {
 	this._messageRenderFactory = value;
 	this.invalidate(INVALIDATION_FLAG_TEXT_EDITOR);
@@ -120,6 +123,11 @@ public function set iconTexture(value:Texture) : void
 	super.defaultIcon.height = this.iconSize.y;
 }
 
+override public function set iconOffsetX(value:Number) : void
+{
+	super.iconOffsetX = value;
+}
+
 /**
  * @private
  */
@@ -148,7 +156,7 @@ override protected function draw() : void
 	if( this._invalidationFlags[INVALIDATION_FLAG_TEXT_EDITOR] )
 	{
 		if( this.messageTextRenderer == null ) 
-			this.messageTextRenderer = this.messageRenderFactory();
+			this.messageTextRenderer = this.messageFactory();
 		if( this.messageTextRenderer != null )
 			this.addChild(DisplayObject(this.messageTextRenderer));
 	}
@@ -166,29 +174,32 @@ override protected function draw() : void
 override protected function layoutContent() : void
 {
 	var messageRenderer:DisplayObject = DisplayObject(this.messageTextRenderer);
-	if( messageRenderer == null || !messageRenderer.visible )
-	{
-		this.iconOffsetY = 0;
-		this.labelOffsetY = 0;
-	}
-	else
+	var __iconOffsetY:int;
+	var __labelOffsetY:int;
+	if( messageRenderer != null && messageRenderer.visible )
 	{
 		messageRenderer.width = this.actualWidth - this._paddingRight - this._paddingLeft;
 		messageRenderer.x = this.actualWidth - this._paddingRight - messageRenderer.width;
 		if( this.messagePosition == RelativePosition.BOTTOM )
 		{
-			this.iconOffsetY = -27;
-			this.labelOffsetY = -26;
+			__iconOffsetY = -27;
+			__labelOffsetY = -26;
 			messageRenderer.y = this.actualHeight - this.paddingBottom - messageRenderer.height;
 		}
 		else
 		{
-			this.iconOffsetY = 27;
-			this.labelOffsetY = 28;
+			__iconOffsetY = 27;
+			__labelOffsetY = 28;
 			messageRenderer.y = this.paddingTop;
 		}
 	}
+
 	super.layoutContent();
+	
+	if( this.currentIcon )
+		this.currentIcon.y += __iconOffsetY;
+	if( this.labelTextRenderer )
+		this.labelTextRenderer.y += __labelOffsetY;
 }
 
 public function showTutorHint(offsetX:Number = 0, offsetY:Number = 0) : void 

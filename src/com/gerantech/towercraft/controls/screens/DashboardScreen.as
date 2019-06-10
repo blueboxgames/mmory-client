@@ -1,6 +1,11 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.constants.SegmentType;
 import com.gerantech.towercraft.Game;
+import com.gerantech.towercraft.controls.TileBackground;
 import com.gerantech.towercraft.controls.buttons.Indicator;
 import com.gerantech.towercraft.controls.items.DashboardTabItemRenderer;
 import com.gerantech.towercraft.controls.items.SegmentsItemRenderer;
@@ -15,12 +20,10 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.constants.SegmentType;
+
 import feathers.controls.AutoSizeMode;
 import feathers.controls.ImageLoader;
+import feathers.controls.LayoutGroup;
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.ScrollPolicy;
@@ -32,35 +35,43 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalAlign;
+
 import flash.desktop.NativeApplication;
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
-import starling.animation.Transitions;
-import starling.core.Starling;
+
 import starling.events.Event;
+import starling.filters.ColorMatrixFilter;
 
 public class DashboardScreen extends BaseCustomScreen
 {
 static public const FOOTER_SIZE:int = 200;
 static public var TAB_INDEX:int = 2;
+private var tabSize:int;
 private var pageList:List;
 private var tabsList:List;
-private var tabSize:int;
-private var segmentsCollection:ListCollection;
+private var toolbar:LayoutGroup;
 private var tabSelection:ImageLoader;
+private var segmentsCollection:ListCollection;
 
 public function DashboardScreen()
 {
-	if( !Assets.animationAssetsLoaded )
-		Assets.loadAnimationAssets(initialize, "factions", "packs");
+	visible = false;	
+	if( appModel.assets.getTexture("packs_tex") == null )
+		Assets.loadAtlas("assets/animations/", "_tex", initialize, "packs");
 }
 
 override protected function initialize():void
 {
-	if( !Assets.animationAssetsLoaded )
+	if( appModel.assets.getTexture("packs_tex") == null )
 		return;
 	OpenBookOverlay.createFactory();
-	
+
+	// =-=-=-=-=-=-=-=-=-=-=-=- background -=-=-=-=-=-=-=-=-=-=-=-=
+	var tileBacground:TileBackground = new TileBackground("home/pistole-tile", 0.3, true);
+	tileBacground.layoutData = new AnchorLayoutData(0, 0, FOOTER_SIZE, 0);
+	backgroundSkin = tileBacground;
+
 	super.initialize();
 	if( stage == null )
 		addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
@@ -74,7 +85,6 @@ protected function addedToStageHandler(event:Event):void
 	
 	autoSizeMode = AutoSizeMode.STAGE;
 	layout = new AnchorLayout();
-	visible = false;	
 	
 	if( appModel.loadingManager.state < LoadingManager.STATE_LOADED )
 		appModel.loadingManager.addEventListener(LoadingEvent.LOADED, loadingManager_loadedHandler);
@@ -87,6 +97,16 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	appModel.loadingManager.removeEventListener(LoadingEvent.LOADED, loadingManager_loadedHandler);
 	UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_000_FIRST_RUN);
 
+	// tutorial mode
+	if( player.get_battleswins() == 0 )
+	{
+		if( player.tutorialMode == 0 )
+			appModel.navigator.pushScreen(Game.OPERATIONS_SCREEN);
+		else if( player.tutorialMode == 1 )
+			appModel.navigator.runBattle(0);
+		return;
+	}
+
 	// return to last open game
 	if( appModel.loadingManager.serverData.getBool("inBattle") )
 	{
@@ -94,34 +114,23 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 		return;
 	}
 
-		// =-=-=-=-=-=-=-=-=-=-=-=- page -=-=-=-=-=-=-=-=-=-=-=-=
+	// =-=-=-=-=-=-=-=-=-=-=-=- page -=-=-=-=-=-=-=-=-=-=-=-=
 	var pageLayout:HorizontalLayout = new HorizontalLayout();
-	pageLayout.gap = 0;
+	pageLayout.typicalItemHeight = 150;
 	pageLayout.horizontalAlign = HorizontalAlign.CENTER;
 	pageLayout.verticalAlign = VerticalAlign.JUSTIFY;
-	pageLayout.typicalItemWidth = stage.stageWidth;
+	// pageLayout.typicalItemWidth = stage.stageWidth;
 	pageLayout.useVirtualLayout = false;
 	
 	pageList = new List();
 	pageList.snapToPages = true;
 	pageList.layout = pageLayout;
-	pageList.layoutData = new AnchorLayoutData(0, 0, FOOTER_SIZE, 0);
-	pageList.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
-	pageList.addEventListener(FeathersEventType.FOCUS_IN, pageList_focusInHandler);
 	pageList.verticalScrollPolicy = ScrollPolicy.OFF;
+	pageList.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
+	pageList.layoutData = new AnchorLayoutData(0, -pageLayout.typicalItemHeight, FOOTER_SIZE, -pageLayout.typicalItemHeight);
 	pageList.itemRendererFactory = function ():IListItemRenderer { return new SegmentsItemRenderer(); }
 	addChild(pageList);
-	
-	var shadowTop:ImageLoader = new ImageLoader();
-	shadowTop.source = Assets.getTexture("theme/gradeint-top", "gui");
-	shadowTop.layoutData = new AnchorLayoutData(-30, -30, NaN, -30);
-	shadowTop.maintainAspectRatio = false;
-	shadowTop.touchable = false;
-	shadowTop.height = 200;
-	shadowTop.alpha = 0.4;
-	shadowTop.color = 0;
-	addChild(shadowTop);
-	
+		
 	var shadowBottom:ImageLoader = new ImageLoader();
 	shadowBottom.source = Assets.getTexture("theme/gradeint-bottom", "gui");
 	shadowBottom.layoutData = new AnchorLayoutData(NaN, -20, FOOTER_SIZE - 20, -20);
@@ -139,7 +148,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	footerBG.height = FOOTER_SIZE;
 	footerBG.source = Assets.getTexture("home/dash-bg");
 	footerBG.scale9Grid = new Rectangle(13, 10, 5, 66);
-	footerBG.layoutData = new AnchorLayoutData(NaN, 0, 0, 0);
+	footerBG.layoutData = new AnchorLayoutData(NaN, 0, -1, 0);
 	footerBG.touchable = false;
 	addChild(footerBG);
 	
@@ -169,37 +178,43 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	tabsList.itemRendererFactory = function ():IListItemRenderer { return new DashboardTabItemRenderer(tabSize); }
 	addChild(tabsList);
 	
+	toolbar = new LayoutGroup();
+	toolbar.layout = new AnchorLayout();
+	toolbar.layoutData = new AnchorLayoutData(0, 0, NaN, 0);
+	addChild(toolbar);
+	
+	var shadowTop:ImageLoader = new ImageLoader();
+	shadowTop.source = Assets.getTexture("theme/gradeint-top", "gui");
+	shadowTop.layoutData = new AnchorLayoutData(-30, -30, NaN, -30);
+	shadowTop.maintainAspectRatio = false;
+	shadowTop.touchable = false;
+	shadowTop.height = 200;
+	shadowTop.alpha = 0.4;
+	shadowTop.color = 0;
+	toolbar.addChild(shadowTop);
+
 	var indicatorHC:Indicator = new Indicator("rtl", ResourceType.R4_CURRENCY_HARD);
-	indicatorHC.layoutData = new AnchorLayoutData(18, 36);
-	addChild(indicatorHC);
+	indicatorHC.layoutData = new AnchorLayoutData(20, 70);
+	toolbar.addChild(indicatorHC);
 	
 	var indicatorSC:Indicator = new Indicator("rtl", ResourceType.R3_CURRENCY_SOFT);
-	indicatorSC.layoutData = new AnchorLayoutData(18, NaN, NaN, NaN, 0);
-	addChild(indicatorSC);
+	indicatorSC.layoutData = new AnchorLayoutData(20, NaN, NaN, NaN, 0);
+	toolbar.addChild(indicatorSC);
 	
 	if( player.get_arena(0) > 0 )
 	{
 		var indicatorCT:Indicator = new Indicator("rtl", ResourceType.R6_TICKET);
-		indicatorCT.layoutData = new AnchorLayoutData(18, NaN, NaN, 42);
-		addChild(indicatorCT);
-	}
-	
-	// tutorial mode
-	if( player.get_battleswins() == 0 )
-	{
-		if( player.tutorialMode == 0 )
-			appModel.navigator.pushScreen(Game.OPERATIONS_SCREEN);
-		else if( player.tutorialMode == 1 )
-			appModel.navigator.runBattle(0);
-		return;
+		indicatorCT.layoutData = new AnchorLayoutData(20, NaN, NaN, 70);
+		toolbar.addChild(indicatorCT);
 	}
 	
 	segmentsCollection = getListData();
 
 	pageList.dataProvider = segmentsCollection;
 	pageList.horizontalScrollPolicy = player.dashboadTabEnabled(-1) ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+	pageList.addEventListener(FeathersEventType.FOCUS_IN, pageList_focusInHandler);
 	pageList.addEventListener(Event.READY, pageList_readyHandler);
-	pageList.addEventListener(FeathersEventType.SCROLL_COMPLETE, pageList_scrollCompleteHandler);
+	pageList.addEventListener(Event.SCROLL, pageList_scrollHandler);
 	tabsList.dataProvider = segmentsCollection;
 	setTimeout(gotoPage, 10, TAB_INDEX, 0.1);
 	visible = true;
@@ -212,18 +227,6 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	SFSConnection.instance.lobbyManager.addEventListener(Event.UPDATE, lobbyManager_updateHandler);
 }
 
-private function pageList_readyHandler(event:Event):void
-{
-	tabsList.isEnabled = event.data;
-	pageList.horizontalScrollPolicy = event.data ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
-}
-protected function exchangeManager_endHandler(event:Event):void
-{
-	if( ExchangeType.getCategory(event.data.type) == ExchangeType.C110_BATTLES )//open first pack
-		segmentsCollection.updateItemAt(1);
-	else if( event.data.type == -100 )//upgrade initial card
-		segmentsCollection.updateItemAt(2);
-}
 private function getListData():ListCollection
 {
 	var ret:ListCollection = new ListCollection();
@@ -232,28 +235,6 @@ private function getListData():ListCollection
 	return ret;
 }
 
-private function pageList_scrollCompleteHandler(e:Event):void 
-{
-	if( !pageList.hasEventListener(FeathersEventType.FOCUS_IN) )
-		pageList.addEventListener(FeathersEventType.FOCUS_IN, pageList_focusInHandler);
-}
-
-private function pageList_focusInHandler(event:Event):void
-{
-	tabsList.removeEventListeners(Event.SELECT);
-	var focusIndex:int = event.data as int;
-	if( tabsList.selectedIndex != focusIndex )
-		gotoPage(focusIndex, 0.5, false);
-	tabsList.addEventListener(Event.SELECT, tabsList_selectHandler);
-}
-
-private function tabsList_selectHandler(event:Event):void
-{
-	if( !player.dashboadTabEnabled(tabsList.selectedIndex) )
-		return;
-	pageList.removeEventListeners(FeathersEventType.FOCUS_IN);
-	gotoPage(tabsList.selectedIndex);
-}
 public function gotoPage(pageIndex:int, animDuration:Number = 0.3, scrollPage:Boolean = true):void
 {
 	trace("gotoPage", TAB_INDEX, pageIndex, ExchangeSegment.SELECTED_CATEGORY, pageList.selectedIndex, tabsList.selectedIndex)
@@ -263,10 +244,52 @@ public function gotoPage(pageIndex:int, animDuration:Number = 0.3, scrollPage:Bo
 	if( animDuration > 0 )
 		appModel.sounds.addAndPlay("tab");
 	appModel.navigator.dispatchEventWith("dashboardTabChanged", false, animDuration);
-	Starling.juggler.tween(tabSelection, animDuration, {x:pageIndex * tabSize - tabSize * 0.1, transition:Transitions.EASE_OUT});
 }
 
-private function lobbyManager_updateHandler(event:Event):void
+protected function pageList_readyHandler(event:Event):void
+{
+	tabsList.isEnabled = event.data;
+	pageList.horizontalScrollPolicy = event.data ? ScrollPolicy.AUTO : ScrollPolicy.OFF;
+	if( event.data )
+	{
+		tabsList.filter = null;
+	}
+	else
+	{
+		var filter:ColorMatrixFilter = new ColorMatrixFilter();
+		filter.adjustSaturation(-1);
+		tabsList.filter = filter;
+	}
+}
+protected function exchangeManager_endHandler(event:Event):void
+{
+	if( ExchangeType.getCategory(event.data.type) == ExchangeType.C110_BATTLES ) //open first pack
+		segmentsCollection.updateItemAt(1);
+	else if( event.data.type == -100 ) //upgrade initial card
+		segmentsCollection.updateItemAt(2);
+}
+protected function pageList_scrollHandler(event:Event):void
+{
+	var ratio:Number = this.pageList.horizontalScrollPosition / this.pageList.maxHorizontalScrollPosition;
+	this.toolbar.alpha = 3 - ratio * 4;
+	this.toolbar.visible = this.toolbar.alpha > 0.01
+	this.tabSelection.x = ratio * this.stageWidth * 0.8 - this.tabSize * 0.1;
+}
+protected function pageList_focusInHandler(event:Event):void
+{
+	tabsList.removeEventListener(Event.SELECT, tabsList_selectHandler);
+	var focusIndex:int = event.data as int;
+	if( tabsList.selectedIndex != focusIndex )
+		gotoPage(focusIndex, 0, false);
+	tabsList.addEventListener(Event.SELECT, tabsList_selectHandler);
+}
+protected function tabsList_selectHandler(event:Event):void
+{
+	if( !player.dashboadTabEnabled(tabsList.selectedIndex) )
+		return;
+	gotoPage(tabsList.selectedIndex);
+}
+protected function lobbyManager_updateHandler(event:Event):void
 {
 	TabItemData(segmentsCollection.getItemAt(3)).badgeNumber = SFSConnection.instance.lobbyManager.numUnreads();
 }
@@ -287,8 +310,16 @@ override protected function backButtonFunction():void
 
 override public function dispose():void
 {
-	if( appModel != null )
-		appModel.loadingManager.removeEventListener(LoadingEvent.LOADED, loadingManager_loadedHandler);
+	if( tabsList != null )
+		tabsList.removeEventListener(Event.SELECT, tabsList_selectHandler);
+	if( pageList != null )
+	{
+		pageList.removeEventListener(Event.READY, pageList_readyHandler);
+		pageList.removeEventListener(Event.SCROLL, pageList_scrollHandler);
+		pageList.removeEventListener(FeathersEventType.FOCUS_IN, pageList_focusInHandler);
+	}
+	exchangeManager.removeEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
+	appModel.loadingManager.removeEventListener(LoadingEvent.LOADED, loadingManager_loadedHandler);
 	super.dispose();
 }
 }

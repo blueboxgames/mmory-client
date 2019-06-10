@@ -3,13 +3,11 @@ package com.gerantech.towercraft.controls.screens
 import com.gerantech.towercraft.controls.TileBackground;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import feathers.controls.Button;
-import feathers.controls.ImageLoader;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import starling.display.Image;
+
 import starling.events.Event;
 
 public class SimpleScreen extends BaseCustomScreen
@@ -44,7 +42,7 @@ override protected function initialize():void
 	addChild(closeButton);
 	
 	titleDisplay = new ShadowLabel(title);
-	titleDisplay.layoutData = new AnchorLayoutData(headerSize - 100, NaN, NaN, NaN, 0);
+	titleDisplay.layoutData = new AnchorLayoutData(headerSize - 120, NaN, NaN, NaN, 0);
 	addChild(titleDisplay);
 }
 

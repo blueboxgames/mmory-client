@@ -5,7 +5,7 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.managers.oauth.OAuthManager;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.Localizations;
-import com.gt.towers.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.marpies.ane.gameanalytics.GameAnalytics;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
@@ -38,7 +38,7 @@ public function changeLocale(locale:String, forced:Boolean=false) : void
 	}
 	
 	Localizations.instance.addEventListener(Event.CHANGE, localizations_changeHandler);
-	Localizations.instance.changeLocale(locale, AppModel.instance.assets);
+	Localizations.instance.changeLocale(locale);
 }
 
 protected function localizations_changeHandler(event:Event) : void 
@@ -68,7 +68,6 @@ public function setInt(key:int, value:int):void
 	setString(key, value.toString());
     if( key == PrefsTypes.TUTOR )
 		GameAnalytics.addDesignEvent("tutorial:step-" + value);
-
 }
 public function setFloat(key:int, value:Number):void
 {
@@ -87,7 +86,6 @@ public function setString(key:int, value:String):void
 /************************   AUTHENTICATE SOCIAL OR GAME SERVICES   ***************************/
 public function authenticateSocial():void
 {
-	return;
     //NativeAbilities.instance.showToast(SocialManager.instance.initialized + " == " + SocialManager.instance.authenticated + " == " + player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE), 2);
     if( OAuthManager.instance.authenticated )
     {

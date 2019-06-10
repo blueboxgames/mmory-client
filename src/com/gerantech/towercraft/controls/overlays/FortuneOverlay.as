@@ -4,7 +4,7 @@ import com.gerantech.towercraft.controls.Spinner;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
-import com.gt.towers.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import dragonBones.starling.StarlingArmatureDisplay;
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;

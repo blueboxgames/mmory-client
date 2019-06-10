@@ -23,11 +23,11 @@ import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.views.units.UnitView;
-import com.gt.towers.battle.BattleField;
-import com.gt.towers.battle.fieldes.FieldData;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.StickerType;
-import com.gt.towers.socials.Challenge;
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.fieldes.FieldData;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.StickerType;
+import com.gerantech.mmory.core.socials.Challenge;
 import com.marpies.ane.gameanalytics.GameAnalytics;
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
@@ -76,7 +76,7 @@ override protected function initialize():void
 	
 	var gradient:ImageLoader = new ImageLoader();
 	gradient.scale9Grid = MainTheme.SHADOW_SIDE_SCALE9_GRID;
-    gradient.color = Color.BLACK;
+	gradient.color = Color.BLACK;
 	gradient.alpha = 0.5;
 	gradient.width = 440;
 	gradient.height = 140;
@@ -128,7 +128,7 @@ override protected function initialize():void
 	else
 	{
 		timerSlider = new BattleCountdown();
-		timerSlider.layoutData = new AnchorLayoutData(padding, padding);
+		timerSlider.layoutData = new AnchorLayoutData(10, 10);
 	}
 	addChild(timerSlider);
 	
@@ -159,7 +159,7 @@ override protected function initialize():void
 	bubbleAxis.layoutData = new AnchorLayoutData(140 + padding, NaN, NaN, padding);
 	
 	scoreBoard = new BattleScoreBoard();
-	scoreBoard.layoutData = new AnchorLayoutData(NaN, -15, NaN, NaN, NaN, -BattleFooter.HEIGHT * 0.2);
+	scoreBoard.layoutData = new AnchorLayoutData(NaN, -16, NaN, NaN, NaN, -BattleFooter.HEIGHT * 0.2);
 	//scoreBoard.y = appModel.battleFieldView.y - scoreBoard.height * 0.5;
 	addChild(scoreBoard);
 	updateScores(1, 0, battleData.allise.getInt("score"), battleData.axis.getInt("score"), -1);

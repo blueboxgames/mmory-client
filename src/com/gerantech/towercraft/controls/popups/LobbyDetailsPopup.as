@@ -1,12 +1,12 @@
 package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.extensions.NativeAbilities;
-import com.gerantech.towercraft.controls.FastList;
-import com.gerantech.towercraft.controls.buttons.CustomButton;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
-import com.gerantech.towercraft.controls.buttons.LobbyTabButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.headers.TabsHeader;
+import com.gerantech.towercraft.controls.items.TabsHeaderItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyFeatureItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyMemberItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
@@ -16,12 +16,12 @@ import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.MessageTypes;
+import com.gerantech.towercraft.utils.Localizations;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
@@ -31,7 +31,9 @@ import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
+
 import starling.animation.Transitions;
 import starling.events.Event;
 
@@ -58,6 +60,7 @@ public function LobbyDetailsPopup(roomData:Object, isReadOnly:Boolean = false)
 		params.putBool("all", true);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_roomDataHandler);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_DATA, params);
+	EmblemButton.loadAtlas(null);
 }
 
 override protected function initialize():void
@@ -71,16 +74,6 @@ override protected function initialize():void
 	transitionOut.sourceBound = transitionIn.destinationBound = new Rectangle(_p,	stageHeight* 0.5 - _h * 0.5,	stageWidth - _p * 2,	_h * 1.0);
 
 	super.initialize();
-	
-	var iconDisplay:ImageLoader = new ImageLoader();
-	iconDisplay.height = iconDisplay.width = padding * 4;
-	iconDisplay.source = Assets.getTexture("emblems/emblem-" + StrUtils.getZeroNum(roomData.pic + ""), "gui");
-	iconDisplay.layoutData = new AnchorLayoutData(padding, appModel.isLTR?NaN:padding, NaN, appModel.isLTR?padding:NaN);
-	addChild(iconDisplay);
-	
-	var titleDisplay:ShadowLabel = new ShadowLabel(roomData.name);
-	titleDisplay.layoutData = new AnchorLayoutData(padding * 0.8, appModel.isLTR?padding:padding * 6, NaN, appModel.isLTR?padding * 6:padding);
-	addChild(titleDisplay);
 }
 
 protected function sfsConnection_roomDataHandler(event:SFSEvent):void
@@ -94,15 +87,15 @@ protected function sfsConnection_roomDataHandler(event:SFSEvent):void
 	if( roomServerData.containsKey("name") )
 		roomData.name = roomServerData.getText("name");
 	if( roomServerData.containsKey("max") )
-		roomData.name = roomServerData.getInt("max");
+		roomData.max = roomServerData.getInt("max");
 	if( roomServerData.containsKey("num") )
-		roomData.name = roomServerData.getInt("num");
+		roomData.num = roomServerData.getInt("num");
 	if( roomServerData.containsKey("sum") )
-		roomData.name = roomServerData.getInt("sum");
+		roomData.sum = roomServerData.getInt("sum");
 	if( roomServerData.containsKey("pic") )
-		roomData.name = roomServerData.getInt("pic");
+		roomData.pic = roomServerData.getInt("pic");
 	if( roomServerData.containsKey("act") )
-		roomData.name = roomServerData.getInt("act");
+		roomData.act = roomServerData.getInt("act");
 	if( roomServerData.containsKey("all") )
 		roomData.all = roomServerData.getSFSArray("all");
 	
@@ -121,6 +114,16 @@ protected override function transitionInCompleted():void
 
 private function showDetails():void
 {
+	var iconDisplay:ImageLoader = new ImageLoader();
+	iconDisplay.height = iconDisplay.width = padding * 4;
+	iconDisplay.source = EmblemButton.getTexture(roomData.pic);
+	iconDisplay.layoutData = new AnchorLayoutData(padding, appModel.isLTR?NaN:padding, NaN, appModel.isLTR?padding:NaN);
+	addChild(iconDisplay);
+	
+	var titleDisplay:ShadowLabel = new ShadowLabel(roomData.name);
+	titleDisplay.layoutData = new AnchorLayoutData(padding * 0.8, appModel.isLTR?padding:padding * 6, NaN, appModel.isLTR?padding * 6:padding);
+	addChild(titleDisplay);
+
 	var bioDisplay:RTLLabel = new RTLLabel(roomData.bio, 0x333333, "justify", null, true, null, 0.55);
 	bioDisplay.layoutData = new AnchorLayoutData(padding * 3, appModel.isLTR?padding:padding * 6, NaN, appModel.isLTR?padding * 6 : padding);
 	addChild(bioDisplay);
@@ -144,7 +147,14 @@ private function showDetails():void
 	membersCollection = new ListCollection(membersArray);
 	
 	var header:TabsHeader = new TabsHeader();
-	header.dataProvider = new ListCollection([ { label: loc("lobby_point"), width:210}, { label: loc("lobby_activeness"), width:210} ]);
+	header.itemRendererFactory = function () : IListItemRenderer
+	{
+		var ret:TabsHeaderItemRenderer = new TabsHeaderItemRenderer();
+		ret.iconLayoutData = new AnchorLayoutData(NaN, 20, NaN, NaN, NaN, 0);
+		ret.labelLayoutData.horizontalCenter = -10;
+		return ret;
+	}
+	header.dataProvider = new ListCollection([ { label:loc("lobby_point"), labelSize:0.7, icon:"theme/vertical-scroll-bar-increment-button-icon", iconWidth:18, width:210}, { label:loc("lobby_activeness"), labelSize:0.7, icon:"theme/vertical-scroll-bar-increment-button-icon", iconWidth:18, width:210} ]);
 	header.addEventListener(Event.CHANGE, header_changeHandler);
 	header.layoutData = new AnchorLayoutData(500, appModel.isLTR?40:NaN, NaN, appModel.isLTR?NaN:40);
 	header.selectedIndex = 0;
@@ -222,10 +232,10 @@ private function showDetails():void
 		return;
 	
 	var shareButton:IndicatorButton = new IndicatorButton();
-	shareButton.layoutData = new AnchorLayoutData(20, appModel.isLTR?20:NaN, NaN, appModel.isLTR?NaN:20);
-	shareButton.label = loc("lobby_invite");
 	shareButton.width = 164;
 	shareButton.height = 72;
+	shareButton.label = loc("lobby_invite");
+	shareButton.layoutData = new AnchorLayoutData(20, appModel.isLTR?20:NaN, NaN, appModel.isLTR?NaN:20);
 	shareButton.addEventListener(Event.TRIGGERED, shareButton_triggeredHandler);
 	addChild(shareButton);
 	
@@ -268,8 +278,8 @@ private function removeButton_triggeredHandler(e:Event):void
 
 private function shareButton_triggeredHandler():void
 {
-	NativeAbilities.instance.shareText(loc("lobby_invite"), loc("lobby_invite_message")+ "\n" + loc("lobby_invite_url", [roomData.id, player.invitationCode]));
-	trace(loc("lobby_invite_url", [roomData.id, player.invitationCode]))
+	NativeAbilities.instance.shareText(loc("lobby_invite"), loc("lobby_invite_message")+ "\n" + Localizations.instance.get("lobby_invite_url", [roomData.id, player.invitationCode]));
+	trace(Localizations.instance.get("lobby_invite_url", [roomData.id, player.invitationCode]))
 }
 
 private function header_changeHandler(event:Event):void
@@ -370,19 +380,19 @@ private function buttonsPopup_selectHandler(event:Event):void
 			params.putUtfString("name", buttonsPopup.data.name);
 			if ( confirm.data == "lobby_promote" )
 			{
-				params.putShort("pr", MessageTypes.M13_COMMENT_PROMOTE);
+				params.putInt("pr", MessageTypes.M13_COMMENT_PROMOTE);
 				buttonsPopup.data.permission ++;
 				membersCollection.updateItemAt(buttonsPopup.data.index);
 			}
 			else if ( confirm.data == "lobby_demote" )
 			{
-				params.putShort("pr", MessageTypes.M14_COMMENT_DEMOTE);
+				params.putInt("pr", MessageTypes.M14_COMMENT_DEMOTE);
 				buttonsPopup.data.permission --;
 				membersCollection.updateItemAt(buttonsPopup.data.index);
 			}
 			else
 			{
-				params.putShort("pr", MessageTypes.M12_COMMENT_KICK);
+				params.putInt("pr", MessageTypes.M12_COMMENT_KICK);
 				membersCollection.removeItemAt(buttonsPopup.data.index);
 			}
 			SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_MODERATION, params, SFSConnection.instance.lobbyManager.lobby);

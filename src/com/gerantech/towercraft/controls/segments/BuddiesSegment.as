@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.mmory.core.socials.Lobby;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.items.BuddyItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
@@ -13,8 +14,7 @@ import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.battle.fieldes.FieldData;
-import com.gt.towers.socials.Lobby;
+import com.gerantech.towercraft.utils.Localizations;
 import com.smartfoxserver.v2.core.SFSBuddyEvent;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Buddy;
@@ -22,6 +22,7 @@ import com.smartfoxserver.v2.entities.SFSBuddy;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.entities.variables.SFSBuddyVariable;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.events.FeathersEventType;
@@ -29,7 +30,9 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
+
 import flash.geom.Rectangle;
+
 import starling.animation.Transitions;
 import starling.events.Event;
 
@@ -93,7 +96,7 @@ override public function init():void
 
 private function showTutorials():void
 {
-	if( SFSConnection.instance.buddyManager.buddyList.length >= 3 )
+	if( SFSConnection.instance.buddyManager.buddyList.length >= 3 || game.sessionsCount % 5 != 0 )
 		return;
 	var tutorialData:TutorialData = new TutorialData("buddy_tutorial");
 	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, loc("tutor_buddy_0", [Lobby.buddyInviterReward, Lobby.buddyInviteeReward]), null, 1000, 1000, 0));
@@ -131,8 +134,10 @@ protected function list_focusInHandler(event:Event):void
 	var buddy:Buddy = selectedItem.data as Buddy;
 	if( buddy == null )
 	{
-		NativeAbilities.instance.shareText(loc("invite_friend"), loc("invite_friend_message", [appModel.descriptor.name]) + "\n" + loc("buddy_invite_url", [player.invitationCode]));
-		trace(loc("buddy_invite_url", [player.invitationCode]))
+		var subject:String = loc("invite_friend");
+		var text:String = loc("invite_friend_message", [appModel.descriptor.name]) + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
+		NativeAbilities.instance.shareText(subject, text);
+		trace(subject, text);
 		return;
 	}
 	
@@ -193,9 +198,9 @@ protected function sfs_buddyBattleHandler(event:SFSEvent):void
 	if( event.params.cmd != SFSCommands.BUDDY_BATTLE )
 		return;
 	var p:ISFSObject = event.params.params as SFSObject;
-	if( p.getShort("bs") == 0 && p.getInt("s") != AppModel.instance.game.player.id )
+	if( p.getInt("bs") == 0 && p.getInt("s") != AppModel.instance.game.player.id )
 		return;
-	buttonsEnabled = p.getShort("bs") > 0;
+	buttonsEnabled = p.getInt("bs") > 0;
 }
 
 private function spectate(buddy:Buddy):void

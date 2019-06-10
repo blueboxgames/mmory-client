@@ -8,7 +8,7 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import starling.animation.Transitions;

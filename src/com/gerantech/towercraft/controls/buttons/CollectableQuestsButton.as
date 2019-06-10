@@ -1,8 +1,8 @@
 package com.gerantech.towercraft.controls.buttons 
 {
-import com.gt.towers.events.CoreEvent;
-import com.gt.towers.exchanges.ExchangeItem;
-import com.gt.towers.others.Quest;
+import com.gerantech.mmory.core.events.CoreEvent;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.others.Quest;
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayoutData;
 import flash.utils.clearTimeout;

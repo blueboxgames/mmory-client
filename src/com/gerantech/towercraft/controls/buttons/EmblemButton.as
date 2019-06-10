@@ -1,14 +1,17 @@
 package com.gerantech.towercraft.controls.buttons
 {
+	import com.gerantech.towercraft.models.AppModel;
 	import com.gerantech.towercraft.models.Assets;
 	import com.gerantech.towercraft.themes.MainTheme;
 	import com.gerantech.towercraft.utils.StrUtils;
-	
+
 	import feathers.controls.ButtonState;
 	import feathers.controls.ImageLoader;
 	import feathers.layout.AnchorLayout;
 	import feathers.layout.AnchorLayoutData;
 	import feathers.skins.ImageSkin;
+
+	import starling.textures.Texture;
 
 	public class EmblemButton extends SimpleLayoutButton
 	{
@@ -33,7 +36,7 @@ package com.gerantech.towercraft.controls.buttons
 			backgroundSkin = skin;
 			
 			iconDisplay = new ImageLoader();
-			iconDisplay.source = Assets.getTexture("emblems/emblem-" + StrUtils.getZeroNum(_value+""), "gui");
+			iconDisplay.source = getTexture(_value);
 			iconDisplay.layoutData = new AnchorLayoutData(padding, padding, padding*1.3, padding);
 			addChild(iconDisplay);
 		}
@@ -48,8 +51,22 @@ package com.gerantech.towercraft.controls.buttons
 				return;
 			
 			_value = val;
-			if( iconDisplay )
-				iconDisplay.source = Assets.getTexture("emblems/emblem-"+StrUtils.getZeroNum(_value+""), "gui");
+			if( iconDisplay != null )
+				iconDisplay.source = getTexture(_value);
 		}
+
+		static public function loadAtlas(loadCallback:Function) : void
+		{
+			var txt:Texture = AppModel.instance.assets.getTexture("emblem-000");
+			if( txt == null )
+				Assets.loadAtlas("assets/images/", "", loadCallback, "emblems");
+		}
+
+		static public function getTexture(index:int) : Texture
+		{
+			return AppModel.instance.assets.getTexture("emblem-" + StrUtils.getZeroNum(index.toString()));
+		}
+
+
 	}
 }

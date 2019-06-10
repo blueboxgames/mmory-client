@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.utils
 {
 import com.gerantech.towercraft.models.AppModel;
+
 import flash.utils.Dictionary;
 
 public class StrUtils
@@ -66,6 +67,7 @@ public static function getArabicNumber(input:Object):String
 	_str = _str.split('8').join('٨');
 	_str = _str.split('9').join('٩');
 	_str = _str.split('/').join('٫');
+	_str = _str.split('?').join('؟');
 	return _str;
 }
 public static function getPersianNumber(input:Object):String
@@ -82,6 +84,7 @@ public static function getPersianNumber(input:Object):String
 	_str = _str.split('8').join('۸');
 	_str = _str.split('9').join('۹');
 	_str = _str.split('/').join('٫');
+	_str = _str.split('?').join('؟');
 	return _str;
 }
 public static function getNumber(input:Object):String
@@ -253,6 +256,30 @@ public static function toTimeFormat(seconds:int):String
 		return minutes+ "m " + seconds + "s";
 	}
 	return seconds + "s";
+}
+
+public static function toElapsed(seconds:int):String
+{
+	if( seconds < 300 )
+		return loc("ago_moments");
+
+	var minutes:int = Math.round( seconds / 60 );
+	if( minutes < 60 )
+		return loc("ago_minutes", [minutes]);
+
+	var hours:int = Math.floor( minutes / 60 );
+	if( hours < 24 )
+		return loc("ago_hours", [hours]);
+	
+	var days:int = Math.floor( hours / 24 );
+	if( days < 31 )
+		return loc("ago_days", [days]);
+	
+	var months:int = Math.floor( days / 30 );
+	if( months < 13 )
+		return loc("ago_months", [months]);
+
+	return loc("ago_years", [Math.floor( months / 12 )]);
 }
 
 public static function getDateString(_date:Date, isTime:Boolean = false):String

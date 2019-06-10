@@ -1,23 +1,23 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.headers.LobbyHeader;
+import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.popups.FriendlyBattleModePopup;
-import com.gerantech.towercraft.controls.popups.SimpleListPopup;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.battle.fieldes.FieldData;
-import com.gt.towers.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import feathers.controls.Button;
+
 import feathers.layout.AnchorLayoutData;
+
 import flash.utils.setTimeout;
-import starling.display.Image;
+
 import starling.events.Event;
 
 public class LobbyChatSegment extends LobbyBaseChatSegment
@@ -34,7 +34,7 @@ override public function get manager():LobbyManager
 
 override protected function loadData():void
 {
-	if( !initializeStarted || ChatSegment.factory == null )
+	if( !initializeStarted || EmoteItemRenderer.factory == null )
 		return;
 	
 	if( manager.isReady )
@@ -55,7 +55,7 @@ override protected function showElements():void
 	battleButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
 	battleButton.width = battleButton.height = footerSize;
 	battleButton.iconTexture = Assets.getTexture("socials/icon-battle", "gui");
-    battleButton.layoutData = new AnchorLayoutData(NaN, NaN, padding, padding);
+	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, padding, padding);
 	battleButton.addEventListener(Event.TRIGGERED, battleButton_triggeredHandler);
 	addChild(battleButton);
 	
@@ -72,7 +72,7 @@ protected function chatList_triggeredHandler(event:Event):void
 	var selectedItem:LobbyChatItemRenderer = event.data[0] as LobbyChatItemRenderer;
 	var params:SFSObject = event.data[1] as SFSObject;
 	// show info
-	if( params.getShort("pr") == MessageTypes.M10_COMMENT_JOINT )
+	if( params.getInt("pr") == MessageTypes.M10_COMMENT_JOINT )
 	{
 		var sfs:SFSObject = new SFSObject();
 		sfs.putInt("i", params.getInt("o"));
@@ -81,7 +81,7 @@ protected function chatList_triggeredHandler(event:Event):void
 		return;
 	}
 	// accept or reject
-	if( MessageTypes.isConfirm(params.getShort("m")) )
+	if( MessageTypes.isConfirm(params.getInt("m")) )
 		SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby );
 }
 
@@ -97,7 +97,7 @@ protected function battleButton_triggeredHandler(event:Event):void
 	battleModePopup.addEventListener(Event.SELECT, battleModePopup_selectHandler);
 	appModel.navigator.addPopup(battleModePopup);
 	//showSimpleListPopup(null, battleButton, battlebutton_selectHandler, battlebutton_selectHandler, "button_battle_left", "button_battle_right");
-    scrollToEnd();
+	scrollToEnd();
 }
 
 protected function battleModePopup_selectHandler(event:Event):void 
@@ -107,8 +107,8 @@ protected function battleModePopup_selectHandler(event:Event):void
 	
 	setTimeout(function():void{ buttonsEnabled = false}, 1);
 	var params:SFSObject = new SFSObject();
-	params.putShort("m", MessageTypes.M30_FRIENDLY_BATTLE);
-	params.putShort("st", 0);
+	params.putInt("m", MessageTypes.M30_FRIENDLY_BATTLE);
+	params.putInt("st", 0);
 	if( event.data == 1 )
 		params.putBool("bt", true);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby);
@@ -122,8 +122,8 @@ protected function manager_triggerHandler(event:Event):void
 
 override public function enabledChatting(value:Boolean):void
 {
-    super.enabledChatting(value);
-    battleButton.visible = !value;
+	super.enabledChatting(value);
+	battleButton.visible = !value;
 }
 
 override public function set buttonsEnabled(value:Boolean):void

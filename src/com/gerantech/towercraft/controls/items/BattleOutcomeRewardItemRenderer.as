@@ -1,13 +1,12 @@
 package com.gerantech.towercraft.controls.items
 {
-import com.gerantech.towercraft.controls.BuildingCard;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.models.vo.RewardData;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.ResourceType;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import dragonBones.starling.StarlingArmatureDisplay;
@@ -29,7 +28,6 @@ private var reward:SFSObject;
 private var iconDisplay:Image;
 private var labelDisplay:RTLLabel;
 private var battleData:BattleData;
-private var buildingCrad:BuildingCard;
 private var armatureDisplay:StarlingArmatureDisplay;
 
 public function BattleOutcomeRewardItemRenderer(battleData:BattleData){ this.battleData = battleData; }
@@ -68,7 +66,6 @@ override protected function commitData():void
 		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, isComment ? 80 : 60);
 		labelDisplay.alpha = isComment ? 0.7 : 1;
 		addChild(labelDisplay);
-		
 	}
 	_owner.addEventListener(FeathersEventType.CREATION_COMPLETE, owner_createCompleteHandler);
 }
