@@ -13,7 +13,10 @@ import com.gerantech.towercraft.controls.overlays.EarnOverlay;
 import com.gerantech.towercraft.controls.overlays.FortuneOverlay;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.popups.AdConfirmPopup;
+import com.gerantech.towercraft.controls.popups.BookDetailsPopup;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
+import com.gerantech.towercraft.controls.popups.EmoteDetailsPopup;
+import com.gerantech.towercraft.controls.popups.SimpleHeaderPopup;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.controls.segments.ExchangeSegment;
 import com.gerantech.towercraft.events.GameEvent;
@@ -30,9 +33,6 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 import feathers.events.FeathersEventType;
 
 import starling.events.Event;
-import com.gerantech.towercraft.controls.popups.SimpleHeaderPopup;
-import com.gerantech.towercraft.controls.popups.BookDetailsPopup;
-import com.gerantech.towercraft.controls.popups.EmoteDetailsPopup;
 /**
 * @author Mansour Djawadi
 */
@@ -103,12 +103,16 @@ public function process(item : ExchangeItem) : void
 	function detailsPopup_selectHandler(event:Event):void
 	{
 		detailsPopup.removeEventListener(Event.SELECT, detailsPopup_selectHandler);
-		// waiting battle books
 		if( item.isBook() )
 		{
 			_state = item.getState(timeManager.now);
-			if( _state == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
-				params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+			if( _state == ExchangeItem.CHEST_STATE_WAIT )
+			{
+				if( exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
+					params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+				else
+					detailsPopup.addEventListener(Event.SELECT, detailsPopup_selectHandler);
+			}
 		}
 		exchange(item, params);
 	}
