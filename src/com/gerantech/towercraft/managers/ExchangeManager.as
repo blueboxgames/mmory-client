@@ -63,10 +63,6 @@ public function process(item : ExchangeItem) : void
 	{
 		item.enabled = true;
 		var _state:int = item.getState(timeManager.now);
-		//  waiting battle books
-		if( _state == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
-			params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
-
 		if( item.category == ExchangeType.C110_BATTLES && _state == ExchangeItem.CHEST_STATE_EMPTY )
 			return;
 		
@@ -107,6 +103,13 @@ public function process(item : ExchangeItem) : void
 	function detailsPopup_selectHandler(event:Event):void
 	{
 		detailsPopup.removeEventListener(Event.SELECT, detailsPopup_selectHandler);
+		// waiting battle books
+		if( item.isBook() )
+		{
+			_state = item.getState(timeManager.now);
+			if( _state == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
+				params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+		}
 		exchange(item, params);
 	}
 
