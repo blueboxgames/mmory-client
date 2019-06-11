@@ -1,5 +1,11 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.groups.Devider;
 import com.gerantech.towercraft.controls.groups.GradientHilight;
@@ -15,12 +21,6 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.constants.MessageTypes;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.exchanges.ExchangeItem;
-import com.gerantech.mmory.core.exchanges.Exchanger;
 
 import dragonBones.events.EventObject;
 import dragonBones.starling.StarlingArmatureDisplay;
@@ -83,12 +83,14 @@ override protected function initialize():void
 
 	var numCards:int = ExchangeType.getNumTotalCards(item.outcome, arena, player.splitTestCoef, 0);
 	var cardsPalette:IconGroup = new IconGroup(Assets.getTexture("cards"), int(numCards * 0.9) + " - " + int(numCards * 1.1 + 1));
+	cardsPalette.backgroundColor = 0x87a8d0;
 	cardsPalette.width = transitionIn.destinationBound.width * 0.42;
 	cardsPalette.layoutData = new AnchorLayoutData(290, NaN, NaN, 50);
 	addChild(cardsPalette);
 	
 	var numSofts:int = ExchangeType.getNumSofts(item.outcome, arena, player.splitTestCoef);
 	var softsPalette:IconGroup = new IconGroup(Assets.getTexture("res-" + ResourceType.R3_CURRENCY_SOFT, "gui"), int(numSofts * 0.9) + " - " + int(numSofts * 1.1 + 1));
+	softsPalette.backgroundColor = 0x87a8d0;
 	softsPalette.textColor = 0xFFFF99;
 	softsPalette.width = transitionIn.destinationBound.width * 0.42;
 	softsPalette.layoutData = new AnchorLayoutData(290, 40);
