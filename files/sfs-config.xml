@@ -2,7 +2,7 @@
 <SmartFoxConfig>
 <ip>85.208.252.20</ip>
 <port>9933</port>
-<zone>towers</zone>
+<zone>mmory</zone>
 <debug>false</debug>
 <httpPort>8080</httpPort>
 <useBlueBox>true</useBlueBox>
