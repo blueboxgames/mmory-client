@@ -1,5 +1,10 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.mmory.core.Player;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.Exchanger;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.headers.DeckHeader;
 import com.gerantech.towercraft.controls.items.CardItemRenderer;
@@ -11,11 +16,6 @@ import com.gerantech.towercraft.controls.popups.RequirementConfirmPopup;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.mmory.core.Player;
-import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.exchanges.Exchanger;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.controls.List;
@@ -36,11 +36,11 @@ import flash.utils.setTimeout;
 
 import starling.animation.Transitions;
 import starling.core.Starling;
+import starling.display.Quad;
 import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
-import starling.display.Quad;
 
 public class CardsSegment extends Segment
 {
@@ -280,6 +280,7 @@ private function setEditMode(value:Boolean, type:int):void
 		
 		draggableCard = new CardView();
 		draggableCard.width = 240;
+		draggableCard.showElixir = true;
 		draggableCard.height = draggableCard.width * CardView.VERICAL_SCALE;
 		draggableCard.pivotX = draggableCard.width * 0.5;
 		draggableCard.pivotY = draggableCard.height * 0.5;
