@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <application xmlns="http://ns.adobe.com/air/application/32.0">
   <id>__APPID__</id>
-  <versionNumber>0.2.000</versionNumber>
+  <versionNumber>0.2.050</versionNumber>
   <supportedProfiles>mobileDevice</supportedProfiles>
   <filename>Pistol</filename>
   <name>Pistol</name>
@@ -57,7 +57,7 @@
 				<action android:name="android.intent.action.VIEW"/>
 				<category android:name="android.intent.category.BROWSABLE"/>
 				<category android:name="android.intent.category.DEFAULT"/>
-				<data android:scheme="towers"/>
+				<data android:scheme="k2k"/>
 		  </intent-filter>
 		</activity>    			
 		<activity android:name="ir.tapsell.sdk.TapsellAdActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
