@@ -105,7 +105,7 @@ private function addSwitcher(controlName:String, positionY:int, min:int, value:i
 	if ( prefix != null )
 		switcher.labelStringFactory = function (value:int):String { return loc(prefix + "_" + value); }
 
-	switcher.width = 400;
+	switcher.width = 360;
 	switcher.height = 100;
 	switcher.layoutData = new AnchorLayoutData( positionY, appModel.isLTR?padding:NaN, NaN, appModel.isLTR?NaN:padding);
 	addChild(switcher);
