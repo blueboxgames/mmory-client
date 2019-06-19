@@ -289,7 +289,6 @@ private function validateSummonPosition() : Boolean
 {
 	if( touchPosition.y < 0 || touchPosition.y > BattleField.HEIGHT )
 		return false;
-	
 	if( CardTypes.isSpell(selectedCard.type) )
 		return true;
 	return true;
@@ -301,6 +300,9 @@ private function setTouchPosition(touch:Touch) : void
 {
 	touchPosition.x = Math.max(BattleField.PADDING, Math.min(stageWidth - BattleField.PADDING, touch.globalX));
 	
+	if( selectedCard == null )
+		return;
+	
 	var limitY:Number = -0.5;
 	if( !CardTypes.isSpell(selectedCard.type) )
 	{
@@ -308,7 +310,7 @@ private function setTouchPosition(touch:Touch) : void
 		{
 			limitY = 0.15;
 		}
-		else
+		else if( appModel.battleFieldView.mapBuilder != null )
 		{
 			if( appModel.battleFieldView.mapBuilder.summonAreaMode >= MapBuilder.SUMMON_AREA_BOTH )
 				limitY = -0.24;
