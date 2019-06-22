@@ -1,5 +1,8 @@
 package com.gerantech.towercraft.controls.items.challenges 
 {
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.towercraft.controls.buttons.IconButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
@@ -9,11 +12,8 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
 import com.gerantech.towercraft.events.GameEvent;
 import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.socials.Challenge;
 
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
@@ -26,6 +26,7 @@ import flash.geom.Rectangle;
 
 import starling.core.Starling;
 import starling.events.Event;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 
 /**
 * @author Mansour Djawadi
@@ -40,7 +41,6 @@ static private const BG_SCALE_GRID:Rectangle = new Rectangle(23, 22, 2, 2);
 static private const COLORS:Array = [0x30e465, 0xffa400, 0xff4200, 0xe720ff];
 
 private var state:int;
-private var chIndex:int;
 private var locked:Boolean;
 private var backgroundImage:SimpleLayoutButton;
 private var backgroundLayoutData:AnchorLayoutData;
@@ -68,9 +68,8 @@ override protected function commitData() : void
 
 	challenge = player.challenges.get(_data as int);
 	state = challenge.getState(timeManager.now);
-	chIndex = IN_HOME ? UserData.instance.challengeIndex : index;
-	locked = Challenge.getUnlockAt(index) > ARENA;
-	challenge.mode = Challenge.getMode(chIndex);
+	// chIndex = IN_HOME ? UserData.instance.challengeIndex : index;
+	locked = ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, index) > ARENA;
 	
 	backgroundFactory();
 	iconFactory();
@@ -89,7 +88,7 @@ private function costFactory() : void
 {
 	if( locked || IS_FRIENDLY )
 		return;
-	challenge.runRequirements = Challenge.getRunRequiements(chIndex);
+	challenge.runRequirements = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, challenge.type));
 	var costType:int = challenge.runRequirements.keys()[0];
 	var costValue:int = challenge.runRequirements.get(costType);
 	if( costValue <= 0 )
@@ -155,7 +154,7 @@ private function bannerFactory() : void
 		bannerDisplay.layoutData = new AnchorLayoutData(150, 11, 60, 11);
 		addChild(bannerDisplay);
 	}
-	bannerDisplay.source = Assets.getTexture(locked ? "events/banner-locked" : "events/banner-" + chIndex, "gui");
+	bannerDisplay.source = Assets.getTexture(locked ? "events/banner-locked" : "events/banner-" + challenge.mode, "gui");
 }
 
 private function backgroundFactory() : void
@@ -171,7 +170,7 @@ private function backgroundFactory() : void
 		ImageLoader(backgroundImage.backgroundSkin).scale9Grid = BG_SCALE_GRID;
 		addChild(backgroundImage);
 	}
-	ImageLoader(backgroundImage.backgroundSkin).source = Assets.getTexture("events/index-bg-" + chIndex + "-up", "gui");
+	ImageLoader(backgroundImage.backgroundSkin).source = Assets.getTexture("events/index-bg-" + challenge.mode + "-up", "gui");
 }
 
 private function iconFactory() : void
@@ -195,12 +194,12 @@ private function titleFactory() : void
 {
 	if( titleDisplay == null )
 	{
-		titleDisplay = new RTLLabel(null, COLORS[chIndex], null, null, false, null, 0.9);
+		titleDisplay = new RTLLabel(null, COLORS[challenge.mode], null, null, false, null, 0.9);
 		titleDisplay.layoutData = new AnchorLayoutData(12, appModel.isLTR ? NaN : 160, NaN, appModel.isLTR ? 160 : NaN);
 		titleDisplay.touchable = false;
 		addChild(titleDisplay);
 	}
-	titleDisplay.text = locked ? loc("challenge_label", [loc("num_" + (chIndex + 1))]) : loc("challenge_title_" + challenge.mode);
+	titleDisplay.text = locked ? loc("challenge_label", [loc("num_" + (index + 1))]) : loc("challenge_title_" + challenge.mode);
 }
 
 private function messageFactory() : void
@@ -223,12 +222,12 @@ protected function backgroundImage_triggerdHandler(event:Event) : void
 {
 	if( locked )
 	{
-		var point:int = game.arenas.get(Challenge.getUnlockAt(chIndex)).min - 1;
+		var point:int = game.arenas.get(ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, index)).min - 1;
 		appModel.navigator.addLog(loc("availableuntil_messeage", [loc("resource_title_2") + " " + point, ""]));
 		return;
 	}
 	
-	_owner.dispatchEventWith(Event.TRIGGERED, false, chIndex);
+	_owner.dispatchEventWith(Event.TRIGGERED, false, index);
 }
 
 protected function infoButton_triggeredHandler(event:Event) : void

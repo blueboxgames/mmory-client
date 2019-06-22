@@ -14,6 +14,7 @@ import com.gerantech.mmory.core.utils.maps.IntCardMap;
 import com.gerantech.mmory.core.utils.maps.IntIntCardMap;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 public class BattleData
 {
@@ -63,7 +64,7 @@ public function BattleData(sfsData:ISFSObject)
 
 	// reduce battle cost
 	var game:Game = AppModel.instance.game;
-	var cost:IntIntMap = Challenge.getRunRequiements(sfsData.getInt("mode"));
+	var cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, sfsData.getInt("type")));
 	var exItem:ExchangeItem = Challenge.getExchangeItem(sfsData.getInt("mode"), cost, game.player.get_arena(0));
 	var response:int = game.exchanger.exchange(exItem, sfsData.getInt("startAt"), 0);
 	if( response != MessageTypes.RESPONSE_SUCCEED )

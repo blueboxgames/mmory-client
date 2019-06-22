@@ -221,7 +221,7 @@ private function pullCard() : void
 {
 	collectedItemIndex ++;
 	rewardType = rewardKeys[collectedItemIndex];
-	rewardRarity = ScriptEngine.getInt(CardFeatureType.F00_RARITY, rewardType);
+	rewardRarity = ScriptEngine.getInt(ScriptEngine.T00_RARITY, rewardType);
 	
 	// play SFXs
 	if( ResourceType.isCard(rewardType) )

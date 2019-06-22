@@ -110,7 +110,7 @@ public function summon() : void
 	zoneDisplay.visible = false;
 	titleDisplay.visible = false;
 	levelDisplay.visible = false;
-	var dely:Number = ScriptEngine.getInt(CardFeatureType.F04_SUMMON_TIME, this._type, AppModel.instance.game.player.cards.get(_type).level) * 0.001;
+	var dely:Number = ScriptEngine.getInt(ScriptEngine.T04_SUMMON_TIME, this._type, AppModel.instance.game.player.cards.get(_type).level) * 0.001;
 	Starling.juggler.tween(unitsContainer, 0.2, {alpha:0, delay:dely, onComplete:removeFromParent, onCompleteArgs:[true]});
 }
 }

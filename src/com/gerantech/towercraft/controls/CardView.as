@@ -74,8 +74,8 @@ package com.gerantech.towercraft.controls
 			if( this._type > 100 )
 			{
 				this._availablity = player.getAvailablity(this._type)
-				this._rarity = ScriptEngine.getInt(CardFeatureType.F00_RARITY, this._type)
-				this._elixir = ScriptEngine.getInt(CardFeatureType.F02_ELIXIR_SIZE, this._type)
+				this._rarity = ScriptEngine.getInt(ScriptEngine.T00_RARITY, this._type)
+				this._elixir = ScriptEngine.getInt(ScriptEngine.T02_ELIXIR_SIZE, this._type)
 			}
 			this.invalidate(INVALIDATION_FLAG_DATA);
 		}
@@ -111,7 +111,7 @@ package com.gerantech.towercraft.controls
 				return;
 			this._showElixir = value;
 			if( this._showElixir && this._type > 100 )
-				this._elixir = ScriptEngine.getInt(CardFeatureType.F02_ELIXIR_SIZE, this._type);
+				this._elixir = ScriptEngine.getInt(ScriptEngine.T02_ELIXIR_SIZE, this._type);
 			this.invalidate(INVALIDATION_FLAG_DATA);
 		}
 

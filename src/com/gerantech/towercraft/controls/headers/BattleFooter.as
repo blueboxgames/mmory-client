@@ -345,8 +345,10 @@ override public function dispose() : void
 {
 	super.dispose();
 	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_elixirUpdateHandler);
-	draggableCard.removeFromParent(true);
-	placeHolder.removeFromParent(true);
+	if( draggableCard != null )
+		draggableCard.removeFromParent(true);
+	if( placeHolder != null )
+		placeHolder.removeFromParent(true);
 	removeEventListener(TouchEvent.TOUCH, stage_touchHandler);
 }
 private function get battleField() : BattleField

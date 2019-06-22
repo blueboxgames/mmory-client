@@ -73,7 +73,7 @@ override protected function transitionInCompleted():void
 	super.transitionInCompleted();
 	padding = 50;
 
-	var rarity:int = ScriptEngine.getInt(CardFeatureType.F00_RARITY, cardType, 1);
+	var rarity:int = ScriptEngine.getInt(ScriptEngine.T00_RARITY, cardType, 1);
 	var rarityPalette:ColorGroup = new ColorGroup();
 	rarityPalette.backgroundColor = CardTypes.getRarityColor(rarity);
 	rarityPalette.label = loc("card_rarity_" + rarity);
@@ -96,8 +96,8 @@ override protected function transitionInCompleted():void
 	CardFeatureItemRenderer.CARD_TYPE = cardType;
 	CardFeatureItemRenderer.UPGRADABLE = player.cards.exists(cardType) && player.cards.get(cardType).upgradable();
 	var features:Vector.<int> = CardFeatureType.getRelatedTo(cardType)._list;
-	if( ScriptEngine.get(CardFeatureType.F03_QUANTITY, cardType) > 1 )
-		features.push(CardFeatureType.F03_QUANTITY);
+	if( ScriptEngine.get(ScriptEngine.T03_QUANTITY, cardType) > 1 )
+		features.push(ScriptEngine.T03_QUANTITY);
 	
 	var featureLayout:TiledRowsLayout = new TiledRowsLayout();
 	featureLayout.horizontalAlign = HorizontalAlign.LEFT;
