@@ -287,13 +287,15 @@ protected function stage_touchHandler(event:TouchEvent) : void
 
 private function coverUnitTutorial():void
 {
-	if( numTutors < player.get_battleswins() || numCovers < battleField.numSummonedUnits )
+	if( numTutors < player.get_battleswins() )
 		return;
 	
 	var ptoffset:int = ScriptEngine.getInt(ScriptEngine.T64_BATTLE_PAUSE_TIME, battleField.field.mode, player.get_battleswins(), battleField.numSummonedUnits);
 	if( ptoffset > 0 )
 		battleField.pauseTime = battleField.now + ptoffset;
 
+	if( numCovers < battleField.numSummonedUnits )
+		return;
 	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "cover", battleField.numSummonedUnits);
 	if( summonData != null )
 		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3]);
