@@ -34,7 +34,7 @@ public function CoreLoader(serverData:SFSObject)
 	this.version = this.serverData.getText("coreVersion");
 	
 	ScriptEngine.initialize(serverData.getText("script"));
-	trace("script version:", ScriptEngine.get(-2, 0));
+	trace("script version:", ScriptEngine.get(-2));
 	initServerData(serverData);
 	
 	AppModel.instance.game = new Game();
