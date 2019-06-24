@@ -296,7 +296,7 @@ private function coverUnitTutorial():void
 
 	if( numCovers < battleField.numSummonedUnits )
 		return;
-	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "cover", battleField.numSummonedUnits);
+	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "cover", player.get_battleswins() * 10 + battleField.numSummonedUnits);
 	if( summonData != null )
 		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3]);
 }
