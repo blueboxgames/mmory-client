@@ -8,7 +8,6 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.models.Assets;
 	import com.gerantech.towercraft.themes.MainTheme;
 	import com.gerantech.towercraft.utils.StrUtils;
-	import com.gerantech.mmory.core.constants.CardFeatureType;
 	import com.gerantech.mmory.core.constants.CardTypes;
 	import com.gerantech.mmory.core.constants.ResourceType;
 	import com.gerantech.mmory.core.scripts.ScriptEngine;

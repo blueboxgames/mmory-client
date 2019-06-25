@@ -5,7 +5,6 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
-import com.gerantech.mmory.core.constants.CardFeatureType;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
