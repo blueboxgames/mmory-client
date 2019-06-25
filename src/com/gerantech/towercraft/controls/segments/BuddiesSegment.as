@@ -135,7 +135,7 @@ protected function list_focusInHandler(event:Event):void
 	if( buddy == null )
 	{
 		var subject:String = loc("invite_friend");
-		var text:String = loc("invite_friend_message", [appModel.descriptor.name]) + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
+		var text:String = loc("invite_friend_message") + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
 		NativeAbilities.instance.shareText(subject, text);
 		trace(subject, text);
 		return;

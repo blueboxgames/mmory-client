@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRenderer;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;
-import com.gerantech.mmory.core.constants.PrefsTypes;
 
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
@@ -54,10 +54,18 @@ override protected function initialize():void
 
 protected function list_triggeredHandler(event:Event) : void 
 {
+	var selectedIndex:int = event.data as int;
 	if( player.getTutorStep() == PrefsTypes.T_73_CHALLENGES_SHOWN )
+	{
+		if( selectedIndex != 1 )
+		{
+			appModel.navigator.addLog(loc("!!!"))
+			return;
+		}
 		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_74_CHALLENGE_SELECTED); 
+	}
 
-	UserData.instance.challengeIndex = event.data as int;
+	UserData.instance.challengeIndex = selectedIndex;
 	UserData.instance.save();
 	appModel.navigator.popScreen();
 }

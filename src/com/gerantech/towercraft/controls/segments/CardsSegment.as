@@ -69,42 +69,42 @@ override public function init():void
 	deckHeader = new DeckHeader();
 	deckHeader.addEventListener(Event.SELECT, deckHeader_selectHandler);
 	deckHeader.layoutData = new AnchorLayoutData(NaN, paddingH, NaN, paddingH);
+	deckHeader.alpha = 0;
 	addChild(deckHeader);
 	
 	var scrollerLayout:VerticalLayout = new VerticalLayout();
-	scrollerLayout.gap = 48;
+	scrollerLayout.gap = 32;
 	scrollerLayout.padding = 16; 
 	scrollerLayout.paddingTop = DeckHeader.HEIGHT + 16;
 	scrollerLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
 	
 	scroller = new ScrollContainer();
 	scroller.alpha = 0;
+	scroller.touchable = false;
 	scroller.layout = scrollerLayout;
-	scroller.layoutData = new AnchorLayoutData(0, paddingH, 0, paddingH);
 	scroller.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
-	scroller.addEventListener(Event.SCROLL, scroller_scrollHandler);
+	scroller.layoutData = new AnchorLayoutData(0, paddingH, 0, paddingH);
 	addChildAt(scroller, 0);
-	
+
 	initializeCompleted = true;
 	layout = new AnchorLayout();
-	var foundLayout:TiledRowsLayout = new TiledRowsLayout();
-	var unavailabledLayout:TiledRowsLayout = new TiledRowsLayout();
-	unavailabledLayout.gap = foundLayout.gap = foundLayout.paddingTop = 16;
-	unavailabledLayout.verticalGap = foundLayout.verticalGap = 52;
-	unavailabledLayout.paddingTop = foundLayout.paddingTop = 52;
-	unavailabledLayout.paddingBottom = foundLayout.paddingBottom = 52;
-	unavailabledLayout.useSquareTiles = foundLayout.useSquareTiles = false;
-	unavailabledLayout.useVirtualLayout = foundLayout.useVirtualLayout = false;
-	unavailabledLayout.requestedColumnCount = foundLayout.requestedColumnCount = 4;
-	unavailabledLayout.typicalItemWidth = foundLayout.typicalItemWidth = (stageWidth - foundLayout.gap * (foundLayout.requestedColumnCount - 1) - 64) / foundLayout.requestedColumnCount;
-	unavailabledLayout.typicalItemHeight = foundLayout.typicalItemHeight = foundLayout.typicalItemWidth * CardView.VERICAL_SCALE;
+	var availableLayout:TiledRowsLayout = new TiledRowsLayout();
+	var unavailableLayout:TiledRowsLayout = new TiledRowsLayout();
+	unavailableLayout.gap = availableLayout.gap = 16;
+	unavailableLayout.verticalGap = availableLayout.verticalGap = 52;
+	unavailableLayout.paddingTop = availableLayout.paddingTop = 52;
+	unavailableLayout.paddingBottom = availableLayout.paddingBottom = 52;
+	unavailableLayout.useSquareTiles = availableLayout.useSquareTiles = false;
+	unavailableLayout.useVirtualLayout = availableLayout.useVirtualLayout = false;
+	unavailableLayout.requestedColumnCount = availableLayout.requestedColumnCount = 4;
+	unavailableLayout.typicalItemWidth = availableLayout.typicalItemWidth = (stageWidth - availableLayout.gap * (availableLayout.requestedColumnCount - 1) - 64) / availableLayout.requestedColumnCount;
+	unavailableLayout.typicalItemHeight = availableLayout.typicalItemHeight = availableLayout.typicalItemWidth * CardView.VERICAL_SCALE;
 
 	availableList = new List();
+	availableList.layout = availableLayout;
 	availableList.verticalScrollPolicy = ScrollPolicy.OFF;
-	availableList.layout = foundLayout;
 	availableList.itemRendererFactory = function():IListItemRenderer { return new CardItemRenderer(true, true, true, scroller); }
 	availableList.dataProvider = availableCollection;
-	availableList.addEventListener(FeathersEventType.FOCUS_IN, unlocksList_focusInHandler);
 	scroller.addChild(availableList);
 	
 	if( unavailableCollection.length > 0 )
@@ -113,15 +113,47 @@ override public function init():void
 		
 		unavailableList = new List();
 		unavailableList.verticalScrollPolicy = ScrollPolicy.OFF;
-		unavailableList.layout = unavailabledLayout;
+		unavailableList.layout = unavailableLayout;
 		unavailableList.itemRendererFactory = function():IListItemRenderer { return new CardItemRenderer(false, false, false, scroller); }
 		unavailableList.dataProvider = unavailableCollection;
 		scroller.addChild(unavailableList);
 	}
-	
-	exchangeManager.addEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
-	Starling.juggler.tween(scroller, 0.5, {alpha:1});
+
+	if( !player.inDeckTutorial() )
+	{
+		Starling.juggler.tween(scroller, 0.1, {alpha:1});
+		Starling.juggler.tween(deckHeader, 0.2, {alpha:1, onComplete:finalizeSegment});
+		return;
+	}
+
+	//tutorial appearance
+	scroller.scrollToPosition(NaN, 2900, 0.5);
+	scroller.addEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_fscrollCompleteHandler);
+	function scroller_fscrollCompleteHandler(event:Event) : void
+	{
+		scroller.removeEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_fscrollCompleteHandler);
+		Starling.juggler.tween(scroller, 0.2, {alpha:1, onComplete:appearPage});
+	}
+	function appearPage() : void
+	{
+		scroller.addEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_lscrollCompleteHandler);
+		Starling.juggler.delayCall(scroller.scrollToPosition, 1, NaN, 0, 2);
+	}
+	function scroller_lscrollCompleteHandler(event:Event) : void
+	{
+		scroller.removeEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_lscrollCompleteHandler);
+		Starling.juggler.tween(deckHeader, 0.3, {alpha:1, onComplete:finalizeSegment});
+	}
 }
+
+private function finalizeSegment() : void
+{
+	scroller.touchable = true;
+	scroller.addEventListener(Event.SCROLL, scroller_scrollHandler);
+	availableList.addEventListener(FeathersEventType.FOCUS_IN, unlocksList_focusInHandler);
+	exchangeManager.addEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
+}
+	
 protected function exchangeManager_endHandler(event:Event):void
 {
 	deckHeader.update();

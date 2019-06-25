@@ -141,9 +141,7 @@ override protected function transitionInCompleted():void
 	var hasCoin:Boolean = player.resources.get(ResourceType.R3_CURRENCY_SOFT) >= upgradeCost;
 	upgradeButton.labelFactory = function () : ITextRenderer
 	{
-		if( hasCoin )
-			return new ShadowLabel(null, 1, 0, "center", null, false, null, 1);
-		return new RTLLabel(null, 0xCC0000, "center", null, false, null, 1);
+		return new ShadowLabel(null, hasCoin ? 1 : 0xFF0000, 0, "center", null, false, null, 1);
 	}
 	upgradeButton.defaultIcon.alpha = hasCoin ? 1 : 0.8;
 	addChild(upgradeButton);
