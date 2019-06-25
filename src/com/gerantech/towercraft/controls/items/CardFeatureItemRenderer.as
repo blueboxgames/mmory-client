@@ -7,7 +7,6 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.CardFeatureType;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import starling.display.BlendMode;
 import feathers.controls.ImageLoader;
@@ -19,6 +18,7 @@ import flash.filters.GlowFilter;
 import flash.geom.Rectangle;
 import starling.display.DisplayObject;
 import starling.display.Image;
+import com.gerantech.mmory.core.constants.CardTypes;
 
 public class CardFeatureItemRenderer extends FeatureItemRenderer
 {
@@ -38,10 +38,10 @@ override protected function commitData():void
 	feature = _data as int;
 	var card:Card = player.cards.get(CARD_TYPE);
 	var level:int = card == null ? 1 : (card.level - (IN_DETAILS ? 0 : 1));
-	var oldValue:Number = ScriptEngine.get(feature, CARD_TYPE, level + 0) * CardFeatureType.getUIFactor(feature);
+	var oldValue:Number = ScriptEngine.get(feature, CARD_TYPE, level + 0) * CardTypes.getUIFactor(feature);
 	if ( UPGRADABLE )
 	{
-		var newValue:Number = ScriptEngine.get(feature, CARD_TYPE, level + 1) * CardFeatureType.getUIFactor(feature);
+		var newValue:Number = ScriptEngine.get(feature, CARD_TYPE, level + 1) * CardTypes.getUIFactor(feature);
 		diff = Math.round(Math.abs(newValue - oldValue));
 	}
 	

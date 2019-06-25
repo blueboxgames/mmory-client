@@ -1,28 +1,31 @@
 package com.gerantech.towercraft.controls.screens
 {
-import com.gerantech.towercraft.controls.items.LeagueItemRenderer;
-import com.gerantech.towercraft.controls.overlays.EndBattleOverlay;
-import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
-import com.gerantech.towercraft.controls.toasts.BattleTurnToast;
-import com.gerantech.towercraft.models.vo.BattleData;
-import com.gerantech.towercraft.views.BattleFieldView;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.controls.items.LeagueItemRenderer;
+import com.gerantech.towercraft.controls.overlays.EndBattleOverlay;
+import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
+import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
+import com.gerantech.towercraft.controls.toasts.BattleTurnToast;
+import com.gerantech.towercraft.models.vo.BattleData;
+import com.gerantech.towercraft.views.BattleFieldView;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import dragonBones.objects.DragonBonesData;
 import dragonBones.starling.StarlingFactory;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
+
 import starling.core.Starling;
 import starling.events.Event;
-import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
-import com.gerantech.mmory.core.exchanges.ExchangeItem;
 
 public class LeaguesScreen extends ListScreen
 {
@@ -65,7 +68,7 @@ override protected function initialize():void
 	list.elasticity = 0.03;
 	list.dataProvider = leaguesCollection;
 	
-	testStarterPack();
+	// testStarterPack();
 	//testOpenBook();
 	//testOffer();
 	//testBattleToast();

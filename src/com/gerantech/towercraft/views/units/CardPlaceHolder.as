@@ -6,7 +6,6 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.CardFeatureType;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.CoreUtils;
