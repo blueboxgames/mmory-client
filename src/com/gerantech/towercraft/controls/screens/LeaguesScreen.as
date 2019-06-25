@@ -21,6 +21,8 @@ import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import starling.core.Starling;
 import starling.events.Event;
+import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 
 public class LeaguesScreen extends ListScreen
 {
@@ -63,6 +65,7 @@ override protected function initialize():void
 	list.elasticity = 0.03;
 	list.dataProvider = leaguesCollection;
 	
+	testStarterPack();
 	//testOpenBook();
 	//testOffer();
 	//testBattleToast();
@@ -142,6 +145,12 @@ private function list_createCompleteHandler():void
 //	trace(leaguesCollection.length,FactionItemRenderer.playerLeague,(leaguesCollection.length-FactionItemRenderer.playerLeague-1), FactionItemRenderer._height * (leaguesCollection.length-FactionItemRenderer.playerLeague-1))
 	list.scrollToPosition(NaN, LeagueItemRenderer.HEIGHT * (leaguesCollection.length - LeagueItemRenderer.LEAGUE - 1) + 300, 0);
 	Starling.juggler.delayCall(list.scrollToPosition, 0.3, NaN, LeagueItemRenderer.HEIGHT * (leaguesCollection.length - LeagueItemRenderer.LEAGUE - 2) , 1);
+}
+
+private function testStarterPack():void
+{
+	var item:ExchangeItem = new  ExchangeItem(31, 0, 123121212,  ResourceType.R5_CURRENCY_REAL + ":1990", "57:11," + ResourceType.R4_CURRENCY_HARD + ":300");
+	appModel.navigator.addPopup(new BundleDetailsPopup(item));
 }
 }
 }

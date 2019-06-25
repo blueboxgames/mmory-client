@@ -66,7 +66,7 @@ public function setInt(key:int, value:int):void
             return;
     
 	setString(key, value.toString());
-    if( key == PrefsTypes.TUTOR )
+	if( key == PrefsTypes.TUTOR )
 		GameAnalytics.addDesignEvent("tutorial:step-" + value);
 }
 public function setFloat(key:int, value:Number):void

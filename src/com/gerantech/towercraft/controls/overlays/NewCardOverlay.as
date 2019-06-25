@@ -71,7 +71,7 @@ override protected function addedToStageHandler(event:Event) : void
 	cardArmature.addEventListener(EventObject.SOUND_EVENT, armature_soundEventHandler);
 	addChild(cardArmature as DisplayObject);
 	
-	var rarity:int = ScriptEngine.getInt(CardFeatureType.F00_RARITY, type);
+	var rarity:int = ScriptEngine.getInt(ScriptEngine.T00_RARITY, type);
 	// change card
 	var texture:Texture = Assets.getTexture("cards/" + type, "gui");
 	var subtexture:SubTexture = new SubTexture(texture, new Rectangle(0, 0, texture.width, texture.height));

@@ -15,22 +15,10 @@ import starling.events.Event;
 
 public class ChallengesScreen extends ListScreen
 {
-private static var challengesCollection:ListCollection;
 public function ChallengesScreen()
 {
 	super();
 	title = loc("challenges_page");
-	if( challengesCollection == null )
-	{
-		challengesCollection = new ListCollection();
-		var keys:Vector.<int> = player.challenges.keys();
-		var index:int = 0;
-		while( index < keys.length )
-		{
-			challengesCollection.addItem(player.challenges.get(keys[index]));
-			index ++;
-		}
-	}
 }
 
 override protected function initialize():void
@@ -47,7 +35,7 @@ override protected function initialize():void
 	listLayout.paddingTop = 200;
 	listLayout.padding = 150;
 	
-	list.dataProvider = challengesCollection;
+	list.dataProvider = new ListCollection([0,1,2,3]);
 	list.itemRendererFactory = function () : IListItemRenderer { return new ChallengeIndexItemRenderer(); };
 	list.addEventListener(Event.TRIGGERED, list_triggeredHandler);
 	

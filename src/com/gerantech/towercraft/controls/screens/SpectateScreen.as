@@ -12,6 +12,7 @@ import com.smartfoxserver.v2.requests.LeaveRoomRequest;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import starling.events.Event;
+import com.smartfoxserver.v2.requests.IRequest;
 
 public class SpectateScreen extends ListScreen
 {
@@ -103,7 +104,7 @@ override protected function backButtonFunction():void
 override public function dispose():void
 {
 	var r:Room = sfsConnection.getRoomByName(cmd)
-	sfsConnection.send(new LeaveRoomRequest(sfsConnection.getRoomByName(cmd)));
+	sfsConnection.send(new LeaveRoomRequest(sfsConnection.getRoomByName(cmd)) as IRequest);
 	removeConnectionListeners();
 	super.dispose();
 }

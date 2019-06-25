@@ -115,7 +115,7 @@ override protected function getRewardsCollection(playerIndex:int) : ListCollecti
 	
 	if( exchanger.findItem(ExchangeType.C110_BATTLES, ExchangeItem.CHEST_STATE_EMPTY, timeManager.now) == null )
 		ret.push({t:"-1", c:loc("battle_no_book")});
-	if( player.get_arena(player.get_point() - reward_2.getInt("point")) > 0 && battleData.sfsData.getInt("mode") == 0 )
+	if( player.get_arena(player.get_point() - reward_2.getInt("point")) > 0 && battleData.sfsData.getInt("type") == 0 )
 		ret.push({t:"-2", c:loc("battle_no_point")});
 	return ret;
 }

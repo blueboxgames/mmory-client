@@ -42,7 +42,7 @@ public class BookDetailsPopup extends SimpleHeaderPopup
 private var item:ExchangeItem;
 private var hilight:GradientHilight;
 private var showButton:Boolean;
-private var messageDisplay:RTLLabel;
+private var messageDisplay:ShadowLabel;
 private var actionButton:MMOryButton;
 private var footerDisplay:ImageLoader;
 private var countdownDisplay:CountdownLabel;

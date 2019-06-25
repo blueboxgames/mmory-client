@@ -51,7 +51,7 @@ override protected function initialize():void
 	addChild(skin);
 	
 	var leftButton:Button = new Button();
-	leftButton.label = ">";
+	leftButton.label = appModel.isLTR ? "<" : ">";
 	leftButton.width = controlSize;
 	leftButton.styleName = MainTheme.STYLE_BUTTON_NEUTRAL;
 	leftButton.layoutData = new AnchorLayoutData(0, NaN, 0, 0);
@@ -59,7 +59,7 @@ override protected function initialize():void
 	addChild(leftButton);
 	
 	var rightButton:Button = new Button();
-	rightButton.label = "<";
+	rightButton.label = appModel.isLTR ? ">" : "<";
 	rightButton.width = controlSize;
 	rightButton.styleName = MainTheme.STYLE_BUTTON_NEUTRAL;
 	rightButton.layoutData = new AnchorLayoutData(0, 0, 0, NaN);
