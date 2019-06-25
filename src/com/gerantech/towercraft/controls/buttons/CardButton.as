@@ -2,7 +2,6 @@ package com.gerantech.towercraft.controls.buttons
 {
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.CardFeatureType;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 

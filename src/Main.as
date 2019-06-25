@@ -1,11 +1,12 @@
 package
 {
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.screens.BattleScreen;
 import com.gerantech.towercraft.controls.screens.SplashScreen;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.towercraft.utils.Localizations;
 import com.marpies.ane.gameanalytics.GameAnalytics;
 import com.marpies.ane.gameanalytics.data.GAErrorSeverity;
 
@@ -21,13 +22,11 @@ import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.InvokeEvent;
 import flash.events.UncaughtErrorEvent;
-import flash.geom.Rectangle;
 import flash.utils.getTimer;
 
 import haxe.Log;
 
 import starling.core.Starling;
-import com.gerantech.towercraft.utils.Localizations;
 
 public class Main extends Sprite
 {
@@ -49,9 +48,9 @@ public function Main()
     
 	// GameAnalytic Configurations
 	var currencies:Vector.<String> = new Vector.<String>();
-	var bt:Vector.<int> = CardTypes.getAll()._list;
-	for each( var r:int in bt )
-		currencies.push(r.toString());
+	// var bt:Array = CardTypes.getAll();
+	// for each( var r:int in bt )
+	// 	currencies.push(r.toString());
 	currencies.push(ResourceType.R1_XP.toString());
 	currencies.push(ResourceType.R2_POINT.toString());
 	currencies.push(ResourceType.R4_CURRENCY_HARD.toString());

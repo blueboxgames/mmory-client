@@ -10,7 +10,6 @@ import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
 import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.CardFeatureType;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 
@@ -125,7 +124,7 @@ override protected function initialize():void
 		featureList.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 560);
 		featureList.horizontalScrollPolicy = featureList.verticalScrollPolicy = ScrollPolicy.OFF;
 		featureList.itemRendererFactory = function ():IListItemRenderer { return new CardFeatureItemRenderer(); }
-		featureList.dataProvider = new ListCollection(CardFeatureType.getRelatedTo(card.type)._list);
+		featureList.dataProvider = new ListCollection(CardTypes.getRelatedTo(card.type)._list);
 		addChild(featureList);
 	}
 	function showEnd():void 

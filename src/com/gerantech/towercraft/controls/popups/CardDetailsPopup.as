@@ -1,5 +1,10 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.groups.ColorGroup;
@@ -10,12 +15,6 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.CardFeatureType;
-import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
@@ -91,11 +90,10 @@ override protected function transitionInCompleted():void
 	addChild(messageDisplay);
 	
 	// features ....
-	
 	CardFeatureItemRenderer.IN_DETAILS = true;
 	CardFeatureItemRenderer.CARD_TYPE = cardType;
 	CardFeatureItemRenderer.UPGRADABLE = player.cards.exists(cardType) && player.cards.get(cardType).upgradable();
-	var features:Vector.<int> = CardFeatureType.getRelatedTo(cardType)._list;
+	var features:Array = CardTypes.getRelatedTo(cardType);
 	if( ScriptEngine.get(ScriptEngine.T03_QUANTITY, cardType) > 1 )
 		features.push(ScriptEngine.T03_QUANTITY);
 	
