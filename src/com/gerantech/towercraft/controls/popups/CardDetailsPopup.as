@@ -120,6 +120,7 @@ override protected function transitionInCompleted():void
 	if( card.level == -1 )
 		dispatchEventWith(Event.UPDATE, false, cardType);
 	
+	cardDisplay.level = card.level;
 	var inDeck:Boolean = player.getSelectedDeck().existsValue(cardType);
 
 	var upgradeCost:int = Card.get_upgradeCost(card.level, card.rarity);
