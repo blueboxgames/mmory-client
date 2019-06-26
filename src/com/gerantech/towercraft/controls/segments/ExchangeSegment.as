@@ -106,7 +106,7 @@ override public function updateData():void
 			specials.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C80_EMOTES && player.unlocked_social() )
 			emotes.add(itemKeys[i]);
-		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C120_MAGICS )
+		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C120_MAGICS && player.get_arena(0) > 1 )
 			magics.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS && player.unlocked_challenge() )
 			tickets.add(itemKeys[i]);
