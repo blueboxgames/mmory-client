@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.managers.net.sfs
 {
+import com.gerantech.mmory.core.utils.lists.IntList;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.overlays.LowConnectionOverlay;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.LoadAndSaver;
-import com.gerantech.mmory.core.utils.lists.IntList;
-import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.smartfoxserver.v2.SmartFox;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Room;
@@ -40,9 +40,8 @@ public var zoneName:String;
 public var lobbyManager:LobbyManager;
 public var publicLobbyManager:LobbyManager;
 
-public var retryMax:int = 3;
-public var retryIndex:int = 1;
-public var retryTimeout:int = 500;
+private var retryMax:int = 2;
+private var retryIndex:int = 0;
 
 private var loginParams:ISFSObject;
 private var lowConnectionOverlay:LowConnectionOverlay;
