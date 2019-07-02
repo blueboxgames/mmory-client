@@ -68,7 +68,7 @@ override protected function initialize():void
 	list.elasticity = 0.03;
 	list.dataProvider = leaguesCollection;
 	
-	testStarterPack();
+	// testStarterPack();
 	//testOpenBook();
 	//testOffer();
 	//testBattleToast();
