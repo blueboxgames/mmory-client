@@ -1,39 +1,38 @@
 package com.gerantech.towercraft.controls.screens
 {
-import com.gerantech.towercraft.controls.BattleHUD;
-import com.gerantech.towercraft.controls.overlays.BattleStartOverlay;
-import com.gerantech.towercraft.controls.overlays.BattleWaitingOverlay;
-import com.gerantech.towercraft.controls.overlays.EndBattleOverlay;
-import com.gerantech.towercraft.controls.overlays.EndOperationOverlay;
-import com.gerantech.towercraft.controls.overlays.EndOverlay;
-import com.gerantech.towercraft.controls.popups.ConfirmPopup;
-import com.gerantech.towercraft.controls.popups.UnderMaintenancePopup;
-import com.gerantech.towercraft.events.GameEvent;
-import com.gerantech.towercraft.managers.SoundManager;
-import com.gerantech.towercraft.managers.VideoAdsManager;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
-import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.tutorials.TutorialData;
-import com.gerantech.towercraft.models.tutorials.TutorialTask;
-import com.gerantech.towercraft.models.vo.BattleData;
-import com.gerantech.towercraft.models.vo.UserData;
-import com.gerantech.towercraft.models.vo.VideoAd;
-import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.views.BattleFieldView;
 import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.battle.fieldes.FieldData;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.controls.BattleHUD;
+import com.gerantech.towercraft.controls.overlays.BattleStartOverlay;
+import com.gerantech.towercraft.controls.overlays.BattleWaitingOverlay;
+import com.gerantech.towercraft.controls.overlays.EndBattleOverlay;
+import com.gerantech.towercraft.controls.overlays.EndOperationOverlay;
+import com.gerantech.towercraft.controls.overlays.EndOverlay;
+import com.gerantech.towercraft.controls.popups.UnderMaintenancePopup;
+import com.gerantech.towercraft.events.GameEvent;
+import com.gerantech.towercraft.managers.SoundManager;
+import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.models.tutorials.TutorialData;
+import com.gerantech.towercraft.models.tutorials.TutorialTask;
+import com.gerantech.towercraft.models.vo.BattleData;
+import com.gerantech.towercraft.models.vo.UserData;
+import com.gerantech.towercraft.themes.MainTheme;
+import com.gerantech.towercraft.views.BattleFieldView;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import feathers.events.FeathersEventType;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -292,7 +291,7 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	}
 	
 	// reserved prefs data
-	if( inTutorial && rewards.getSFSObject(0).getInt("score") > 0 )
+	if( player.get_battleswins() < 20 && rewards.getSFSObject(0).getInt("score") > 0 )
 		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 7);
 	
 	player.addResources(outcomes);
