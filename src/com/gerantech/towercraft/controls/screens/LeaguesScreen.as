@@ -68,7 +68,7 @@ override protected function initialize():void
 	list.elasticity = 0.03;
 	list.dataProvider = leaguesCollection;
 	
-	// testStarterPack();
+	testStarterPack();
 	//testOpenBook();
 	//testOffer();
 	//testBattleToast();
@@ -152,7 +152,7 @@ private function list_createCompleteHandler():void
 
 private function testStarterPack():void
 {
-	var item:ExchangeItem = new  ExchangeItem(31, 0, 123121212,  ResourceType.R5_CURRENCY_REAL + ":1990", "57:11," + ResourceType.R4_CURRENCY_HARD + ":300");
+	var item:ExchangeItem = new  ExchangeItem(31, 0, timeManager.now + 5000,  ResourceType.R5_CURRENCY_REAL + ":1990", "116:40," + ResourceType.R4_CURRENCY_HARD + ":300");
 	appModel.navigator.addPopup(new BundleDetailsPopup(item));
 }
 }

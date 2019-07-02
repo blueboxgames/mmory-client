@@ -1,20 +1,22 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
-import com.gerantech.towercraft.controls.CardView;
-import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.exchanges.Exchanger;
+import com.gerantech.towercraft.controls.buttons.MMOryButton;
+import com.gerantech.towercraft.controls.groups.Devider;
+import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
+import com.gerantech.towercraft.models.Assets;
 
 import feathers.controls.ImageLoader;
-import feathers.core.ITextRenderer;
+import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayoutData;
+import feathers.layout.HorizontalAlign;
+import feathers.layout.HorizontalLayout;
+import feathers.layout.RelativePosition;
+import feathers.layout.VerticalAlign;
 
-import flash.geom.Point;
+import flash.geom.Rectangle;
 
 import starling.events.Event;
 
@@ -25,6 +27,14 @@ override protected function initialize() : void
 {
 	this.exchangeManager.addEventListener(FeathersEventType.BEGIN_INTERACTION, exchangeManager_beginInteractionHandler);
 	super.initialize();
+	
+	var insideLayout:AnchorLayoutData = new AnchorLayoutData(20, 20, 196, 20);
+	var insideSkin:ImageLoader = new ImageLoader();
+	insideSkin.scale9Grid = new Rectangle(1, 1, 6, 5);
+	insideSkin.source = Assets.getTexture("shop/gradient-gold-bg", "gui");
+  insideSkin.layoutData = insideLayout;
+  this.addChildAt(insideSkin, 0);
+
 }
 
 override protected function commitData() : void
@@ -37,77 +47,55 @@ override protected function commitData() : void
 		return;
 	}
 
-/* 	var availabledLabel:RTLLabel = new RTLLabel(exchange.numExchanges + "/3", 0, null, "right", false, null, 0.7);
-	availabledLabel.layoutData = new AnchorLayoutData(12, 24);
-	addChild(availabledLabel);*/
- 	
 	var outKeys:Vector.<int> = this.exchange.outcomes.keys();
-	var p:int = 140;
-	var rowH:int = (width + p * 2) / (outKeys.length + 1);
+	var oldPrice:int = Exchanger.toReal(this.exchange.outcomes);
+	
+	// items
+	var itemsLayout:HorizontalLayout = new HorizontalLayout();
+	itemsLayout.horizontalAlign = HorizontalAlign.CENTER;
+	itemsLayout.verticalAlign = VerticalAlign.JUSTIFY;
+	itemsLayout.hasVariableItemDimensions = true;
+	itemsLayout.padding = 60;
+	itemsLayout.gap = 0;
+	var gapW:int = 48;
+	var colW:int = Math.min(280, (this._owner.width - itemsLayout.gap * (outKeys.length + 1) - itemsLayout.padding * 2 - gapW * (outKeys.length - 1)) / outKeys.length);
+	var items:LayoutGroup = new LayoutGroup();
+	items.layoutData = new AnchorLayoutData(40, 0, 280, 0);
+	items.layout = itemsLayout;
+	this.addChild(items);
 	for ( var i:int = 0; i < outKeys.length; i++ )
-		this.createOutcome(outKeys, i, rowH, p);
-
-	var outValue:int = Exchanger.toReal(exchange.outcomes);
-	var discount:int = Math.round((1 - (this.reqCount / outValue)) * 100)
-	var ribbonDisplay:ImageLoader = new ImageLoader();
-	ribbonDisplay.source = Assets.getTexture("cards/empty-badge", "gui");
-	ribbonDisplay.layoutData = new AnchorLayoutData(0, NaN, NaN, 0);
-	ribbonDisplay.height = ribbonDisplay.width = 172;
-	this.addChild(ribbonDisplay);
-	ribbonDisplay.addEventListener(FeathersEventType.CREATION_COMPLETE, function():void
 	{
-		var discoutDisplay:ShadowLabel = new ShadowLabel( discount + "% OFF", 1, 0, "center", "ltr", false, null, 0.6);
-		discoutDisplay.width = 200;
-		discoutDisplay.alignPivot();
-		discoutDisplay.rotation = -0.8;
-		discoutDisplay.x = ribbonDisplay.width * 0.3;
-		discoutDisplay.y = ribbonDisplay.height * 0.3;
-		ribbonDisplay.addChild(discoutDisplay);
-	});
-}
+		items.addChild(BundleDetailsPopup.createOutcome(outKeys[i], this.exchange.outcomes.get(outKeys[i]), colW));
 
-private function createOutcome(outKeys:Vector.<int>, i:int, rowH:int, _padding:int):void 
-{
-	var book:Boolean = ResourceType.isBook(outKeys[i]);
-	var _width:int = book ? 220 : 180;
-	var point:Point = new Point((i+1) * rowH - _width * 0.5 - _padding, 70);
-
-	var itemIcon:ImageLoader = new ImageLoader();
-	itemIcon.width = _width;
-	itemIcon.height = itemIcon.width * CardView.VERICAL_SCALE;
-	itemIcon.source = Assets.getTexture((book ? "books/" : "cards/") + outKeys[i], "gui");
-	itemIcon.x = point.x;
-	itemIcon.y = point.y;
-	this.addChildAt(itemIcon, 0);
-
-	if( !book )
-	{
-		var p:int = 3;
-		var bgDisplay:ImageLoader = new ImageLoader();
-		bgDisplay.width = itemIcon.width + p * 2;
-		bgDisplay.height = itemIcon.width * CardView.VERICAL_SCALE + p * 2;
-		bgDisplay.scale9Grid = MainTheme.ROUND_SMALL_SCALE9_GRID;
-		bgDisplay.source = appModel.theme.roundSmallSkin;
-		bgDisplay.x = point.x - p;
-		bgDisplay.y = point.y - p;
-		this.addChildAt(bgDisplay, 0);
-
-		var itemCount:ShadowLabel = new ShadowLabel(this.titleFormatter(this.exchange.outcomes.get(outKeys[i])), 1, 0, null, null, false, null, 0.9);
-		itemCount.layoutData = new AnchorLayoutData(itemIcon.y + itemIcon.height - 64, width - itemIcon.x - itemIcon.width + 12);
-		this.addChild(itemCount);
+		if( i == outKeys.length - 1 )
+			continue;
+		var plusImage:ImageLoader = new ImageLoader();
+		plusImage.width = plusImage.height = gapW;
+		plusImage.source = Assets.getTexture("shop/plus", "gui")
+		items.addChild(plusImage);
 	}
-}
 
-override protected function buttonLabelFactory() : ITextRenderer
-{
-	if( this.exchange.numExchanges == 0)
-		return new ShadowLabel(null, 0x2ee723, 0, "center", null, false, null, 0.85);
-	return new RTLLabel(null, 0x000088, "center", null, false, null, 0.85);
+	this.buttonDisplay.message = MMOryButton.getLabel(reqType, oldPrice);
+
+	var discountBadge:LayoutGroup = BundleDetailsPopup.createBadge(Math.round((1 - (reqCount / oldPrice)) * 100));
+  discountBadge.layoutData = new AnchorLayoutData(NaN, NaN, -32, -20);
+	this.addChild(discountBadge);
 }
 
 override protected function iconFactory() : void {}
 override protected function titleFactory() : void {}
 override protected function exchangeManager_endInteractionHandler(event:Event):void {}
+override protected function buttonFactory():void
+{
+	super.buttonFactory();
+	this.buttonDisplay.height = 142;
+	this.buttonDisplay.paddingLeft = 200;
+	this.buttonDisplay.messagePosition = RelativePosition.RIGHT;
+
+	var line:Devider = new Devider(0xBB0000);
+	line.layoutData = new AnchorLayoutData(NaN, 280, 148, 460);
+	this.addChild(line);
+}
 protected function exchangeManager_beginInteractionHandler(event:Event):void 
 {
 	this.resetData(event.data as ExchangeItem);

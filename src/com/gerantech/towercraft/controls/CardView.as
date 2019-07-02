@@ -142,7 +142,13 @@ package com.gerantech.towercraft.controls
 		{
 			return _availablity;
 		}
-
+		public function set availablity(value:int):void
+		{
+			if( this._availablity == value )
+				return;
+			this._availablity = value;
+			this.invalidate(INVALIDATION_FLAG_DATA);
+		}
 
 		override protected function draw() : void
 		{
