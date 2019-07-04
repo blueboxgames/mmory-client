@@ -27,13 +27,13 @@ import flash.geom.Rectangle;
 import starling.core.Starling;
 import starling.events.Event;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.constants.ResourceType;
 
 /**
 * @author Mansour Djawadi
 */
 public class ChallengeIndexItemRenderer extends AbstractListItemRenderer
 {
-static public var ARENA:int;
 static public var IN_HOME:Boolean;
 static public var IS_FRIENDLY:Boolean;
 static public var SHOW_INFO:Boolean;
@@ -69,7 +69,8 @@ override protected function commitData() : void
 	challenge = player.challenges.get(_data as int);
 	state = challenge.getState(timeManager.now);
 	// chIndex = IN_HOME ? UserData.instance.challengeIndex : index;
-	locked = ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, index) > ARENA;
+	trace(player.getResource(ResourceType.R7_MAX_POINT), "mp", ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, index));
+	locked = ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, index) > player.getResource(ResourceType.R7_MAX_POINT);
 	
 	backgroundFactory();
 	iconFactory();
@@ -222,7 +223,7 @@ protected function backgroundImage_triggerdHandler(event:Event) : void
 {
 	if( locked )
 	{
-		var point:int = game.arenas.get(ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, index)).min - 1;
+		var point:int = ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, index);
 		appModel.navigator.addLog(loc("availableuntil_messeage", [loc("resource_title_2") + " " + point, ""]));
 		return;
 	}
@@ -240,7 +241,7 @@ protected function tutorials_completeHandler(event:Event) : void
 	if( event.data.name != "challenge_tutorial" )
 		return;
 	tutorials.removeEventListener(GameEvent.TUTORIAL_TASKS_FINISH, tutorials_completeHandler);
-	if ( (player.getTutorStep() == PrefsTypes.T_72_NAME_SELECTED && index == 0) || (player.getTutorStep() == PrefsTypes.T_73_CHALLENGES_SHOWN && index == 1) )
+	if ( (player.getTutorStep() == PrefsTypes.T_72_NAME_SELECTED && index == 0) || (player.getTutorStep() == PrefsTypes.T_201_CHALLENGES_SHOWN && index == 1) )
 		backgroundImage.showTutorHint();
 }
 }

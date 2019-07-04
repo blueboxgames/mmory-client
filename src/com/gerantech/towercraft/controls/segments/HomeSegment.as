@@ -65,7 +65,6 @@ override public function init():void
 	ChallengeIndexItemRenderer.IN_HOME = true;
 	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
 	ChallengeIndexItemRenderer.SHOW_INFO = false;
-	ChallengeIndexItemRenderer.ARENA = league;
 	var listLayout:VerticalLayout = new VerticalLayout();
 	listLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
 	listLayout.typicalItemHeight = Math.min(410, stageHeight * 0.23);
@@ -213,7 +212,7 @@ private function showTutorial():void
 	var tutorStep:int = player.getTutorStep();
 	trace("player.inTutorial: ", player.inTutorial(), "tutorStep: ", tutorStep);
 
-	if( (player.get_battleswins() < 2 && player.getTutorStep() >= PrefsTypes.T_018_CARD_UPGRADED) || (league > 0 && player.getTutorStep() == PrefsTypes.T_74_CHALLENGE_SELECTED) )
+	if( (player.get_battleswins() < 2 && player.getTutorStep() >= PrefsTypes.T_018_CARD_UPGRADED) || (league > 0 && player.getTutorStep() == PrefsTypes.T_202_CHALLENGE_SELECTED) )
 	{
 		SimpleLayoutButton(getChildByName("battleButton")).showTutorHint();
 		return;
@@ -228,13 +227,13 @@ private function showTutorial():void
 		{
 			confirm.removeEventListener(Event.COMPLETE, confirm_eventsHandler);
 			UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_72_NAME_SELECTED);
-			
-			// show challenge tutorial
-			var tutorialData:TutorialData = new TutorialData("challenge_tutorial");
-			tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_challenge_0", null, 500, 1500, 0));
-			tutorials.show(tutorialData);
 		}
 	}
+
+	// show challenge tutorial
+	/*var tutorialData:TutorialData = new TutorialData("challenge_tutorial");
+	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_challenge_0", null, 500, 1500, 0));
+	tutorials.show(tutorialData); */
 }
 
 private function mainButtons_triggeredHandler(event:Event):void

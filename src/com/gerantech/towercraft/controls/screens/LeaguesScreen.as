@@ -55,13 +55,14 @@ override protected function initialize():void
 	super.initialize();
 	layout = new AnchorLayout();
 	
-	LeagueItemRenderer.HEIGHT = 1000;
+	LeagueItemRenderer.HEIGHT = 1500;
 	LeagueItemRenderer.LEAGUE = player.get_arena(0);
 
 	listLayout.gap = 0;
 	listLayout.paddingTop = 500;
 	listLayout.paddingBottom = 0;
 	listLayout.useVirtualLayout = false;
+	listLayout.hasVariableItemDimensions = true;
 	
 	list.itemRendererFactory = function():IListItemRenderer { return new LeagueItemRenderer(); }
 	list.addEventListener(FeathersEventType.CREATION_COMPLETE, list_createCompleteHandler);

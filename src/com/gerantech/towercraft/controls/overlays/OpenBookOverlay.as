@@ -55,7 +55,7 @@ private var frequentlyTapped:int;
 private var rewardType:int;
 private var rewardRarity:int;
 private var titleDisplay:ShadowLabel;
-private var descriptionDisplay:RTLLabel;
+private var descriptionDisplay:ShadowLabel;
 private var sliderDisplay:IndicatorCard;
 private var collectedItemIndex:int = -1;
 

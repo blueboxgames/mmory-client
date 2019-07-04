@@ -28,7 +28,6 @@ override protected function initialize():void
 	ChallengeIndexItemRenderer.IN_HOME = false;
 	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
 	ChallengeIndexItemRenderer.SHOW_INFO = true;
-	ChallengeIndexItemRenderer.ARENA = player.get_arena(0);
 	
 	listLayout.verticalAlign = VerticalAlign.MIDDLE;
 	listLayout.typicalItemHeight = 410;
@@ -44,7 +43,7 @@ override protected function initialize():void
 
 	if( player.getTutorStep() == PrefsTypes.T_72_NAME_SELECTED )
 	{
-		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_73_CHALLENGES_SHOWN); 
+		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_201_CHALLENGES_SHOWN); 
 		
 		var tutorialData:TutorialData = new TutorialData("challenge_tutorial");
 		tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_challenge_1", null, 500, 1500, 0));
@@ -55,14 +54,14 @@ override protected function initialize():void
 protected function list_triggeredHandler(event:Event) : void 
 {
 	var selectedIndex:int = event.data as int;
-	if( player.getTutorStep() == PrefsTypes.T_73_CHALLENGES_SHOWN )
+	if( player.getTutorStep() == PrefsTypes.T_201_CHALLENGES_SHOWN )
 	{
 		if( selectedIndex != 1 )
 		{
 			appModel.navigator.addLog(loc("!!!"))
 			return;
 		}
-		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_74_CHALLENGE_SELECTED); 
+		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_202_CHALLENGE_SELECTED); 
 	}
 
 	UserData.instance.challengeIndex = selectedIndex;

@@ -291,7 +291,7 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	}
 	
 	// reserved prefs data
-	if( player.get_battleswins() < 20 && rewards.getSFSObject(0).getInt("score") > 0 )
+	if( player.get_battleswins() < 10 && rewards.getSFSObject(0).getInt("score") > 0 )
 		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 7);
 	
 	player.addResources(outcomes);

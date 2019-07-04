@@ -167,14 +167,14 @@ static public function createBadge(discount:int):LayoutGroup
 	return discountBadge;
 }
 
-static public function createOutcome(type:int, count:int, colW:int):LayoutGroup 
+static public function createOutcome(type:int, count:int, colW:int, hasShine:Boolean = true):LayoutGroup 
 {
 	var item:LayoutGroup = new LayoutGroup();
 	item.layout = new AnchorLayout();
 	item.width = colW;
 
-	var shineImage:ImageLoader = new ImageLoader();
-	shineImage.source = Assets.getTexture("shop/shine-under-item", "gui");
+	if( hasShine )
+		var shineImage:ImageLoader = new ImageLoader();
 
 	var itemIcon:FeathersControl;
 	if( ResourceType.isCard(type) )
@@ -193,14 +193,19 @@ static public function createOutcome(type:int, count:int, colW:int):LayoutGroup
 		ImageLoader(itemIcon).source = Assets.getTexture(getTexturURL(type), "gui");
 		itemIcon.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 
-		shineImage.width = shineImage.height = colW * 1.2;
+		if( hasShine )
+			shineImage.width = shineImage.height = colW * 1.2;
 	}
 	item.addChild(itemIcon);
-
-	shineImage.pivotX = shineImage.pivotY = shineImage.width * 0.5;
-	Starling.juggler.tween(shineImage, 14, {rotation:Math.PI * 2, repeatCount:40});
-	shineImage.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
-	item.addChildAt(shineImage, 0);
+	
+	if( hasShine )
+	{
+		shineImage.source = Assets.getTexture("shop/shine-under-item", "gui");
+		shineImage.pivotX = shineImage.pivotY = shineImage.width * 0.5;
+		Starling.juggler.tween(shineImage, 14, {rotation:Math.PI * 2, repeatCount:40});
+		shineImage.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
+		item.addChildAt(shineImage, 0);
+	}
 
 	if( !ResourceType.isBook(type) )
 	{

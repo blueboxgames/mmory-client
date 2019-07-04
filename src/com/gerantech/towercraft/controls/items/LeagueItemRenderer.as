@@ -1,34 +1,30 @@
 package com.gerantech.towercraft.controls.items
 {
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.others.Arena;
+import com.gerantech.mmory.core.utils.Int3;
 import com.gerantech.towercraft.controls.buttons.LeagueButton;
 import com.gerantech.towercraft.controls.overlays.NewCardOverlay;
+import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.MessageTypes;
-import com.gerantech.mmory.core.others.Arena;
 
 import feathers.controls.Button;
 import feathers.controls.ImageLoader;
-import feathers.controls.List;
-import feathers.controls.renderers.IListItemRenderer;
-import feathers.data.ListCollection;
+import feathers.controls.LayoutGroup;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import feathers.layout.HorizontalAlign;
-import feathers.layout.TiledRowsLayout;
-import feathers.layout.VerticalAlign;
 
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
 
-import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
-import com.gerantech.towercraft.controls.CardView;
 
 public class LeagueItemRenderer extends AbstractListItemRenderer
 {
@@ -48,9 +44,9 @@ private var commited:Boolean;
 public function LeagueItemRenderer(){ super(); }
 override protected function initialize():void
 {
+	height = HEIGHT;
 	super.initialize();
 	layout = new AnchorLayout();
-	height = HEIGHT;
 }
 
 override protected function commitData():void
@@ -61,11 +57,13 @@ override protected function commitData():void
 	
 	league = _data as Arena;//trace(index, league.index , playerLeague)
 	if( league.index == 0 )
-		height = 500;
+		height = 300;
 	
 	ready = league.index > LEAGUE - 2 && league.index < LEAGUE + 3;
 	if( ready )
+	{
 		createElements();
+	}
 	else
 	{
 		_owner.addEventListener(Event.OPEN, _owner_openHandler);
@@ -107,56 +105,45 @@ private function createElements():void
 		leagueIcon.scale = 1.2;
 		Starling.juggler.tween(leagueIcon, 0.3, {scale:1});
 	}
-	// cards elements
-	var cards:Array = player.availabledCards(league.index, 0);
-	var collectable:Boolean = !player.cards.exists(cards[0]) && league.min <= player.get_point();
-	var cardsLayout:TiledRowsLayout = new TiledRowsLayout();
-	cardsLayout.requestedColumnCount = Math.min(cards.length, 3);
-	cardsLayout.requestedRowCount = Math.ceil(cards.length / 3);
-	cardsLayout.horizontalAlign = HorizontalAlign.CENTER;
-	cardsLayout.verticalAlign = collectable ? VerticalAlign.BOTTOM : VerticalAlign.MIDDLE;
-	cardsLayout.gap = cardsLayout.padding = 12;
-	cardsLayout.useVirtualLayout = false;
-	cardsLayout.useSquareTiles = false;
-	cardsLayout.typicalItemWidth = Math.min(CARDS_WIDTH, 680 / cardsLayout.requestedColumnCount - cardsLayout.padding * 2 - (cardsLayout.requestedColumnCount - 1) * cardsLayout.gap);
-	cardsLayout.typicalItemHeight = cardsLayout.typicalItemWidth * (collectable ? 1.7 : CardView.VERICAL_SCALE);
 	
-	var listSkin:Image = new Image(appModel.theme.roundMediumInnerSkin);
-	listSkin.scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;
-	listSkin.alpha = 0.3;
-	listSkin.color = 0;
+	// rewards items
+	for each(var reward:Int3 in league.rewards)
+	{
+		trace(reward.i , player.getResource(ResourceType.R7_MAX_POINT))
+		var rewardDisplay:LayoutGroup = BundleDetailsPopup.createOutcome(reward.j, reward.k, 200, reward.i < player.getResource(ResourceType.R7_MAX_POINT));
+		rewardDisplay.height = 260;
+		rewardDisplay.x = stageWidth * 0.5 + ICON_LAYOUT_DATA.horizontalCenter + 180;
+		rewardDisplay.y = HEIGHT - (reward.i - league.min) / (league.max - league.min) * HEIGHT - rewardDisplay.height * 0.5;
 
-	var cardsList:List = new List();
-	cardsList.touchable = false;
-	cardsList.layout = cardsLayout;
-	cardsList.backgroundSkin = listSkin;
-	//cardsList.width = cardsLayout.typicalItemWidth + cardsLayout.padding * 2;
-	//cardsList.height = cardsLayout.typicalItemHeight + cardsLayout.padding * 2;
-	cardsList.itemRendererFactory = function ():IListItemRenderer { return new CardItemRenderer ( false, false ); };
-	cardsList.layoutData = new AnchorLayoutData(NaN, NaN, NaN, stageWidth * 0.5 + ICON_LAYOUT_DATA.horizontalCenter + 180, NaN, -HEIGHT * 0.5);
-	cardsList.dataProvider = new ListCollection(cards);
-	addChild(cardsList);
-
-	var arrowSkin:ImageLoader = new ImageLoader();
-	arrowSkin.source = appModel.theme.calloutLeftArrowSkinTexture;
-	arrowSkin.layoutData = new AnchorLayoutData(NaN, -0.1, NaN, NaN, NaN, -HEIGHT * 0.5);
-	AnchorLayoutData(arrowSkin.layoutData).rightAnchorDisplayObject = cardsList;
-	arrowSkin.alpha = listSkin.alpha;
-	arrowSkin.color = listSkin.color;
-	addChild(arrowSkin);
+		var rewarsSkin:Image = new Image(appModel.theme.roundMediumInnerSkin);
+		rewarsSkin.scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;
+		rewarsSkin.alpha = 0.3;
+		rewarsSkin.color = 0;
+		rewardDisplay.backgroundSkin = rewarsSkin;
 	
+		var arrowSkin:ImageLoader = new ImageLoader();
+		arrowSkin.source = appModel.theme.calloutLeftArrowSkinTexture;
+		arrowSkin.layoutData = new AnchorLayoutData(NaN, -0.1, NaN, NaN, NaN, 0);
+		AnchorLayoutData(arrowSkin.layoutData).rightAnchorDisplayObject = rewardDisplay;
+		AnchorLayoutData(arrowSkin.layoutData).verticalCenterAnchorDisplayObject = rewardDisplay;
+		arrowSkin.alpha = rewarsSkin.alpha;
+		arrowSkin.color = rewarsSkin.color;
+		addChild(arrowSkin);
+		addChild(rewardDisplay);
+	}
+	/* 
 	if( collectable )
 	{
-		arrowSkin.alpha = listSkin.alpha = 0.5;
-		arrowSkin.color = listSkin.color = 0xFFB600;
+		arrowSkin.alpha = rewarsSkin.alpha = 0.5;
+		arrowSkin.color = rewarsSkin.color = 0xFFB600;
 		
 		var collectButton:Button = new Button();
-		collectButton.name = cards[0].toString();
+		collectButton.name = rewards[0].toString();
 		collectButton.label = loc("collect_label");
 		collectButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
-		collectButton.x = stageWidth * 0.5 + ICON_LAYOUT_DATA.horizontalCenter + 180 + cardsLayout.typicalItemWidth * 0.5 + cardsLayout.padding;
-		collectButton.y = cardsLayout.typicalItemHeight * 0.5 - cardsLayout.padding * 2;
-		collectButton.width = cardsLayout.typicalItemWidth + cardsLayout.padding * 2;
+		collectButton.x = stageWidth * 0.5 + ICON_LAYOUT_DATA.horizontalCenter + 180 + itemsLayout.typicalItemWidth * 0.5 + itemsLayout.padding;
+		collectButton.y = itemsLayout.typicalItemHeight * 0.5 - itemsLayout.padding * 2;
+		collectButton.width = itemsLayout.typicalItemWidth + itemsLayout.padding * 2;
 		collectButton.height = 120;
 		collectButton.pivotX = collectButton.width * 0.5;
 		collectButton.pivotY = collectButton.height * 0.5;
@@ -168,15 +155,10 @@ private function createElements():void
 			Starling.juggler.tween(collectButton, 0.8, {delay:1, scale:1, transition:Transitions.EASE_OUT_BACK,
 			onComplete:punchButton, onStart:function():void{collectButton.scale = 1.5;}});
 		}
-	}
+	}*/
 	
 	if( league.index <= 0 )
 	{
-		if( league.index == 0 )
-		{
-			AnchorLayoutData(arrowSkin.layoutData).verticalCenter = -280;
-			AnchorLayoutData(cardsList.layoutData).verticalCenter = -140;
-		}
 		commited = true;
 		return;
 	}
@@ -228,14 +210,18 @@ private function createElements():void
 		addChildAt(sliderBackground, 0);
 	}
 	
-	var minPointRect:ImageLoader = new ImageLoader();
-	minPointRect.source = Assets.getTexture("leagues/min-point-rect", "gui");
-	minPointRect.layoutData = MIN_POINT_LAYOUT_DATA;
-	minPointRect.scale9Grid = MIN_POINT_GRID;
-	minPointRect.width = 180;
-	minPointRect.height = 68;
-	addChild(minPointRect);
-	
+
+	if( league.index > 1 )
+	{
+		var minPointRect:ImageLoader = new ImageLoader();
+		minPointRect.source = Assets.getTexture("leagues/min-point-rect", "gui");
+		minPointRect.layoutData = MIN_POINT_LAYOUT_DATA;
+		minPointRect.scale9Grid = MIN_POINT_GRID;
+		minPointRect.width = 180;
+		minPointRect.height = 68;
+		addChild(minPointRect);
+	}
+
 	if( LEAGUE + 1 == league.index )
 	{
 		var pointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(player.get_point()), 1, "center", null, false, null, 0.8);
@@ -245,9 +231,13 @@ private function createElements():void
 		addChild(pointLabel);
 	}
 
-	var minPointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber((league.min - 1) + "+"), 1, "center", null, false, null, 0.8);
-	minPointLabel.layoutData = MIN_POINT_LAYOUT_DATA;
-	addChild(minPointLabel);
+	if( league.index > 1 )
+	{
+		var minPointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber((league.min - 1) + "+"), 1, "center", null, false, null, 0.8);
+		minPointLabel.layoutData = MIN_POINT_LAYOUT_DATA;
+		addChild(minPointLabel);
+	}
+
 
 	if( league.index == LEAGUE )
 		setTimeout(_owner.dispatchEventWith, 500, Event.OPEN);
