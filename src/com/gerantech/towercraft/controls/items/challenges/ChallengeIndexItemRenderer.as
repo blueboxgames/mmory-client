@@ -1,8 +1,10 @@
 package com.gerantech.towercraft.controls.items.challenges 
 {
 import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.socials.Challenge;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.buttons.IconButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
@@ -26,8 +28,6 @@ import flash.geom.Rectangle;
 
 import starling.core.Starling;
 import starling.events.Event;
-import com.gerantech.mmory.core.utils.maps.IntIntMap;
-import com.gerantech.mmory.core.constants.ResourceType;
 
 /**
 * @author Mansour Djawadi
@@ -37,7 +37,7 @@ public class ChallengeIndexItemRenderer extends AbstractListItemRenderer
 static public var IN_HOME:Boolean;
 static public var IS_FRIENDLY:Boolean;
 static public var SHOW_INFO:Boolean;
-static private const BG_SCALE_GRID:Rectangle = new Rectangle(23, 22, 2, 2);
+static public const BG_SCALE_GRID:Rectangle = new Rectangle(23, 22, 2, 2);
 static private const COLORS:Array = [0x30e465, 0xffa400, 0xff4200, 0xe720ff];
 
 private var state:int;
@@ -68,8 +68,6 @@ override protected function commitData() : void
 
 	challenge = player.challenges.get(_data as int);
 	state = challenge.getState(timeManager.now);
-	// chIndex = IN_HOME ? UserData.instance.challengeIndex : index;
-	trace(player.getResource(ResourceType.R7_MAX_POINT), "mp", ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, index));
 	locked = ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, index) > player.getResource(ResourceType.R7_MAX_POINT);
 	
 	backgroundFactory();

@@ -38,6 +38,7 @@ public function LeaguesScreen()
 {
 	if( leaguesCollection == null )
 	{
+		player.resources.set(ResourceType.R25_REWARD_STEP, 0)
 		leaguesCollection = new ListCollection();
 		var keys:Vector.<int> = game.arenas.keys();
 		var numLeagues:int = keys.length - 1;
@@ -146,9 +147,9 @@ private function testBattleOverlay() : void
 
 private function list_createCompleteHandler():void
 {
-//	trace(leaguesCollection.length,FactionItemRenderer.playerLeague,(leaguesCollection.length-FactionItemRenderer.playerLeague-1), FactionItemRenderer._height * (leaguesCollection.length-FactionItemRenderer.playerLeague-1))
-	list.scrollToPosition(NaN, LeagueItemRenderer.HEIGHT * (leaguesCollection.length - LeagueItemRenderer.LEAGUE - 1) + 300, 0);
-	Starling.juggler.delayCall(list.scrollToPosition, 0.3, NaN, LeagueItemRenderer.HEIGHT * (leaguesCollection.length - LeagueItemRenderer.LEAGUE - 2) , 1);
+	var leagueY:int = LeagueItemRenderer.HEIGHT * (leaguesCollection.length - LeagueItemRenderer.LEAGUE);
+	list.scrollToPosition(NaN, leagueY + 200, 0);
+	Starling.juggler.delayCall(list.scrollToPosition, 0.1, NaN, leagueY - 400, 1);
 }
 
 private function testStarterPack():void

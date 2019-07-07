@@ -184,8 +184,9 @@ static public function createOutcome(type:int, count:int, colW:int, hasShine:Boo
 		CardView(itemIcon).availablity = CardTypes.AVAILABLITY_EXISTS;
 		itemIcon.height = (item.width - 48) * CardView.VERICAL_SCALE;
 		itemIcon.layoutData = new AnchorLayoutData(NaN, 24, NaN, 24, NaN, 0);
-	
-		shineImage.width = shineImage.height = colW * 2.0;
+
+		if( hasShine )
+			shineImage.width = shineImage.height = colW * 2.0;
 	}
 	else
 	{
