@@ -63,20 +63,12 @@ override public function init():void
 
 	// events button
 	ChallengeIndexItemRenderer.IN_HOME = true;
-	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
 	ChallengeIndexItemRenderer.SHOW_INFO = false;
-	var listLayout:VerticalLayout = new VerticalLayout();
-	listLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
-	listLayout.typicalItemHeight = Math.min(410, stageHeight * 0.23);
-	listLayout.padding = 50;
-	listLayout.paddingTop = 280;
-	var eventsButton:List = new List();
-	eventsButton.layout = listLayout;
-	eventsButton.horizontalScrollPolicy = eventsButton.verticalScrollPolicy = ScrollPolicy.OFF;
-	eventsButton.itemRendererFactory = function () : IListItemRenderer { return new ChallengeIndexItemRenderer(); };
-	eventsButton.dataProvider = new ListCollection([UserData.instance.challengeIndex]);
-	eventsButton.layoutData = new AnchorLayoutData(NaN, paddingH + 100, NaN, paddingH + 100, NaN, -stageHeight * 0.05);
-	eventsButton.height = listLayout.typicalItemHeight + listLayout.padding + listLayout.paddingTop;
+	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
+	var eventsButton:ChallengeIndexItemRenderer = new ChallengeIndexItemRenderer();
+	eventsButton.height = Math.min(410, stageHeight * 0.23)
+	eventsButton.layoutData = new AnchorLayoutData(NaN, paddingH + 150, NaN, paddingH + 150, NaN, -stageHeight * 0.05);
+	eventsButton.data = UserData.instance.challengeIndex;
 	addButton(eventsButton, "eventsButton");
 	
 	// battle button
