@@ -140,7 +140,7 @@ static public function loadChallenges(params:ISFSObject, playerId:int) : void
 		for (var j:int = 0; j < c.getSFSArray("rewards").size(); j++)
 		{
 			item = c.getSFSArray("rewards").getSFSObject(j);
-			ch.rewards.set(item.getInt("key"), new Arena(item.getInt("key"), item.getInt("min"), item.getInt("max"), item.getInt("prize")));
+			ch.rewards.set(item.getInt("key"), new Arena(null, item.getInt("key"), item.getInt("min"), item.getInt("max"), item.getInt("prize")));
 		}
 		
 		ch.attendees = new Array();

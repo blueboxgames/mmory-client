@@ -15,6 +15,7 @@ public static const BATTLE_HIT:String = "h";
 public static const RANK:String = "rank";
 public static const PROFILE:String = "profile";
 
+public static const COLLECT_ROAD_REWARD:String = "collectRoadReward";
 public static const CARD_UPGRADE:String = "cardUpgrade";
 public static const CARD_NEW:String = "cardNew";
 public static const EXCHANGE:String = "exchange";

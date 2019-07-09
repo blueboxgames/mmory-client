@@ -27,7 +27,6 @@ import com.gerantech.towercraft.models.vo.VideoAd;
 import com.marpies.ane.gameanalytics.GameAnalytics;
 import com.marpies.ane.gameanalytics.data.GAResourceFlowType;
 import com.smartfoxserver.v2.core.SFSEvent;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.events.FeathersEventType;
@@ -219,7 +218,7 @@ private function exchange( item:ExchangeItem, params:SFSObject ) : int
 			if( item.category == ExchangeType.C110_BATTLES )
 				UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_013_BOOK_OPENED);
 			
-			earnOverlay = item.category == ExchangeType.C100_FREES ? new FortuneOverlay(bookType) : new OpenBookOverlay(bookType);
+			earnOverlay = EarnOverlay(item.category == ExchangeType.C100_FREES ? new FortuneOverlay(bookType) : new OpenBookOverlay(bookType));
 			appModel.navigator.addOverlay(earnOverlay);
 		}
 	}
@@ -267,16 +266,8 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 			dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);
 			return;
 		}
-		var outcomes:IntIntMap = new IntIntMap();
-		//trace(data.getSFSArray("rewards").getDump());
-		var reward:ISFSObject;
-		for( var i:int=0; i<data.getSFSArray("rewards").size(); i++ )
-		{
-			reward = data.getSFSArray("rewards").getSFSObject(i);
-			if( ResourceType.isCard(reward.getInt("t")) || ResourceType.isBook(reward.getInt("t")) || reward.getInt("t") == ResourceType.R3_CURRENCY_SOFT || reward.getInt("t") == ResourceType.R4_CURRENCY_HARD || reward.getInt("t") == ResourceType.R6_TICKET )
-				outcomes.set(reward.getInt("t"), reward.getInt("c"));
-		}
 		
+		var outcomes:IntIntMap = EarnOverlay.getOutcomse(data.getSFSArray("rewards"))		
 		player.addResources(outcomes);
 		earnOverlay.outcomes = outcomes;
 		earnOverlay.addEventListener(Event.CLOSE, openChestOverlay_closeHandler);

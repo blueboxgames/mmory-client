@@ -1,22 +1,22 @@
 package com.gerantech.towercraft.controls.buttons 
 {
-import com.gerantech.towercraft.models.Assets;
-import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.events.CoreEvent;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.others.TrophyReward;
+import com.gerantech.towercraft.models.Assets;
+
 import feathers.controls.ImageLoader;
-import feathers.layout.AnchorLayout;
-import feathers.layout.AnchorLayoutData;
-import flash.geom.Rectangle;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
+import com.gerantech.mmory.core.constants.ResourceType;
 
 /**
 * @author Mansour Djawadi
 */
 public class CollectableLeaguesButton extends CollectableButton 
 {
-	private var leagueIndex:int;
+private var leagueIndex:int;
 public function CollectableLeaguesButton()
 {
 	super();
@@ -36,11 +36,22 @@ protected function playerResources_changeHandler(event:CoreEvent):void
 
 private function checkLeagueRewardAchieved() : void
 {
-	var availabledCards:Array = player.availabledCards(leagueIndex, 1);
-	for each( var c:int in availabledCards )
-		if( !player.cards.exists(c) )
-			state = ExchangeItem.CHEST_STATE_READY;
-	
+	for(var i:int = player.get_arena(0); i > 0; i--)
+	{
+		for(var j:int = 2; j >= 0; j--)
+		{
+			var tr:TrophyReward = game.arenas.get(i).rewards[j] as TrophyReward;
+			if( player.getResource(ResourceType.R25_REWARD_STEP) >= tr.step )
+				break;
+			if( player.get_point() >= tr.point )
+			{
+				state = ExchangeItem.CHEST_STATE_READY;
+				backgroundFactory();
+				return;
+			}
+		}
+	}
+
 	backgroundFactory();
 }
 override public function update() : void

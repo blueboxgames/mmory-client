@@ -23,6 +23,7 @@ import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
+import feathers.layout.AnchorLayoutData;
 
 import starling.core.Starling;
 import starling.events.Event;
@@ -38,7 +39,6 @@ public function LeaguesScreen()
 {
 	if( leaguesCollection == null )
 	{
-		player.resources.set(ResourceType.R25_REWARD_STEP, 0)
 		leaguesCollection = new ListCollection();
 		var keys:Vector.<int> = game.arenas.keys();
 		var numLeagues:int = keys.length - 1;
@@ -56,25 +56,26 @@ override protected function initialize():void
 	super.initialize();
 	layout = new AnchorLayout();
 	
-	LeagueItemRenderer.HEIGHT = 1500;
+	LeagueItemRenderer.HEIGHT = 1800;
 	LeagueItemRenderer.LEAGUE = player.get_arena(0);
 
 	listLayout.gap = 0;
 	listLayout.paddingTop = 500;
-	listLayout.paddingBottom = 0;
+	listLayout.paddingBottom = 200;
 	listLayout.useVirtualLayout = false;
 	listLayout.hasVariableItemDimensions = true;
 	
+	AnchorLayoutData(list.layoutData).bottom = -listLayout.paddingBottom;
 	list.itemRendererFactory = function():IListItemRenderer { return new LeagueItemRenderer(); }
 	list.addEventListener(FeathersEventType.CREATION_COMPLETE, list_createCompleteHandler);
 	list.elasticity = 0.03;
 	list.dataProvider = leaguesCollection;
 	
 	// testStarterPack();
-	//testOpenBook();
-	//testOffer();
-	//testBattleToast();
-	//testBattleOverlay();
+	// testOpenBook();
+	// testOffer();
+	// testBattleToast();
+	// testBattleOverlay();
 }
 
 private function testOpenBook():void 

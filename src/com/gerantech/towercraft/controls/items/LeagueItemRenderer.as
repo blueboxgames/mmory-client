@@ -4,18 +4,25 @@ import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.others.Arena;
-import com.gerantech.mmory.core.utils.Int3;
+import com.gerantech.mmory.core.others.TrophyReward;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.buttons.LeagueButton;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
 import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRenderer;
+import com.gerantech.towercraft.controls.overlays.EarnOverlay;
 import com.gerantech.towercraft.controls.overlays.NewCardOverlay;
+import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
+import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
+import com.smartfoxserver.v2.core.SFSEvent;
+import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
@@ -43,9 +50,11 @@ static public const SLIDER_WIDTH:int = 48;
 static private var ICON_LAYOUT_DATA:AnchorLayoutData = new AnchorLayoutData(-ICON_HEIGHT * 0.54, NaN, NaN, NaN, ICON_X);
 static public const MIN_POINT_LAYOUT_DATA:AnchorLayoutData = new AnchorLayoutData(ICON_HEIGHT * 0.5, NaN, NaN, NaN, ICON_X);
 static private const MIN_POINT_GRID:Rectangle = new Rectangle(39, 39, 1, 1);
-private var ready:Boolean;
+
 private var league:Arena;
+private var ready:Boolean;
 private var commited:Boolean;
+private var earnOverlay:EarnOverlay;
 public function LeagueItemRenderer(){ super(); }
 override protected function initialize():void
 {
@@ -206,24 +215,33 @@ private function createElements():void
 
 private function createRewardItem(r:int) : void 
 {
+	var reward:TrophyReward = league.rewards[r];
+	var reached:Boolean = reward.reached();
+	var collectible:Boolean = reward.collectible();
 	var colW:int = 240;
-	var reward:Int3 = league.rewards[r];
-	var rewardId:int = (league.index - 1) * 3 + r;
-	var reached:Boolean = reward.i < player.get_point();
-	var collectible:Boolean = reached && player.getRewardStep() < rewardId;
-	var rewardType:int = reward.j;
-	var rewardCount:int = reward.k;
+	var itemX:int = 60;
+	var itemY:int = HEIGHT - (reward.point - league.min) / (league.max - league.min) * HEIGHT;
+	var itemW:int = 660;
+	var isCard:Boolean = ResourceType.isCard(reward.key);
+
+	if( ResourceType.isEvent(reward.key) )
+	{
+		createEventItem(itemX, itemY, itemW, reward, reached, collectible);
+		createPoint(reward, itemY);
+		return;
+	}
 
 	var item:SimpleLayoutButton = new SimpleLayoutButton();
 	item.layout = new AnchorLayout();
+	item.touchGroup = true;
 	item.data = {index:r, reward:reward};
-	item.width = 666;
-	item.height = 330;
+	item.width = itemW;
+	item.height = isCard ? 340 : 260;
 	item.pivotX = item.width * 0.5;
 	item.pivotY = item.height * 0.5;
-	item.x = 60 + item.pivotX;
-	item.y = HEIGHT - (reward.i - league.min) / (league.max - league.min) * HEIGHT;
-
+	item.x = itemX + item.pivotX;
+	item.y = itemY;
+	
 	var itemSkin:Image = new Image(Assets.getTexture(reached ? (collectible ? "events/index-bg-10-up" : "events/index-bg-1-up") : "events/index-bg-4-up", "gui"));
 	itemSkin.scale9Grid = ChallengeIndexItemRenderer.BG_SCALE_GRID;
 	itemSkin.pixelSnapping = false;
@@ -236,10 +254,10 @@ private function createRewardItem(r:int) : void
 	shineImage.source = Assets.getTexture("shop/shine-under-item", "gui");
 
 	var itemIcon:FeathersControl;
-	if( ResourceType.isCard(rewardType) )
+	if( ResourceType.isCard(reward.key) )
 	{
 		itemIcon = new CardView();
-		CardView(itemIcon).type = rewardType;
+		CardView(itemIcon).type = reward.key;
 		CardView(itemIcon).availablity = CardTypes.AVAILABLITY_EXISTS;
 		itemIcon.height = colW;
 		itemIcon.width = colW / CardView.VERICAL_SCALE;
@@ -250,7 +268,7 @@ private function createRewardItem(r:int) : void
 		itemIcon = new ImageLoader();
 		itemIcon.height = colW;
 		itemIcon.width = colW * 0.9;
-		ImageLoader(itemIcon).source = Assets.getTexture(BundleDetailsPopup.getTexturURL(rewardType), "gui");
+		ImageLoader(itemIcon).source = Assets.getTexture(BundleDetailsPopup.getTexturURL(reward.key), "gui");
 		shineImage.width = shineImage.height = colW * 0.9;
 	}
 	itemIcon.pivotX = itemIcon.width * 0.5;
@@ -275,45 +293,28 @@ private function createRewardItem(r:int) : void
 		item.addChild(achievedImage);
 	}
 
-	var titleDisplay:RTLLabel = new RTLLabel(titleFormatter(rewardType, rewardCount), collectible ? 0 : 0x1FA8FF, "center", null, false, null, 0.95);
-	titleDisplay.pixelSnapping = false;
-	titleDisplay.layoutData = new AnchorLayoutData(60, 260, NaN, 20);
-	item.addChild(titleDisplay);
-
-	var messageDisplay:ShadowLabel = new ShadowLabel(messageFormatter(rewardType, rewardCount), 1, 0, "center", null, false, null, 1);
+	var messageDisplay:ShadowLabel = new ShadowLabel(messageFormatter(reward.key, reward.value), 1, 0, "center", null, false, null, 0.85);
+	messageDisplay.layoutData = new AnchorLayoutData(NaN, 240, NaN, 20, NaN, -20);
 	messageDisplay.pixelSnapping = false;
-	messageDisplay.layoutData = new AnchorLayoutData(NaN, 260, 100, 20);
 	item.addChild(messageDisplay);
 
-	var pointDisplay:ShadowLabel = new ShadowLabel(StrUtils.getNumber(reward.i), 1, 0, "center", null, false, null, 1);
-	pointDisplay.height = 100;
-	pointDisplay.pivotY = pointDisplay.height * 0.5
-	pointDisplay.y = item.y;
-	pointDisplay.x = stageWidth - 140;
-	addChild(pointDisplay);
+	createPoint(reward, item.y);
 
 	if( collectible )
 	{
-		item.addEventListener(Event.TRIGGERED, rewaardItem_triggeredHandler);
+		item.addEventListener(Event.TRIGGERED, rewardItem_triggeredHandler);
 		punchButton(item);
 	}
 	addChild(item);
 }
 
-private function titleFormatter(type:int, count:int) : String
-{
-	if( ResourceType.isBook(type) )
-		return StrUtils.loc("exchange_title_" + type);
-	if( ResourceType.isCard(type) )
-		return StrUtils.loc("card_title_" + type);
-	return StrUtils.loc("resource_title_" + type);
-}
-
 private function messageFormatter(type:int, count:int) : String
 {
 	if( ResourceType.isBook(type) )
-		return StrUtils.loc("arena_text") + " " + StrUtils.loc("num_" + (count + 1));
-	return "x" + StrUtils.getNumber(count);
+		return loc("exchange_title_" + type);
+	if( ResourceType.isCard(type) )
+		return loc("new_card_label");
+	return loc("count_mid", [count, loc("resource_title_" + type)]);
 }
 
 private function punchButton(collectButton:LayoutGroup) : void
@@ -323,27 +324,75 @@ private function punchButton(collectButton:LayoutGroup) : void
 }
 
 
-
-protected function rewaardItem_triggeredHandler(event:Event) : void 
+private function createEventItem(x:int, y:int, width:int, reward:TrophyReward, reached:Boolean, collectible:Boolean):void
 {
-	var item:SimpleLayoutButton = event.currentTarget as SimpleLayoutButton;
-	item.removeEventListener(Event.TRIGGERED, rewaardItem_triggeredHandler);
-	var rewardIndex:int = (league.index - 1) * 3 + int(item.data.index);
-
-	if(player.achieveReward(league.index, item.data.index as int) != MessageTypes.RESPONSE_SUCCEED )
-	{
-		appModel.navigator.addLog("Not Allowed!");
-		return;
-	}
-/* 	var overlay:NewCardOverlay = new NewCardOverlay(cardType);
-	overlay.addEventListener(Event.CLOSE, overlay_closeHandler);
-	appModel.navigator.addOverlay(overlay); */
+	var item:ChallengeIndexItemRenderer = new ChallengeIndexItemRenderer();
+	ChallengeIndexItemRenderer.IS_FRIENDLY = true;
+	item.width = width;
+	item.height = 400;
+	item.x = x;
+	item.y = y - item.height * 0.5;
+	item.data = reward.key % 10;
+	addChild(item);
+}
+private function createPoint(reward:TrophyReward, y:int):void
+{
+	var pointDisplay:ShadowLabel = new ShadowLabel(StrUtils.getNumber(reward.point), 1, 0, "center", null, false, null, 1);
+	pointDisplay.height = 100;
+	pointDisplay.pivotY = pointDisplay.height * 0.5
+	pointDisplay.y = y;
+	pointDisplay.x = stageWidth - 140;
+	addChild(pointDisplay);
 }
 
-protected function overlay_closeHandler(event:Event) : void 
+protected function rewardItem_triggeredHandler(event:Event) : void 
 {
-	var overlay:NewCardOverlay = event.currentTarget as NewCardOverlay;
-	overlay.removeEventListener(Event.CLOSE, overlay_closeHandler);
+	var item:SimpleLayoutButton = event.currentTarget as SimpleLayoutButton;
+	item.removeEventListener(Event.TRIGGERED, rewardItem_triggeredHandler);
+	var reward:TrophyReward = item.data.reward as TrophyReward;
+
+	if( player.achieveReward(reward.league, reward.index as int) != MessageTypes.RESPONSE_SUCCEED )
+	{
+		appModel.navigator.addLog(loc("arena_reward_error"));
+		Starling.juggler.delayCall(_owner.scrollToPosition, 0.1, NaN, _owner.verticalScrollPosition + 500, 1);
+		return;
+	}
+	
+	if( ResourceType.isBook(reward.key) )
+	{
+		earnOverlay = new OpenBookOverlay(reward.key) as EarnOverlay;
+		
+	}
+	else
+		earnOverlay = new NewCardOverlay(reward.key) as EarnOverlay;
+	earnOverlay.data = reward as Object;
+	appModel.navigator.addOverlay(earnOverlay);
+
+	var params:SFSObject = new SFSObject();
+	params.putInt("l", reward.league);
+	params.putInt("i", reward.index);
+	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_responseHandler)
+	SFSConnection.instance.sendExtensionRequest(SFSCommands.COLLECT_ROAD_REWARD, params);
+}
+
+protected function sfs_responseHandler(event:SFSEvent):void
+{
+	if( event.params.cmd != SFSCommands.COLLECT_ROAD_REWARD )
+		return;
+	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_responseHandler);
+	if( event.params.params.getInt("response") != MessageTypes.RESPONSE_SUCCEED )
+		return;
+
+	var outcomes:IntIntMap = EarnOverlay.getOutcomse(event.params.params.getSFSArray("outcomes"))		
+	earnOverlay.outcomes = outcomes;
+	earnOverlay.addEventListener(Event.CLOSE, earnOverlay_closeHandler);
+
+	player.addResources(outcomes);
+}
+
+protected function earnOverlay_closeHandler(event:Event) : void 
+{
+	earnOverlay.removeEventListener(Event.CLOSE, earnOverlay_closeHandler);
 	removeChildren();
 	commited = false;
 	createElements();

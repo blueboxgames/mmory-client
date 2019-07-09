@@ -220,6 +220,8 @@ static public function createOutcome(type:int, count:int, colW:int, hasShine:Boo
 
 static public function getTexturURL(type:int) : String
 {
+	if( ResourceType.isEvent(type) )
+		return "events/banner-" + (type%10);
 	if( ResourceType.isBook(type) )
 		return "books/" + type;
 	if( ResourceType.isCard(type) )
