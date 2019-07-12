@@ -192,6 +192,7 @@
     "deck_label": "Battle Deck",
     "usage_label": "Use",
     "upgrade_label": "Upgrade",
+    "upgrade_message": "upgraded to # level.",
     "info_label": "Info",
     "level_label": "Level #",
     "achieved_label": "Achieved",

@@ -8,7 +8,7 @@ import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.headers.DeckHeader;
 import com.gerantech.towercraft.controls.items.CardItemRenderer;
-import com.gerantech.towercraft.controls.overlays.BuildingUpgradeOverlay;
+import com.gerantech.towercraft.controls.overlays.CardUpgradeOverlay;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.CardDetailsPopup;
 import com.gerantech.towercraft.controls.popups.CardSelectPopup;
@@ -388,7 +388,7 @@ private function seudUpgradeRequest(card:Card, confirmedHards:int):void
 	sfs.putInt("confirmedHards", confirmedHards);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.CARD_UPGRADE, sfs);
 	
-	var upgradeOverlay:BuildingUpgradeOverlay = new BuildingUpgradeOverlay();
+	var upgradeOverlay:CardUpgradeOverlay = new CardUpgradeOverlay();
 	upgradeOverlay.card = card;
 	appModel.navigator.addOverlay(upgradeOverlay);
 	

@@ -1,5 +1,8 @@
 package com.gerantech.towercraft.controls.overlays
 {
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
 import com.gerantech.towercraft.controls.items.CardFeatureItemRenderer;
@@ -9,9 +12,6 @@ import com.gerantech.towercraft.events.GameEvent;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
-import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.constants.PrefsTypes;
 
 import dragonBones.starling.StarlingArmatureDisplay;
 
@@ -32,12 +32,12 @@ import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.events.Event;
 
-public class BuildingUpgradeOverlay extends BaseOverlay
+public class CardUpgradeOverlay extends BaseOverlay
 {
 public var card:Card;
 private var initializeStarted:Boolean;
 private var shineArmature:StarlingArmatureDisplay;
-public function BuildingUpgradeOverlay(){ super(); }
+public function CardUpgradeOverlay(){ super(); }
 override protected function initialize():void
 {
 	if( stage != null )
@@ -81,7 +81,7 @@ override protected function initialize():void
 		cardView.level = card.level;
 		Starling.juggler.tween(cardView, 0.3, {scale:1.6, transition:Transitions.EASE_OUT});
 		Starling.juggler.tween(cardView, 0.5, {delay:0.7, y:cardView.y - 150, transition:Transitions.EASE_IN_OUT});
-		
+
 		// shine animation
 		shineArmature = OpenBookOverlay.factory.buildArmatureDisplay("shine");
 		shineArmature.touchable = false;
@@ -110,6 +110,11 @@ override protected function initialize():void
 	}
 	function showFeatures():void 
 	{
+		var messeageDisplay:RTLLabel = new RTLLabel(loc("upgrade_message", [loc("num_" + card.level)]), 1, "center", null, false, null, 1);
+		messeageDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0);
+		messeageDisplay.y = stageHeight * 0.62;
+		addChild(messeageDisplay);
+
 		CardFeatureItemRenderer.IN_DETAILS = false;
 		var featureLayout:TiledRowsLayout = new TiledRowsLayout();
 		featureLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
@@ -124,7 +129,7 @@ override protected function initialize():void
 		featureList.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 560);
 		featureList.horizontalScrollPolicy = featureList.verticalScrollPolicy = ScrollPolicy.OFF;
 		featureList.itemRendererFactory = function ():IListItemRenderer { return new CardFeatureItemRenderer(); }
-		featureList.dataProvider = new ListCollection(CardTypes.getRelatedTo(card.type)._list);
+		featureList.dataProvider = new ListCollection(CardTypes.getRelatedTo(card.type));
 		addChild(featureList);
 	}
 	function showEnd():void 

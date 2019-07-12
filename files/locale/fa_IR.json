@@ -193,6 +193,7 @@
     "deck_label": "کارت‌های نبرد",
     "usage_label": "استفاده",
     "upgrade_label": "ارتقـــا",
+    "upgrade_message": "به سطح # ارتقا پیدا کرد.",
     "info_label": "اطلاعات",
     "level_label": "سطح #",
     "achieved_label": "دریافت شد",
