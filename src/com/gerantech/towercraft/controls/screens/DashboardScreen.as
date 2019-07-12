@@ -173,7 +173,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	tabsList.height = FOOTER_SIZE * 1.0;
 	tabsList.clipContent = false;
 	tabsList.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
-    tabsList.verticalScrollPolicy = ScrollPolicy.OFF;
+	tabsList.verticalScrollPolicy = ScrollPolicy.OFF;
 	tabsList.addEventListener(Event.SELECT, tabsList_selectHandler);
 	tabsList.itemRendererFactory = function ():IListItemRenderer { return new DashboardTabItemRenderer(tabSize); }
 	addChild(tabsList);
