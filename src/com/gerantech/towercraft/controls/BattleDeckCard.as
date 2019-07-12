@@ -1,21 +1,18 @@
 package com.gerantech.towercraft.controls
 {
+import com.gerantech.mmory.core.constants.CardTypes;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-
-import starling.filters.ColorMatrixFilter;
 public class BattleDeckCard extends TowersLayout
 {
 private var _type:int;
 private var cardView:CardView;
-private var _filter:ColorMatrixFilter;
 public function BattleDeckCard(type:int)
 {
 	super();
 	touchGroup = true;
 	this.type = type;
-	_filter = new ColorMatrixFilter();
-	_filter.adjustSaturation(-1);
 }
 
 override protected function initialize():void
@@ -53,7 +50,7 @@ override public function set isEnabled(value:Boolean) : void
 		return;
 	super.isEnabled = value;
 	touchable = value;
-	cardView.filter = value ? null : _filter;
+	cardView.availablity = value ? CardTypes.AVAILABLITY_EXISTS : CardTypes.AVAILABLITY_WAIT;
 }
 }
 }

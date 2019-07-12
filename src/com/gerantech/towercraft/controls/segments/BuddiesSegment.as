@@ -21,6 +21,7 @@ import com.smartfoxserver.v2.entities.Buddy;
 import com.smartfoxserver.v2.entities.SFSBuddy;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+import com.smartfoxserver.v2.entities.variables.BuddyVariable;
 import com.smartfoxserver.v2.entities.variables.SFSBuddyVariable;
 
 import feathers.controls.renderers.IListItemRenderer;
@@ -79,9 +80,9 @@ override public function init():void
 	
 	buddyCollection = new ListCollection(SFSConnection.instance.buddyManager.buddyList);
 	var me:SFSBuddy = new SFSBuddy(0, player.id + "");
-	me.setVariable( new SFSBuddyVariable("$__BV_NICKNAME__", player.nickName));
-	me.setVariable( new SFSBuddyVariable("$__BV_STATE__", "Available"));
-	me.setVariable( new SFSBuddyVariable("$point", player.get_point()));
+	me.setVariable( new SFSBuddyVariable("$__BV_NICKNAME__", player.nickName) as BuddyVariable);
+	me.setVariable( new SFSBuddyVariable("$__BV_STATE__", "Available") as BuddyVariable);
+	me.setVariable( new SFSBuddyVariable("$point", player.get_point()) as BuddyVariable);
 	//me.setVariable( new SFSBuddyVariable("$room", SFSConnection.instance.myLobby.name));
 	buddyCollection.addItem( me );
 	buddyCollection.addItem( 0 );

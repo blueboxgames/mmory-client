@@ -301,7 +301,7 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	else
 		endOverlay = new EndBattleOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);
 	endOverlay.addEventListener(Event.CLOSE, endOverlay_closeHandler);
-	setTimeout(hud.end, 1500, endOverlay);// delay for noobs
+	setTimeout(hud.end, Math.max(200, 1000 - player.get_battleswins() * 300), endOverlay);// delay for noobs
 }
 
 private function endOverlay_closeHandler(event:Event):void
@@ -315,11 +315,10 @@ private function endOverlay_closeHandler(event:Event):void
 		return;
 	}
 	
-	var field:FieldData = appModel.battleFieldView.battleData.battleField.field;
 	appModel.battleFieldView.responseSender.leave();
 	appModel.battleFieldView.responseSender.actived = false;
 	
-	if( player.get_battleswins() > 5 && endOverlay.score == 3 && player.get_arena(0) > 0 )//!sfsConnection.mySelf.isSpectator && 
+	if( player.get_battleswins() > 5 && endOverlay.score == 3 && player.get_arena(0) > 0 ) // !sfsConnection.mySelf.isSpectator && 
 		appModel.navigator.showOffer();
 	dispatchEventWith(Event.COMPLETE);
 }
