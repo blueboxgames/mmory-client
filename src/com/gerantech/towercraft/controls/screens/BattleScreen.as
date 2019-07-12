@@ -4,6 +4,7 @@ import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.battle.fieldes.FieldData;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.BattleHUD;
@@ -294,7 +295,22 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	if( player.get_battleswins() < 10 && rewards.getSFSObject(0).getInt("score") > 0 )
 		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 7);
 	
+	var challengUnlockAt:int;
+	for( var c:int = 1; c < 4; c++ )
+	{
+		if( player.getTutorStep() > 200 + c * 10 )
+			continue;
+		challengUnlockAt = Challenge.getUnlockAt(game, c);
+		if( challengUnlockAt > player.get_point() )
+			break;
+	}
+
 	player.addResources(outcomes);
+	
+	// check new challenge unlocked
+	if( challengUnlockAt > 0 && challengUnlockAt < player.get_point() )
+		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, 200 + c * 10);
+	
 	var endOverlay:EndOverlay;
 	if( field.isOperation() )
 		endOverlay = new EndOperationOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);
