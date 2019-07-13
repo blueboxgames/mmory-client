@@ -141,8 +141,8 @@ private function updateButton_triggeredHandler(event:Event):void
 		params.putInt("pic", emblemButton.value);
 	if( roomData.bio != bioInput.text )
 		params.putUtfString("bio", bioInput.text);
-	if( roomData.name != nameInput.text )
-		params.putUtfString("name", nameInput.text);
+	// if( roomData.name != nameInput.text )
+	// 	params.putUtfString("name", nameInput.text);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_EDIT, params, SFSConnection.instance.lobbyManager.lobby);
 	SFSConnection.instance.lobbyManager.requestData(true, true);
 	close();
