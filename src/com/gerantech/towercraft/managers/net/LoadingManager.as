@@ -260,8 +260,8 @@ private function registerFCMPushManager():void
 	
 	
 	messaging = MessagingANE.messaging;
-	messaging.addEventListener(MessagingEvent.ON_MESSAGE_RECEIVED, onMessageReceived);
-	messaging.addEventListener(MessagingEvent.ON_TOKEN_REFRESHED, onTokenRefreshed);
+	// messaging.addEventListener(MessagingEvent.ON_MESSAGE_RECEIVED, onMessageReceived);
+	messaging.addEventListener(MessagingEvent.ON_TOKEN_REFRESHED, messaging_onTokenRefreshedHandler);
 
 	fcmToken = messaging.token;
 	if (fcmToken != null)
@@ -273,13 +273,13 @@ private function registerFCMPushManager():void
 	/**
 	 * This function is used to receive data from message.
 	 * It is not required for showing messages.
-	 */
 	function onMessageReceived(event:MessagingEvent):void
 	{
 		var remoteMessage:RemoteMessage = event.remoteMessage;
 	}
+	*/
 
-	function onTokenRefreshed(event:MessagingEvent):void
+	function messaging_onTokenRefreshedHandler(event:MessagingEvent):void
 	{
 		fcmToken = event.token;
 		trace("FCM Token: " + fcmToken);

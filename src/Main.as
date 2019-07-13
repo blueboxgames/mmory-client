@@ -1,5 +1,7 @@
 package
 {
+import com.gameanalytics.sdk.GAErrorSeverity;
+import com.gameanalytics.sdk.GameAnalytics;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.Game;
@@ -7,10 +9,6 @@ import com.gerantech.towercraft.controls.screens.BattleScreen;
 import com.gerantech.towercraft.controls.screens.SplashScreen;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.Localizations;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gameanalytics.sdk.GameAnalytics;
-import com.gameanalytics.sdk.GAErrorSeverity;
 import com.tuarua.FirebaseANE;
 import com.tuarua.firebase.FirebaseOptions;
 import com.tuarua.fre.ANEError;
@@ -82,7 +80,7 @@ public function Main()
 	loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, loaderInfo_uncaughtErrorHandler);
 	NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, nativeApplication_invokeHandler);
 
-	if (AppModel.instance.platform == AppModel.PLATFORM_ANDROID)
+	if( AppModel.instance.platform == AppModel.PLATFORM_ANDROID )
 	{
 		try
 		{
