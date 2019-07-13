@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.mmory.core.socials.Lobby;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.items.BuddyItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
@@ -13,13 +14,14 @@ import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.socials.Lobby;
+import com.gerantech.towercraft.utils.Localizations;
 import com.smartfoxserver.v2.core.SFSBuddyEvent;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Buddy;
 import com.smartfoxserver.v2.entities.SFSBuddy;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+import com.smartfoxserver.v2.entities.variables.BuddyVariable;
 import com.smartfoxserver.v2.entities.variables.SFSBuddyVariable;
 
 import feathers.controls.renderers.IListItemRenderer;
@@ -78,9 +80,9 @@ override public function init():void
 	
 	buddyCollection = new ListCollection(SFSConnection.instance.buddyManager.buddyList);
 	var me:SFSBuddy = new SFSBuddy(0, player.id + "");
-	me.setVariable( new SFSBuddyVariable("$__BV_NICKNAME__", player.nickName));
-	me.setVariable( new SFSBuddyVariable("$__BV_STATE__", "Available"));
-	me.setVariable( new SFSBuddyVariable("$point", player.get_point()));
+	me.setVariable( new SFSBuddyVariable("$__BV_NICKNAME__", player.nickName) as BuddyVariable);
+	me.setVariable( new SFSBuddyVariable("$__BV_STATE__", "Available") as BuddyVariable);
+	me.setVariable( new SFSBuddyVariable("$point", player.get_point()) as BuddyVariable);
 	//me.setVariable( new SFSBuddyVariable("$room", SFSConnection.instance.myLobby.name));
 	buddyCollection.addItem( me );
 	buddyCollection.addItem( 0 );
@@ -95,7 +97,7 @@ override public function init():void
 
 private function showTutorials():void
 {
-	if( SFSConnection.instance.buddyManager.buddyList.length >= 3 )
+	if( SFSConnection.instance.buddyManager.buddyList.length >= 3 || game.sessionsCount % 5 != 0 )
 		return;
 	var tutorialData:TutorialData = new TutorialData("buddy_tutorial");
 	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, loc("tutor_buddy_0", [Lobby.buddyInviterReward, Lobby.buddyInviteeReward]), null, 1000, 1000, 0));
@@ -133,8 +135,10 @@ protected function list_focusInHandler(event:Event):void
 	var buddy:Buddy = selectedItem.data as Buddy;
 	if( buddy == null )
 	{
-		NativeAbilities.instance.shareText(loc("invite_friend"), loc("invite_friend_message", [appModel.descriptor.name]) + "\n" + loc("buddy_invite_url", [player.invitationCode]));
-		trace(loc("buddy_invite_url", [player.invitationCode]))
+		var subject:String = loc("invite_friend");
+		var text:String = loc("invite_friend_message") + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
+		NativeAbilities.instance.shareText(subject, text);
+		trace(subject, text);
 		return;
 	}
 	

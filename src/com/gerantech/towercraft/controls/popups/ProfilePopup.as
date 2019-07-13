@@ -1,8 +1,11 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.FastList;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.Indicator;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorXP;
@@ -19,9 +22,6 @@ import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.scripts.ScriptEngine;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
@@ -71,6 +71,7 @@ public function ProfilePopup(user:Object, getFullPlayerData:Boolean = false)
 	
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_responceHandler);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.PROFILE, params);
+	EmblemButton.loadAtlas(null);
 }
 
 override protected function initialize():void
@@ -116,7 +117,7 @@ private function showProfile():void
 {
 	var lobbyIconDisplay:ImageLoader = new ImageLoader();
 	lobbyIconDisplay.height = lobbyIconDisplay.width = padding * 3.5;
-	lobbyIconDisplay.source = Assets.getTexture("emblems/emblem-" + StrUtils.getZeroNum(user.lp + ""), "gui");
+	lobbyIconDisplay.source = EmblemButton.getTexture(user.lp as int);
 	lobbyIconDisplay.layoutData = new AnchorLayoutData(padding, appModel.isLTR?NaN:padding, NaN, appModel.isLTR?padding:NaN);
 	addChild(lobbyIconDisplay);
 	
@@ -242,7 +243,7 @@ private function showProfile():void
 	indicatorPoint.setData(0, point, Number.MAX_VALUE);
 	indicatorPoint.width = padding * 6;
 	indicatorPoint.height = padding * 1.5;
-	indicatorPoint.layoutData = new AnchorLayoutData(padding * 3, appModel.isLTR?padding * 1.5:NaN, NaN, appModel.isLTR?NaN:padding * 1.5);
+	indicatorPoint.layoutData = new AnchorLayoutData(padding * 3, appModel.isLTR?padding * 2:NaN, NaN, appModel.isLTR?NaN:padding * 2);
 	addChild(indicatorPoint);
 	
 	var scroller:ScrollContainer = new ScrollContainer();

@@ -1,17 +1,17 @@
 package com.gerantech.towercraft.controls.switchers
 {
 import com.gerantech.towercraft.controls.TowersLayout;
-import com.gerantech.towercraft.controls.buttons.CustomButton;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
+import com.gerantech.towercraft.utils.StrUtils;
 
+import feathers.controls.Button;
+import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 
 import starling.animation.Transitions;
 import starling.core.Starling;
-import starling.display.Image;
 import starling.events.Event;
 
 public class Switcher extends TowersLayout
@@ -44,20 +44,24 @@ override protected function initialize():void
 	minHeight = controlSize;
 	minWidth = 120;
 	
-	var skin:Image = new Image(appModel.theme.backgroundSliderSkin);
+	var skin:ImageLoader = new ImageLoader();
+	skin.source = appModel.theme.backgroundSliderSkin;
 	skin.scale9Grid = MainTheme.SLIDER_SCALE9_GRID;
-	backgroundSkin = skin;
+	skin.layoutData = new AnchorLayoutData(5, 5, 5, 5);
+	addChild(skin);
 	
-	var leftButton:CustomButton = new CustomButton();
-	leftButton.label = ">";
+	var leftButton:Button = new Button();
+	leftButton.label = appModel.isLTR ? "<" : ">";
 	leftButton.width = controlSize;
+	leftButton.styleName = MainTheme.STYLE_BUTTON_NEUTRAL;
 	leftButton.layoutData = new AnchorLayoutData(0, NaN, 0, 0);
 	leftButton.addEventListener(Event.TRIGGERED, leftButton_triggerdHandler);
 	addChild(leftButton);
 	
-	var rightButton:CustomButton = new CustomButton();
-	rightButton.label = "<";
+	var rightButton:Button = new Button();
+	rightButton.label = appModel.isLTR ? ">" : "<";
 	rightButton.width = controlSize;
+	rightButton.styleName = MainTheme.STYLE_BUTTON_NEUTRAL;
 	rightButton.layoutData = new AnchorLayoutData(0, 0, 0, NaN);
 	rightButton.addEventListener(Event.TRIGGERED, rightButton_triggerdHandler);
 	addChild(rightButton);
@@ -70,7 +74,7 @@ override protected function initialize():void
 
 protected function defaulLabelStringFactory(value:int):String
 {
-	return value.toString();
+	return StrUtils.getNumber(value);
 }
 
 private function leftButton_triggerdHandler(event:Event):void

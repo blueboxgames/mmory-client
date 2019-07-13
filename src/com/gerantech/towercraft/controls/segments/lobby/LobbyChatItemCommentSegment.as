@@ -1,22 +1,22 @@
 package com.gerantech.towercraft.controls.segments.lobby
 {
-import com.gerantech.towercraft.controls.FastList;
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gt.towers.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
+import feathers.controls.List;
 import feathers.layout.AnchorLayoutData;
 
 public class LobbyChatItemCommentSegment extends LobbyChatItemSegment
 {
 private var labelDisplay:ShadowLabel;
 
-public function LobbyChatItemCommentSegment(owner:FastList) { super(owner); }
+public function LobbyChatItemCommentSegment(owner:List) { super(owner); }
 override public function init():void
 {
 	super.init();
 	height = 50;
-	labelDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 0.65); 
+	labelDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 0.6); 
 	labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
 	addChild(labelDisplay);
 }

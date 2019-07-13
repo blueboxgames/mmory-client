@@ -1,5 +1,9 @@
 package com.gerantech.towercraft.controls
 {
+import com.gameanalytics.sdk.GameAnalytics;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.StickerType;
+import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.towercraft.controls.buttons.CustomButton;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
 import com.gerantech.towercraft.controls.headers.AttendeeHeader;
@@ -17,18 +21,12 @@ import com.gerantech.towercraft.controls.toasts.BattleTurnToast;
 import com.gerantech.towercraft.controls.toasts.LastSecondsToast;
 import com.gerantech.towercraft.controls.tooltips.StickerBubble;
 import com.gerantech.towercraft.managers.SoundManager;
-import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.views.units.UnitView;
-import com.gt.towers.battle.BattleField;
-import com.gt.towers.battle.fieldes.FieldData;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.StickerType;
-import com.gt.towers.socials.Challenge;
-import com.gameanalytics.sdk.GameAnalytics;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
@@ -40,8 +38,10 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.TiledRowsLayout;
 import feathers.layout.VerticalAlign;
+
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;

@@ -1,3 +1,5 @@
+
+
 @echo off
 
 :: Set working dir
@@ -16,6 +18,7 @@ set AND_CERT_NAME="towerstory"
 set AND_CERT_PASS=12345
 set AND_CERT_FILE=cert/android.p12
 set AND_ICONS=files/icons/android
+if NOT %SERVER%==iran set AND_ICONS=files/icons/gndroid
 
 set AND_SIGNING_OPTIONS=-storetype pkcs12 -keystore "%AND_CERT_FILE%" -storepass %AND_CERT_PASS%
 

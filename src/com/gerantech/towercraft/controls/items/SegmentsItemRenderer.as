@@ -13,7 +13,7 @@ import com.gerantech.towercraft.controls.segments.LobbySearchSegment;
 import com.gerantech.towercraft.controls.segments.Segment;
 import com.gerantech.towercraft.controls.segments.SocialSegment;
 import com.gerantech.towercraft.models.vo.TabItemData;
-import com.gt.towers.constants.SegmentType;
+import com.gerantech.mmory.core.constants.SegmentType;
 
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;

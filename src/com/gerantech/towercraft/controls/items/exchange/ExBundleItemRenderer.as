@@ -1,111 +1,104 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
-import com.gerantech.towercraft.controls.CardView;
-import com.gerantech.towercraft.controls.buttons.DiscountButton;
-import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
-import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.exchanges.Exchanger;
+import com.gerantech.towercraft.controls.buttons.MMOryButton;
+import com.gerantech.towercraft.controls.groups.Devider;
+import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
 import com.gerantech.towercraft.models.Assets;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.exchanges.ExchangeItem;
-import com.gt.towers.exchanges.Exchanger;
-
-import dragonBones.starling.StarlingArmatureDisplay;
 
 import feathers.controls.ImageLoader;
+import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayoutData;
+import feathers.layout.HorizontalAlign;
+import feathers.layout.HorizontalLayout;
+import feathers.layout.RelativePosition;
+import feathers.layout.VerticalAlign;
 
-import flash.utils.setTimeout;
+import flash.geom.Rectangle;
 
-import starling.display.DisplayObject;
-import starling.display.DisplayObjectContainer;
+import starling.events.Event;
 
-public class ExBundleItemRenderer extends ExBaseItemRenderer
+public class ExBundleItemRenderer extends ExDefaultItemRenderer
 {
-public function ExBundleItemRenderer(){}
-override protected function commitData():void
+public function ExBundleItemRenderer(category:int) { super(category); }
+override protected function initialize() : void
 {
-	super.commitData();
-	skin.alpha = 0.7;
+	this.exchangeManager.addEventListener(FeathersEventType.BEGIN_INTERACTION, exchangeManager_beginInteractionHandler);
+	super.initialize();
 	
-	var outKeys:Vector.<int> = exchange.outcomes.keys();
+	var insideLayout:AnchorLayoutData = new AnchorLayoutData(20, 20, 196, 20);
+	var insideSkin:ImageLoader = new ImageLoader();
+	insideSkin.scale9Grid = new Rectangle(1, 1, 6, 5);
+	insideSkin.source = Assets.getTexture("shop/gradient-gold-bg", "gui");
+  insideSkin.layoutData = insideLayout;
+  this.addChildAt(insideSkin, 0);
 
-	var rowH:int = width / ( outKeys.length );
-	for ( var i:int = 0; i < outKeys.length; i ++ )
-		createOutcome(outKeys, i, rowH);
-	
-	var availabledLabel:RTLLabel = new RTLLabel(exchange.numExchanges + "/3", 0, null, "right", false, null, 0.7);
-	availabledLabel.layoutData = new AnchorLayoutData(12, 24);
-	addChild(availabledLabel);
-	
-	var outValue:int = Exchanger.toReal(exchange.outcomes);
-	var discount:int = Math.round((1 - (exchange.requirements.values()[0] / outValue)) * 100)
-	
-	var buttonDisplay:DiscountButton = new DiscountButton();
-	buttonDisplay.layoutData = new AnchorLayoutData(NaN, NaN, 24, NaN, 0);
-	buttonDisplay.width = 320;
-	if( exchange.requirements.keys()[0] == ResourceType.R5_CURRENCY_REAL )
-		buttonDisplay.currency = "ت";
-	buttonDisplay.originCount = outValue;
-	buttonDisplay.count = exchange.requirements.values()[0];
-	buttonDisplay.type = exchange.requirements.keys()[0];
-	addChild(buttonDisplay);
-	
-	var ribbonDisplay:ImageLoader = new ImageLoader();
-	ribbonDisplay.source = Assets.getTexture("cards/empty-badge");
-	ribbonDisplay.layoutData = new AnchorLayoutData( -14, NaN, NaN, -14);
-	ribbonDisplay.height = ribbonDisplay.width = 220;
-	addChild(ribbonDisplay);
-	ribbonDisplay.addEventListener(FeathersEventType.CREATION_COMPLETE, function():void
-	{
-		var discoutDisplay:ShadowLabel = new ShadowLabel( discount + "% OFF", 1, 0, "center", "ltr", false, null, 0.7);
-		discoutDisplay.width = 200;
-		discoutDisplay.alignPivot();
-		discoutDisplay.rotation = -0.8;
-		discoutDisplay.x = ribbonDisplay.width * 0.33;
-		discoutDisplay.y = ribbonDisplay.height * 0.33;
-		ribbonDisplay.addChild(discoutDisplay);
-	});
 }
 
-private function createOutcome(outKeys:Vector.<int>, i:int, rowH:int):void 
+override protected function commitData() : void
 {
-	var outcome:DisplayObjectContainer;
-	if( ResourceType.isBook(outKeys[i]) ) 
+	super.commitData();
+	if( this.exchange.numExchanges > 0 )
 	{
-		var bookArmature:StarlingArmatureDisplay = OpenBookOverlay.factory.buildArmatureDisplay(outKeys[i].toString());
-		bookArmature.width = 260;
-		bookArmature.scaleY = bookArmature.scaleX;
-		bookArmature.animation.gotoAndStopByProgress("appear", 1);
-		bookArmature.animation.timeScale = 0;
-		addChild(bookArmature as DisplayObject);
-		outcome = bookArmature as DisplayObjectContainer;
-	}
-	else
-	{
-		var cardDisplay:CardView = new CardView();
-		cardDisplay.width = 220;
-		addChild(cardDisplay);
-		cardDisplay.type = outKeys[i]
-		cardDisplay.pivotX = cardDisplay.width * 0.5;
-		cardDisplay.pivotY = cardDisplay.pivotX * CardView.VERICAL_SCALE;	
-		
-		var countDisplay:ShadowLabel = new ShadowLabel(exchange.outcomes.get(outKeys[i]).toString(), 1, 0, "center", null, false, null, 0.9);
-		countDisplay.layoutData = new AnchorLayoutData(12, 24, NaN, 24);
-		setTimeout(cardDisplay.addChild, 10, countDisplay);
-		outcome = cardDisplay;
+		this.buttonDisplay.label = loc("achieved_label");
+		this.buttonDisplay.iconTexture = null;
+		return;
 	}
 
-	outcome.x = i * rowH + rowH * 0.5;
-	outcome.y = 190;
+	var outKeys:Vector.<int> = this.exchange.outcomes.keys();
+	var oldPrice:int = Exchanger.toReal(this.exchange.outcomes);
 	
-	var labelDisplay:ShadowLabel = new ShadowLabel(loc((ResourceType.isCard(outKeys[i]) ? "card_title_" : (ResourceType.isBook(outKeys[i])?"exchange_title_":"resource_title_")) + outKeys[i]), 1, 0, "center");
-	labelDisplay.width = rowH;
-	labelDisplay.pivotX = rowH * 0.5;
-	labelDisplay.x = i * rowH + rowH * 0.5;
-	labelDisplay.y = 320;
-	addChild(labelDisplay);
+	// items
+	var itemsLayout:HorizontalLayout = new HorizontalLayout();
+	itemsLayout.horizontalAlign = HorizontalAlign.CENTER;
+	itemsLayout.verticalAlign = VerticalAlign.JUSTIFY;
+	itemsLayout.hasVariableItemDimensions = true;
+	itemsLayout.padding = 60;
+	itemsLayout.gap = 0;
+	var gapW:int = 48;
+	var colW:int = Math.min(280, (this._owner.width - itemsLayout.gap * (outKeys.length + 1) - itemsLayout.padding * 2 - gapW * (outKeys.length - 1)) / outKeys.length);
+	var items:LayoutGroup = new LayoutGroup();
+	items.layoutData = new AnchorLayoutData(40, 0, 280, 0);
+	items.layout = itemsLayout;
+	this.addChild(items);
+	for ( var i:int = 0; i < outKeys.length; i++ )
+	{
+		items.addChild(BundleDetailsPopup.createOutcome(outKeys[i], this.exchange.outcomes.get(outKeys[i]), colW));
+
+		if( i == outKeys.length - 1 )
+			continue;
+		var plusImage:ImageLoader = new ImageLoader();
+		plusImage.width = plusImage.height = gapW;
+		plusImage.source = Assets.getTexture("shop/plus", "gui")
+		items.addChild(plusImage);
+	}
+
+	this.buttonDisplay.message = MMOryButton.getLabel(reqType, oldPrice);
+
+	var discountBadge:LayoutGroup = BundleDetailsPopup.createBadge(Math.round((1 - (reqCount / oldPrice)) * 100));
+  discountBadge.layoutData = new AnchorLayoutData(NaN, NaN, -32, -20);
+	this.addChild(discountBadge);
+}
+
+override protected function iconFactory() : void {}
+override protected function titleFactory() : void {}
+override protected function exchangeManager_endInteractionHandler(event:Event):void {}
+override protected function buttonFactory():void
+{
+	super.buttonFactory();
+	this.buttonDisplay.height = 142;
+	this.buttonDisplay.paddingLeft = 200;
+	this.buttonDisplay.messagePosition = RelativePosition.RIGHT;
+
+	var line:Devider = new Devider(0xBB0000);
+	line.layoutData = new AnchorLayoutData(NaN, 280, 148, 460);
+	this.addChild(line);
+}
+protected function exchangeManager_beginInteractionHandler(event:Event):void 
+{
+	this.resetData(event.data as ExchangeItem);
 }
 
 override protected function showAchieveAnimation(item:ExchangeItem):void 

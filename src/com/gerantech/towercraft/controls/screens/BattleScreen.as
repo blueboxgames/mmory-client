@@ -1,39 +1,38 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.fieldes.FieldData;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.socials.Challenge;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.BattleHUD;
 import com.gerantech.towercraft.controls.overlays.BattleStartOverlay;
 import com.gerantech.towercraft.controls.overlays.BattleWaitingOverlay;
 import com.gerantech.towercraft.controls.overlays.EndBattleOverlay;
 import com.gerantech.towercraft.controls.overlays.EndOperationOverlay;
 import com.gerantech.towercraft.controls.overlays.EndOverlay;
-import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.popups.UnderMaintenancePopup;
 import com.gerantech.towercraft.events.GameEvent;
 import com.gerantech.towercraft.managers.SoundManager;
-import com.gerantech.towercraft.managers.VideoAdsManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.models.vo.UserData;
-import com.gerantech.towercraft.models.vo.VideoAd;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.views.BattleFieldView;
-import com.gt.towers.battle.BattleField;
-import com.gt.towers.battle.fieldes.FieldData;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.socials.Challenge;
-import com.gt.towers.utils.maps.IntIntMap;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import feathers.events.FeathersEventType;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -60,6 +59,7 @@ public function BattleScreen()
 	addChild(appModel.battleFieldView);
 	
 	backgroundSkin = new Image(appModel.theme.quadSkin);
+	Image(backgroundSkin).scale9Grid = MainTheme.QUAD_SCALE9_GRID;
 	Image(backgroundSkin).color = 0xCCB3A3;
 }
 
@@ -291,7 +291,7 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	}
 	
 	// reserved prefs data
-	if( inTutorial && rewards.getSFSObject(0).getInt("score") > 0 )
+	if( player.get_battleswins() < 10 && rewards.getSFSObject(0).getInt("score") > 0 )
 		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 7);
 	
 	player.addResources(outcomes);
@@ -301,7 +301,7 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	else
 		endOverlay = new EndBattleOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);
 	endOverlay.addEventListener(Event.CLOSE, endOverlay_closeHandler);
-	setTimeout(hud.end, 1500, endOverlay);// delay for noobs
+	setTimeout(hud.end, Math.max(200, 1000 - player.get_battleswins() * 300), endOverlay);// delay for noobs
 }
 
 private function endOverlay_closeHandler(event:Event):void
@@ -315,11 +315,10 @@ private function endOverlay_closeHandler(event:Event):void
 		return;
 	}
 	
-	var field:FieldData = appModel.battleFieldView.battleData.battleField.field;
 	appModel.battleFieldView.responseSender.leave();
 	appModel.battleFieldView.responseSender.actived = false;
 	
-	if( player.get_battleswins() > 5 && endOverlay.score == 3 && player.get_arena(0) > 0 )//!sfsConnection.mySelf.isSpectator && 
+	if( player.get_battleswins() > 5 && endOverlay.score == 3 && player.get_arena(0) > 0 ) // !sfsConnection.mySelf.isSpectator && 
 		appModel.navigator.showOffer();
 	dispatchEventWith(Event.COMPLETE);
 }

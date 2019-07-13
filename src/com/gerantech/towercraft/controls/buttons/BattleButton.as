@@ -4,9 +4,9 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.socials.Challenge;
-import com.gt.towers.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.socials.Challenge;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
@@ -14,6 +14,7 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 
 import flash.geom.Rectangle;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 /**
 * ...
@@ -60,9 +61,10 @@ override protected function initialize() : void
 	addChild(backgroundDisplay);
 
 	// cost elements ....
-	var cost:IntIntMap = Challenge.getRunRequiements(UserData.instance.challengeIndex);
-	var costType:int = cost.keys()[0];
-	var costValue:int = cost.get(costType);
+	var _type:int = ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, UserData.instance.challengeIndex)
+	var _cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, _type));
+	var costType:int = _cost.keys()[0];
+	var costValue:int = _cost.get(costType);
 
 	labelDisplay = new ShadowLabel(label, 1, 0, "center", null, false, null, 1.5);
 	labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, costValue > 0 ? -40 : -10);

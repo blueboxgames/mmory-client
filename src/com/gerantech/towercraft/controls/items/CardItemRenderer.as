@@ -2,8 +2,7 @@ package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.models.Assets;
-import com.gt.towers.constants.CardFeatureType;
-import com.gt.towers.scripts.ScriptEngine;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.ScrollContainer;
@@ -44,8 +43,6 @@ override protected function initialize():void
 {
 	super.initialize();
 	layout = new AnchorLayout();
-	alpha = 0;
-	
 	cardLayoutData = new AnchorLayoutData(0, 0, NaN, 0);
 }
 
@@ -112,11 +109,10 @@ override protected function commitData():void
 		// cardDisplay.setData(cardType, l, c);
 		cardDisplay.type = cardType;
 		cardDisplay.level = showLevel ? l : -1;
-		Starling.juggler.tween(this, 0.2, {delay:0.05 * index, alpha:1});
 	}
 	else
 	{
-		alpha = 1;
+		// alpha = 1;
 		cardType = _data.type;
 		cardDisplay.type = cardType;
 		cardDisplay.level = showLevel ? l : -1;

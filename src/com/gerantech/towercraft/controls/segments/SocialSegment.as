@@ -6,7 +6,7 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.constants.SegmentType;
+import com.gerantech.mmory.core.constants.SegmentType;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.List;

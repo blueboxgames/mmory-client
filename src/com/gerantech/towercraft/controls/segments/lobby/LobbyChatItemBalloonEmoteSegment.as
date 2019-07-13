@@ -1,13 +1,14 @@
 package com.gerantech.towercraft.controls.segments.lobby
 {
-import com.gerantech.towercraft.controls.FastList;
-import com.gerantech.towercraft.controls.segments.ChatSegment;
+import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
 import dragonBones.events.EventObject;
 import dragonBones.starling.StarlingArmatureDisplay;
 import dragonBones.starling.StarlingEvent;
+
+import feathers.controls.List;
 
 import starling.display.DisplayObject;
 import starling.events.Event;
@@ -17,14 +18,14 @@ public class LobbyChatItemBalloonEmoteSegment extends LobbyChatItemBalloonSegmen
 private var labelDisplay:ShadowLabel;
 private var emoteArmature:StarlingArmatureDisplay;
 
-public function LobbyChatItemBalloonEmoteSegment(owner:FastList) { super(owner); }
+public function LobbyChatItemBalloonEmoteSegment(owner:List) { super(owner); }
 override public function init():void
 {
 	super.init();
 	height = 280;
 	whoSkinLayout.right = mySkinLayout.left = 600;
 
-	emoteArmature = ChatSegment.factory.buildArmatureDisplay("emote");
+	emoteArmature = EmoteItemRenderer.factory.buildArmatureDisplay("emote");
 	emoteArmature.touchable = false;
 	emoteArmature.y = height - 20;
 	addChild(emoteArmature as DisplayObject);

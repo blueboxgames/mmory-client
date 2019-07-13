@@ -1,9 +1,14 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.mmory.core.Player;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.Exchanger;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.headers.DeckHeader;
 import com.gerantech.towercraft.controls.items.CardItemRenderer;
-import com.gerantech.towercraft.controls.overlays.BuildingUpgradeOverlay;
+import com.gerantech.towercraft.controls.overlays.CardUpgradeOverlay;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.CardDetailsPopup;
 import com.gerantech.towercraft.controls.popups.CardSelectPopup;
@@ -11,11 +16,6 @@ import com.gerantech.towercraft.controls.popups.RequirementConfirmPopup;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gt.towers.Player;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.exchanges.Exchanger;
-import com.gt.towers.scripts.ScriptEngine;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.controls.List;
@@ -36,6 +36,7 @@ import flash.utils.setTimeout;
 
 import starling.animation.Transitions;
 import starling.core.Starling;
+import starling.display.Quad;
 import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
@@ -61,46 +62,49 @@ override public function init():void
 {
 	super.init();
 	updateData();
+
+	backgroundSkin = new Quad(1, 1);
+	backgroundSkin.alpha = 0;
 	
 	deckHeader = new DeckHeader();
 	deckHeader.addEventListener(Event.SELECT, deckHeader_selectHandler);
 	deckHeader.layoutData = new AnchorLayoutData(NaN, paddingH, NaN, paddingH);
+	deckHeader.alpha = 0;
 	addChild(deckHeader);
 	
 	var scrollerLayout:VerticalLayout = new VerticalLayout();
-	scrollerLayout.gap = 48;
+	scrollerLayout.gap = 32;
 	scrollerLayout.padding = 16; 
 	scrollerLayout.paddingTop = DeckHeader.HEIGHT + 16;
 	scrollerLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
 	
 	scroller = new ScrollContainer();
 	scroller.alpha = 0;
+	scroller.touchable = false;
 	scroller.layout = scrollerLayout;
-	scroller.layoutData = new AnchorLayoutData(0, paddingH, 0, paddingH);
 	scroller.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
-	scroller.addEventListener(Event.SCROLL, scroller_scrollHandler);
+	scroller.layoutData = new AnchorLayoutData(0, paddingH, 0, paddingH);
 	addChildAt(scroller, 0);
-	
+
 	initializeCompleted = true;
 	layout = new AnchorLayout();
-	var foundLayout:TiledRowsLayout = new TiledRowsLayout();
-	var unavailabledLayout:TiledRowsLayout = new TiledRowsLayout();
-	unavailabledLayout.gap = foundLayout.gap = foundLayout.paddingTop = 16;
-	unavailabledLayout.verticalGap = foundLayout.verticalGap = 52;
-	unavailabledLayout.paddingTop = foundLayout.paddingTop = 52;
-	unavailabledLayout.paddingBottom = foundLayout.paddingBottom = 52;
-	unavailabledLayout.useSquareTiles = foundLayout.useSquareTiles = false;
-	unavailabledLayout.useVirtualLayout = foundLayout.useVirtualLayout = false;
-	unavailabledLayout.requestedColumnCount = foundLayout.requestedColumnCount = 4;
-	unavailabledLayout.typicalItemWidth = foundLayout.typicalItemWidth = (stageWidth - foundLayout.gap * (foundLayout.requestedColumnCount - 1) - 64) / foundLayout.requestedColumnCount;
-	unavailabledLayout.typicalItemHeight = foundLayout.typicalItemHeight = foundLayout.typicalItemWidth * CardView.VERICAL_SCALE;
+	var availableLayout:TiledRowsLayout = new TiledRowsLayout();
+	var unavailableLayout:TiledRowsLayout = new TiledRowsLayout();
+	unavailableLayout.gap = availableLayout.gap = 16;
+	unavailableLayout.verticalGap = availableLayout.verticalGap = 52;
+	unavailableLayout.paddingTop = availableLayout.paddingTop = 52;
+	unavailableLayout.paddingBottom = availableLayout.paddingBottom = 52;
+	unavailableLayout.useSquareTiles = availableLayout.useSquareTiles = false;
+	unavailableLayout.useVirtualLayout = availableLayout.useVirtualLayout = false;
+	unavailableLayout.requestedColumnCount = availableLayout.requestedColumnCount = 4;
+	unavailableLayout.typicalItemWidth = availableLayout.typicalItemWidth = (stageWidth - availableLayout.gap * (availableLayout.requestedColumnCount - 1) - 64) / availableLayout.requestedColumnCount;
+	unavailableLayout.typicalItemHeight = availableLayout.typicalItemHeight = availableLayout.typicalItemWidth * CardView.VERICAL_SCALE;
 
 	availableList = new List();
+	availableList.layout = availableLayout;
 	availableList.verticalScrollPolicy = ScrollPolicy.OFF;
-	availableList.layout = foundLayout;
 	availableList.itemRendererFactory = function():IListItemRenderer { return new CardItemRenderer(true, true, true, scroller); }
 	availableList.dataProvider = availableCollection;
-	availableList.addEventListener(FeathersEventType.FOCUS_IN, unlocksList_focusInHandler);
 	scroller.addChild(availableList);
 	
 	if( unavailableCollection.length > 0 )
@@ -109,15 +113,47 @@ override public function init():void
 		
 		unavailableList = new List();
 		unavailableList.verticalScrollPolicy = ScrollPolicy.OFF;
-		unavailableList.layout = unavailabledLayout;
+		unavailableList.layout = unavailableLayout;
 		unavailableList.itemRendererFactory = function():IListItemRenderer { return new CardItemRenderer(false, false, false, scroller); }
 		unavailableList.dataProvider = unavailableCollection;
 		scroller.addChild(unavailableList);
 	}
-	
-	exchangeManager.addEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
-	Starling.juggler.tween(scroller, 0.5, {alpha:1});
+
+	if( !player.inDeckTutorial() )
+	{
+		Starling.juggler.tween(scroller, 0.1, {alpha:1});
+		Starling.juggler.tween(deckHeader, 0.2, {alpha:1, onComplete:finalizeSegment});
+		return;
+	}
+
+	//tutorial appearance
+	scroller.scrollToPosition(NaN, 2900, 0.5);
+	scroller.addEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_fscrollCompleteHandler);
+	function scroller_fscrollCompleteHandler(event:Event) : void
+	{
+		scroller.removeEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_fscrollCompleteHandler);
+		Starling.juggler.tween(scroller, 0.2, {alpha:1, onComplete:appearPage});
+	}
+	function appearPage() : void
+	{
+		scroller.addEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_lscrollCompleteHandler);
+		Starling.juggler.delayCall(scroller.scrollToPosition, 1, NaN, 0, 2);
+	}
+	function scroller_lscrollCompleteHandler(event:Event) : void
+	{
+		scroller.removeEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_lscrollCompleteHandler);
+		Starling.juggler.tween(deckHeader, 0.3, {alpha:1, onComplete:finalizeSegment});
+	}
 }
+
+private function finalizeSegment() : void
+{
+	scroller.touchable = true;
+	scroller.addEventListener(Event.SCROLL, scroller_scrollHandler);
+	availableList.addEventListener(FeathersEventType.FOCUS_IN, unlocksList_focusInHandler);
+	exchangeManager.addEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
+}
+	
 protected function exchangeManager_endHandler(event:Event):void
 {
 	deckHeader.update();
@@ -216,7 +252,7 @@ private function selectPopup_selectHandler(event:Event):void
 private function stage_touchHandler(event:TouchEvent):void
 {
 	var touch:Touch = event.getTouch(this);
-	if( touch == null )
+	if( touch == null || draggableCard == null )
 		return;
 	
 	if( touch.phase == TouchPhase.BEGAN)
@@ -233,7 +269,7 @@ private function stage_touchHandler(event:TouchEvent):void
 		draggableCard.y = touch.globalY;
 		deckHeader.getCardIndex(touch.globalX, touch.globalY);
 	}
-	else if(touch.phase == TouchPhase.ENDED)
+	else if( touch.phase == TouchPhase.ENDED)
 	{
 		var cardIndex:int = deckHeader.getCardIndex(touch.globalX, touch.globalY);
 		if( touchId == -1 && cardIndex > -1 )
@@ -276,6 +312,7 @@ private function setEditMode(value:Boolean, type:int):void
 		
 		draggableCard = new CardView();
 		draggableCard.width = 240;
+		draggableCard.showElixir = true;
 		draggableCard.height = draggableCard.width * CardView.VERICAL_SCALE;
 		draggableCard.pivotX = draggableCard.width * 0.5;
 		draggableCard.pivotY = draggableCard.height * 0.5;
@@ -286,7 +323,7 @@ private function setEditMode(value:Boolean, type:int):void
 		addChild(draggableCard);
 		draggableCard.type = type;
 		
-		stage.addEventListener(TouchEvent.TOUCH, stage_touchHandler);
+		addEventListener(TouchEvent.TOUCH, stage_touchHandler);
 		return;
 	}
 
@@ -351,7 +388,7 @@ private function seudUpgradeRequest(card:Card, confirmedHards:int):void
 	sfs.putInt("confirmedHards", confirmedHards);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.CARD_UPGRADE, sfs);
 	
-	var upgradeOverlay:BuildingUpgradeOverlay = new BuildingUpgradeOverlay();
+	var upgradeOverlay:CardUpgradeOverlay = new CardUpgradeOverlay();
 	upgradeOverlay.card = card;
 	appModel.navigator.addOverlay(upgradeOverlay);
 	

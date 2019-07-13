@@ -1,5 +1,10 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.groups.ColorGroup;
@@ -10,12 +15,6 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.CardFeatureType;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.scripts.ScriptEngine;
 
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
@@ -73,7 +72,7 @@ override protected function transitionInCompleted():void
 	super.transitionInCompleted();
 	padding = 50;
 
-	var rarity:int = ScriptEngine.getInt(CardFeatureType.F00_RARITY, cardType, 1);
+	var rarity:int = ScriptEngine.getInt(ScriptEngine.T00_RARITY, cardType, 1);
 	var rarityPalette:ColorGroup = new ColorGroup();
 	rarityPalette.backgroundColor = CardTypes.getRarityColor(rarity);
 	rarityPalette.label = loc("card_rarity_" + rarity);
@@ -91,13 +90,12 @@ override protected function transitionInCompleted():void
 	addChild(messageDisplay);
 	
 	// features ....
-	
 	CardFeatureItemRenderer.IN_DETAILS = true;
 	CardFeatureItemRenderer.CARD_TYPE = cardType;
 	CardFeatureItemRenderer.UPGRADABLE = player.cards.exists(cardType) && player.cards.get(cardType).upgradable();
-	var features:Vector.<int> = CardFeatureType.getRelatedTo(cardType)._list;
-	if( ScriptEngine.get(CardFeatureType.F03_QUANTITY, cardType) > 1 )
-		features.push(CardFeatureType.F03_QUANTITY);
+	var features:Array = CardTypes.getRelatedTo(cardType);
+	if( ScriptEngine.get(ScriptEngine.T03_QUANTITY, cardType) > 1 )
+		features.push(ScriptEngine.T03_QUANTITY);
 	
 	var featureLayout:TiledRowsLayout = new TiledRowsLayout();
 	featureLayout.horizontalAlign = HorizontalAlign.LEFT;
@@ -122,6 +120,7 @@ override protected function transitionInCompleted():void
 	if( card.level == -1 )
 		dispatchEventWith(Event.UPDATE, false, cardType);
 	
+	cardDisplay.level = card.level;
 	var inDeck:Boolean = player.getSelectedDeck().existsValue(cardType);
 
 	var upgradeCost:int = Card.get_upgradeCost(card.level, card.rarity);
@@ -143,9 +142,7 @@ override protected function transitionInCompleted():void
 	var hasCoin:Boolean = player.resources.get(ResourceType.R3_CURRENCY_SOFT) >= upgradeCost;
 	upgradeButton.labelFactory = function () : ITextRenderer
 	{
-		if( hasCoin )
-			return new ShadowLabel(null, 1, 0, "center", null, false, null, 1);
-		return new RTLLabel(null, 0xCC0000, "center", null, false, null, 1);
+		return new ShadowLabel(null, hasCoin ? 1 : 0xFF0000, 0, "center", null, false, null, 1);
 	}
 	upgradeButton.defaultIcon.alpha = hasCoin ? 1 : 0.8;
 	addChild(upgradeButton);

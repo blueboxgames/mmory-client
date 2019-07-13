@@ -3,11 +3,14 @@ package com.gerantech.towercraft.controls.texts
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import flash.geom.Rectangle;
+import feathers.layout.RelativePosition;
+
 import flash.utils.setInterval;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -19,7 +22,8 @@ import starling.display.Image;
 public class CountdownLabel extends TowersLayout 
 {
 public var localString:String = null;
-private var clockDisplay:ImageLoader;
+public var iconPosition:String = "left";
+private var iconDisplay:ImageLoader;
 private var needleDisplay:Image;
 private var labelDisplay:RTLLabel;
 private var _scale:Number;
@@ -33,32 +37,25 @@ override protected function initialize() : void
 {
 	padding = height * 0.15;
 	layout = new AnchorLayout();
-	
-	var skin:ImageLoader = new ImageLoader();
-	skin.source = Assets.getTexture("theme/indicator-background");
-	skin.scale9Grid = new Rectangle(8, 12, 4, 4);
-	skin.layoutData = new AnchorLayoutData(padding, 0, padding * 1.5, height * 0.5);
-	skin.alpha = 0.95;
-	//addChild(skin);
-	
-	clockDisplay = new ImageLoader();
-	clockDisplay.source = Assets.getTexture("timer");
-	clockDisplay.layoutData = new AnchorLayoutData(0, NaN, 0, 0);
-	clockDisplay.height = clockDisplay.width = height;
-	addChild(clockDisplay);
+		
+	iconDisplay = new ImageLoader();
+	iconDisplay.source = Assets.getTexture("timer");
+	iconDisplay.layoutData = new AnchorLayoutData(0, iconPosition == RelativePosition.LEFT ? NaN : 0, 0, iconPosition == RelativePosition.LEFT ? 0 : NaN);
+	iconDisplay.height = iconDisplay.width = height;
+	addChild(iconDisplay);
 	
 	needleDisplay = new Image(Assets.getTexture("timer-needle"));
 	needleDisplay.pivotX = needleDisplay.width * 0.5;
 	needleDisplay.pivotY = needleDisplay.height * 0.5;
 	needleDisplay.height = height * 0.6;
 	needleDisplay.scaleX = needleDisplay.scaleY;
-	needleDisplay.x = height * 0.5;
+	needleDisplay.x = iconPosition == RelativePosition.LEFT ? height * 0.5 : width - height * 0.5;
 	needleDisplay.y = height * 0.5;
 	needleDisplay.rotation = 0.55;
 	addChild(needleDisplay);
 	
-	labelDisplay = new RTLLabel(defaultFormatLabelFactory(_time, localString), 1, "center", localString == null ? "ltr" : null, false, null, height / 130);
-	labelDisplay.layoutData = new AnchorLayoutData(NaN, 0, NaN, height * 0.75, NaN, 0);
+	labelDisplay = new RTLLabel(defaultFormatLabelFactory(_time, localString), 1, "center", localString == null ? "ltr" : null, false, null, height / 140);
+	labelDisplay.layoutData = new AnchorLayoutData(NaN, iconPosition == RelativePosition.LEFT ? 3 : height * 0.8, NaN, iconPosition == RelativePosition.LEFT ? height * 0.8 : 3, NaN, 0);
 	addChild(labelDisplay);
 	
 	play();

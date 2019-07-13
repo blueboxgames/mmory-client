@@ -16,13 +16,11 @@ private var inboxSegment:InboxSegment;
 public function IssuesScreen()
 {
 	super();
-	title = "Issues"
 	headerSize = 120;
 	showTileAnimationn = false;
 }
 override protected function initialize():void
 {
-	//title = "Issue Tracking";
 	super.initialize();
 	layout = new AnchorLayout();
 	

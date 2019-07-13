@@ -1,19 +1,18 @@
 package com.gerantech.towercraft.controls.segments 
 {
-import com.gerantech.towercraft.controls.FastList;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
+import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
 import com.gerantech.towercraft.controls.texts.CustomTextInput;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
-import dragonBones.objects.DragonBonesData;
-import dragonBones.starling.StarlingFactory;
-
+import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.ScrollPolicy;
 import feathers.controls.renderers.IListItemRenderer;
@@ -38,12 +37,11 @@ import starling.events.Event;
 */
 public class ChatSegment extends Segment 
 {
-static public var dragonBonesData:DragonBonesData;
-static public var factory:StarlingFactory;
+
 
 protected var padding:int;
 protected var footerSize:int;
-protected var chatList:FastList;
+protected var chatList:List;
 protected var chatEnableButton:MMOryButton;
 protected var chatLayout:VerticalLayout;
 protected var chatTextInput:CustomTextInput;
@@ -55,17 +53,12 @@ private var startScrollBarIndicator:Number = 0;
 public function ChatSegment()
 {
 	super();
-	Assets.loadAnimationAssets(animation_loadCallback, "emotes");
+	EmoteItemRenderer.loadEmotes(animation_loadCallback);
 }
 
 protected function animation_loadCallback():void 
 {
-	if( ChatSegment.factory == null )
-	{
-		ChatSegment.factory = new StarlingFactory();
-		ChatSegment.dragonBonesData = ChatSegment.factory.parseDragonBonesData(appModel.assets.getObject("emotes_ske"));
-		ChatSegment.factory.parseTextureAtlasData(appModel.assets.getObject("emotes_tex"), appModel.assets.getTexture("emotes_tex"));
-	}
+	EmblemButton.loadAtlas(null);
 }
 
 protected function showElements() : void
@@ -74,14 +67,14 @@ protected function showElements() : void
 	footerSize = 120;
 	
 	chatLayout = new VerticalLayout();
-	chatLayout.gap = padding;
-	chatLayout.paddingTop = padding * 2;
+	chatLayout.gap = 32;
+	chatLayout.paddingTop = 32;
     chatLayout.paddingBottom = footerSize + padding * 2;
 	chatLayout.hasVariableItemDimensions = true;
 	chatLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
 	chatLayout.verticalAlign = VerticalAlign.BOTTOM;
 	
-	chatList = new FastList(false);
+	chatList = new List();
 	chatList.layout = chatLayout;
     chatList.layoutData = new AnchorLayoutData(21, 0, 0, 0);
 	chatList.itemRendererFactory = function ():IListItemRenderer { return new LobbyChatItemRenderer()};
@@ -91,7 +84,7 @@ protected function showElements() : void
 	chatList.addEventListener(FeathersEventType.CREATION_COMPLETE, chatList_createCompleteHandler);
 	chatList.dataProvider = new ListCollection();
 	chatList.validate();
-	chatList.loadingState = 1;
+	// chatList.loadingState = 1;
 	addChild(chatList);
 
 	chatTextInput = new CustomTextInput(SoftKeyboardType.DEFAULT, ReturnKeyLabel.DONE, 0, false, appModel.align);
@@ -268,6 +261,7 @@ public function enabledChatting(value:Boolean):void
         chatTextInput.removeFromParent();
         addChild(chatEnableButton);
     }
+	dispatchEventWith(FeathersEventType.FOCUS_IN, false, _chatEnabled);
 }
 
 public function set buttonsEnabled(value:Boolean):void

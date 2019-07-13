@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.managers
 {
-import com.gt.towers.battle.BattleField;
+import com.gerantech.mmory.core.battle.BattleField;
 import flash.utils.clearInterval;
 import flash.utils.getTimer;
 import flash.utils.setInterval;

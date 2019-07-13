@@ -1,36 +1,30 @@
 package com.gerantech.towercraft.controls.items
 {
-import com.gerantech.towercraft.controls.buttons.CustomButton;
-import com.gerantech.towercraft.controls.buttons.Indicator;
-import com.gerantech.towercraft.controls.groups.ColorGroup;
+import com.gerantech.mmory.core.others.Quest;
 import com.gerantech.towercraft.controls.groups.RewardsPalette;
 import com.gerantech.towercraft.controls.sliders.LabeledProgressBar;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.others.Quest;
+
 import feathers.controls.ImageLoader;
-import feathers.controls.ProgressBar;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
-import flash.utils.clearTimeout;
-import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
-import starling.display.Image;
 import starling.events.Event;
 
 public class QuestItemRenderer extends AbstractTouchableListItemRenderer
 {
 static public var HEIGHT:int = 400;
-static private var PADDING:int = 30;
-static private var SCALE_GRID:Rectangle = new Rectangle(48, 36, 2, 2);
+static public var PADDING:int = 30;
+static public var SCALE_GRID:Rectangle = new Rectangle(48, 36, 2, 2);
 public var quest:Quest;
 private var passed:Boolean;
 private var skinLayout:AnchorLayoutData;
@@ -112,7 +106,9 @@ override protected function commitData():void
 	iconDisplay.height = iconStr.substr(0,9) == "home/dash-tab-" ? 160 : 120;
 	iconDisplay.y = iconStr.substr(0,9) == "home/dash-tab-" ? -PADDING * 2 : 0;
 	
-	if( quest.type == Quest.TYPE_7_CARD_COLLECT || quest.type == Quest.TYPE_8_CARD_UPGRADE )
+	if( quest.type == Quest.TYPE_7_CARD_COLLECT )
+		titleDisplay.text = loc("quest_title_" + quest.type, [quest.target, loc("card_title_" + quest.key)]);
+	else if( quest.type == Quest.TYPE_8_CARD_UPGRADE )
 		titleDisplay.text = loc("quest_title_" + quest.type, [loc("card_title_" + quest.key), quest.target]);
 	else if( quest.type == Quest.TYPE_6_CHALLENGES )
 		titleDisplay.text = loc("quest_title_" + quest.type, [quest.target, loc("challenge_title_" + (quest.key - 31))]);

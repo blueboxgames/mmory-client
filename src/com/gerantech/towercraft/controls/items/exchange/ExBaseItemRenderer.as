@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
 import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
-import com.gt.towers.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
@@ -47,11 +47,9 @@ protected function exchangeManager_endInteractionHandler(event:Event):void
 
 protected function resetData(item:ExchangeItem):void 
 {
-	if( item.type != exchange.type )
-		return;
-	removeChildren();
 	commitData();
-	showAchieveAnimation(item);
+	if( item.type == exchange.type )
+		showAchieveAnimation(item);
 }
 
 protected function showAchieveAnimation(item:ExchangeItem):void 

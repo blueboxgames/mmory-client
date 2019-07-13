@@ -1,5 +1,9 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.constants.SegmentType;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.TileBackground;
 import com.gerantech.towercraft.controls.buttons.Indicator;
@@ -16,10 +20,6 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.constants.SegmentType;
 
 import feathers.controls.AutoSizeMode;
 import feathers.controls.ImageLoader;
@@ -57,13 +57,13 @@ private var segmentsCollection:ListCollection;
 public function DashboardScreen()
 {
 	visible = false;	
-	if( !Assets.animationAssetsLoaded )
-		Assets.loadAnimationAssets(initialize, "factions", "packs");
+	if( appModel.assets.getTexture("packs_tex") == null )
+		Assets.loadAtlas("assets/animations/", "_tex", initialize, "packs");
 }
 
 override protected function initialize():void
 {
-	if( !Assets.animationAssetsLoaded )
+	if( appModel.assets.getTexture("packs_tex") == null )
 		return;
 	OpenBookOverlay.createFactory();
 
@@ -130,17 +130,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	pageList.layoutData = new AnchorLayoutData(0, -pageLayout.typicalItemHeight, FOOTER_SIZE, -pageLayout.typicalItemHeight);
 	pageList.itemRendererFactory = function ():IListItemRenderer { return new SegmentsItemRenderer(); }
 	addChild(pageList);
-	
-	var shadowTop:ImageLoader = new ImageLoader();
-	shadowTop.source = Assets.getTexture("theme/gradeint-top", "gui");
-	shadowTop.layoutData = new AnchorLayoutData(-30, -30, NaN, -30);
-	shadowTop.maintainAspectRatio = false;
-	shadowTop.touchable = false;
-	shadowTop.height = 200;
-	shadowTop.alpha = 0.4;
-	shadowTop.color = 0;
-	addChild(shadowTop);
-	
+		
 	var shadowBottom:ImageLoader = new ImageLoader();
 	shadowBottom.source = Assets.getTexture("theme/gradeint-bottom", "gui");
 	shadowBottom.layoutData = new AnchorLayoutData(NaN, -20, FOOTER_SIZE - 20, -20);
@@ -183,7 +173,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	tabsList.height = FOOTER_SIZE * 1.0;
 	tabsList.clipContent = false;
 	tabsList.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
-    tabsList.verticalScrollPolicy = ScrollPolicy.OFF;
+	tabsList.verticalScrollPolicy = ScrollPolicy.OFF;
 	tabsList.addEventListener(Event.SELECT, tabsList_selectHandler);
 	tabsList.itemRendererFactory = function ():IListItemRenderer { return new DashboardTabItemRenderer(tabSize); }
 	addChild(tabsList);
@@ -193,6 +183,16 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	toolbar.layoutData = new AnchorLayoutData(0, 0, NaN, 0);
 	addChild(toolbar);
 	
+	var shadowTop:ImageLoader = new ImageLoader();
+	shadowTop.source = Assets.getTexture("theme/gradeint-top", "gui");
+	shadowTop.layoutData = new AnchorLayoutData(-30, -30, NaN, -30);
+	shadowTop.maintainAspectRatio = false;
+	shadowTop.touchable = false;
+	shadowTop.height = 200;
+	shadowTop.alpha = 0.4;
+	shadowTop.color = 0;
+	toolbar.addChild(shadowTop);
+
 	var indicatorHC:Indicator = new Indicator("rtl", ResourceType.R4_CURRENCY_HARD);
 	indicatorHC.layoutData = new AnchorLayoutData(20, 70);
 	toolbar.addChild(indicatorHC);

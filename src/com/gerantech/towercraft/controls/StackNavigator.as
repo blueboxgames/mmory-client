@@ -28,11 +28,11 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.models.vo.UserData;
 	import com.gerantech.towercraft.utils.StrUtils;
 	import com.gerantech.towercraft.utils.Utils;
-	import com.gt.towers.constants.PrefsTypes;
-	import com.gt.towers.constants.ResourceType;
-	import com.gt.towers.socials.Challenge;
-	import com.gt.towers.utils.maps.IntIntMap;
-	import com.gt.towers.utils.maps.IntStrMap;
+	import com.gerantech.mmory.core.constants.PrefsTypes;
+	import com.gerantech.mmory.core.constants.ResourceType;
+	import com.gerantech.mmory.core.socials.Challenge;
+	import com.gerantech.mmory.core.utils.maps.IntIntMap;
+	import com.gerantech.mmory.core.utils.maps.IntStrMap;
 	import com.smartfoxserver.v2.core.SFSEvent;
 	import com.smartfoxserver.v2.entities.Buddy;
 	import com.smartfoxserver.v2.entities.data.ISFSObject;
@@ -51,6 +51,7 @@ package com.gerantech.towercraft.controls
 	import starling.core.Starling;
 	import starling.events.Event;
 	import starling.textures.Texture;
+	import com.gerantech.mmory.core.scripts.ScriptEngine;
 	
 	public class StackNavigator extends StackScreenNavigator
 	{
@@ -111,8 +112,9 @@ package com.gerantech.towercraft.controls
 		
 		public function runBattle(index:int, cancelable:Boolean = true, spectatedUser:String = null, friendlyMode:int = 0) : void
 		{
-			
-			if( spectatedUser == null && friendlyMode == 0 && !AppModel.instance.game.player.has(Challenge.getRunRequiements(index)) )
+			var _type:int = ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, index)
+			var _cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, _type));
+			if( spectatedUser == null && friendlyMode == 0 && !AppModel.instance.game.player.has(_cost) )
 			{
 				gotoShop(ResourceType.R6_TICKET);
 				addLog(loc("log_not_enough", [loc("resource_title_" + ResourceType.R6_TICKET)]));

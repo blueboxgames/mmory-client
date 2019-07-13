@@ -1,14 +1,13 @@
 package com.gerantech.towercraft.models.vo
 {
-import com.gerantech.towercraft.managers.ExchangeManager;
+import com.gerantech.mmory.core.Player;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
-import com.gt.towers.Player;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.exchanges.ExchangeItem;
-import com.gt.towers.socials.Challenge;
+
 import flash.events.Event;
 
 public class TabItemData
@@ -34,7 +33,7 @@ protected function exchangeManager_endHandler(e:Event):void
 
 public function update() : void 
 {
-	if( player.inTutorial() )
+	if( player.get_arena(0) == 0 )
 		return;
 	
 	if( index == 0 )

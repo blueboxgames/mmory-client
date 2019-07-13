@@ -4,12 +4,11 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.battle.BattleField;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.CardFeatureType;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.scripts.ScriptEngine;
-import com.gt.towers.utils.CoreUtils;
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.mmory.core.utils.CoreUtils;
 
 import starling.core.Starling;
 import starling.display.Image;
@@ -110,7 +109,7 @@ public function summon() : void
 	zoneDisplay.visible = false;
 	titleDisplay.visible = false;
 	levelDisplay.visible = false;
-	var dely:Number = ScriptEngine.getInt(CardFeatureType.F04_SUMMON_TIME, this._type, AppModel.instance.game.player.cards.get(_type).level) * 0.001;
+	var dely:Number = ScriptEngine.getInt(ScriptEngine.T04_SUMMON_TIME, this._type, AppModel.instance.game.player.cards.get(_type).level) * 0.001;
 	Starling.juggler.tween(unitsContainer, 0.2, {alpha:0, delay:dely, onComplete:removeFromParent, onCompleteArgs:[true]});
 }
 }

@@ -1,24 +1,30 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.items.LeagueItemRenderer;
 import com.gerantech.towercraft.controls.overlays.EndBattleOverlay;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
+import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
 import com.gerantech.towercraft.controls.toasts.BattleTurnToast;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.views.BattleFieldView;
-import com.gt.towers.battle.units.Card;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.constants.PrefsTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.utils.maps.IntIntMap;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import dragonBones.objects.DragonBonesData;
 import dragonBones.starling.StarlingFactory;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
+import feathers.layout.AnchorLayoutData;
+
 import starling.core.Starling;
 import starling.events.Event;
 
@@ -50,23 +56,26 @@ override protected function initialize():void
 	super.initialize();
 	layout = new AnchorLayout();
 	
-	LeagueItemRenderer.HEIGHT = 1000;
+	LeagueItemRenderer.HEIGHT = 1800;
 	LeagueItemRenderer.LEAGUE = player.get_arena(0);
 
 	listLayout.gap = 0;
 	listLayout.paddingTop = 500;
-	listLayout.paddingBottom = 0;
+	listLayout.paddingBottom = 200;
 	listLayout.useVirtualLayout = false;
+	listLayout.hasVariableItemDimensions = true;
 	
+	AnchorLayoutData(list.layoutData).bottom = -listLayout.paddingBottom;
 	list.itemRendererFactory = function():IListItemRenderer { return new LeagueItemRenderer(); }
 	list.addEventListener(FeathersEventType.CREATION_COMPLETE, list_createCompleteHandler);
 	list.elasticity = 0.03;
 	list.dataProvider = leaguesCollection;
 	
-	//testOpenBook();
-	//testOffer();
-	//testBattleToast();
-	//testBattleOverlay();
+	// testStarterPack();
+	// testOpenBook();
+	// testOffer();
+	// testBattleToast();
+	// testBattleOverlay();
 }
 
 private function testOpenBook():void 
@@ -139,9 +148,15 @@ private function testBattleOverlay() : void
 
 private function list_createCompleteHandler():void
 {
-//	trace(leaguesCollection.length,FactionItemRenderer.playerLeague,(leaguesCollection.length-FactionItemRenderer.playerLeague-1), FactionItemRenderer._height * (leaguesCollection.length-FactionItemRenderer.playerLeague-1))
-	list.scrollToPosition(NaN, LeagueItemRenderer.HEIGHT * (leaguesCollection.length - LeagueItemRenderer.LEAGUE - 1) + 300, 0);
-	Starling.juggler.delayCall(list.scrollToPosition, 0.3, NaN, LeagueItemRenderer.HEIGHT * (leaguesCollection.length - LeagueItemRenderer.LEAGUE - 2) , 1);
+	var leagueY:int = LeagueItemRenderer.HEIGHT * (leaguesCollection.length - LeagueItemRenderer.LEAGUE);
+	list.scrollToPosition(NaN, leagueY + 200, 0);
+	Starling.juggler.delayCall(list.scrollToPosition, 0.1, NaN, leagueY - 400, 1);
+}
+
+private function testStarterPack():void
+{
+	var item:ExchangeItem = new  ExchangeItem(31, 0, timeManager.now + 5000,  ResourceType.R5_CURRENCY_REAL + ":1990", "116:40," + ResourceType.R4_CURRENCY_HARD + ":300");
+	appModel.navigator.addPopup(new BundleDetailsPopup(item));
 }
 }
 }

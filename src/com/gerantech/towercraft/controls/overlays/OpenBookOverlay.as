@@ -9,11 +9,10 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
-import com.gt.towers.constants.CardFeatureType;
-import com.gt.towers.constants.CardTypes;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.scripts.ScriptEngine;
-import com.gt.towers.utils.maps.IntIntMap;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 
 import dragonBones.events.EventObject;
 import dragonBones.objects.DragonBonesData;
@@ -56,7 +55,7 @@ private var frequentlyTapped:int;
 private var rewardType:int;
 private var rewardRarity:int;
 private var titleDisplay:ShadowLabel;
-private var descriptionDisplay:RTLLabel;
+private var descriptionDisplay:ShadowLabel;
 private var sliderDisplay:IndicatorCard;
 private var collectedItemIndex:int = -1;
 
@@ -221,7 +220,7 @@ private function pullCard() : void
 {
 	collectedItemIndex ++;
 	rewardType = rewardKeys[collectedItemIndex];
-	rewardRarity = ScriptEngine.getInt(CardFeatureType.F00_RARITY, rewardType);
+	rewardRarity = ScriptEngine.getInt(ScriptEngine.T00_RARITY, rewardType);
 	
 	// play SFXs
 	if( ResourceType.isCard(rewardType) )

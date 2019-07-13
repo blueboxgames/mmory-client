@@ -7,7 +7,7 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -103,7 +103,7 @@ private function insertData():void
 	banModeSwitcher.layoutData = new HorizontalLayoutData(100);
 	l2.addChild( banModeSwitcher );
 	
-	var message:String = "تخلفات شما:\n\n";
+	var message:String = "\n\n";
 	var date:Date = new Date();
 	for (var i:int = 0; i < offenderData.getSFSArray("infractions").size(); i++ )
 	{

@@ -6,11 +6,12 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.models.vo.RewardData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.constants.ResourceType;
-import com.gt.towers.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
+
 import feathers.controls.Button;
 import feathers.controls.List;
 import feathers.controls.renderers.IListItemRenderer;
@@ -19,9 +20,11 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalAlign;
+
 import starling.core.Starling;
 import starling.display.Quad;
 import starling.events.Event;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 public class EndBattleOverlay extends EndOverlay
 {
@@ -113,7 +116,7 @@ override protected function getRewardsCollection(playerIndex:int) : ListCollecti
 	
 	if( exchanger.findItem(ExchangeType.C110_BATTLES, ExchangeItem.CHEST_STATE_EMPTY, timeManager.now) == null )
 		ret.push({t:"-1", c:loc("battle_no_book")});
-	if( player.get_arena(player.get_point() - reward_2.getInt("point")) > 0 && battleData.sfsData.getInt("mode") == 0 )
+	if( player.get_arena(player.get_point() - reward_2.getInt("point")) > 0 && ScriptEngine.getInt(ScriptEngine.T48_CHALLENGE_REWARDCOEF, battleData.sfsData.getInt("type")) <= 0 )
 		ret.push({t:"-2", c:loc("battle_no_point")});
 	return ret;
 }

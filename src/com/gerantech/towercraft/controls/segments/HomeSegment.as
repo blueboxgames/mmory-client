@@ -23,8 +23,8 @@ import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gt.towers.constants.ExchangeType;
-import com.gt.towers.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 
 import feathers.controls.Button;
 import feathers.controls.List;
@@ -63,21 +63,12 @@ override public function init():void
 
 	// events button
 	ChallengeIndexItemRenderer.IN_HOME = true;
-	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
 	ChallengeIndexItemRenderer.SHOW_INFO = false;
-	ChallengeIndexItemRenderer.ARENA = league;
-	var listLayout:VerticalLayout = new VerticalLayout();
-	listLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
-	listLayout.typicalItemHeight = Math.min(410, stageHeight * 0.23);
-	listLayout.padding = 50;
-	listLayout.paddingTop = 280;
-	var eventsButton:List = new List();
-	eventsButton.layout = listLayout;
-	eventsButton.horizontalScrollPolicy = eventsButton.verticalScrollPolicy = ScrollPolicy.OFF;
-	eventsButton.itemRendererFactory = function () : IListItemRenderer { return new ChallengeIndexItemRenderer(); };
-	eventsButton.dataProvider = new ListCollection([UserData.instance.challengeIndex]);
-	eventsButton.layoutData = new AnchorLayoutData(NaN, paddingH + 100, NaN, paddingH + 100, NaN, -stageHeight * 0.05);
-	eventsButton.height = listLayout.typicalItemHeight + listLayout.padding + listLayout.paddingTop;
+	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
+	var eventsButton:ChallengeIndexItemRenderer = new ChallengeIndexItemRenderer();
+	eventsButton.height = Math.min(410, stageHeight * 0.23)
+	eventsButton.layoutData = new AnchorLayoutData(NaN, paddingH + 150, NaN, paddingH + 150, NaN, -stageHeight * 0.05);
+	eventsButton.data = UserData.instance.challengeIndex;
 	addButton(eventsButton, "eventsButton");
 	
 	// battle button
@@ -213,7 +204,7 @@ private function showTutorial():void
 	var tutorStep:int = player.getTutorStep();
 	trace("player.inTutorial: ", player.inTutorial(), "tutorStep: ", tutorStep);
 
-	if( (player.get_battleswins() < 2 && player.getTutorStep() >= PrefsTypes.T_018_CARD_UPGRADED) || (league > 0 && player.getTutorStep() == PrefsTypes.T_74_CHALLENGE_SELECTED) )
+	if( (player.get_battleswins() < 2 && player.getTutorStep() >= PrefsTypes.T_018_CARD_UPGRADED) || (league > 0 && player.getTutorStep() == PrefsTypes.T_202_CHALLENGE_SELECTED) )
 	{
 		SimpleLayoutButton(getChildByName("battleButton")).showTutorHint();
 		return;
@@ -228,13 +219,13 @@ private function showTutorial():void
 		{
 			confirm.removeEventListener(Event.COMPLETE, confirm_eventsHandler);
 			UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_72_NAME_SELECTED);
-			
-			// show challenge tutorial
-			var tutorialData:TutorialData = new TutorialData("challenge_tutorial");
-			tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_challenge_0", null, 500, 1500, 0));
-			tutorials.show(tutorialData);
 		}
 	}
+
+	// show challenge tutorial
+	/*var tutorialData:TutorialData = new TutorialData("challenge_tutorial");
+	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_challenge_0", null, 500, 1500, 0));
+	tutorials.show(tutorialData); */
 }
 
 private function mainButtons_triggeredHandler(event:Event):void

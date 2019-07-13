@@ -27,6 +27,7 @@ package com.gerantech.towercraft.themes
 
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
+
 import feathers.controls.Alert;
 import feathers.controls.AutoComplete;
 import feathers.controls.Button;
@@ -86,14 +87,13 @@ import feathers.layout.HorizontalLayout;
 import feathers.layout.RelativePosition;
 import feathers.layout.VerticalAlign;
 import feathers.layout.VerticalLayout;
-import feathers.media.FullScreenToggleButton;
-import feathers.media.MuteToggleButton;
-import feathers.media.PlayPauseToggleButton;
 import feathers.media.SeekSlider;
 import feathers.skins.ImageSkin;
 import feathers.system.DeviceCapabilities;
 import feathers.themes.StyleNameFunctionTheme;
+
 import flash.geom.Rectangle;
+
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.display.Quad;
@@ -109,12 +109,20 @@ import starling.textures.Texture;
 */
 public class MainTheme extends StyleNameFunctionTheme
 {
-static public const FONT_NAME:String = "SourceSansPro";
 
 /**
  * The stack of fonts to use for controls that don't use embedded fonts.
  */
-static public const FONT_NAME_STACK:String = "SourceSansPro,Helvetica,_sans";
+static public const FONT_NAME_STACK:String = "SourceSansPro, _sans";
+static public const FONT_NAME:String = "SourceSansPro";
+// [Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSans", fontWeight="normal", fontStyle="normal", mimeType="application/x-font",embedAsCFF="false")]	
+// static protected var SOURCE_SANS_REGULAR:Class;
+// [Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSansPro", fontWeight="normal", fontStyle="normal", mimeType="application/x-font",embedAsCFF="true")]
+// static protected var SOURCE_SANS_PRO_REGULAR:Class;
+[Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSans", fontWeight="bold", fontStyle="normal", mimeType="application/x-font",embedAsCFF="false")]
+static protected var SOURCE_SANS_BOLD:Class;
+[Embed(source="../../../../assets/fonts/LilitaOneSultanAdanBold.ttf", fontFamily="SourceSansPro", fontWeight="bold", fontStyle="normal", mimeType="application/x-font",embedAsCFF="true")]
+static protected var SOURCE_SANS_PRO_BOLD:Class;
 
 static public const PRIMARY_BACKGROUND_COLOR:uint = 0x3d4759;
 static public const LIGHT_TEXT_COLOR:uint = 0xe5e5e5;
@@ -170,6 +178,7 @@ static public const POPUP_HEADERED_SCALE9_GRID:Rectangle = new Rectangle(14, 112
 static public const POPUP_INSIDE_SCALE9_GRID:Rectangle = new Rectangle(14, 15, 2, 1);
 static public const CALLOUT_SCALE9_GRID:Rectangle = new Rectangle(14, 14, 2, 16);
 static public const ITEM_RENDERER_SCALE9_GRID:Rectangle = new Rectangle(17, 22, 4, 10);
+static public const ITEM_RENDERER_BULGY_SCALE9_GRID:Rectangle = new Rectangle(30, 30, 2, 2);
 static public const ITEM_RENDERER_RANK_SCALE9_GRID:Rectangle = new Rectangle(270, 50, 2, 1);
 static public const INSET_ITEM_RENDERER_MIDDLE_SCALE9_GRID:Rectangle = new Rectangle(2, 2, 1, 40);
 static public const INSET_ITEM_RENDERER_FIRST_SCALE9_GRID:Rectangle = new Rectangle(7, 7, 1, 35);
@@ -314,7 +323,6 @@ protected static function popUpOverlayFactory():DisplayObject
 public function MainTheme()
 {
 	super();
-	new FontRegistor();
 	initialize();
 }
 
@@ -540,7 +548,7 @@ public function get backgroundSkinTexture() : Texture { return Assets.getTexture
 public function get backgroundDisabledSkinTexture() : Texture { return Assets.getTexture("theme/background-disabled-skin", "gui"); }
 public function get backgroundInsetSkinTexture() : Texture { return Assets.getTexture("theme/background-inset-skin", "gui"); }
 public function get backgroundInsetDisabledSkinTexture() : Texture { return Assets.getTexture("theme/background-inset-disabled-skin", "gui"); }
-public function get backgroundInsetFocusedSkinTexture() : Texture { return Assets.getTexture("theme/background-focused-skin", "gui"); }
+public function get backgroundInsetFocusedSkinTexture() : Texture { return Assets.getTexture("theme/background-inset-focused-skin", "gui"); }
 public function get backgroundInsetDangerSkinTexture() : Texture { return Assets.getTexture("theme/background-inset-danger-skin", "gui"); }
 public function get backgroundLightBorderSkinTexture() : Texture { return Assets.getTexture("theme/background-light-border-skin", "gui"); }
 public function get backgroundDarkBorderSkinTexture() : Texture { return Assets.getTexture("theme/background-dark-border-skin", "gui"); }
@@ -613,6 +621,10 @@ public function get itemRendererUpSkinTexture() : Texture { return Assets.getTex
 public function get itemRendererSelectedSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-selected-skin", "gui"); }
 public function get itemRendererDisabledSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-disabled-skin", "gui"); }
 public function get itemRendererDangerSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-danger-skin", "gui"); }
+public function get itemRendererBulgyUpSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-bulgy-up-skin", "gui"); }
+public function get itemRendererBulgySelectedSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-bulgy-selected-skin", "gui"); }
+public function get itemRendererBulgyDisabledSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-bulgy-disabled-skin", "gui"); }
+public function get itemRendererBulgyDangerSkinTexture() : Texture { return Assets.getTexture("theme/item-renderer-bulgy-danger-skin", "gui"); } 
 public function get insetItemRendererUpSkinTexture() : Texture { return Assets.getTexture("theme/inset-item-renderer-up-skin", "gui"); }
 public function get insetItemRendererSelectedSkinTexture() : Texture { return Assets.getTexture("theme/inset-item-renderer-selected-up-skin", "gui"); }
 public function get insetItemRendererFirstUpSkinTexture() : Texture { return Assets.getTexture("theme/first-inset-item-renderer-up-skin", "gui"); }
@@ -2339,7 +2351,7 @@ protected function setBaseTextInputStyles(input:TextInput):void
 	skin.setTextureForState(TextInputState.DISABLED, this.backgroundInsetDisabledSkinTexture);
 	skin.setTextureForState(TextInputState.FOCUSED, this.backgroundInsetFocusedSkinTexture);
 	skin.setTextureForState(TextInputState.ERROR, this.backgroundInsetDangerSkinTexture);
-	skin.scale9Grid = DEFAULT_BACKGROUND_SCALE9_GRID;
+	skin.scale9Grid = ROUND_MEDIUM_SCALE9_GRID;
 	skin.width = this.wideControlSize;
 	skin.height = this.controlSize;
 	skin.minWidth = this.controlSize;

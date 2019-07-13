@@ -4,15 +4,17 @@ import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.extensions.iab.Iab;
 import com.gerantech.extensions.iab.Purchase;
 import com.gerantech.extensions.iab.events.IabEvent;
+import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.towercraft.controls.popups.MessagePopup;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gt.towers.constants.ExchangeType;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.events.FeathersEventType;
+
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
@@ -264,12 +266,12 @@ public function rate():void
 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- GET DOWNLOAD URL -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 public function getDownloadURL():String
 {
-	switch(appModel.descriptor.market )
+	switch( appModel.descriptor.market )
 	{
-		case "google":		return 'https://play.google.com/store/apps/details?id=air.' + appModel.descriptor.id;			
+		case "google":			return 'https://play.google.com/store/apps/details?id=air.' + appModel.descriptor.id;			
 		case "cafebazaar":	return 'https://cafebazaar.ir/app/air.' + appModel.descriptor.id;			
-		case "myket":		return 'http://myket.ir/App/air.' + appModel.descriptor.id;
-		case "cando":		return 'cando://details?id=air.' + appModel.descriptor.id;			
+		case "myket":				return 'http://myket.ir/App/air.' + appModel.descriptor.id;
+		case "cando":				return 'cando://details?id=air.' + appModel.descriptor.id;			
 	}
 	return "http://towers.grantech.ir/get/towerstory.apk";
 }
@@ -282,6 +284,12 @@ public function share():void
 private function log(message:String):void 
 {
 	//NativeAbilities.instance.showToast("iab_" + message, 2);
+}
+public function get currency() : String
+{
+	if( appModel.descriptor.market == "google" || appModel.descriptor.market == "appStore" )
+		return "USD";
+	return "IRR";
 }
 }
 }
