@@ -1,6 +1,5 @@
 package com.gerantech.towercraft.controls.items.challenges 
 {
-import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
@@ -56,7 +55,11 @@ public function ChallengeIndexItemRenderer()
 {
 	super();
 	layout = new AnchorLayout();
-	tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_FINISH, tutorials_completeHandler);
+	
+	if( IN_HOME )
+		tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_FINISH, tutorials_completeHandler);
+	else
+		addEventListener(FeathersEventType.CREATION_COMPLETE, createCompleteHandler)
 }
 
 override protected function commitData() : void 
@@ -66,9 +69,9 @@ override protected function commitData() : void
 		height = VerticalLayout(_owner.layout).typicalItemHeight;
 
 	challenge = player.challenges.get(_data as int);
-	challenge.id = _data as int;
+	challenge.index = _data as int;
 	state = challenge.getState(timeManager.now);
-	locked = ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, challenge.id) > player.get_point();
+	locked = Challenge.getUnlockAt(game, challenge.index) > player.get_point();
 	
 	backgroundFactory();
 	iconFactory();
@@ -80,7 +83,7 @@ override protected function commitData() : void
 	costFactory();
 	
 	alpha = 0;
-	Starling.juggler.tween(this, 0.25, {delay:Math.log(challenge.id + 1) * 0.2, alpha:1});
+	Starling.juggler.tween(this, 0.25, {delay:Math.log(challenge.index + 1) * 0.2, alpha:1});
 }
 
 private function costFactory() : void 
@@ -222,14 +225,13 @@ protected function backgroundImage_triggerdHandler(event:Event) : void
 	if( locked )
 	{
 		challenge.unlockAt
-		var point:int = ScriptEngine.getInt(ScriptEngine.T43_CHALLENGE_UNLOCKAT, challenge.id);
-		appModel.navigator.addLog(loc("availableuntil_messeage", [loc("resource_title_2") + " " + point, ""]));
+		appModel.navigator.addLog(loc("availableuntil_messeage", [loc("resource_title_2") + " " + Challenge.getUnlockAt(game, challenge.index), ""]));
 		return;
 	}
 	if( _owner != null )
-		_owner.dispatchEventWith(Event.TRIGGERED, false, challenge.id);
+		_owner.dispatchEventWith(Event.TRIGGERED, false, challenge.index);
 	else
-		dispatchEventWith(Event.TRIGGERED, false, challenge.id);
+		dispatchEventWith(Event.TRIGGERED, false, challenge.index);
 
 }
 
@@ -243,7 +245,13 @@ protected function tutorials_completeHandler(event:Event) : void
 	if( event.data.name != "challenge_tutorial" )
 		return;
 	tutorials.removeEventListener(GameEvent.TUTORIAL_TASKS_FINISH, tutorials_completeHandler);
-	if ( (player.getTutorStep() == PrefsTypes.T_72_NAME_SELECTED && challenge.id == 0) || (player.getTutorStep() == PrefsTypes.T_201_CHALLENGES_SHOWN && challenge.id == 1) )
+	backgroundImage.showTutorHint();
+}
+
+protected function createCompleteHandler(event:Event) : void
+{
+	removeEventListener(FeathersEventType.CREATION_COMPLETE, createCompleteHandler)
+	if( challenge.index ==  (player.getTutorStep() - 200) / 10 )
 		backgroundImage.showTutorHint();
 }
 }

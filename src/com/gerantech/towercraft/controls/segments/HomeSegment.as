@@ -1,5 +1,7 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.buttons.BattleButton;
 import com.gerantech.towercraft.controls.buttons.CollectableLeaguesButton;
@@ -23,19 +25,11 @@ import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.constants.PrefsTypes;
 
 import feathers.controls.Button;
-import feathers.controls.List;
-import feathers.controls.ScrollPolicy;
-import feathers.controls.renderers.IListItemRenderer;
-import feathers.data.ListCollection;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import feathers.layout.HorizontalAlign;
-import feathers.layout.VerticalLayout;
 
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
@@ -204,9 +198,12 @@ private function showTutorial():void
 	var tutorStep:int = player.getTutorStep();
 	trace("player.inTutorial: ", player.inTutorial(), "tutorStep: ", tutorStep);
 
-	if( (player.get_battleswins() < 2 && player.getTutorStep() >= PrefsTypes.T_018_CARD_UPGRADED) || (league > 0 && player.getTutorStep() == PrefsTypes.T_202_CHALLENGE_SELECTED) )
+	var challengeTutorialMode:Boolean = player.getTutorStep() == PrefsTypes.T_211_CHALLENGES_SELECTED || player.getTutorStep() == PrefsTypes.T_221_CHALLENGES_SELECTED || player.getTutorStep() == PrefsTypes.T_231_CHALLENGES_SELECTED;
+	if( (player.get_battleswins() < 2 && player.getTutorStep() >= PrefsTypes.T_018_CARD_UPGRADED) || challengeTutorialMode )
 	{
 		SimpleLayoutButton(getChildByName("battleButton")).showTutorHint();
+		if( challengeTutorialMode )
+			UserData.instance.prefs.setInt(PrefsTypes.TUTOR, player.getTutorStep() + 1); 
 		return;
 	}
 	
@@ -223,9 +220,13 @@ private function showTutorial():void
 	}
 
 	// show challenge tutorial
-	/*var tutorialData:TutorialData = new TutorialData("challenge_tutorial");
-	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_challenge_0", null, 500, 1500, 0));
-	tutorials.show(tutorialData); */
+	if( player.getTutorStep() == PrefsTypes.T_210_CHALLENGES_FOCUS || player.getTutorStep() == PrefsTypes.T_220_CHALLENGES_FOCUS || player.getTutorStep() == PrefsTypes.T_230_CHALLENGES_FOCUS )
+	{
+		var tutorialData:TutorialData = new TutorialData("challenge_tutorial");
+		tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_challenge_" + player.getTutorStep(), null, 500, 1500, 0));
+		tutorials.show(tutorialData);
+
+	}
 }
 
 private function mainButtons_triggeredHandler(event:Event):void

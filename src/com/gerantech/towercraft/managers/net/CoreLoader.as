@@ -116,18 +116,16 @@ static private function loadExchanges(serverData:SFSObject) : void
 static public function loadChallenges(params:ISFSObject, playerId:int) : void 
 {
 	var challenges:IntChallengeMap = new IntChallengeMap();
-	challenges.set(0, new Challenge(ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 0, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 0, playerId)));
-	challenges.set(1, new Challenge(ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 1, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 1, playerId)));
-	challenges.set(2, new Challenge(Challenge.TYPE_1_REWARD, 2));
-	challenges.set(3, new Challenge(Challenge.TYPE_2_RANKING, 3));
+	challenges.set(0, new Challenge(AppModel.instance.game, 0, ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 0, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 0, playerId)));
+	challenges.set(1, new Challenge(AppModel.instance.game, 1, ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 1, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 1, playerId)));
+	challenges.set(2, new Challenge(AppModel.instance.game, 2, Challenge.TYPE_1_REWARD, 2));
+	challenges.set(3, new Challenge(AppModel.instance.game, 3, Challenge.TYPE_2_RANKING, 3));
 	if( params.containsKey("challenges") )
 	for( var i:int = 0; i < params.getSFSArray("challenges").size(); i++ )
 	{
 		var c:ISFSObject = params.getSFSArray("challenges").getSFSObject(i);
-		var ch:Challenge = new Challenge();
+		var ch:Challenge = new Challenge(AppModel.instance.game, 2 + i, c.getInt("type"), c.getInt("mode"));
 		ch.id = c.getInt("id");
-		ch.type = c.getInt("type");
-		ch.mode = c.getInt("mode");
 		ch.startAt = c.getInt("start_at");
 		ch.unlockAt = c.getInt("unlock_at");
 		ch.duration = c.getInt("duration");
@@ -152,7 +150,7 @@ static public function loadChallenges(params:ISFSObject, playerId:int) : void
 				ch.attendees.push(new Attendee(item.getInt("id"), item.getText("name"), item.getInt("point"), item.getInt("updateAt")));
 			}
 		}
-		challenges.set(i + 2, ch);
+		challenges.set(ch.index, ch);
 	}
 	AppModel.instance.game.player.challenges = challenges;
 }
