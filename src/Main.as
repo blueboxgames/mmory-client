@@ -60,10 +60,20 @@ public function Main()
 	
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
 		.setBuildAndroid(AppModel.instance.descriptor.versionNumber).setGameKeyAndroid("df4b20d8b9a4b0ec2fdf5ac49471d5b2").setGameSecretAndroid("972a1c900218b46f42d8a93e2f69710545903307")
+		.setBuildWindows(AppModel.instance.descriptor.versionNumber).setGameKeyWindows("").setGameSecretWindows("")
 		.setResourceCurrencies(currencies)
-		.setResourceItemTypes(new <String>["outcome", "special", "book", "purchase", "exchange", "upgrade", "donate"])
+		.setResourceItemTypes(new <String>["outcome", "special", "book", "purchase", "exchange", "upgrade", "donate"]);
 	/*.setBuildiOS(AppModel.instance.descriptor.versionNumber).setGameKeyiOS("[ios_game_key]").setGameSecretiOS("[ios_secret_key]")*/
-	GameAnalytics.init();
+	if ( GameAnalytics.isSupported )
+	{
+		try {
+			GameAnalytics.init();
+		}
+		catch (error:Error)
+		{
+			trace(error.message);
+		}
+	}
 	
 	t = getTimer();
 	stage.scaleMode = StageScaleMode.NO_SCALE;

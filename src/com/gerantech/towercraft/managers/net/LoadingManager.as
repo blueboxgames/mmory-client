@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.managers.net
 {
 import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
@@ -10,17 +11,16 @@ import com.gerantech.towercraft.managers.InboxService;
 import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.UserPrefs;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
+import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gerantech.towercraft.utils.Utils;
-import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.tuarua.firebase.MessagingANE;
-import com.tuarua.firebase.messaging.RemoteMessage;
 import com.tuarua.firebase.messaging.events.MessagingEvent;
 
 import flash.events.Event;
@@ -28,7 +28,6 @@ import flash.events.EventDispatcher;
 import flash.system.Capabilities;
 import flash.utils.getTimer;
 import flash.utils.setTimeout;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 
 [Event(name="loaded",				type="com.gerantech.towercraft.events.LoadingEvent")]
 [Event(name="loginError",			type="com.gerantech.towercraft.events.LoadingEvent")]
@@ -196,7 +195,10 @@ protected function prefs_completeHandler(e:*):void
 	InboxService.instance.requestThreads();
 	dispatchEvent(new LoadingEvent(LoadingEvent.LOADED));
 	
-	registerFCMPushManager();
+	if (AppModel.instance.platform == AppModel.PLATFORM_ANDROID)
+	{
+		registerFCMPushManager();
+	}
 	
 	// prevent ADs for new users
 	if( appModel.game.player.get_arena(0) == 0 || appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) )
@@ -260,7 +262,7 @@ private function registerFCMPushManager():void
 	
 	
 	messaging = MessagingANE.messaging;
-	messaging.addEventListener(MessagingEvent.ON_MESSAGE_RECEIVED, onMessageReceived);
+	/* messaging.addEventListener(MessagingEvent.ON_MESSAGE_RECEIVED, onMessageReceived); */
 	messaging.addEventListener(MessagingEvent.ON_TOKEN_REFRESHED, onTokenRefreshed);
 
 	fcmToken = messaging.token;
@@ -274,10 +276,10 @@ private function registerFCMPushManager():void
 	 * This function is used to receive data from message.
 	 * It is not required for showing messages.
 	 */
-	function onMessageReceived(event:MessagingEvent):void
+	/* function onMessageReceived(event:MessagingEvent):void
 	{
 		var remoteMessage:RemoteMessage = event.remoteMessage;
-	}
+	} */
 
 	function onTokenRefreshed(event:MessagingEvent):void
 	{
