@@ -478,6 +478,9 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 		return;
 	}
 
+	if( state != GameObject.STATE_4_MOVING )
+		return;
+
 	bodyDisplay.play();
 	shadowDisplay.play();
 }
