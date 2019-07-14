@@ -115,8 +115,13 @@ override protected function initialize():void
 	}
 	
 	elixirBar = new ElixirBar();
-	elixirBar.value = ElixirUpdater.INIT_VALUE;
+	elixirBar.addEventListener(FeathersEventType.CREATION_COMPLETE, elixirBar_createComplateHandler);
 	elixirBar.layoutData = new AnchorLayoutData(NaN, padding * 2, padding, preparedCard.width + padding * 2);
+	function elixirBar_createComplateHandler(event:Event) : void
+	{
+		elixirBar.removeEventListener(FeathersEventType.CREATION_COMPLETE, elixirBar_createComplateHandler);
+		elixirBar.value = ElixirUpdater.INIT_VALUE;
+	}
 	addChild(elixirBar);
 	
 	draggableCard = new Draggable();
