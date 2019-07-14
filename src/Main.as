@@ -38,7 +38,7 @@ private var splash:SplashScreen;
 
 public function Main()
 {
-	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) +"|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
+	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) + "|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
 	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(AppModel.instance.descriptor.market));
 	/*var str:String = "";
 	var ret:Number = -0.05;
@@ -153,7 +153,7 @@ protected function stage_deactivateHandler(event:Event):void
 	if( !BattleScreen.IN_BATTLE )
 	{
 		this.starling.stop(true);
-		stage.frameRate = 0;
+		this.stage.frameRate = 0;
 	}
 	this.stage.addEventListener(Event.ACTIVATE, stage_activateHandler, false, 0, true);
 	AppModel.instance.sounds.muteAll(true);
@@ -162,7 +162,7 @@ protected function stage_deactivateHandler(event:Event):void
 protected function stage_activateHandler(event:Event):void
 {
 	this.stage.removeEventListener(Event.ACTIVATE, stage_activateHandler);
-	stage.frameRate = 60;
+	this.stage.frameRate = 60;
 	this.starling.start();
 	AppModel.instance.sounds.muteAll(false);
 	AppModel.instance.notifier.clear();
