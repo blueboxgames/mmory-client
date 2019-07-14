@@ -1,5 +1,9 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
@@ -10,10 +14,6 @@ import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.constants.MessageTypes;
-import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
@@ -148,7 +148,7 @@ private function isBad(name:String) : Boolean
 	if( name.substr(name.length - 2) == " " || name.substr(0, 1) == " " )
 		return true;
 	
-	var badNames:Array = ["  ", "admin", "super-", "root", "koot", "oot", "koo", "ko ", "manager", "bot", "sex", "pistol", "ادمین", "کوت", "سازنده", "مدیر", "کیر", "کون", "جنده", "بات", "تپانچه"];
+	var badNames:Array = ["  ", "admin", "super-", "root", "koot", "oot", "koo", "ko ", "manager", "bot", "sex", "pistol", "boo", "land", "ادمین", "کوت", "سازنده", "مدیر", "کیر", "کون", "جنده", "بات", "تپانچه"];
 	for each( var b:String in badNames )
 		if( name.search(b) > -1 )
 			return true;

@@ -3,11 +3,11 @@
   <id>__APPID__</id>
   <versionNumber>0.2.100</versionNumber>
   <supportedProfiles>mobileDevice</supportedProfiles>
-  <filename>Pistol</filename>
-  <name>Pistol</name>
+  <filename>BoomLand</filename>
+  <name>BoomLand</name>
   <description>__DESCRIPTION__</description>
   <initialWindow>
-    <title>Pistol</title>
+    <title>BoomLand</title>
     <content>release.swf</content>
     <visible>true</visible>
     <fullScreen>true</fullScreen>
