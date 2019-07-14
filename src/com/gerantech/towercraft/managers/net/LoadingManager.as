@@ -195,10 +195,7 @@ protected function prefs_completeHandler(e:*):void
 	InboxService.instance.requestThreads();
 	dispatchEvent(new LoadingEvent(LoadingEvent.LOADED));
 	
-	if (AppModel.instance.platform == AppModel.PLATFORM_ANDROID)
-	{
-		registerFCMPushManager();
-	}
+	registerFCMPushManager();
 	
 	// prevent ADs for new users
 	if( appModel.game.player.get_arena(0) == 0 || appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) )
@@ -256,6 +253,10 @@ private function registerOneSignalPushManager():void
  */
 private function registerFCMPushManager():void
 {
+	if (AppModel.instance.platform != AppModel.PLATFORM_ANDROID)
+	{
+		return;
+	}
 	var messaging:MessagingANE;
 	var fcmToken:String;
 	var pushParams:ISFSObject = new SFSObject();
