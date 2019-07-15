@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.controls.headers
 {
 import com.gerantech.mmory.core.battle.BattleField;
-import com.gerantech.mmory.core.battle.ElixirUpdater;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
@@ -21,7 +20,6 @@ import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.views.MapBuilder;
 import com.gerantech.towercraft.views.units.CardPlaceHolder;
 import com.smartfoxserver.v2.core.SFSEvent;
-import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
@@ -115,13 +113,8 @@ override protected function initialize():void
 	}
 	
 	elixirBar = new ElixirBar();
-	elixirBar.addEventListener(FeathersEventType.CREATION_COMPLETE, elixirBar_createComplateHandler);
 	elixirBar.layoutData = new AnchorLayoutData(NaN, padding * 2, padding, preparedCard.width + padding * 2);
-	function elixirBar_createComplateHandler(event:Event) : void
-	{
-		elixirBar.removeEventListener(FeathersEventType.CREATION_COMPLETE, elixirBar_createComplateHandler);
-		elixirBar.value = ElixirUpdater.INIT_VALUE;
-	}
+	elixirBar.value = appModel.battleFieldView.battleData.getAlliseEllixir();
 	addChild(elixirBar);
 	
 	draggableCard = new Draggable();
@@ -142,20 +135,9 @@ protected function sfsConnection_elixirUpdateHandler(event:SFSEvent):void
 {
 	if( event.params.cmd != SFSCommands.BATTLE_ELIXIR_UPDATE )
 		return;
-
-	var params:SFSObject = event.params.params as SFSObject;
-	if( params.containsKey(battleField.side.toString()) )
-	{
-		battleField.elixirUpdater.updateAt(battleField.side, params.getInt(battleField.side.toString()));
-		elixirBar.value = appModel.battleFieldView.battleData.getAlliseEllixir();
-		for( var i:int=0; i<cards.length; i++ )
-			cards[i].updateData();
-	}
-	else
-	{
-		var outside:int = 1 - battleField.side;
-		battleField.elixirUpdater.updateAt(outside, params.getInt(outside.toString()));
-	}
+	elixirBar.value = appModel.battleFieldView.battleData.getAlliseEllixir();
+	for( var i:int=0; i<cards.length; i++ )
+		cards[i].updateData();
 }
 
 public function updateScore(round:int, winnerSide:int, allise:int, axis:int, unitId:int) : void 

@@ -4,7 +4,6 @@ import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.battle.fieldes.FieldData;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.BattleHUD;
@@ -129,10 +128,17 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		break;
 	
 	case SFSCommands.BATTLE_NEW_ROUND:
-		if( appModel.battleFieldView.battleData.battleField.field.mode == Challenge.MODE_1_TOUCHDOWN )
-			appModel.battleFieldView.battleData.battleField.requestReset();
+		if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN )
+			battleField.requestReset();
 		if( hud != null )
-			hud.updateScores(data.getInt("round"), data.getInt("winner"), data.getInt(appModel.battleFieldView.battleData.battleField.side + ""), data.getInt(appModel.battleFieldView.battleData.battleField.side == 0 ? "1" : "0"), data.getInt("unitId"));
+			hud.updateScores(data.getInt("round"), data.getInt("winner"), data.getInt(battleField.side + ""), data.getInt(battleField.side == 0 ? "1" : "0"), data.getInt("unitId"));
+		break;
+
+	case SFSCommands.BATTLE_ELIXIR_UPDATE:
+		if( data.containsKey(battleField.side.toString()) )
+			battleField.elixirUpdater.updateAt(battleField.side, data.getInt(battleField.side.toString()));
+		else
+			battleField.elixirUpdater.updateAt(1 - battleField.side, data.getInt(String(1 - battleField.side)));
 		break;
 	}
 	//trace(event.params.cmd, data.getDump());
@@ -225,10 +231,9 @@ private function showTutorials() : void
 	}
 	
 	// create tutorial steps
-	var field:FieldData = appModel.battleFieldView.battleData.battleField.field;
-	var tutorialData:TutorialData = new TutorialData(field.mode + "_start");
+	var tutorialData:TutorialData = new TutorialData(battleField.field.mode + "_start");
 	tutorialData.data = "start";
-	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_" + field.mode + "_" + player.get_battleswins() + "_start", null, 500, 1500));
+	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_" + battleField.field.mode + "_" + player.get_battleswins() + "_start", null, 500, 1500));
 	tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_FINISH, tutorials_tasksFinishHandler);
 	tutorials.show(tutorialData);
 	
@@ -238,7 +243,7 @@ private function showTutorials() : void
 private function readyBattle() : void 
 {
 	if( player.get_battleswins() < 3 )
-		appModel.battleFieldView.mapBuilder.showEnemyHint(appModel.battleFieldView.battleData.battleField.field, player.get_battleswins());
+		appModel.battleFieldView.mapBuilder.showEnemyHint(battleField.field, player.get_battleswins());
 	
 	touchEnable = true;
 	hud.showDeck();
@@ -249,8 +254,8 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 {
 	IN_BATTLE = false;
 	var inTutorial:Boolean = player.get_battleswins() < 5;
-	appModel.battleFieldView.battleData.battleField.state = BattleField.STATE_4_ENDED;
-	var field:FieldData = appModel.battleFieldView.battleData.battleField.field;
+	battleField.state = BattleField.STATE_4_ENDED;
+	var field:FieldData = battleField.field;
 	touchEnable = false;
 	appModel.sounds.stopAll();
 	hud.stopTimers();
@@ -388,7 +393,7 @@ override protected function backButtonFunction():void
 /*	if( player.inTutorial() )
 		return;
 	
-	if( appModel.battleFieldView.battleData.battleField.startAt + appModel.battleFieldView.battleData.battleField.field.times.get(0) > timeManager.now )
+	if( battleField.startAt + battleField.field.times.get(0) > timeManager.now )
 		return;
 	var confirm:ConfirmPopup = new ConfirmPopup(loc("leave_battle_confirm_message"));
 	confirm.acceptStyle = MainTheme.STYLE_BUTTON_SMALL_DANGER;
@@ -400,6 +405,11 @@ override protected function backButtonFunction():void
 		appModel.battleFieldView.responseSender.leave();
 	}*/
 }
+private function get battleField() : BattleField
+{
+	return appModel.battleFieldView.battleData.battleField;
+}
+
 
 override public function dispose():void
 {

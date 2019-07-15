@@ -1,12 +1,12 @@
 package com.gerantech.towercraft.controls.sliders
 {
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.ElixirUpdater;
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.battle.BattleField;
-import com.gerantech.mmory.core.battle.ElixirUpdater;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
@@ -96,11 +96,24 @@ public function get value():Number
 }
 public function set value(newValue:Number):void
 {
-	var __v:Number = Math.max(0, Math.min( newValue, ElixirUpdater.MAX_VALUE ));
+	var __v:Number = Math.max(0, Math.min( Math.floor(newValue), ElixirUpdater.MAX_VALUE ));
 	if( _value == __v )
 		return;
 	_value = __v;
+	trace(_value)
+	invalidate(INVALIDATION_FLAG_DATA);
+}
 
+override protected function draw():void
+{
+	super.draw();
+
+	if( isInvalid(INVALIDATION_FLAG_DATA) )
+		validateValue();
+}
+
+private function validateValue():void
+{
 	var last:Number = (_value + 0) / ElixirUpdater.MAX_VALUE * this.width;
 	var next:Number = (_value + 1) / ElixirUpdater.MAX_VALUE * this.width;
 	var time:Number = 1 / (battleField.getDuration() > battleField.getTime(1) ? battleField.elixirUpdater.finalSpeeds[battleField.side] : battleField.elixirUpdater.normalSpeeds[battleField.side]) / 1000;
@@ -124,6 +137,7 @@ public function set value(newValue:Number):void
 		Starling.juggler.tween(realtimeDisplay, time, {width:next, transition:Transitions.LINEAR});
 	}
 }
+
 
 private function get battleField() : BattleField
 {
