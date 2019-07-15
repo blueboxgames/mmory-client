@@ -113,7 +113,7 @@ public function showEnemyHint(field:FieldData, battleswins:int):void
 	if( enemyHint == null )
 		return;
 	enemyHint.visible = true;
-	Starling.juggler.tween(enemyHint, 1.5, {alpha:0, repeatCount:10, onComplete:hideHint});
+	Starling.juggler.tween(enemyHint, 1.5, {alpha:0, repeatCount:7, onComplete:hideHint});
 	
 	var enemyHintText:ShadowLabel = new ShadowLabel(StrUtils.loc("tutor_" + field.mode + "_enemy_hint"), field.mode == 0 ? 0xEC3E3E : 0xFFFFFF, 0, "center", null, true, "center", 1.3);
 	enemyHintText.width = Starling.current.stage.width * 0.8;
