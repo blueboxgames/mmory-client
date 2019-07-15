@@ -297,7 +297,7 @@ private function showProfile():void
     deckHeader.width = transitionIn.destinationBound.width * 0.8;
     deckHeader.height = 120;
     deckHeader.layoutData = new AnchorLayoutData(featureList.dataProvider.length * 50 + top, NaN, NaN, NaN, 0);
-	deckHeader.addEventListener(FeathersEventType.CREATION_COMPLETE, function():void{	deckHeader.scale = 0.80;});
+		deckHeader.addEventListener(FeathersEventType.CREATION_COMPLETE, function():void{	deckHeader.scale = 0.80;});
     scroller.addChild(deckHeader);
     
     var deckLayout:TiledRowsLayout = new TiledRowsLayout();
@@ -308,7 +308,7 @@ private function showProfile():void
     deckLayout.typicalItemWidth = (width - deckLayout.gap * (deckLayout.requestedColumnCount - 1) - padding * 4) / deckLayout.requestedColumnCount;
     deckLayout.typicalItemHeight = deckLayout.typicalItemWidth * CardView.VERICAL_SCALE;
 	
-	var deckList:List = new List();
+		var deckList:List = new List();
     deckList.layout = deckLayout;
     deckList.height = deckLayout.typicalItemHeight * 2 + deckLayout.gap;
     deckList.verticalScrollPolicy = deckList.horizontalScrollPolicy = ScrollPolicy.OFF;
