@@ -1,10 +1,8 @@
 package com.gerantech.towercraft.controls.segments
 {
-import com.gerantech.mmory.core.Player;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.exchanges.Exchanger;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.headers.DeckHeader;
 import com.gerantech.towercraft.controls.items.CardItemRenderer;
@@ -171,17 +169,20 @@ protected function scroller_scrollHandler(event:Event):void
 
 override public function updateData():void
 {
-	var all:Array = ScriptEngine.get(1, -1);
-	var unavailables:Array = all.splice(player.get_arena(0) + Player.FIRST_CARDS);
+	var all:Vector.<int> = Card.get_unlockes(game).keys();
+	var unused:Array = new Array();
+	var unavailables:Array = new Array();
 	if( availableCollection == null )
 		availableCollection = new ListCollection();
-	var unused:Array = new Array();
-	var c:int = 0;
-	while( c < all.length )
+	for(var c:int = 0; c < all.length; c++ )
 	{
-		if( !player.getSelectedDeck().existsValue(all[c]) && player.cards.exists(all[c]) )
-			unused.push(all[c]);
-		c ++;
+		if( !player.getSelectedDeck().existsValue(all[c]) )
+		{
+			if( player.cards.exists(all[c]) )
+				unused.push(all[c]);
+			else
+				unavailables.push(all[c]);
+		}
 	}
 	availableCollection.data = unused;
 	

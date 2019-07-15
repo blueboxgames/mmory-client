@@ -47,6 +47,7 @@ import flash.geom.Rectangle;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
+import com.gerantech.mmory.core.battle.units.Card;
 
 public class ProfilePopup extends SimplePopup 
 {
@@ -322,10 +323,10 @@ private function showProfile():void
 private function getBuildingData():ListCollection
 {
 	var ret:ListCollection = new ListCollection();
-	var buildings:Array = ScriptEngine.get(1, -1);
-	for ( var i:int = 0; i < buildings.length; i++ )
-		buildings[i] = {type:buildings[i], level:getLevel(buildings[i])};
-	return new ListCollection(buildings);
+	var cards:Vector.<int> = Card.get_unlockes(game).keys();
+	for( var i:int = 0; i < cards.length; i++ )
+		cards[i] = {type:cards[i], level:getLevel(cards[i])};
+	return new ListCollection(cards);
 }
 
 private function getLevel(type:int):int
