@@ -224,7 +224,10 @@ private function showTutorials() : void
 		return;
 
 	//appModel.battleFieldView.createDrops();
-	if( player.getTutorStep() > 81 )
+	if( player.getTutorStep() < 81 )
+		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 1);
+
+	if( player.get_battleswins() > 3 )
 	{
 		readyBattle();
 		return;
@@ -236,8 +239,6 @@ private function showTutorials() : void
 	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_" + battleField.field.mode + "_" + player.get_battleswins() + "_start", null, 500, 1500));
 	tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_FINISH, tutorials_tasksFinishHandler);
 	tutorials.show(tutorialData);
-	
-	UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 1);
 }
 
 private function readyBattle() : void 
