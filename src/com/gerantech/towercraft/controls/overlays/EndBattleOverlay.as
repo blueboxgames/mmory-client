@@ -1,14 +1,16 @@
 package com.gerantech.towercraft.controls.overlays
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.towercraft.controls.BattleHUD;
 import com.gerantech.towercraft.controls.headers.BattleHeader;
 import com.gerantech.towercraft.controls.items.BattleOutcomeRewardItemRenderer;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.models.vo.RewardData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
@@ -24,7 +26,6 @@ import feathers.layout.VerticalAlign;
 import starling.core.Starling;
 import starling.display.Quad;
 import starling.events.Event;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 public class EndBattleOverlay extends EndOverlay
 {
@@ -50,9 +51,7 @@ override protected function initialize():void
 	}
 	
 	// axis
-	var name:String = reward_1.getText("name");
-	if( player.inTutorial() && player.tutorialMode == 1 )
-		name = loc("trainer_label");
+	var name:String = BattleHUD.getAxisName(player.get_battleswins() -1, reward_1.getText("name"));
 	var axisHeader:BattleHeader = new BattleHeader(name, reward_1.getInt("id") == player.id, reward_1.getInt("score"));
 	axisHeader.layoutData = new AnchorLayoutData(padding * 11, 100, NaN, 100);
 	addChild(axisHeader);
@@ -117,6 +116,7 @@ override protected function getRewardsCollection(playerIndex:int) : ListCollecti
 	if( exchanger.findItem(ExchangeType.C110_BATTLES, ExchangeItem.CHEST_STATE_EMPTY, timeManager.now) == null )
 		ret.push({t:"-1", c:loc("battle_no_book")});
 	if( player.get_arena(player.get_point() - reward_2.getInt("point")) > 0 && ScriptEngine.getInt(ScriptEngine.T48_CHALLENGE_REWARDCOEF, battleData.sfsData.getInt("type")) <= 0 )
+
 		ret.push({t:"-2", c:loc("battle_no_point")});
 	return ret;
 }

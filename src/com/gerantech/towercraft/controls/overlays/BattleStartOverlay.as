@@ -1,12 +1,16 @@
 package com.gerantech.towercraft.controls.overlays
 {
+import com.gerantech.towercraft.controls.BattleHUD;
 import com.gerantech.towercraft.controls.headers.BattleHeader;
 import com.gerantech.towercraft.models.vo.BattleData;
+
 import feathers.controls.AutoSizeMode;
 import feathers.controls.LayoutGroup;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 
@@ -42,10 +46,8 @@ override protected function initialize():void
 	container.height = stage.stageHeight;
 	addChild(container);
 	
-	var name:String = mapIndex >-1?(loc("operation_label") + " " +(mapIndex + 1)): battleData.axis.getText("name");
 	// axis elements
-	if( player.get_battleswins() < 4 && player.tutorialMode == 1 )
-		name = loc("trainer_label");
+	var name:String = mapIndex > -1 ? (loc("operation_label") + " " +(mapIndex + 1)): BattleHUD.getAxisName(player.get_battleswins(), battleData.axis.getText("name"));
 	axisHeader = new BattleHeader(name, false, -1);
 	axisHeader.layoutData = new AnchorLayoutData(300, 100, NaN, 100);
 	container.addChild(axisHeader);
