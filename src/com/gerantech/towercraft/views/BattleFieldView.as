@@ -186,9 +186,8 @@ public function hitUnits(buletId:int, targets:ISFSArray) : void
 	for ( var i:int = 0; i < targets.size(); i ++ )
 	{
 		var id:int = targets.getSFSObject(i).getInt("i");
-		var health:Number = targets.getSFSObject(i).getDouble("h");
 		if( battleData.battleField.units.exists(id) )
-			battleData.battleField.units.get(id).hit(battleData.battleField.units.get(id).health - health);
+			battleData.battleField.units.get(id).setHealth(targets.getSFSObject(i).getDouble("h"));
 		else
 			trace("unit " + id + " not found.");
 	}

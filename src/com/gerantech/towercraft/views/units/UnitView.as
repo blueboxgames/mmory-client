@@ -299,13 +299,16 @@ private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, o
 	shadowDisplay.updateTexture(anim, dir);
 }
 
-override public function hit(damage:Number):void
+override public function setHealth(health:Number) : Number
 {
-	super.hit(damage);
-	if( disposed() )
-		return;
-	//trace(id, health, damage)
-	if( bodyDisplay != null )
+	if( this.disposed() )
+		return 0;
+
+	var damage:Number =  super.setHealth(health);
+	if( damage == 0 )
+		return damage;
+	
+	if( bodyDisplay != null && damage > 0.01 )
 	{
 		if( hitFilterBody == null )
 		{
@@ -326,11 +329,6 @@ override public function hit(damage:Number):void
 		}, 50);
 	}
 
-	setHealth(health);
-}
-
-private function setHealth(health:Number):void
-{
 	if( healthDisplay == null )
 	{
 		if( CardTypes.isTroop(card.type) )
@@ -347,6 +345,8 @@ private function setHealth(health:Number):void
 
 	if( health < 0 )
 		dispose();
+	
+	return damage;
 }
 
 protected function defaultSummonEffectFactory() : void
