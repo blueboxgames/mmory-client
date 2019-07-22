@@ -195,7 +195,7 @@ protected function loaderInfo_uncaughtErrorHandler(event:UncaughtErrorEvent):voi
 		severity = GAErrorSeverity.WARNING;
 	}
 	GameAnalytics.addErrorEvent(severity, text);
-	//navigateToURL(new URLRequest("http://127.0.0.1:8080/towerslet/towers?" + severity + "--" + text));
+	// new GTStreamer(File.applicationStorageDirectory.resolvePath("log.txt"), null, null, null, false, false).save(text);
 }
 }
 }
