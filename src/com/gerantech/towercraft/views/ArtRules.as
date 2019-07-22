@@ -9,6 +9,7 @@ import flash.utils.Dictionary;
 */
 public class ArtRules 
 {
+static public const BASE:String = "base";
 static public const BULLET:String = "bullet";
 static public const BULLET_FX:String = "bulletFX";
 static public const FLAME:String = "flame";

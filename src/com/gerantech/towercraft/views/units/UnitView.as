@@ -66,7 +66,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 
 	var appearanceDelay:Number = Math.random() * 0.5;
 	
-	if( CardTypes.isBuilding(card.type) )
+	if( appModel.artRules.get(card.type, ArtRules.BASE) != "" )
 	{
 		baseDisplay = new Image(appModel.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/base"));
 		baseDisplay.pivotX = baseDisplay.width * 0.5;
