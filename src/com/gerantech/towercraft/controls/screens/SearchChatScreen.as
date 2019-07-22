@@ -48,7 +48,7 @@ protected function sfs_issuesResponseHandler(event:SFSEvent):void
 	for (var i:int = 0; i < chats.size(); i++)
 		result.addItem(chats.getSFSObject(i));
 	result.sortCompareFunction = sortChats;
-//	trace(event.params.params.getDump())
+	// trace(event.params.params.getDump())
 }
 
 private function sortChats ( a:SFSObject, b:SFSObject ):int
