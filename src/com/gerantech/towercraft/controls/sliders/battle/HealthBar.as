@@ -2,27 +2,28 @@ package com.gerantech.towercraft.controls.sliders.battle
 {
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.views.BattleFieldView;
+
 import flash.geom.Rectangle;
+
 import starling.display.Image;
 
 public class HealthBar
 {
-static protected var SCALE_RECT:Rectangle = new Rectangle(3, 3, 9, 9);
+static protected var SCALE_RECT:Rectangle = new Rectangle(3, 3, 1, 1);
 public var width:Number = 48;
 public var height:Number = 15;
 protected var _value:Number = 0;
 protected var _side:int = -2;
-protected var maximum:Number;
+public var maximum:Number;
 protected var sliderFillDisplay:Image;
 protected var sliderBackDisplay:Image;
 protected var filedView:BattleFieldView;
-public function HealthBar(filedView:BattleFieldView, side:int, initValue:Number = 0, initMax:Number = 1)
+public function HealthBar(filedView:BattleFieldView, side:int, maximum:Number = 1)
 {
 	super();
-	this.value = initValue;
-	this.maximum = initMax;
-	this.side = side;
 	this.filedView = filedView;
+	this.maximum = maximum;
+	this.side = side;
 }
 
 public function initialize() : void
@@ -32,14 +33,14 @@ public function initialize() : void
 	sliderBackDisplay.touchable = false;
 	sliderBackDisplay.width = width;
 	sliderBackDisplay.height = height;
-	sliderBackDisplay.visible = value < maximum;
+	sliderBackDisplay.visible = false;//value < maximum;
 	filedView.guiImagesContainer.addChild(sliderBackDisplay);
 	
 	sliderFillDisplay = new Image(AppModel.instance.assets.getTexture("sliders/" + side + "/fill"));
 	sliderFillDisplay.scale9Grid = SCALE_RECT;
 	sliderFillDisplay.touchable = false;
 	sliderFillDisplay.height = height;
-	sliderFillDisplay.visible = value < maximum;
+	sliderFillDisplay.visible = false;//value < maximum;
 	filedView.guiImagesContainer.addChild(sliderFillDisplay);
 }
 
@@ -76,11 +77,11 @@ public function set value(v:Number) : void
 	if( sliderFillDisplay != null )
 	{
 		sliderFillDisplay.visible = _value < maximum;
-		sliderFillDisplay.width =  width * (_value / maximum);
+		if( sliderFillDisplay.visible )
+			sliderFillDisplay.width =  width * (_value / maximum);
 	}
-	
-	if( sliderFillDisplay != null )
-		sliderFillDisplay.visible = _value < maximum;
+	if( sliderBackDisplay != null )
+		sliderBackDisplay.visible = _value < maximum;
 }
 
 public function get side():int

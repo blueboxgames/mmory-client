@@ -104,8 +104,6 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	Starling.juggler.add(shadowDisplay);
 	fieldView.shadowsContainer.addChild(shadowDisplay);
 
-	setHealth(card.health);
-
 	if( CardTypes.isTroop(card.type) )
 	{
 		bodyDisplay.alpha = 0;
@@ -332,17 +330,13 @@ override public function setHealth(health:Number) : Number
 	if( healthDisplay == null )
 	{
 		if( CardTypes.isTroop(card.type) )
-			healthDisplay = new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, health, card.health);
+			healthDisplay = new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
 		else
-			healthDisplay = new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, health, card.health);		
+			healthDisplay = new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth) as HealthBarLeveled;
 		healthDisplay.initialize();
 	}
-	else
-	{
-		healthDisplay.value = health;
-	}
+	healthDisplay.value = health;
 	healthDisplay.setPosition(__x, __y - card.sizeV - 60);
-
 	if( health < 0 )
 		dispose();
 	
