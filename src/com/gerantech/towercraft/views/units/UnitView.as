@@ -72,7 +72,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		baseDisplay.pivotX = baseDisplay.width * 0.5;
 		baseDisplay.pivotY = baseDisplay.height * _PIVOT_Y;
 		baseDisplay.x = __x;
-		baseDisplay.y = __y;
+		baseDisplay.y = __y - 1;
 		baseDisplay.width = _WIDTH;
 		baseDisplay.height = _HEIGHT;
 		baseDisplay.scale *= _SCALE;

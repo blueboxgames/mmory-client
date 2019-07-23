@@ -12,9 +12,9 @@ public class HealthBar
 static protected var SCALE_RECT:Rectangle = new Rectangle(3, 3, 1, 1);
 public var width:Number = 48;
 public var height:Number = 15;
+public var maximum:Number;
 protected var _value:Number = 0;
 protected var _side:int = -2;
-public var maximum:Number;
 protected var sliderFillDisplay:Image;
 protected var sliderBackDisplay:Image;
 protected var filedView:BattleFieldView;
