@@ -41,6 +41,7 @@ private var rangeDisplay:Image;
 private var sizeDisplay:Image;
 private var __x:Number;
 private var __y:Number;
+private var __yz:Number;
 private var _muted:Boolean = true;
 
 public var fireDisplayFactory:Function;
@@ -107,9 +108,9 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	if( CardTypes.isTroop(card.type) )
 	{
 		bodyDisplay.alpha = 0;
-		bodyDisplay.y = __y - 100;
+		bodyDisplay.y = __yz - 100;
 		bodyDisplay.scaleY = bodyScale * 4;
-		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,		alpha:0.5, y:__y,	transition:Transitions.EASE_OUT, onComplete:defaultSummonEffectFactory});
+		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,		alpha:0.5, y:__yz,	transition:Transitions.EASE_OUT, onComplete:defaultSummonEffectFactory});
 		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay + 0.1,	scaleY:bodyScale,	transition:Transitions.EASE_OUT_BACK});
 		
 		shadowDisplay.scale = 0.1
@@ -122,7 +123,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		deployIcon.stop();
 		deployIcon.scale = 0.5;
 		deployIcon.x = __x;
-		deployIcon.y = __y - 80;
+		deployIcon.y = __yz - 80;
 		deployIcon.rotateTo(0, 360, card.summonTime / 1000);
 		setTimeout(fieldView.guiImagesContainer.addChild, appearanceDelay * 1000, deployIcon);
 	}
@@ -172,7 +173,7 @@ override public function setState(state:int) : Boolean
 		// finish summon animations
 		bodyDisplay.pause();
 		bodyDisplay.x = __x;
-		bodyDisplay.y = __y;
+		bodyDisplay.y = __yz;
 		bodyDisplay.alpha = 1;
 		bodyDisplay.scaleY = bodyScale;
 		Starling.juggler.removeTweens(bodyDisplay);
@@ -234,12 +235,13 @@ override public function setPosition(x:Number, y:Number, z:Number, forced:Boolea
 	
 	__x = getSideX();
 	__y = getSideY();
+	__yz = __y + this.z * BattleField.CAMERA_ANGLE;
 	switchAnimation("m_", __x, _x, __y, _y);
 	
 	if( bodyDisplay != null )
 	{
 		bodyDisplay.x = __x;
-		bodyDisplay.y = __y;	
+		bodyDisplay.y = __yz;	
 	}
 	
 	if( shadowDisplay != null )
@@ -249,7 +251,7 @@ override public function setPosition(x:Number, y:Number, z:Number, forced:Boolea
 	}
 
 	if( healthDisplay != null )
-		healthDisplay.setPosition(__x, __y - card.sizeV - 60);
+		healthDisplay.setPosition(__x, __yz - card.sizeV - 60);
 
 	if( rangeDisplay != null )
 	{
@@ -264,7 +266,6 @@ override public function setPosition(x:Number, y:Number, z:Number, forced:Boolea
 	}
 	return true;
 }
-
 
 private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, oldY:Number):void
 {
@@ -336,7 +337,7 @@ override public function setHealth(health:Number) : Number
 		healthDisplay.initialize();
 	}
 	healthDisplay.value = health;
-	healthDisplay.setPosition(__x, __y - card.sizeV - 60);
+	healthDisplay.setPosition(__x, __yz - card.sizeV - 60);
 	if( health < 0 )
 		dispose();
 	

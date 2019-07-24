@@ -149,7 +149,7 @@ public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Nu
 		return;
 	}
 
-	var u:UnitView = new UnitView(card, id, side, x, y, 0);
+	var u:UnitView = new UnitView(card, id, side, x, y, card.z);
 	u.addEventListener("findPath", findPathHandler);
 
 	if( health >= 0 )
