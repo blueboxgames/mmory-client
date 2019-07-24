@@ -1,14 +1,16 @@
 package com.gerantech.towercraft.controls.items
 {
+import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.Assets;
-import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.TiledRowsLayout;
 import feathers.skins.ImageSkin;
-import flash.geom.Rectangle;
+
 import starling.core.Starling;
 
 public class ProfileBuildingItemRenderer extends AbstractTouchableListItemRenderer
@@ -34,10 +36,10 @@ override protected function initialize():void
 	super.initialize();
 	alpha = 0;
 	
-	mySkin = new ImageSkin(Assets.getTexture("theme/building-button"));
-	mySkin.setTextureForState("normal", Assets.getTexture("theme/building-button"));
-	mySkin.setTextureForState("locked", Assets.getTexture("theme/building-button-disable"));
-	mySkin.scale9Grid = new Rectangle(20, 20, 112, 74);
+	mySkin = new ImageSkin(appModel.theme.buttonSmallUpSkinTexture);
+	mySkin.setTextureForState("normal", appModel.theme.buttonSmallUpSkinTexture);
+	mySkin.setTextureForState("locked", appModel.theme.buttonSmallDisabledSkinTexture);
+	mySkin.scale9Grid = MainTheme.BUTTON_SMALL_SCALE9_GRID;
 	backgroundSkin = mySkin;
 	
 	layout= new AnchorLayout();

@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.FastList;
@@ -47,7 +47,6 @@ import flash.geom.Rectangle;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
-import com.gerantech.mmory.core.battle.units.Card;
 
 public class ProfilePopup extends SimplePopup 
 {
@@ -324,9 +323,10 @@ private function getBuildingData():ListCollection
 {
 	var ret:ListCollection = new ListCollection();
 	var cards:Vector.<int> = Card.get_unlockes(game).keys();
+	var data:Array = new Array();
 	for( var i:int = 0; i < cards.length; i++ )
-		cards[i] = {type:cards[i], level:getLevel(cards[i])};
-	return new ListCollection(cards);
+		data[i] = {type:cards[i], level:getLevel(cards[i])};
+	return new ListCollection(data);
 }
 
 private function getLevel(type:int):int
