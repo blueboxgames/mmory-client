@@ -1,25 +1,34 @@
 package com.gerantech.towercraft.controls.items
 {
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.others.Arena;
+import com.gerantech.mmory.core.others.TrophyReward;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.buttons.LeagueButton;
+import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
+import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRenderer;
+import com.gerantech.towercraft.controls.overlays.EarnOverlay;
 import com.gerantech.towercraft.controls.overlays.NewCardOverlay;
+import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
+import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
+import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.MessageTypes;
-import com.gerantech.mmory.core.others.Arena;
+import com.smartfoxserver.v2.core.SFSEvent;
+import com.smartfoxserver.v2.entities.data.SFSObject;
 
-import feathers.controls.Button;
 import feathers.controls.ImageLoader;
-import feathers.controls.List;
-import feathers.controls.renderers.IListItemRenderer;
-import feathers.data.ListCollection;
+import feathers.controls.LayoutGroup;
+import feathers.core.FeathersControl;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import feathers.layout.HorizontalAlign;
-import feathers.layout.TiledRowsLayout;
-import feathers.layout.VerticalAlign;
 
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
@@ -28,29 +37,30 @@ import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
-import com.gerantech.towercraft.controls.CardView;
 
 public class LeagueItemRenderer extends AbstractListItemRenderer
 {
 static public var LEAGUE:int;
 static public var HEIGHT:int;
-static public const ICON_X:int = -400;
-static public const ICON_WIDTH:int = 180;
-static public const ICON_HEIGHT:int = 198;
+static public const ICON_X:int = 310;
+static public const ICON_WIDTH:int = 160;
+static public const ICON_HEIGHT:int = 176;
 static public const CARDS_WIDTH:int = 210;
 static public const SLIDER_WIDTH:int = 48;
 static private var ICON_LAYOUT_DATA:AnchorLayoutData = new AnchorLayoutData(-ICON_HEIGHT * 0.54, NaN, NaN, NaN, ICON_X);
 static public const MIN_POINT_LAYOUT_DATA:AnchorLayoutData = new AnchorLayoutData(ICON_HEIGHT * 0.5, NaN, NaN, NaN, ICON_X);
 static private const MIN_POINT_GRID:Rectangle = new Rectangle(39, 39, 1, 1);
-private var ready:Boolean;
+
 private var league:Arena;
+private var ready:Boolean;
 private var commited:Boolean;
+private var earnOverlay:EarnOverlay;
 public function LeagueItemRenderer(){ super(); }
 override protected function initialize():void
 {
+	height = HEIGHT;
 	super.initialize();
 	layout = new AnchorLayout();
-	height = HEIGHT;
 }
 
 override protected function commitData():void
@@ -61,11 +71,13 @@ override protected function commitData():void
 	
 	league = _data as Arena;//trace(index, league.index , playerLeague)
 	if( league.index == 0 )
-		height = 500;
+		height = 300;
 	
 	ready = league.index > LEAGUE - 2 && league.index < LEAGUE + 3;
 	if( ready )
+	{
 		createElements();
+	}
 	else
 	{
 		_owner.addEventListener(Event.OPEN, _owner_openHandler);
@@ -107,118 +119,58 @@ private function createElements():void
 		leagueIcon.scale = 1.2;
 		Starling.juggler.tween(leagueIcon, 0.3, {scale:1});
 	}
-	// cards elements
-	var cards:Array = player.availabledCards(league.index, 0);
-	var collectable:Boolean = !player.cards.exists(cards[0]) && league.min <= player.get_point();
-	var cardsLayout:TiledRowsLayout = new TiledRowsLayout();
-	cardsLayout.requestedColumnCount = Math.min(cards.length, 3);
-	cardsLayout.requestedRowCount = Math.ceil(cards.length / 3);
-	cardsLayout.horizontalAlign = HorizontalAlign.CENTER;
-	cardsLayout.verticalAlign = collectable ? VerticalAlign.BOTTOM : VerticalAlign.MIDDLE;
-	cardsLayout.gap = cardsLayout.padding = 12;
-	cardsLayout.useVirtualLayout = false;
-	cardsLayout.useSquareTiles = false;
-	cardsLayout.typicalItemWidth = Math.min(CARDS_WIDTH, 680 / cardsLayout.requestedColumnCount - cardsLayout.padding * 2 - (cardsLayout.requestedColumnCount - 1) * cardsLayout.gap);
-	cardsLayout.typicalItemHeight = cardsLayout.typicalItemWidth * (collectable ? 1.7 : CardView.VERICAL_SCALE);
-	
-	var listSkin:Image = new Image(appModel.theme.roundMediumInnerSkin);
-	listSkin.scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;
-	listSkin.alpha = 0.3;
-	listSkin.color = 0;
-
-	var cardsList:List = new List();
-	cardsList.touchable = false;
-	cardsList.layout = cardsLayout;
-	cardsList.backgroundSkin = listSkin;
-	//cardsList.width = cardsLayout.typicalItemWidth + cardsLayout.padding * 2;
-	//cardsList.height = cardsLayout.typicalItemHeight + cardsLayout.padding * 2;
-	cardsList.itemRendererFactory = function ():IListItemRenderer { return new CardItemRenderer ( false, false ); };
-	cardsList.layoutData = new AnchorLayoutData(NaN, NaN, NaN, stageWidth * 0.5 + ICON_LAYOUT_DATA.horizontalCenter + 180, NaN, -HEIGHT * 0.5);
-	cardsList.dataProvider = new ListCollection(cards);
-	addChild(cardsList);
-
-	var arrowSkin:ImageLoader = new ImageLoader();
-	arrowSkin.source = appModel.theme.calloutLeftArrowSkinTexture;
-	arrowSkin.layoutData = new AnchorLayoutData(NaN, -0.1, NaN, NaN, NaN, -HEIGHT * 0.5);
-	AnchorLayoutData(arrowSkin.layoutData).rightAnchorDisplayObject = cardsList;
-	arrowSkin.alpha = listSkin.alpha;
-	arrowSkin.color = listSkin.color;
-	addChild(arrowSkin);
-	
-	if( collectable )
-	{
-		arrowSkin.alpha = listSkin.alpha = 0.5;
-		arrowSkin.color = listSkin.color = 0xFFB600;
-		
-		var collectButton:Button = new Button();
-		collectButton.name = cards[0].toString();
-		collectButton.label = loc("collect_label");
-		collectButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
-		collectButton.x = stageWidth * 0.5 + ICON_LAYOUT_DATA.horizontalCenter + 180 + cardsLayout.typicalItemWidth * 0.5 + cardsLayout.padding;
-		collectButton.y = cardsLayout.typicalItemHeight * 0.5 - cardsLayout.padding * 2;
-		collectButton.width = cardsLayout.typicalItemWidth + cardsLayout.padding * 2;
-		collectButton.height = 120;
-		collectButton.pivotX = collectButton.width * 0.5;
-		collectButton.pivotY = collectButton.height * 0.5;
-		collectButton.addEventListener(Event.TRIGGERED, collectButton_triggeredHandler);
-		addChild(collectButton);
-		punchButton();
-		function punchButton() : void
-		{
-			Starling.juggler.tween(collectButton, 0.8, {delay:1, scale:1, transition:Transitions.EASE_OUT_BACK,
-			onComplete:punchButton, onStart:function():void{collectButton.scale = 1.5;}});
-		}
-	}
 	
 	if( league.index <= 0 )
 	{
-		if( league.index == 0 )
-		{
-			AnchorLayoutData(arrowSkin.layoutData).verticalCenter = -280;
-			AnchorLayoutData(cardsList.layoutData).verticalCenter = -140;
-		}
 		commited = true;
 		return;
 	}
+
 	
+	// rewards items
+	for ( var r:int = 0; r < league.rewards.length; r++ )
+		createRewardItem(r);
+	 
 	// progress bar
-	var l:Arena = game.arenas.get(LEAGUE);
-	if( LEAGUE + 1 >= league.index )
+	var currentLeague:Arena = game.arenas.get(LEAGUE);
+	if( LEAGUE  >= league.index )
 	{
-		var fillHeight:Number = HEIGHT * (l.max  - player.get_point()) / (l.max - l.min);
+		var fillHeight:Number = HEIGHT * (currentLeague.max  - player.get_point()) / (currentLeague.max - currentLeague.min);
 		var sliderFill:ImageLoader = new ImageLoader();
-		sliderFill.layoutData = new AnchorLayoutData(LEAGUE + 1 > league.index ? 0 : fillHeight, NaN, 0, NaN, ICON_LAYOUT_DATA.horizontalCenter);
+		sliderFill.layoutData = new AnchorLayoutData(LEAGUE  > league.index ? 0 : fillHeight, NaN, 0, NaN, ICON_X);
 		sliderFill.source = Assets.getTexture("leagues/slider-fill", "gui");
 		sliderFill.scale9Grid = MainTheme.SMALL_BACKGROUND_SCALE9_GRID;
 		sliderFill.width = SLIDER_WIDTH;
 		addChildAt(sliderFill, 0);
 		
-		if( LEAGUE + 1 == league.index )
+		if( LEAGUE  == league.index )
 		{
+			var pointRect:ImageLoader = new ImageLoader();
+			pointRect.source = Assets.getTexture("leagues/point-rect", "gui");
+			pointRect.width = 150;
+			pointRect.height = 72;
+			pointRect.scale9Grid = new Rectangle(17, 17, 2, 2);
+			pointRect.layoutData = new AnchorLayoutData(fillHeight - pointRect.height * 0.5, -10);
+			addChild(pointRect);
+			
 			var pointLine:ImageLoader = new ImageLoader();
 			pointLine.source = appModel.theme.quadSkin;
 			pointLine.scale9Grid = MainTheme.QUAD_SCALE9_GRID;
-			pointLine.width = 640;
+			pointLine.width = 100;
 			pointLine.height = 4;
-			pointLine.layoutData = new AnchorLayoutData(fillHeight - pointLine.height * 0.5, NaN, NaN, stageWidth * 0.5 + ICON_LAYOUT_DATA.horizontalCenter - SLIDER_WIDTH);
+			pointLine.x = stageWidth * 0.5 + ICON_X;
+			pointLine.y = fillHeight - pointLine.height * 0.5;
 			addChildAt(pointLine, 1);
-			
-			var pointRect:ImageLoader = new ImageLoader();
-			pointRect.source = Assets.getTexture("leagues/point-rect", "gui");
-			pointRect.width = 260;
-			pointRect.height = 72;
-			pointRect.scale9Grid = new Rectangle(17, 17, 2, 2);
-			pointRect.layoutData = new AnchorLayoutData(fillHeight - pointRect.height * 0.5, 40);
-			addChild(pointRect);
 			
 			var pointIcon:ImageLoader = new ImageLoader();
 			pointIcon.source = Assets.getTexture("res-2", "gui");
 			pointIcon.width = pointIcon.height = 52;
-			pointIcon.layoutData = new AnchorLayoutData(fillHeight - pointIcon.height * 0.5, pointRect.width - 30);
+			pointIcon.layoutData = new AnchorLayoutData(fillHeight - pointIcon.height * 0.5, pointRect.width - 70);
 			addChild(pointIcon);
 		}
 	}
-	if( LEAGUE + 1 <= league.index )
+	
+	if( LEAGUE <= league.index )
 	{
 		var sliderBackground:ImageLoader = new ImageLoader();
 		sliderBackground.source = Assets.getTexture("leagues/slider-background", "gui");
@@ -227,50 +179,220 @@ private function createElements():void
 		sliderBackground.width = SLIDER_WIDTH;
 		addChildAt(sliderBackground, 0);
 	}
-	
-	var minPointRect:ImageLoader = new ImageLoader();
-	minPointRect.source = Assets.getTexture("leagues/min-point-rect", "gui");
-	minPointRect.layoutData = MIN_POINT_LAYOUT_DATA;
-	minPointRect.scale9Grid = MIN_POINT_GRID;
-	minPointRect.width = 180;
-	minPointRect.height = 68;
-	addChild(minPointRect);
-	
-	if( LEAGUE + 1 == league.index )
+
+	if( league.index > 0 )
 	{
-		var pointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(player.get_point()), 1, "center", null, false, null, 0.8);
-		pointLabel.layoutData = new AnchorLayoutData(fillHeight - pointRect.height * 0.5, 50);
-		pointLabel.width = pointRect.width - 70;
-		pointLabel.height = 72;
+		var minPointRect:ImageLoader = new ImageLoader();
+		minPointRect.source = Assets.getTexture("leagues/min-point-rect", "gui");
+		minPointRect.layoutData = MIN_POINT_LAYOUT_DATA;
+		minPointRect.scale9Grid = MIN_POINT_GRID;
+		minPointRect.width = 180;
+		minPointRect.height = 68;
+		addChild(minPointRect);
+	}
+
+	if( LEAGUE == league.index )
+	{
+		var pointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(player.get_point()), 1, "center", null, false, "center", 0.7);
+		pointLabel.layoutData = new AnchorLayoutData(fillHeight - pointRect.height * 0.5 + 5, -10);
+		pointLabel.width = pointRect.width - 40;
 		addChild(pointLabel);
 	}
 
-	var minPointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber((league.min - 1) + "+"), 1, "center", null, false, null, 0.8);
-	minPointLabel.layoutData = MIN_POINT_LAYOUT_DATA;
-	addChild(minPointLabel);
+	if( league.index > 0 )
+	{
+		var minPointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(league.max + "+"), 1, "center", null, false, null, 0.8);
+		minPointLabel.layoutData = MIN_POINT_LAYOUT_DATA;
+		addChild(minPointLabel);
+	}
+
 
 	if( league.index == LEAGUE )
 		setTimeout(_owner.dispatchEventWith, 500, Event.OPEN);
 	commited = true;
 }
 
-protected function collectButton_triggeredHandler(event:Event) : void 
+
+private function createRewardItem(r:int) : void 
 {
-	var cardType:int = int(Button(event.currentTarget).name);
-	if( Card.addNew(game, cardType) != MessageTypes.RESPONSE_SUCCEED )
+	var reward:TrophyReward = league.rewards[r];
+	var reached:Boolean = reward.reached();
+	var collectible:Boolean = reward.collectible();
+	var colW:int = 240;
+	var itemX:int = 60;
+	var itemY:int = HEIGHT - (reward.point - league.min) / (league.max - league.min) * HEIGHT;
+	var itemW:int = 660;
+	var isCard:Boolean = ResourceType.isCard(reward.key);
+
+	if( ResourceType.isEvent(reward.key) )
 	{
-		appModel.navigator.addLog("Not Allowed!");
+		createEventItem(itemX, itemY, itemW, reward, reached, collectible);
+		createPoint(reward, itemY);
 		return;
 	}
-	var overlay:NewCardOverlay = new NewCardOverlay(cardType);
-	overlay.addEventListener(Event.CLOSE, overlay_closeHandler);
-	appModel.navigator.addOverlay(overlay);
+
+	var item:SimpleLayoutButton = new SimpleLayoutButton();
+	item.layout = new AnchorLayout();
+	item.touchGroup = true;
+	item.data = {index:r, reward:reward};
+	item.width = itemW;
+	item.height = isCard ? 340 : 260;
+	item.pivotX = item.width * 0.5;
+	item.pivotY = item.height * 0.5;
+	item.x = itemX + item.pivotX;
+	item.y = itemY;
+	
+	var itemSkin:Image = new Image(Assets.getTexture(reached ? (collectible ? "events/index-bg-10-up" : "events/index-bg-1-up") : "events/index-bg-4-up", "gui"));
+	itemSkin.scale9Grid = ChallengeIndexItemRenderer.BG_SCALE_GRID;
+	itemSkin.pixelSnapping = false;
+	item.backgroundSkin = itemSkin;
+
+	var shineImage:ImageLoader = new ImageLoader();
+	shineImage.alpha = 0.8;
+	shineImage.color = 0xFFFFCC;
+	shineImage.pixelSnapping = false;
+	shineImage.source = Assets.getTexture("shop/shine-under-item", "gui");
+
+	var itemIcon:FeathersControl;
+	if( ResourceType.isCard(reward.key) )
+	{
+		itemIcon = new CardView();
+		CardView(itemIcon).type = reward.key;
+		CardView(itemIcon).availablity = CardTypes.AVAILABLITY_EXISTS;
+		itemIcon.height = colW;
+		itemIcon.width = colW / CardView.VERICAL_SCALE;
+		shineImage.width = shineImage.height = colW * 1.2;
+	}
+	else
+	{
+		itemIcon = new ImageLoader();
+		itemIcon.height = colW;
+		itemIcon.width = colW * 0.9;
+		ImageLoader(itemIcon).source = Assets.getTexture(BundleDetailsPopup.getTexturURL(reward.key), "gui");
+		shineImage.width = shineImage.height = colW * 0.9;
+	}
+	itemIcon.pivotX = itemIcon.width * 0.5;
+	itemIcon.pivotY = itemIcon.height * 0.5;
+	itemIcon.x = item.width - colW + itemIcon.width * 0.5 + 10;
+	itemIcon.y = item.height * 0.43;
+	item.addChild(itemIcon);
+
+	shineImage.pivotX = shineImage.pivotY = shineImage.width * 0.5;
+	shineImage.x = itemIcon.x;
+	shineImage.y = itemIcon.y;
+	Starling.juggler.tween(shineImage, 14, {rotation:Math.PI * 2, repeatCount:40});
+	item.addChildAt(shineImage, 0);
+
+	if( reached && !collectible )
+	{
+		var achievedImage:ImageLoader = new ImageLoader();
+		achievedImage.layoutData = new AnchorLayoutData(NaN, NaN, 80, 20);
+		achievedImage.source = appModel.theme.pickerListItemSelectedIconTexture;
+		achievedImage.pixelSnapping = false;
+		achievedImage.color = 0x1BFD06;
+		item.addChild(achievedImage);
+	}
+
+	var messageDisplay:ShadowLabel = new ShadowLabel(messageFormatter(reward.key, reward.value), 1, 0, "center", null, false, null, 0.85);
+	messageDisplay.layoutData = new AnchorLayoutData(NaN, 240, NaN, 20, NaN, -20);
+	messageDisplay.pixelSnapping = false;
+	item.addChild(messageDisplay);
+
+	createPoint(reward, item.y);
+
+	if( collectible )
+	{
+		item.addEventListener(Event.TRIGGERED, rewardItem_triggeredHandler);
+		punchButton(item);
+	}
+	addChild(item);
 }
 
-protected function overlay_closeHandler(event:Event) : void 
+private function messageFormatter(type:int, count:int) : String
 {
-	var overlay:NewCardOverlay = event.currentTarget as NewCardOverlay;
-	overlay.removeEventListener(Event.CLOSE, overlay_closeHandler);
+	if( ResourceType.isBook(type) )
+		return loc("exchange_title_" + type);
+	if( ResourceType.isCard(type) )
+		return loc("new_card_label");
+	return loc("count_mid", [count, loc("resource_title_" + type)]);
+}
+
+private function punchButton(collectButton:LayoutGroup) : void
+{
+	Starling.juggler.tween(collectButton, 0.8, {delay:1 + Math.random(), scale:1, transition:Transitions.EASE_OUT_BACK,
+	onComplete:punchButton, onCompleteArgs:[collectButton], onStart:function():void{collectButton.scale = 1.1;}});
+}
+
+
+private function createEventItem(x:int, y:int, width:int, reward:TrophyReward, reached:Boolean, collectible:Boolean):void
+{
+	var item:ChallengeIndexItemRenderer = new ChallengeIndexItemRenderer();
+	ChallengeIndexItemRenderer.IS_FRIENDLY = true;
+	item.width = width;
+	item.height = 400;
+	item.x = x;
+	item.y = y - item.height * 0.5;
+	item.data = reward.key % 10;
+	addChild(item);
+}
+private function createPoint(reward:TrophyReward, y:int):void
+{
+	var pointDisplay:ShadowLabel = new ShadowLabel(StrUtils.getNumber(reward.point), 1, 0, "center", null, false, null, 1);
+	pointDisplay.height = 100;
+	pointDisplay.pivotY = pointDisplay.height * 0.5
+	pointDisplay.y = y;
+	pointDisplay.x = stageWidth - 140;
+	addChild(pointDisplay);
+}
+
+protected function rewardItem_triggeredHandler(event:Event) : void 
+{
+	var item:SimpleLayoutButton = event.currentTarget as SimpleLayoutButton;
+	item.removeEventListener(Event.TRIGGERED, rewardItem_triggeredHandler);
+	var reward:TrophyReward = item.data.reward as TrophyReward;
+
+	if( player.achieveReward(reward.league, reward.index as int) != MessageTypes.RESPONSE_SUCCEED )
+	{
+		appModel.navigator.addLog(loc("arena_reward_error"));
+		Starling.juggler.delayCall(_owner.scrollToPosition, 0.1, NaN, _owner.verticalScrollPosition + 500, 1);
+		return;
+	}
+	
+	if( ResourceType.isBook(reward.key) )
+	{
+		earnOverlay = new OpenBookOverlay(reward.key) as EarnOverlay;
+		
+	}
+	else
+		earnOverlay = new NewCardOverlay(reward.key) as EarnOverlay;
+	earnOverlay.data = reward as Object;
+	appModel.navigator.addOverlay(earnOverlay);
+
+	var params:SFSObject = new SFSObject();
+	params.putInt("l", reward.league);
+	params.putInt("i", reward.index);
+	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_responseHandler)
+	SFSConnection.instance.sendExtensionRequest(SFSCommands.COLLECT_ROAD_REWARD, params);
+}
+
+protected function sfs_responseHandler(event:SFSEvent):void
+{
+	if( event.params.cmd != SFSCommands.COLLECT_ROAD_REWARD )
+		return;
+	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_responseHandler);
+	if( event.params.params.getInt("response") != MessageTypes.RESPONSE_SUCCEED )
+		return;
+
+	var outcomes:IntIntMap = EarnOverlay.getOutcomse(event.params.params.getSFSArray("outcomes"))		
+	earnOverlay.outcomes = outcomes;
+	earnOverlay.addEventListener(Event.CLOSE, earnOverlay_closeHandler);
+
+	player.addResources(outcomes);
+}
+
+protected function earnOverlay_closeHandler(event:Event) : void 
+{
+	earnOverlay.removeEventListener(Event.CLOSE, earnOverlay_closeHandler);
 	removeChildren();
 	commited = false;
 	createElements();

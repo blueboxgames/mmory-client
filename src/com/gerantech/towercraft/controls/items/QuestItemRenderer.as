@@ -1,5 +1,6 @@
 package com.gerantech.towercraft.controls.items
 {
+import com.gerantech.mmory.core.others.Quest;
 import com.gerantech.towercraft.controls.groups.RewardsPalette;
 import com.gerantech.towercraft.controls.sliders.LabeledProgressBar;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
@@ -8,7 +9,6 @@ import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.others.Quest;
 
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
@@ -23,8 +23,8 @@ import starling.events.Event;
 public class QuestItemRenderer extends AbstractTouchableListItemRenderer
 {
 static public var HEIGHT:int = 400;
-static private var PADDING:int = 30;
-static private var SCALE_GRID:Rectangle = new Rectangle(48, 36, 2, 2);
+static public var PADDING:int = 30;
+static public var SCALE_GRID:Rectangle = new Rectangle(48, 36, 2, 2);
 public var quest:Quest;
 private var passed:Boolean;
 private var skinLayout:AnchorLayoutData;

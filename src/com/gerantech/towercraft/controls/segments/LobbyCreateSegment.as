@@ -1,5 +1,6 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.popups.EmblemsPopup;
@@ -8,7 +9,6 @@ import com.gerantech.towercraft.controls.texts.CustomTextInput;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
@@ -41,8 +41,8 @@ override protected function initialize():void
 	super.initialize();
 	layout = new AnchorLayout();
 	
-	padding = 128;
-	controlWidth = 420;
+	padding = 110;
+	controlWidth = 400;
 	
 	var tilteDisplay:RTLLabel = new RTLLabel(loc("lobby_create_message"), 1, "center", null, true, null, 0.8);
 	tilteDisplay.layoutData = new AnchorLayoutData(padding, padding, NaN, padding);

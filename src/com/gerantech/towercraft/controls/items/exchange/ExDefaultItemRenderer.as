@@ -1,12 +1,12 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.constants.ResourceType;
 
 import feathers.controls.ImageLoader;
 import feathers.core.ITextRenderer;
@@ -15,11 +15,15 @@ import feathers.skins.ImageSkin;
 
 import flash.geom.Rectangle;
 
+import starling.textures.Texture;
+
 public class ExDefaultItemRenderer extends ExBaseItemRenderer
 {
 static public const BACKGROUND_SCALEGRID:Rectangle = new Rectangle(18, 18, 1, 1);
 protected var reqType:int;
 protected var reqCount:int;
+protected var outType:int;
+protected var outCount:int;
 protected var category:int;
 protected var buttonSkin:ImageSkin;
 protected var iconDisplay:ImageLoader;
@@ -36,7 +40,9 @@ override protected function commitData():void
 	this.titleFactory();
 
 	this.reqType = this.exchange.requirements.keys()[0];
-	this.reqCount = this.exchange.requirements.get(reqType);
+	this.reqCount = this.exchange.requirements.get(this.reqType);
+	this.outType = this.exchange.outcomes.keys()[0];
+	this.outCount = this.exchange.outcomes.get(this.outType);
 	
 	if( this.buttonDisplay != null )
 	{
@@ -45,9 +51,9 @@ override protected function commitData():void
 		this.buttonDisplay.label = MMOryButton.getLabel(this.reqType, this.reqCount);
 	}
 	if( this.iconDisplay != null )
-		this.iconDisplay.source = Assets.getTexture(this.iconSourceProvider(), "gui");
+		this.iconDisplay.source = this.iconSourceProvider();
 	if( this.titleDisplay != null )
-		this.titleDisplay.text = titleFormatter(this.exchange.outcomes.values()[0]);
+		this.titleDisplay.text = titleFormatter(this.outType, this.outCount);
 }
 
 override public function set currentState(value:String) : void
@@ -57,23 +63,15 @@ override public function set currentState(value:String) : void
 		this.buttonSkin.defaultColor = this.buttonSkin.getColorForState(value);
 }
 
-private function iconSourceProvider() : String
+protected function iconSourceProvider() : Texture
 {
 	switch( this.category )
 	{
-		case 20: return "cards/" + exchange.outcome;
-		case 120: return "books/" + exchange.outcome;
+		case 20: return Assets.getTexture("cards/" + exchange.outcome, "gui");
+		case 120: return Assets.getTexture("books/" + exchange.outcome, "gui");
 	}
-	return "shop/currency-" + exchange.type;
+	return Assets.getTexture("shop/currency-" + exchange.type, "gui");
 }
-
-protected function titleFormatter(count:int) : String
-{
-	if( this.category == ExchangeType.C120_MAGICS )
-		return loc("arena_text") + " " + loc("num_" + (count + 1));
-	return "x" + StrUtils.getNumber(count);
-}
-
 
 private function skinFactory():void
 {
@@ -91,7 +89,7 @@ protected function iconFactory() : void
 }
 protected function titleFactory() : void
 {
-	this.titleDisplay = new ShadowLabel(null, ExCategoryItemRenderer.GET_TEXT_COLORS(this.category), 0, null, null, false, null, category==ExchangeType.C120_MAGICS?0.8:1.1);
+	this.titleDisplay = new ShadowLabel(null, ExCategoryItemRenderer.GET_TEXT_COLORS(this.category), 0, null, null, false, null, category==ExchangeType.C120_MAGICS?0.65:1.1);
 	this.titleDisplay.layoutData = new AnchorLayoutData(20, NaN, NaN, NaN, 0);
 	this.addChild(this.titleDisplay);
 }
@@ -116,7 +114,15 @@ protected function buttonFactory() : void
 }
 protected function buttonLabelFactory() : ITextRenderer
 {
-	return new ShadowLabel(null, 1, 0, "center", null, false, null, 0.9);
+	return new ShadowLabel(null, 1, 0, "center", null, false, null, 0.85);
 }
+
+static public function titleFormatter(type:int, count:int) : String
+{
+	if( ResourceType.isBook(type) )
+		return StrUtils.loc("arena_text") + " " + StrUtils.loc("num_" + (count + 1));
+	return "x" + StrUtils.getNumber(count);
+}
+
 }
 }

@@ -2,12 +2,15 @@ package com.gerantech.towercraft.controls.buttons
 {
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.overlays.HandPoint;
+
 import feathers.controls.ButtonState;
 import feathers.events.FeathersEventType;
 import feathers.skins.ImageSkin;
+
 import flash.geom.Point;
 import flash.utils.getTimer;
 import flash.utils.setTimeout;
+
 import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
@@ -18,6 +21,7 @@ import starling.events.TouchPhase;
 
 public class SimpleLayoutButton extends TowersLayout
 {
+public var data:Object;
 public var stateNames:Vector.<String> = new <String> [ ButtonState.UP, ButtonState.DOWN, ButtonState.DISABLED ];
 private static const HELPER_POINT:Point = new Point();
 

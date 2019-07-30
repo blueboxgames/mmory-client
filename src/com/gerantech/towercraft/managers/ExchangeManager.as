@@ -1,20 +1,8 @@
 package com.gerantech.towercraft.managers 
 {
+import com.gameanalytics.sdk.GAResourceFlowType;
+import com.gameanalytics.sdk.GameAnalytics;
 import com.gerantech.extensions.iab.IabResult;
-import com.gerantech.towercraft.Game;
-import com.gerantech.towercraft.controls.overlays.EarnOverlay;
-import com.gerantech.towercraft.controls.overlays.FortuneOverlay;
-import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
-import com.gerantech.towercraft.controls.popups.AdConfirmPopup;
-import com.gerantech.towercraft.controls.popups.BookDetailsPopup;
-import com.gerantech.towercraft.controls.popups.ConfirmPopup;
-import com.gerantech.towercraft.controls.screens.DashboardScreen;
-import com.gerantech.towercraft.controls.segments.ExchangeSegment;
-import com.gerantech.towercraft.events.GameEvent;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
-import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.vo.UserData;
-import com.gerantech.towercraft.models.vo.VideoAd;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.mmory.core.constants.PrefsTypes;
@@ -22,10 +10,23 @@ import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
-import com.marpies.ane.gameanalytics.GameAnalytics;
-import com.marpies.ane.gameanalytics.data.GAResourceFlowType;
+import com.gerantech.towercraft.Game;
+import com.gerantech.towercraft.controls.overlays.EarnOverlay;
+import com.gerantech.towercraft.controls.overlays.FortuneOverlay;
+import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
+import com.gerantech.towercraft.controls.popups.AdConfirmPopup;
+import com.gerantech.towercraft.controls.popups.BookDetailsPopup;
+import com.gerantech.towercraft.controls.popups.ConfirmPopup;
+import com.gerantech.towercraft.controls.popups.EmoteDetailsPopup;
+import com.gerantech.towercraft.controls.popups.SimpleHeaderPopup;
+import com.gerantech.towercraft.controls.screens.DashboardScreen;
+import com.gerantech.towercraft.controls.segments.ExchangeSegment;
+import com.gerantech.towercraft.events.GameEvent;
+import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.models.vo.UserData;
+import com.gerantech.towercraft.models.vo.VideoAd;
 import com.smartfoxserver.v2.core.SFSEvent;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.events.FeathersEventType;
@@ -81,25 +82,47 @@ public function process(item : ExchangeItem) : void
 				return;
 			}
 		}
-		
-		var details:BookDetailsPopup = new BookDetailsPopup(item);
-		details.addEventListener(Event.SELECT, details_selectHandler);
-		appModel.navigator.addPopup(details);
-		function details_selectHandler(event:Event):void
-		{
-			_state = item.getState(timeManager.now);
-			if( _state != ExchangeItem.CHEST_STATE_WAIT )
-				details.removeEventListener(Event.SELECT, details_selectHandler);
-			if( _state == ExchangeItem.CHEST_STATE_WAIT && exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
-				params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
-			var response:int = exchange(item, params);
-			if( response != MessageTypes.RESPONSE_SUCCEED )
-				details.close();
-		}
+
+		var detailsPopup:SimpleHeaderPopup = new BookDetailsPopup(item);
+		detailsPopup.addEventListener(Event.SELECT, detailsPopup_selectHandler);
+		appModel.navigator.addPopup(detailsPopup);
+		return;
+	}
+	
+	//     _-_-_-_-_-_- all emotes -_-_-_-_-_-_
+	if( item.isEmote() )
+	{
+		item.enabled = true;
+		detailsPopup = new EmoteDetailsPopup(item);
+		detailsPopup.addEventListener(Event.SELECT, detailsPopup_selectHandler);
+		appModel.navigator.addPopup(detailsPopup);
 		return;
 	}
 
-	var reqType:int = item.requirements.keys()[0];
+	function detailsPopup_selectHandler(event:Event):void
+	{
+		detailsPopup.removeEventListener(Event.SELECT, detailsPopup_selectHandler);
+		if( item.isBook() )
+		{
+			_state = item.getState(timeManager.now);
+			if( _state == ExchangeItem.CHEST_STATE_WAIT )
+			{
+				if( exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
+					params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+				else
+					detailsPopup.addEventListener(Event.SELECT, detailsPopup_selectHandler);
+			}
+		}
+		exchange(item, params);
+	}
+
+	var reqs:Vector.<int> = item.requirements.keys();
+	if( reqs == null || reqs.length == 0 )
+	{
+		exchange(item, params);
+		return;
+	}
+
 	//     _-_-_-_-_-_- special offers -_-_-_-_-_-_
 	if( item.category == ExchangeType.C20_SPECIALS )
 	{
@@ -107,7 +130,7 @@ public function process(item : ExchangeItem) : void
 			return;
 		if( !player.has(item.requirements) )
 		{
-			appModel.navigator.addLog(loc("log_not_enough", [loc("resource_title_" + reqType)]));
+			appModel.navigator.addLog(loc("log_not_enough", [loc("resource_title_" + reqs[0])]));
 			dispatchCustomEvent(FeathersEventType.ERROR, item);
 			return;
 		}
@@ -116,7 +139,7 @@ public function process(item : ExchangeItem) : void
 	}
 
 	//     _-_-_-_-_-_- purchase automation -_-_-_-_-_-_
-	if( reqType == ResourceType.R5_CURRENCY_REAL )
+	if( reqs[0] == ResourceType.R5_CURRENCY_REAL )
 	{
 		BillingManager.instance.addEventListener(FeathersEventType.END_INTERACTION, billinManager_endInteractionHandler);
 		BillingManager.instance.purchase((item.category == ExchangeType.C30_BUNDLES ? "k2k.bundle_" : "k2k.item_") + item.type);
@@ -148,7 +171,7 @@ public function process(item : ExchangeItem) : void
 	}
 	
 	//     _-_-_-_-_-_- other gem consumption -_-_-_-_-_-_
-	if( reqType == ResourceType.R4_CURRENCY_HARD )
+	if( reqs[0] == ResourceType.R4_CURRENCY_HARD )
 	{
 		if( !player.has(item.requirements) )
 		{
@@ -171,7 +194,10 @@ public function process(item : ExchangeItem) : void
 			confirm1.removeEventListener(Event.CLOSE, confirm1_closeHandler);
 			dispatchCustomEvent(FeathersEventType.ERROR, item);
 		}
+		return;
 	}
+	
+	exchange(item, params);
 }
 
 private function exchange( item:ExchangeItem, params:SFSObject ) : int
@@ -192,7 +218,7 @@ private function exchange( item:ExchangeItem, params:SFSObject ) : int
 			if( item.category == ExchangeType.C110_BATTLES )
 				UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_013_BOOK_OPENED);
 			
-			earnOverlay = item.category == ExchangeType.C100_FREES ? new FortuneOverlay(bookType) : new OpenBookOverlay(bookType);
+			earnOverlay = EarnOverlay(item.category == ExchangeType.C100_FREES ? new FortuneOverlay(bookType) : new OpenBookOverlay(bookType));
 			appModel.navigator.addOverlay(earnOverlay);
 		}
 	}
@@ -240,16 +266,8 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 			dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);
 			return;
 		}
-		var outcomes:IntIntMap = new IntIntMap();
-		//trace(data.getSFSArray("rewards").getDump());
-		var reward:ISFSObject;
-		for( var i:int=0; i<data.getSFSArray("rewards").size(); i++ )
-		{
-			reward = data.getSFSArray("rewards").getSFSObject(i);
-			if( ResourceType.isCard(reward.getInt("t")) || ResourceType.isBook(reward.getInt("t")) || reward.getInt("t") == ResourceType.R3_CURRENCY_SOFT || reward.getInt("t") == ResourceType.R4_CURRENCY_HARD || reward.getInt("t") == ResourceType.R6_TICKET )
-				outcomes.set(reward.getInt("t"), reward.getInt("c"));
-		}
 		
+		var outcomes:IntIntMap = EarnOverlay.getOutcomse(data.getSFSArray("rewards"))		
 		player.addResources(outcomes);
 		earnOverlay.outcomes = outcomes;
 		earnOverlay.addEventListener(Event.CLOSE, openChestOverlay_closeHandler);

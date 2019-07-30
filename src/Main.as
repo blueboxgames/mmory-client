@@ -1,13 +1,17 @@
 package
 {
+import com.gameanalytics.sdk.GAErrorSeverity;
+import com.gameanalytics.sdk.GameAnalytics;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.screens.BattleScreen;
 import com.gerantech.towercraft.controls.screens.SplashScreen;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.constants.ResourceType;
-import com.marpies.ane.gameanalytics.GameAnalytics;
-import com.marpies.ane.gameanalytics.data.GAErrorSeverity;
+import com.gerantech.towercraft.models.vo.Descriptor;
+import com.gerantech.towercraft.utils.Localizations;
+import com.tuarua.FirebaseANE;
+import com.tuarua.firebase.FirebaseOptions;
+import com.tuarua.fre.ANEError;
 
 import feathers.events.FeathersEventType;
 
@@ -21,13 +25,11 @@ import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.InvokeEvent;
 import flash.events.UncaughtErrorEvent;
-import flash.geom.Rectangle;
 import flash.utils.getTimer;
 
 import haxe.Log;
 
 import starling.core.Starling;
-import com.gerantech.towercraft.utils.Localizations;
 
 public class Main extends Sprite
 {
@@ -37,8 +39,9 @@ private var splash:SplashScreen;
 
 public function Main()
 {
-	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) +"|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
-	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(AppModel.instance.descriptor.market));
+	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) + "|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
+	var desc:Descriptor = AppModel.instance.descriptor;
+	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(desc.market));
 	/*var str:String = "";
 	var ret:Number = -0.05;
 	for( var level:int=1; level<=13; level++ )
@@ -49,20 +52,30 @@ public function Main()
     
 	// GameAnalytic Configurations
 	var currencies:Vector.<String> = new Vector.<String>();
-	var bt:Vector.<int> = CardTypes.getAll()._list;
-	for each( var r:int in bt )
-		currencies.push(r.toString());
+	// var bt:Array = CardTypes.getAll();
+	// for each( var r:int in bt )
+	// 	currencies.push(r.toString());
 	currencies.push(ResourceType.R1_XP.toString());
 	currencies.push(ResourceType.R2_POINT.toString());
 	currencies.push(ResourceType.R4_CURRENCY_HARD.toString());
 	currencies.push(ResourceType.R3_CURRENCY_SOFT.toString());
-	
+
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
-		.setBuildAndroid(AppModel.instance.descriptor.versionNumber).setGameKeyAndroid("df4b20d8b9a4b0ec2fdf5ac49471d5b2").setGameSecretAndroid("972a1c900218b46f42d8a93e2f69710545903307")
+		/*.setBuildiOS(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec) */
+		.setBuildWindows(desc.versionNumber).setGameKeyWindows("").setGameSecretWindows("")
+		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
 		.setResourceCurrencies(currencies)
-		.setResourceItemTypes(new <String>["outcome", "special", "book", "purchase", "exchange", "upgrade", "donate"])
-	/*.setBuildiOS(AppModel.instance.descriptor.versionNumber).setGameKeyiOS("[ios_game_key]").setGameSecretiOS("[ios_secret_key]")*/
-	GameAnalytics.init();
+		.setResourceItemTypes(new <String>["outcome", "special", "book", "purchase", "exchange", "upgrade", "donate"]);
+	if ( GameAnalytics.isSupported )
+	{
+		try {
+			GameAnalytics.init();
+		}
+		catch (error:Error)
+		{
+			trace(error.message);
+		}
+	}
 	
 	t = getTimer();
 	stage.scaleMode = StageScaleMode.NO_SCALE;
@@ -76,6 +89,33 @@ public function Main()
 	loaderInfo.addEventListener(Event.COMPLETE, loaderInfo_completeHandler);
 	loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, loaderInfo_uncaughtErrorHandler);
 	NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, nativeApplication_invokeHandler);
+
+	if (AppModel.instance.platform == AppModel.PLATFORM_ANDROID)
+	{
+		try
+		{
+			/**
+			 * Here we will initalize firebase native extension, required for 
+			 * Firebase Cloud Messaging.
+			 */
+			FirebaseANE.init();
+			if(!FirebaseANE.isGooglePlayServicesAvailable)
+			{
+				trace("Google Play Service is not installed on device");
+				// TODO: Requires handle method.
+			}
+			var firebaseOptions:FirebaseOptions = FirebaseANE.options;
+			if (firebaseOptions)
+			{
+				trace("apiKey", firebaseOptions.apiKey);
+				trace("googleAppId", firebaseOptions.googleAppId);
+			}
+		}
+		catch (e:ANEError)
+		{
+			trace(e.errorID, e.message, e.getStackTrace(), e.source);
+		}
+	}
 }
 
 private function loaderInfo_completeHandler(event:Event):void
@@ -93,13 +133,13 @@ private function starStarling():void
 {
 	//var _ratio:Number = 1080 / stage.fullScreenWidth;
 	//var _height:Number = Math.min(stage.fullScreenWidth * 2, stage.fullScreenHeight);
-	this.starling = new Starling(Game, stage, new Rectangle(0, 0, stage.fullScreenWidth, stage.fullScreenHeight), null, Context3DRenderMode.AUTO, Context3DProfile.BASELINE_EXTENDED);
+	this.starling = new Starling(Game, stage, null, null, Context3DRenderMode.AUTO, Context3DProfile.BASELINE_EXTENDED);
 	this.starling.addEventListener("rootCreated", starling_rootCreatedHandler);
 	this.starling.supportHighResolutions = true;
 	this.starling.skipUnchangedFrames = true;
 	this.starling.start();
 	this.starling.stage.stageWidth  = 1080;
-	this.starling.stage.stageHeight = stage.fullScreenHeight * (this.starling.stage.stageWidth / stage.fullScreenWidth);
+	this.starling.stage.stageHeight = 1080 * (stage.fullScreenHeight / stage.fullScreenWidth);
 	//NativeAbilities.instance.showToast(stage.fullScreenWidth + "," + stage.fullScreenHeight + "," + this.starling.stage.stageWidth + "," + this.starling.stage.stageHeight + "," + this.starling.contentScaleFactor, 2);
 	//this.starling.showStatsAt("right", "top", 1 / this.starling.contentScaleFactor);
 	trace(stage.fullScreenWidth, stage.fullScreenHeight, this.starling.stage.stageWidth, this.starling.stage.stageHeight, this.starling.contentScaleFactor);
@@ -115,7 +155,7 @@ protected function stage_deactivateHandler(event:Event):void
 	if( !BattleScreen.IN_BATTLE )
 	{
 		this.starling.stop(true);
-		stage.frameRate = 0;
+		this.stage.frameRate = 0;
 	}
 	this.stage.addEventListener(Event.ACTIVATE, stage_activateHandler, false, 0, true);
 	AppModel.instance.sounds.muteAll(true);
@@ -124,7 +164,7 @@ protected function stage_deactivateHandler(event:Event):void
 protected function stage_activateHandler(event:Event):void
 {
 	this.stage.removeEventListener(Event.ACTIVATE, stage_activateHandler);
-	stage.frameRate = 60;
+	this.stage.frameRate = 60;
 	this.starling.start();
 	AppModel.instance.sounds.muteAll(false);
 	AppModel.instance.notifier.clear();

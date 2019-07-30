@@ -1,17 +1,16 @@
 package com.gerantech.towercraft.controls.segments 
 {
+import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
+import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
 import com.gerantech.towercraft.controls.texts.CustomTextInput;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
-
-import dragonBones.objects.DragonBonesData;
-import dragonBones.starling.StarlingFactory;
 
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
@@ -38,8 +37,7 @@ import starling.events.Event;
 */
 public class ChatSegment extends Segment 
 {
-static public var dragonBonesData:DragonBonesData;
-static public var factory:StarlingFactory;
+
 
 protected var padding:int;
 protected var footerSize:int;
@@ -55,17 +53,12 @@ private var startScrollBarIndicator:Number = 0;
 public function ChatSegment()
 {
 	super();
-	Assets.loadAnimationAssets(animation_loadCallback, "emotes");
+	EmoteItemRenderer.loadEmotes(animation_loadCallback);
 }
 
 protected function animation_loadCallback():void 
 {
-	if( ChatSegment.factory == null )
-	{
-		ChatSegment.factory = new StarlingFactory();
-		ChatSegment.dragonBonesData = ChatSegment.factory.parseDragonBonesData(appModel.assets.getObject("emotes_ske"));
-		ChatSegment.factory.parseTextureAtlasData(appModel.assets.getObject("emotes_tex"), appModel.assets.getTexture("emotes_tex"));
-	}
+	EmblemButton.loadAtlas(null);
 }
 
 protected function showElements() : void

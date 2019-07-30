@@ -213,8 +213,8 @@ public function addResourceAnimation(x:Number, y:Number, type:int, count:int, de
 {
 	if( ResourceType.isCard(type) && this.type == ResourceType.R3_CURRENCY_SOFT )
 	{
-		appModel.sounds.addAndPlay("res-appear-1001",null, SoundManager.CATE_SFX, SoundManager.SINGLE_FORCE_THIS);
-		appModel.navigator.addAnimation(x, y, 130, Assets.getTexture("cards", "gui"), count, new Rectangle(320, 1900), delay, null);
+		appModel.sounds.addAndPlay("card-r-0",null, SoundManager.CATE_SFX, SoundManager.SINGLE_FORCE_THIS);
+		appModel.navigator.addAnimation(x, y, 130, Assets.getTexture("res-cards", "gui"), count, new Rectangle(320, 1900), delay, null);
 		return;
 	}
 	

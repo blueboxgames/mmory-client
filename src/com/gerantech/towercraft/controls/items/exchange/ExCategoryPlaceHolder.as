@@ -1,5 +1,7 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.texts.CountdownLabel;
@@ -9,18 +11,14 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.ShopLine;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.exchanges.ExchangeItem;
 
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
-import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
-import feathers.layout.RelativePosition;
 import feathers.layout.TiledRowsLayout;
 import feathers.layout.VerticalAlign;
 
@@ -41,7 +39,7 @@ public class ExCategoryPlaceHolder extends TowersLayout
     return BGS.hasOwnProperty(category) ? BGS[category] : BGS[-1];
   }
   
-  static private const HEIGHTS:Object = {-1:400, 0:420, 10:420, 20:420, 30:500};
+  static private const HEIGHTS:Object = {-1:400, 0:420, 10:420, 20:420, 30:600};
   static public function GET_HEIGHT(category:int) : int
   {
     return HEIGHTS.hasOwnProperty(category) ? HEIGHTS[category] : HEIGHTS[-1];
@@ -101,6 +99,11 @@ public class ExCategoryPlaceHolder extends TowersLayout
         // headerDisplay.showCountdown(line.items[0]);
         this.list.itemRendererFactory = function ():IListItemRenderer{ return new ExBundleItemRenderer(line.category);}
         break;
+        
+        case ExchangeType.C80_EMOTES:
+        // headerDisplay.showCountdown(line.items[0]);
+        this.list.itemRendererFactory = function ():IListItemRenderer{ return new ExEmotItemRenderer(line.category);}
+        break;
       
       default:
         this.list.itemRendererFactory = function ():IListItemRenderer{ return new ExDefaultItemRenderer(line.category);}
@@ -119,16 +122,15 @@ public class ExCategoryPlaceHolder extends TowersLayout
     infoButton.fixed = false;
     infoButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
     infoButton.addEventListener(Event.TRIGGERED, this.infoButton_trigeredHandler);
-    infoButton.layoutData = new AnchorLayoutData(20, appModel.isLTR?20:NaN, NaN, appModel.isLTR?NaN:20);
+    infoButton.layoutData = new AnchorLayoutData(20, 20);
     this.addChild(infoButton as DisplayObject);
 
     // countdown display
-    if( this.line.category == ExchangeType.C20_SPECIALS || this.line.category == ExchangeType.C30_BUNDLES )
+    if( this.line.category == ExchangeType.C20_SPECIALS || this.line.category == ExchangeType.C30_BUNDLES  || this.line.category == ExchangeType.C80_EMOTES )
     {
       this.countdownDisplay = new CountdownLabel();
       this.countdownDisplay.width = 250;
-      this.countdownDisplay.iconPosition = RelativePosition.RIGHT;
-      this.countdownDisplay.layoutData = new AnchorLayoutData(10, 16);
+      this.countdownDisplay.layoutData = new AnchorLayoutData(10, NaN, NaN, 16);
       this.countdownDisplay.time = this.exchanger.items.get(this.line.category + 1).expiredAt - this.timeManager.now;
       this.addChild(this.countdownDisplay);
 
@@ -147,7 +149,7 @@ public class ExCategoryPlaceHolder extends TowersLayout
     if( !ei.enabled )
       return;
     ei.enabled = false;
-    this.owner.dispatchEventWith(FeathersEventType.FOCUS_IN, false, ei);
+    this.owner.dispatchEventWith(Event.SELECT, false, ei);
     this.list.removeEventListener(Event.CHANGE, this.list_changeHandler);
     this.list.selectedIndex = -1;
     this.list.addEventListener(Event.CHANGE, this.list_changeHandler);

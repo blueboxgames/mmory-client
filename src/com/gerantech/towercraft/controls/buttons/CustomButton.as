@@ -1,15 +1,17 @@
 package com.gerantech.towercraft.controls.buttons
 {
-import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.ILayoutData;
 import feathers.skins.ImageSkin;
+
 import flash.geom.Point;
+
 import starling.textures.Texture;
 
 public class CustomButton extends SimpleLayoutButton
@@ -20,7 +22,6 @@ public static const STYLE_DANGER:String = "danger";
 public static const STYLE_HILIGHT:String = "hilight";
 static public const STYLE_DISABLED:String = "disabled";
 
-public var data:Object;
 public var iconPosition:Point;
 public var iconLayout:ILayoutData;
 public var labelLayoutData:AnchorLayoutData;

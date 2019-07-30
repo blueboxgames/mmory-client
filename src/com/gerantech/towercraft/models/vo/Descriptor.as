@@ -16,6 +16,8 @@ package com.gerantech.towercraft.models.vo
 		public var marketIndex:int;
 		public var platform:String;
 		public var server:String;
+		public var analyticskey:String;
+		public var analyticssec:String;
 		
 		private var markets:Array = ["google", "appstore", "cafebazaar", "myket", "cando", "vitrin", "ario", "iranapps"]
 		

@@ -1,16 +1,17 @@
 package com.gerantech.towercraft.views 
 {
+import com.gerantech.mmory.core.battle.fieldes.FieldData;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.battle.fieldes.FieldData;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
-import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
 import starling.display.MovieClip;
 import starling.display.Sprite;
+
 import starlingbuilder.engine.IAssetMediator;
 import starlingbuilder.engine.UIBuilder;
 import starlingbuilder.engine.localization.ILocalization;
@@ -112,14 +113,14 @@ public function showEnemyHint(field:FieldData, battleswins:int):void
 	if( enemyHint == null )
 		return;
 	enemyHint.visible = true;
-	Starling.juggler.tween(enemyHint, 1.5, {alpha:0, repeatCount:10, onComplete:hideHint});
+	Starling.juggler.tween(enemyHint, 1.5, {alpha:0, repeatCount:7, onComplete:hideHint});
 	
-	var enemyHintText:ShadowLabel = new ShadowLabel(StrUtils.loc("tutor_" + field.mode + "_enemy_hint"), 0xEC3E3E, 0, "center", null, true, "center", 1.4);
+	var enemyHintText:ShadowLabel = new ShadowLabel(StrUtils.loc("tutor_" + field.mode + "_enemy_hint"), field.mode == 0 ? 0xEC3E3E : 0xFFFFFF, 0, "center", null, true, "center", 1.3);
 	enemyHintText.width = Starling.current.stage.width * 0.8;
 	enemyHintText.pivotX = enemyHintText.width * 0.5;
 	enemyHintText.pivotY = enemyHintText.height * 0.5;
 	enemyHintText.x = Starling.current.stage.width * 0.45;
-	enemyHintText.y = Starling.current.stage.height * 0.15;
+	enemyHintText.y = Starling.current.stage.height * (field.mode == 0 ? 0.15 : 0.12);
 	enemyHintText.scale = 0;
 	enemyHintText.alpha = 0;
 	AppModel.instance.battleFieldView.guiTextsContainer.addChild(enemyHintText);

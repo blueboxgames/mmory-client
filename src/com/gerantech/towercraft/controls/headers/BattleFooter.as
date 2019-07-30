@@ -1,5 +1,10 @@
 package com.gerantech.towercraft.controls.headers
 {
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.towercraft.controls.BattleDeckCard;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.TowersLayout;
@@ -14,13 +19,7 @@ import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.views.MapBuilder;
 import com.gerantech.towercraft.views.units.CardPlaceHolder;
-import com.gerantech.mmory.core.battle.BattleField;
-import com.gerantech.mmory.core.battle.ElixirUpdater;
-import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.socials.Challenge;
 import com.smartfoxserver.v2.core.SFSEvent;
-import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
@@ -58,6 +57,9 @@ private var touchPosition:Point = new Point();
 private var selectedCard:BattleDeckCard;
 private var selectedCardPosition:Rectangle;
 private var task:TutorialTask;
+private var numTutors:int;
+private var numRounds:int;
+private var numCovers:int;
 
 public function BattleFooter()
 {
@@ -111,11 +113,14 @@ override protected function initialize():void
 	}
 	
 	elixirBar = new ElixirBar();
-	elixirBar.value = ElixirUpdater.INIT_VALUE;
 	elixirBar.layoutData = new AnchorLayoutData(NaN, padding * 2, padding, preparedCard.width + padding * 2);
+	elixirBar.value = appModel.battleFieldView.battleData.getAlliseEllixir();
 	addChild(elixirBar);
 	
 	draggableCard = new Draggable();
+	numTutors = ScriptEngine.getInt(ScriptEngine.T61_BATTLE_NUM_TUTORS, battleField.field.mode);
+	numCovers = ScriptEngine.getInt(ScriptEngine.T62_BATTLE_NUM_COVERS, battleField.field.mode, player.get_battleswins());
+	numRounds = ScriptEngine.getInt(ScriptEngine.T63_BATTLE_NUM_ROUND, battleField.field.mode, player.get_battleswins());
 	
 	stage.addEventListener(TouchEvent.TOUCH, stage_touchHandler);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_elixirUpdateHandler);
@@ -130,26 +135,18 @@ protected function sfsConnection_elixirUpdateHandler(event:SFSEvent):void
 {
 	if( event.params.cmd != SFSCommands.BATTLE_ELIXIR_UPDATE )
 		return;
-
-	var params:SFSObject = event.params.params as SFSObject;
-	if( params.containsKey(battleField.side.toString()) )
-	{
-		battleField.elixirUpdater.updateAt(battleField.side, params.getInt(battleField.side.toString()));
-		elixirBar.value = appModel.battleFieldView.battleData.getAlliseEllixir();
-		for( var i:int=0; i<cards.length; i++ )
-			cards[i].updateData();
-	}
-	else
-	{
-		var outside:int = 1 - battleField.side;
-		battleField.elixirUpdater.updateAt(outside, params.getInt(outside.toString()));
-	}
+	elixirBar.value = appModel.battleFieldView.battleData.getAlliseEllixir();
+	for( var i:int=0; i<cards.length; i++ )
+		cards[i].updateData();
 }
 
 public function updateScore(round:int, winnerSide:int, allise:int, axis:int, unitId:int) : void 
 {
-	if( player.get_battleswins() == 0 && battleField.numSummonedUnits < 4 && allise == 1)
-		showSummonTutorial(0, new Point(450, 900), 200);
+	if( allise != 1 || numTutors < player.get_battleswins() || numRounds < round )
+		return;
+	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "newround", player.get_battleswins());
+	if( summonData != null )
+		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3]);
 }
 
 private function createDeckItem(cardType:int) : void
@@ -162,9 +159,11 @@ private function createDeckItem(cardType:int) : void
 
 public function transitionInCompleteHandler() : void 
 {
-	if( player.get_battleswins() < 3 )
-		//showSummonTutorial(1, new Point(200, 1250), 500);
-		showSummonTutorial(1, new Point(200, 1300), 500);
+	if( numTutors < player.get_battleswins() )
+		return;
+	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "start", player.get_battleswins());
+	if( summonData != null )
+		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3]);
 }
 
 private function showSummonTutorial(index:Number, point:Point, delay:int) : void 
@@ -257,20 +256,8 @@ protected function stage_touchHandler(event:TouchEvent) : void
 				
 				task = null;
 				UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 2);
-				if( player.get_battleswins() < 2 )
-				{
-					battleField.numSummonedUnits ++;
-					
-					if( battleField.numSummonedUnits == 1 ) // pause battle
-					{
-						battleField.pauseTime = battleField.now + 2500;
-						showSummonTutorial(1, new Point(300, 1200), 2000);
-					}
-					else if( battleField.numSummonedUnits == 2 ) // resume battle
-					{
-						battleField.pauseTime = (battleField.startAt + 2000) * 1000;
-					}
-				}
+				battleField.numSummonedUnits ++;
+				coverUnitTutorial();
 			}
 			else
 			{
@@ -285,11 +272,26 @@ protected function stage_touchHandler(event:TouchEvent) : void
 	}
 }
 
+private function coverUnitTutorial():void
+{
+	if( numTutors < player.get_battleswins() )
+		return;
+	
+	var ptoffset:int = ScriptEngine.getInt(ScriptEngine.T64_BATTLE_PAUSE_TIME, battleField.field.mode, player.get_battleswins(), battleField.numSummonedUnits);
+	if( ptoffset > 0 )
+		battleField.pauseTime = battleField.now + ptoffset;
+
+	if( numCovers < battleField.numSummonedUnits )
+		return;
+	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "cover", player.get_battleswins() * 10 + battleField.numSummonedUnits);
+	if( summonData != null )
+		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3]);
+}
+
 private function validateSummonPosition() : Boolean
 {
 	if( touchPosition.y < 0 || touchPosition.y > BattleField.HEIGHT )
 		return false;
-	
 	if( CardTypes.isSpell(selectedCard.type) )
 		return true;
 	return true;
@@ -301,6 +303,9 @@ private function setTouchPosition(touch:Touch) : void
 {
 	touchPosition.x = Math.max(BattleField.PADDING, Math.min(stageWidth - BattleField.PADDING, touch.globalX));
 	
+	if( selectedCard == null )
+		return;
+	
 	var limitY:Number = -0.5;
 	if( !CardTypes.isSpell(selectedCard.type) )
 	{
@@ -308,7 +313,7 @@ private function setTouchPosition(touch:Touch) : void
 		{
 			limitY = 0.15;
 		}
-		else
+		else if( appModel.battleFieldView.mapBuilder != null )
 		{
 			if( appModel.battleFieldView.mapBuilder.summonAreaMode >= MapBuilder.SUMMON_AREA_BOTH )
 				limitY = -0.24;
@@ -343,8 +348,10 @@ override public function dispose() : void
 {
 	super.dispose();
 	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_elixirUpdateHandler);
-	draggableCard.removeFromParent(true);
-	placeHolder.removeFromParent(true);
+	if( draggableCard != null )
+		draggableCard.removeFromParent(true);
+	if( placeHolder != null )
+		placeHolder.removeFromParent(true);
 	removeEventListener(TouchEvent.TOUCH, stage_touchHandler);
 }
 private function get battleField() : BattleField

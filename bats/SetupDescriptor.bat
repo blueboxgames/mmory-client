@@ -1,11 +1,18 @@
 set APP_XML_TEMP=files/application-template.xml
 set APP_XML=bin/application.xml
 
+set ANA_KEY_AND=
+set ANA_SEC_AND=
+set ANA_KEY_IOS=000000
+set ANA_SEC_IOS=111111
+if "%PLATFORM%"=="android" (set ANA_KEY=%ANA_KEY_AND%) else (set ANA_KEY=%ANA_KEY_IOS%) 
+if "%PLATFORM%"=="android" (set ANA_SEC=%ANA_SEC_AND%) else (set ANA_SEC=%ANA_SEC_IOS%) 
+
 set APPID_TEMP=__APPID__
 set APPID_FINE=com.grantech.k2k
 
 set DESC_TEMP=__DESCRIPTION__
-set DESC_FINE={ "platform": "%PLATFORM%", "market": "%MARKET%", "server": "%SERVER%" }
+set DESC_FINE={ "platform": "%PLATFORM%", "market": "%MARKET%", "server": "%SERVER%", "analyticskey": "%ANA_KEY%", "analyticssec": "%ANA_SEC%" }
 
 set PERMISSION_TEMP=com.domain.market.BILLING
 set PERMISSION_FINE=com.domain.market.BILLING

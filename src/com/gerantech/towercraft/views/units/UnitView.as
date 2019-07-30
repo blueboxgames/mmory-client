@@ -1,13 +1,5 @@
 package com.gerantech.towercraft.views.units
 {
-import com.gerantech.towercraft.controls.indicators.CountdownIcon;
-import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
-import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.views.ArtRules;
-import com.gerantech.towercraft.views.UnitMC;
-import com.gerantech.towercraft.views.effects.BattleParticleSystem;
-import com.gerantech.towercraft.views.weapons.BulletView;
 import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.battle.GameObject;
 import com.gerantech.mmory.core.battle.bullets.Bullet;
@@ -17,6 +9,14 @@ import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.events.BattleEvent;
 import com.gerantech.mmory.core.utils.CoreUtils;
 import com.gerantech.mmory.core.utils.Point3;
+import com.gerantech.towercraft.controls.indicators.CountdownIcon;
+import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
+import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
+import com.gerantech.towercraft.views.ArtRules;
+import com.gerantech.towercraft.views.UnitMC;
+import com.gerantech.towercraft.views.effects.BattleParticleSystem;
+import com.gerantech.towercraft.views.weapons.BulletView;
 
 import flash.utils.setTimeout;
 
@@ -154,6 +154,8 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	
 	if( fireDisplayFactory == null )
 		fireDisplayFactory = defaultFireDisplayFactory;
+
+	battleField.addEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
 }
 
 override public function setState(state:int) : Boolean
@@ -453,9 +455,40 @@ private function showDieAnimation():void
 	dieDisplay.addEventListener(Event.COMPLETE, function() : void { Starling.juggler.remove(dieDisplay); dieDisplay.removeFromParent(true); });
 }
 
+protected function battleField_pauseHandler(event:BattleEvent) : void
+{
+	var state:int = event.data as int;
+	if( state >= BattleField.STATE_3_PAUSED )
+	{
+		if( bodyDisplay != null )
+		{
+			Starling.juggler.removeTweens(bodyDisplay);
+			bodyDisplay.scale = bodyScale;
+			bodyDisplay.alpha = 1;
+			bodyDisplay.pause();
+		}
+		
+		if( shadowDisplay != null )
+		{
+			Starling.juggler.removeTweens(shadowDisplay);
+			shadowDisplay.scale = shadowScale;
+			shadowDisplay.alpha = 0.2;
+			shadowDisplay.pause();
+		}
+		return;
+	}
+
+	if( state != GameObject.STATE_4_MOVING )
+		return;
+
+	bodyDisplay.play();
+	shadowDisplay.play();
+}
+
 override public function dispose() : void
 {
 	super.dispose();
+	battleField.removeEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
 	if( CardTypes.isHero(card.type) && side != battleField.side )
 		fieldView.mapBuilder.changeSummonArea(id < 4);
 	Starling.juggler.remove(bodyDisplay);

@@ -1,8 +1,11 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.FastList;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.Indicator;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorXP;
@@ -19,9 +22,6 @@ import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
@@ -47,6 +47,7 @@ import flash.geom.Rectangle;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
+import com.gerantech.mmory.core.battle.units.Card;
 
 public class ProfilePopup extends SimplePopup 
 {
@@ -71,6 +72,7 @@ public function ProfilePopup(user:Object, getFullPlayerData:Boolean = false)
 	
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_responceHandler);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.PROFILE, params);
+	EmblemButton.loadAtlas(null);
 }
 
 override protected function initialize():void
@@ -116,7 +118,7 @@ private function showProfile():void
 {
 	var lobbyIconDisplay:ImageLoader = new ImageLoader();
 	lobbyIconDisplay.height = lobbyIconDisplay.width = padding * 3.5;
-	lobbyIconDisplay.source = Assets.getTexture("emblems/emblem-" + StrUtils.getZeroNum(user.lp + ""), "gui");
+	lobbyIconDisplay.source = EmblemButton.getTexture(user.lp as int);
 	lobbyIconDisplay.layoutData = new AnchorLayoutData(padding, appModel.isLTR?NaN:padding, NaN, appModel.isLTR?padding:NaN);
 	addChild(lobbyIconDisplay);
 	
@@ -295,7 +297,7 @@ private function showProfile():void
     deckHeader.width = transitionIn.destinationBound.width * 0.8;
     deckHeader.height = 120;
     deckHeader.layoutData = new AnchorLayoutData(featureList.dataProvider.length * 50 + top, NaN, NaN, NaN, 0);
-	deckHeader.addEventListener(FeathersEventType.CREATION_COMPLETE, function():void{	deckHeader.scale = 0.80;});
+		deckHeader.addEventListener(FeathersEventType.CREATION_COMPLETE, function():void{	deckHeader.scale = 0.80;});
     scroller.addChild(deckHeader);
     
     var deckLayout:TiledRowsLayout = new TiledRowsLayout();
@@ -306,7 +308,7 @@ private function showProfile():void
     deckLayout.typicalItemWidth = (width - deckLayout.gap * (deckLayout.requestedColumnCount - 1) - padding * 4) / deckLayout.requestedColumnCount;
     deckLayout.typicalItemHeight = deckLayout.typicalItemWidth * CardView.VERICAL_SCALE;
 	
-	var deckList:List = new List();
+		var deckList:List = new List();
     deckList.layout = deckLayout;
     deckList.height = deckLayout.typicalItemHeight * 2 + deckLayout.gap;
     deckList.verticalScrollPolicy = deckList.horizontalScrollPolicy = ScrollPolicy.OFF;
@@ -321,10 +323,10 @@ private function showProfile():void
 private function getBuildingData():ListCollection
 {
 	var ret:ListCollection = new ListCollection();
-	var buildings:Array = ScriptEngine.get(1, -1);
-	for ( var i:int = 0; i < buildings.length; i++ )
-		buildings[i] = {type:buildings[i], level:getLevel(buildings[i])};
-	return new ListCollection(buildings);
+	var cards:Vector.<int> = Card.get_unlockes(game).keys();
+	for( var i:int = 0; i < cards.length; i++ )
+		cards[i] = {type:cards[i], level:getLevel(cards[i])};
+	return new ListCollection(cards);
 }
 
 private function getLevel(type:int):int

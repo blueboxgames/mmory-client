@@ -15,6 +15,7 @@ import feathers.skins.ImageSkin;
 import flash.text.engine.ElementFormat;
 import starling.events.Event;
 import starling.events.Touch;
+import com.smartfoxserver.v2.entities.variables.BuddyVariable;
 
 public class BuddyItemRenderer extends AbstractTouchableListItemRenderer
 {
@@ -122,7 +123,7 @@ override protected function commitData():void
 	mySkin.defaultTexture = itsMe ? appModel.theme.itemRendererSelectedSkinTexture : appModel.theme.itemRendererUpSkinTexture;
 	
 	// Set status display
-	buddy.setVariable( new SFSBuddyVariable("$__BV_STATE__", buddy.isOnline?(buddy.state!="Occupied"?"Available":"Occupied"):"Away"));
+	buddy.setVariable( new SFSBuddyVariable("$__BV_STATE__", buddy.isOnline?(buddy.state!="Occupied"?"Available":"Occupied"):"Away") as BuddyVariable);
 	statusSkin.defaultTexture = statusSkin.getTextureForState(buddy.state);
 	//trace(buddy.nickName, buddy.state, buddy.isOnline)
 }

@@ -1,39 +1,38 @@
 package com.gerantech.towercraft.controls.screens
 {
-import com.gerantech.towercraft.controls.BattleHUD;
-import com.gerantech.towercraft.controls.overlays.BattleStartOverlay;
-import com.gerantech.towercraft.controls.overlays.BattleWaitingOverlay;
-import com.gerantech.towercraft.controls.overlays.EndBattleOverlay;
-import com.gerantech.towercraft.controls.overlays.EndOperationOverlay;
-import com.gerantech.towercraft.controls.overlays.EndOverlay;
-import com.gerantech.towercraft.controls.popups.ConfirmPopup;
-import com.gerantech.towercraft.controls.popups.UnderMaintenancePopup;
-import com.gerantech.towercraft.events.GameEvent;
-import com.gerantech.towercraft.managers.SoundManager;
-import com.gerantech.towercraft.managers.VideoAdsManager;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
-import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.tutorials.TutorialData;
-import com.gerantech.towercraft.models.tutorials.TutorialTask;
-import com.gerantech.towercraft.models.vo.BattleData;
-import com.gerantech.towercraft.models.vo.UserData;
-import com.gerantech.towercraft.models.vo.VideoAd;
-import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.views.BattleFieldView;
 import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.battle.fieldes.FieldData;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.controls.BattleHUD;
+import com.gerantech.towercraft.controls.overlays.BattleStartOverlay;
+import com.gerantech.towercraft.controls.overlays.BattleWaitingOverlay;
+import com.gerantech.towercraft.controls.overlays.EndBattleOverlay;
+import com.gerantech.towercraft.controls.overlays.EndOperationOverlay;
+import com.gerantech.towercraft.controls.overlays.EndOverlay;
+import com.gerantech.towercraft.controls.popups.UnderMaintenancePopup;
+import com.gerantech.towercraft.events.GameEvent;
+import com.gerantech.towercraft.managers.SoundManager;
+import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.models.tutorials.TutorialData;
+import com.gerantech.towercraft.models.tutorials.TutorialTask;
+import com.gerantech.towercraft.models.vo.BattleData;
+import com.gerantech.towercraft.models.vo.UserData;
+import com.gerantech.towercraft.themes.MainTheme;
+import com.gerantech.towercraft.views.BattleFieldView;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import feathers.events.FeathersEventType;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -129,10 +128,17 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		break;
 	
 	case SFSCommands.BATTLE_NEW_ROUND:
-		if( appModel.battleFieldView.battleData.battleField.field.mode == Challenge.MODE_1_TOUCHDOWN )
-			appModel.battleFieldView.battleData.battleField.requestReset();
+		if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN )
+			battleField.requestReset();
 		if( hud != null )
-			hud.updateScores(data.getInt("round"), data.getInt("winner"), data.getInt(appModel.battleFieldView.battleData.battleField.side + ""), data.getInt(appModel.battleFieldView.battleData.battleField.side == 0 ? "1" : "0"), data.getInt("unitId"));
+			hud.updateScores(data.getInt("round"), data.getInt("winner"), data.getInt(battleField.side + ""), data.getInt(battleField.side == 0 ? "1" : "0"), data.getInt("unitId"));
+		break;
+
+	case SFSCommands.BATTLE_ELIXIR_UPDATE:
+		if( data.containsKey(battleField.side.toString()) )
+			battleField.elixirUpdater.updateAt(battleField.side, data.getInt(battleField.side.toString()));
+		else
+			battleField.elixirUpdater.updateAt(1 - battleField.side, data.getInt(String(1 - battleField.side)));
 		break;
 	}
 	//trace(event.params.cmd, data.getDump());
@@ -218,27 +224,27 @@ private function showTutorials() : void
 		return;
 
 	//appModel.battleFieldView.createDrops();
-	if( player.getTutorStep() > 81 )
+	if( player.getTutorStep() < 81 )
+		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 1);
+
+	if( player.get_battleswins() > 3 )
 	{
 		readyBattle();
 		return;
 	}
 	
 	// create tutorial steps
-	var field:FieldData = appModel.battleFieldView.battleData.battleField.field;
-	var tutorialData:TutorialData = new TutorialData(field.mode + "_start");
+	var tutorialData:TutorialData = new TutorialData(battleField.field.mode + "_start");
 	tutorialData.data = "start";
-	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_" + field.mode + "_" + player.get_battleswins() + "_start", null, 500, 1500));
+	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_" + battleField.field.mode + "_" + player.get_battleswins() + "_start", null, 500, 1500));
 	tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_FINISH, tutorials_tasksFinishHandler);
 	tutorials.show(tutorialData);
-	
-	UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 1);
 }
 
 private function readyBattle() : void 
 {
 	if( player.get_battleswins() < 3 )
-		appModel.battleFieldView.mapBuilder.showEnemyHint(appModel.battleFieldView.battleData.battleField.field, player.get_battleswins());
+		appModel.battleFieldView.mapBuilder.showEnemyHint(battleField.field, player.get_battleswins());
 	
 	touchEnable = true;
 	hud.showDeck();
@@ -249,8 +255,8 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 {
 	IN_BATTLE = false;
 	var inTutorial:Boolean = player.get_battleswins() < 5;
-	appModel.battleFieldView.battleData.battleField.state = BattleField.STATE_4_ENDED;
-	var field:FieldData = appModel.battleFieldView.battleData.battleField.field;
+	battleField.state = BattleField.STATE_4_ENDED;
+	var field:FieldData = battleField.field;
 	touchEnable = false;
 	appModel.sounds.stopAll();
 	hud.stopTimers();
@@ -292,17 +298,32 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	}
 	
 	// reserved prefs data
-	if( inTutorial && rewards.getSFSObject(0).getInt("score") > 0 )
+	if( player.get_battleswins() < 10 && rewards.getSFSObject(0).getInt("score") > 0 )
 		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 7);
 	
+	var challengUnlockAt:int;
+	for( var c:int = 1; c < 4; c++ )
+	{
+		if( player.getTutorStep() > 200 + c * 10 )
+			continue;
+		challengUnlockAt = Challenge.getUnlockAt(game, c);
+		if( challengUnlockAt > player.get_point() )
+			break;
+	}
+
 	player.addResources(outcomes);
+	
+	// check new challenge unlocked
+	if( challengUnlockAt > 0 && challengUnlockAt < player.get_point() )
+		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, 200 + c * 10);
+	
 	var endOverlay:EndOverlay;
 	if( field.isOperation() )
 		endOverlay = new EndOperationOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);
 	else
 		endOverlay = new EndBattleOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);
 	endOverlay.addEventListener(Event.CLOSE, endOverlay_closeHandler);
-	setTimeout(hud.end, 1500, endOverlay);// delay for noobs
+	setTimeout(hud.end, Math.max(200, 1000 - player.get_battleswins() * 300), endOverlay);// delay for noobs
 }
 
 private function endOverlay_closeHandler(event:Event):void
@@ -316,11 +337,10 @@ private function endOverlay_closeHandler(event:Event):void
 		return;
 	}
 	
-	var field:FieldData = appModel.battleFieldView.battleData.battleField.field;
 	appModel.battleFieldView.responseSender.leave();
 	appModel.battleFieldView.responseSender.actived = false;
 	
-	if( player.get_battleswins() > 5 && endOverlay.score == 3 && player.get_arena(0) > 0 )//!sfsConnection.mySelf.isSpectator && 
+	if( player.get_battleswins() > 5 && endOverlay.score == 3 && player.get_arena(0) > 0 ) // !sfsConnection.mySelf.isSpectator && 
 		appModel.navigator.showOffer();
 	dispatchEventWith(Event.COMPLETE);
 }
@@ -374,7 +394,7 @@ override protected function backButtonFunction():void
 /*	if( player.inTutorial() )
 		return;
 	
-	if( appModel.battleFieldView.battleData.battleField.startAt + appModel.battleFieldView.battleData.battleField.field.times.get(0) > timeManager.now )
+	if( battleField.startAt + battleField.field.times.get(0) > timeManager.now )
 		return;
 	var confirm:ConfirmPopup = new ConfirmPopup(loc("leave_battle_confirm_message"));
 	confirm.acceptStyle = MainTheme.STYLE_BUTTON_SMALL_DANGER;
@@ -386,6 +406,11 @@ override protected function backButtonFunction():void
 		appModel.battleFieldView.responseSender.leave();
 	}*/
 }
+private function get battleField() : BattleField
+{
+	return appModel.battleFieldView.battleData.battleField;
+}
+
 
 override public function dispose():void
 {

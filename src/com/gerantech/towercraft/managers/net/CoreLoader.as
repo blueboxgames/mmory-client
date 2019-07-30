@@ -3,8 +3,6 @@
  */
 package com.gerantech.towercraft.managers.net
 {
-import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.mmory.core.Game;
 import com.gerantech.mmory.core.InitData;
 import com.gerantech.mmory.core.constants.ResourceType;
@@ -18,11 +16,11 @@ import com.gerantech.mmory.core.utils.maps.IntArenaMap;
 import com.gerantech.mmory.core.utils.maps.IntChallengeMap;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.mmory.core.utils.maps.IntShopMap;
+import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.models.AppModel;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import flash.events.Event;
-import flash.utils.setTimeout;
 
 public class CoreLoader
 {
@@ -30,14 +28,11 @@ private var version:String;
 private var serverData:SFSObject;
 private var initData:InitData;
 
-public function CoreLoader(sfsObj:SFSObject)
+public function CoreLoader(serverData:SFSObject)
 {
-	this.serverData = sfsObj;
-	this.version = serverData.getText("coreVersion");
-	
-	ScriptEngine.initialize(serverData.getText("script"));
-	trace("script version:", ScriptEngine.get(-2, 0))
-
+	this.serverData = serverData;
+	this.version = this.serverData.getText("coreVersion");
+	ScriptEngine.initialize(serverData.getText("script"), this.serverData.getInt("forceVersion"));
 	initServerData(serverData);
 	
 	AppModel.instance.game = new Game();
@@ -48,7 +43,7 @@ public function CoreLoader(sfsObj:SFSObject)
 	AppModel.instance.game.player.invitationCode = serverData.getText("invitationCode");
 
 	loadExchanges(serverData);
-	loadChallenges(serverData);
+	loadChallenges(serverData, initData.id);
 	loadQuests(serverData);
 }
 
@@ -90,7 +85,7 @@ private function initServerData(sfsObj:SFSObject):void
     {
         element = elements.getSFSObject(i);
         if( !initData.decks.exists(element.getInt("deck_index")) )
-            initData.decks.set(element.getInt("deck_index"), new IntIntMap());
+					initData.decks.set(element.getInt("deck_index"), new IntIntMap());
         
         initData.decks.get(element.getInt("deck_index")).set(element.getInt("index"), element.getInt("type"));
     }
@@ -116,21 +111,19 @@ static private function loadExchanges(serverData:SFSObject) : void
 	}
 }
 
-static public function loadChallenges(params:ISFSObject) : void 
+static public function loadChallenges(params:ISFSObject, playerId:int) : void 
 {
 	var challenges:IntChallengeMap = new IntChallengeMap();
-	challenges.set(0, new Challenge(Challenge.TYPE_0_OPEN));
-	challenges.set(1, new Challenge(Challenge.TYPE_0_OPEN));
-	challenges.set(2, new Challenge(Challenge.TYPE_1_REWARD));
-	challenges.set(3, new Challenge(Challenge.TYPE_2_RANKING));
+	challenges.set(0, new Challenge(AppModel.instance.game, 0, ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 0, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 0, playerId)));
+	challenges.set(1, new Challenge(AppModel.instance.game, 1, ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 1, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 1, playerId)));
+	challenges.set(2, new Challenge(AppModel.instance.game, 2, Challenge.TYPE_1_REWARD, 2));
+	challenges.set(3, new Challenge(AppModel.instance.game, 3, Challenge.TYPE_2_RANKING, 3));
 	if( params.containsKey("challenges") )
 	for( var i:int = 0; i < params.getSFSArray("challenges").size(); i++ )
 	{
 		var c:ISFSObject = params.getSFSArray("challenges").getSFSObject(i);
-		var ch:Challenge = new Challenge();
+		var ch:Challenge = new Challenge(AppModel.instance.game, 2 + i, c.getInt("type"), c.getInt("mode"));
 		ch.id = c.getInt("id");
-		ch.type = c.getInt("type");
-		ch.mode = c.getInt("mode");
 		ch.startAt = c.getInt("start_at");
 		ch.unlockAt = c.getInt("unlock_at");
 		ch.duration = c.getInt("duration");
@@ -143,7 +136,7 @@ static public function loadChallenges(params:ISFSObject) : void
 		for (var j:int = 0; j < c.getSFSArray("rewards").size(); j++)
 		{
 			item = c.getSFSArray("rewards").getSFSObject(j);
-			ch.rewards.set(item.getInt("key"), new Arena(item.getInt("key"), item.getInt("min"), item.getInt("max"), item.getInt("prize")));
+			ch.rewards.set(item.getInt("key"), new Arena(null, item.getInt("key"), item.getInt("min"), item.getInt("max"), item.getInt("prize")));
 		}
 		
 		ch.attendees = new Array();
@@ -155,7 +148,7 @@ static public function loadChallenges(params:ISFSObject) : void
 				ch.attendees.push(new Attendee(item.getInt("id"), item.getText("name"), item.getInt("point"), item.getInt("updateAt")));
 			}
 		}
-		challenges.set(i + 2, ch);
+		challenges.set(ch.index, ch);
 	}
 	AppModel.instance.game.player.challenges = challenges;
 }

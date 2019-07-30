@@ -105,7 +105,7 @@ private function addSwitcher(controlName:String, positionY:int, min:int, value:i
 	if ( prefix != null )
 		switcher.labelStringFactory = function (value:int):String { return loc(prefix + "_" + value); }
 
-	switcher.width = 400;
+	switcher.width = 360;
 	switcher.height = 100;
 	switcher.layoutData = new AnchorLayoutData( positionY, appModel.isLTR?padding:NaN, NaN, appModel.isLTR?NaN:padding);
 	addChild(switcher);
@@ -141,8 +141,8 @@ private function updateButton_triggeredHandler(event:Event):void
 		params.putInt("pic", emblemButton.value);
 	if( roomData.bio != bioInput.text )
 		params.putUtfString("bio", bioInput.text);
-	if( roomData.name != nameInput.text )
-		params.putUtfString("name", nameInput.text);
+	// if( roomData.name != nameInput.text )
+	// 	params.putUtfString("name", nameInput.text);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_EDIT, params, SFSConnection.instance.lobbyManager.lobby);
 	SFSConnection.instance.lobbyManager.requestData(true, true);
 	close();

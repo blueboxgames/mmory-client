@@ -7,7 +7,7 @@
 .settings/
 .vscode/
 
-src/application.xml
+bats/SetupDescriptor.bat
 
 # Executables
 *.swf

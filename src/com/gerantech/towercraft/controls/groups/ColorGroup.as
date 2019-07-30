@@ -3,16 +3,42 @@ package com.gerantech.towercraft.controls.groups
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.themes.MainTheme;
-import feathers.controls.ImageLoader;
+
 import feathers.core.ITextRenderer;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.display.DisplayObject;
+import starling.display.Image;
 
 public class ColorGroup extends TowersLayout
 {
-public var backgroundColor:uint = 0xFFFFFF;
-public var textColor:uint = 0xFFFFFF;
+private var _backgroundColor:uint = 0xFFFFFF;
+public function get backgroundColor():uint
+{
+	return _backgroundColor;
+}
+public function set backgroundColor(value:uint):void
+{
+	if( this._backgroundColor == value )
+		return;
+	this._backgroundColor = value;
+	this.invalidate(INVALIDATION_FLAG_STYLES);
+}
+
+private var _textColor:uint = 0xFFFFFF;
+public function get textColor():uint
+{
+	return _textColor;
+}
+public function set textColor(value:uint):void
+{
+	if( this._textColor == value )
+		return;
+	this._textColor = value;
+	this.invalidate(INVALIDATION_FLAG_STYLES);
+}
+
 protected var _label:String;
 protected var _labelRenderFactory:Function;
 protected var labelTextRenderer:ITextRenderer;
@@ -27,12 +53,11 @@ override protected function initialize():void
 	super.initialize();
 	layout = new AnchorLayout(); 
 	
-	var skin:ImageLoader = new ImageLoader();
-	skin.source = appModel.theme.roundMediumInnerSkin;
-	skin.layoutData = new AnchorLayoutData(0, 0, 0, 0);
+	var skin:Image = new Image(appModel.theme.roundMediumInnerSkin);
+	// skin.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 	skin.scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;
-	skin.color = backgroundColor;
-	addChild(skin);
+	skin.color = this._backgroundColor;
+	backgroundSkin = skin;
 }
 
 
@@ -81,7 +106,7 @@ public function set labelRenderFactory(value:Function) : void
 }
 protected function defaultLabelRendererFactory() : ITextRenderer
 {
-	var ret:ShadowLabel = new ShadowLabel(this._label, this.textColor, 0, null, null, false, null, 0.9);
+	var ret:ShadowLabel = new ShadowLabel(this._label, this._textColor, 0, null, null, false, null, 0.9);
 	ret.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
 	return ret;
 }
@@ -103,8 +128,13 @@ override protected function draw() : void
 	
 	if( this.isInvalid(INVALIDATION_FLAG_DATA) )
 		this.refreshlabel();
+	if( this.isInvalid(INVALIDATION_FLAG_SKIN) && this.backgroundSkin != null )
+		Image(this.backgroundSkin).color = this._backgroundColor;
+	//if( this.isInvalid(INVALIDATION_FLAG_STYLES) && this.labelTextRenderer != null )
+		//this.labelTextRenderer.fontStyles.format.color = this._textColor;
 	
 	super.draw();
 }
+
 }
 }

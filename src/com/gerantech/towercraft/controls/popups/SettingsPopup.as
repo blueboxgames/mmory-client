@@ -1,5 +1,6 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.items.SettingsItemRenderer;
@@ -12,7 +13,6 @@ import com.gerantech.towercraft.managers.oauth.OAuthManager;
 import com.gerantech.towercraft.models.vo.SettingsData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.Localizations;
-import com.gerantech.mmory.core.constants.PrefsTypes;
 
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.ScrollPolicy;
@@ -26,6 +26,7 @@ import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
 import starling.events.Event;
+import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 
 public class SettingsPopup extends SimpleHeaderPopup
 {
@@ -140,6 +141,7 @@ protected function prefs_completeHandler(event:Event) : void
 	UserData.instance.prefs.removeEventListener(Event.COMPLETE, prefs_completeHandler);
 	titleDisplay.text = title = loc("settings_page");
 	list.dataProvider.updateAll();
+	ExCategoryItemRenderer.placeholders = null;
 	appModel.navigator.rootScreenID = Game.DASHBOARD_SCREEN;
 }
 

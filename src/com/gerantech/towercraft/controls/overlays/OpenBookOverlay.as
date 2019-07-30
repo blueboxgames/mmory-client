@@ -9,7 +9,6 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
-import com.gerantech.mmory.core.constants.CardFeatureType;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
@@ -56,7 +55,7 @@ private var frequentlyTapped:int;
 private var rewardType:int;
 private var rewardRarity:int;
 private var titleDisplay:ShadowLabel;
-private var descriptionDisplay:RTLLabel;
+private var descriptionDisplay:ShadowLabel;
 private var sliderDisplay:IndicatorCard;
 private var collectedItemIndex:int = -1;
 
@@ -221,7 +220,7 @@ private function pullCard() : void
 {
 	collectedItemIndex ++;
 	rewardType = rewardKeys[collectedItemIndex];
-	rewardRarity = ScriptEngine.getInt(CardFeatureType.F00_RARITY, rewardType);
+	rewardRarity = ScriptEngine.getInt(ScriptEngine.T00_RARITY, rewardType);
 	
 	// play SFXs
 	if( ResourceType.isCard(rewardType) )

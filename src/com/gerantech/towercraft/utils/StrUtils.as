@@ -279,7 +279,7 @@ public static function toElapsed(seconds:int):String
 	if( months < 13 )
 		return loc("ago_months", [months]);
 
-	return loc("ago_years", [Math.floor( hours / 12 )]);
+	return loc("ago_years", [Math.floor( months / 12 )]);
 }
 
 public static function getDateString(_date:Date, isTime:Boolean = false):String

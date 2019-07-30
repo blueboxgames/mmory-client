@@ -1,7 +1,9 @@
 package com.gerantech.towercraft.controls.buttons 
 {
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.controls.overlays.HandPoint;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
+import com.gerantech.towercraft.managers.BillingManager;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 
@@ -51,9 +53,8 @@ static public function getLabel(type:int, count:*) : String
 		return StrUtils.loc("start_open_label");
 	if( count == 0 )
 		return StrUtils.loc("free_label");
-	return StrUtils.getCurrencyFormat(count)//+ " " + currency;
+	return StrUtils.getCurrencyFormat(count) + (type == ResourceType.R5_CURRENCY_REAL ? (" " + StrUtils.loc(BillingManager.instance.currency)) : "");
 }
-
 
 public function MMOryButton() 
 {

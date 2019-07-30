@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.controls.items.lobby
 {
-import com.gerantech.towercraft.controls.FastList;
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBalloonEmoteSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBalloonSegment;
@@ -9,7 +9,6 @@ import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBattleSegme
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemCommentSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemConfirmSegment;
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemSegment;
-import com.gerantech.mmory.core.constants.MessageTypes;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.events.FeathersEventType;
@@ -92,21 +91,21 @@ private function createSegment(type:int) : LobbyChatItemSegment
 	var segment:LobbyChatItemSegment;
 	switch( type )
 	{
-		case TYPE_MESSAGE:	segment = messageSegment;	break;
-		case TYPE_COMMENT:	segment = commentSegment;	break;
-		case TYPE_CONFIRM:	segment = confirmSegment;	break;
-		case TYPE_BATTLE:	segment = battleSegment;	break;
+		case TYPE_MESSAGE:	segment = messageSegment as LobbyChatItemSegment;	break;
+		case TYPE_COMMENT:	segment = commentSegment as LobbyChatItemSegment;	break;
+		case TYPE_CONFIRM:	segment = confirmSegment as LobbyChatItemSegment;	break;
+		case TYPE_BATTLE:	segment = battleSegment as LobbyChatItemSegment;	break;
 	}
 	
 	if( segment != null )
 		return segment;
 	switch( type )
 	{
-		case TYPE_MESSAGE:	segment = messageSegment	= new LobbyChatItemBalloonTextSegment(owner as FastList);	break;
-		case TYPE_COMMENT:	segment = commentSegment	= new LobbyChatItemCommentSegment(owner as FastList);	break;
-		case TYPE_BATTLE:	segment = battleSegment		= new LobbyChatItemBattleSegment( owner as FastList); 	break;
-		case TYPE_EMOTE:	segment = emoteSegment		= new LobbyChatItemBalloonEmoteSegment( owner as FastList); 	break;
-		case TYPE_CONFIRM:	segment = confirmSegment	= new LobbyChatItemConfirmSegment(owner as FastList); 
+		case TYPE_MESSAGE:	segment = (messageSegment	= new LobbyChatItemBalloonTextSegment(owner)) as LobbyChatItemSegment;	break;
+		case TYPE_COMMENT:	segment = (commentSegment	= new LobbyChatItemCommentSegment(owner)) as LobbyChatItemSegment;			break;
+		case TYPE_BATTLE:		segment = (battleSegment	= new LobbyChatItemBattleSegment(owner)) as LobbyChatItemSegment; 			break;
+		case TYPE_EMOTE:		segment = (emoteSegment		= new LobbyChatItemBalloonEmoteSegment(owner)) as LobbyChatItemSegment; break;
+		case TYPE_CONFIRM:	segment = (confirmSegment	= new LobbyChatItemConfirmSegment(owner)) as LobbyChatItemSegment; 
 			segment.addEventListener(Event.TRIGGERED, confirmSegment_triggeredHandler);
 			break;
 	}

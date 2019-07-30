@@ -8,7 +8,6 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.models.Assets;
 	import com.gerantech.towercraft.themes.MainTheme;
 	import com.gerantech.towercraft.utils.StrUtils;
-	import com.gerantech.mmory.core.constants.CardFeatureType;
 	import com.gerantech.mmory.core.constants.CardTypes;
 	import com.gerantech.mmory.core.constants.ResourceType;
 	import com.gerantech.mmory.core.scripts.ScriptEngine;
@@ -74,8 +73,8 @@ package com.gerantech.towercraft.controls
 			if( this._type > 100 )
 			{
 				this._availablity = player.getAvailablity(this._type)
-				this._rarity = ScriptEngine.getInt(CardFeatureType.F00_RARITY, this._type)
-				this._elixir = ScriptEngine.getInt(CardFeatureType.F02_ELIXIR_SIZE, this._type)
+				this._rarity = ScriptEngine.getInt(ScriptEngine.T00_RARITY, this._type)
+				this._elixir = ScriptEngine.getInt(ScriptEngine.T02_ELIXIR_SIZE, this._type)
 			}
 			this.invalidate(INVALIDATION_FLAG_DATA);
 		}
@@ -111,7 +110,7 @@ package com.gerantech.towercraft.controls
 				return;
 			this._showElixir = value;
 			if( this._showElixir && this._type > 100 )
-				this._elixir = ScriptEngine.getInt(CardFeatureType.F02_ELIXIR_SIZE, this._type);
+				this._elixir = ScriptEngine.getInt(ScriptEngine.T02_ELIXIR_SIZE, this._type);
 			this.invalidate(INVALIDATION_FLAG_DATA);
 		}
 
@@ -143,7 +142,13 @@ package com.gerantech.towercraft.controls
 		{
 			return _availablity;
 		}
-
+		public function set availablity(value:int):void
+		{
+			if( this._availablity == value )
+				return;
+			this._availablity = value;
+			this.invalidate(INVALIDATION_FLAG_DATA);
+		}
 
 		override protected function draw() : void
 		{

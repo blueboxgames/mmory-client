@@ -1,12 +1,12 @@
 package com.gerantech.towercraft.managers
 {
+import com.gameanalytics.sdk.GameAnalytics;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.managers.oauth.OAuthManager;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.Localizations;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.marpies.ane.gameanalytics.GameAnalytics;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import starling.events.Event;
@@ -60,14 +60,15 @@ public function setBool(key:int, value:Boolean):void
 }
 public function setInt(key:int, value:int):void
 {
-    // prevent backward tutor steps
-    if( key == PrefsTypes.TUTOR )
-        if( AppModel.instance.game.player.getTutorStep() >= value )
-            return;
-    
+	// prevent backward tutor steps
+	if( key == PrefsTypes.TUTOR &&  AppModel.instance.game.player.getTutorStep() >= value )
+		return;
+	
 	setString(key, value.toString());
-    if( key == PrefsTypes.TUTOR )
+	if( key == PrefsTypes.TUTOR )
 		GameAnalytics.addDesignEvent("tutorial:step-" + value);
+	// if( key == PrefsTypes.TROPHY_REWARD )
+	// 	GameAnalytics.addProgressionEvent(0, "trophy-reward", null, null, value);
 }
 public function setFloat(key:int, value:Number):void
 {

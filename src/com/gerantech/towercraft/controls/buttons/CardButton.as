@@ -1,10 +1,8 @@
 package com.gerantech.towercraft.controls.buttons
 {
-import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.CardFeatureType;
 import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.towercraft.controls.CardView;
 
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
@@ -51,7 +49,7 @@ override protected function initialize():void
 protected function createCompleteHandler(e:Event):void 
 {
 	removeEventListener(FeathersEventType.CREATION_COMPLETE, createCompleteHandler);
-	if( card.type == CardTypes.INITIAL && player.inDeckTutorial())
+	if( card.type == CardTypes.INITIAL && player.inDeckTutorial() )
 		showTutorHint(0, 100);
 }
 

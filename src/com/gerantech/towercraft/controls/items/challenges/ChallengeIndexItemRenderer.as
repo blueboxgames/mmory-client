@@ -1,5 +1,8 @@
 package com.gerantech.towercraft.controls.items.challenges 
 {
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.mmory.core.socials.Challenge;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.buttons.IconButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
@@ -9,11 +12,8 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
 import com.gerantech.towercraft.events.GameEvent;
 import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.socials.Challenge;
 
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
@@ -32,15 +32,13 @@ import starling.events.Event;
 */
 public class ChallengeIndexItemRenderer extends AbstractListItemRenderer
 {
-static public var ARENA:int;
 static public var IN_HOME:Boolean;
 static public var IS_FRIENDLY:Boolean;
 static public var SHOW_INFO:Boolean;
-static private const BG_SCALE_GRID:Rectangle = new Rectangle(23, 22, 2, 2);
+static public const BG_SCALE_GRID:Rectangle = new Rectangle(23, 22, 2, 2);
 static private const COLORS:Array = [0x30e465, 0xffa400, 0xff4200, 0xe720ff];
 
 private var state:int;
-private var chIndex:int;
 private var locked:Boolean;
 private var backgroundImage:SimpleLayoutButton;
 private var backgroundLayoutData:AnchorLayoutData;
@@ -53,24 +51,27 @@ private var infoButton:IndicatorButton;
 private var rankButton:IconButton;
 private var costIconDisplay:ImageLoader;
 private var costLabelDisplay:ShadowLabel;
-public function ChallengeIndexItemRenderer() { super(); }
-override protected function initialize() : void
+public function ChallengeIndexItemRenderer()
 {
-	super.initialize();
+	super();
 	layout = new AnchorLayout();
-	tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_FINISH, tutorials_completeHandler);
+	
+	if( IN_HOME )
+		tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_FINISH, tutorials_completeHandler);
+	else
+		addEventListener(FeathersEventType.CREATION_COMPLETE, createCompleteHandler)
 }
 
 override protected function commitData() : void 
 {
 	super.commitData();
-	height = VerticalLayout(_owner.layout).typicalItemHeight;
+	if( _owner != null )
+		height = VerticalLayout(_owner.layout).typicalItemHeight;
 
 	challenge = player.challenges.get(_data as int);
+	challenge.index = _data as int;
 	state = challenge.getState(timeManager.now);
-	chIndex = IN_HOME ? UserData.instance.challengeIndex : index;
-	locked = Challenge.getUnlockAt(index) > ARENA;
-	challenge.mode = Challenge.getMode(chIndex);
+	locked = Challenge.getUnlockAt(game, challenge.index) > player.get_point();
 	
 	backgroundFactory();
 	iconFactory();
@@ -82,14 +83,14 @@ override protected function commitData() : void
 	costFactory();
 	
 	alpha = 0;
-	Starling.juggler.tween(this, 0.25, {delay:Math.log(index + 1) * 0.2, alpha:1});
+	Starling.juggler.tween(this, 0.25, {delay:Math.log(challenge.index + 1) * 0.2, alpha:1});
 }
 
 private function costFactory() : void 
 {
 	if( locked || IS_FRIENDLY )
 		return;
-	challenge.runRequirements = Challenge.getRunRequiements(chIndex);
+	challenge.runRequirements = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, challenge.type));
 	var costType:int = challenge.runRequirements.keys()[0];
 	var costValue:int = challenge.runRequirements.get(costType);
 	if( costValue <= 0 )
@@ -155,7 +156,7 @@ private function bannerFactory() : void
 		bannerDisplay.layoutData = new AnchorLayoutData(150, 11, 60, 11);
 		addChild(bannerDisplay);
 	}
-	bannerDisplay.source = Assets.getTexture(locked ? "events/banner-locked" : "events/banner-" + chIndex, "gui");
+	bannerDisplay.source = Assets.getTexture(locked ? "events/banner-locked" : "events/banner-" + challenge.mode, "gui");
 }
 
 private function backgroundFactory() : void
@@ -171,7 +172,7 @@ private function backgroundFactory() : void
 		ImageLoader(backgroundImage.backgroundSkin).scale9Grid = BG_SCALE_GRID;
 		addChild(backgroundImage);
 	}
-	ImageLoader(backgroundImage.backgroundSkin).source = Assets.getTexture("events/index-bg-" + chIndex + "-up", "gui");
+	ImageLoader(backgroundImage.backgroundSkin).source = Assets.getTexture("events/index-bg-" + challenge.mode + "-up", "gui");
 }
 
 private function iconFactory() : void
@@ -195,12 +196,12 @@ private function titleFactory() : void
 {
 	if( titleDisplay == null )
 	{
-		titleDisplay = new RTLLabel(null, COLORS[chIndex], null, null, false, null, 0.9);
+		titleDisplay = new RTLLabel(null, COLORS[challenge.mode], null, null, false, null, 0.9);
 		titleDisplay.layoutData = new AnchorLayoutData(12, appModel.isLTR ? NaN : 160, NaN, appModel.isLTR ? 160 : NaN);
 		titleDisplay.touchable = false;
 		addChild(titleDisplay);
 	}
-	titleDisplay.text = locked ? loc("challenge_label", [loc("num_" + (chIndex + 1))]) : loc("challenge_title_" + challenge.mode);
+	titleDisplay.text = locked ? loc("challenge_label", [loc("num_" + (int(_data) + 1))]) : loc("challenge_title_" + challenge.mode);
 }
 
 private function messageFactory() : void
@@ -223,12 +224,15 @@ protected function backgroundImage_triggerdHandler(event:Event) : void
 {
 	if( locked )
 	{
-		var point:int = game.arenas.get(Challenge.getUnlockAt(chIndex)).min - 1;
-		appModel.navigator.addLog(loc("availableuntil_messeage", [loc("resource_title_2") + " " + point, ""]));
+		challenge.unlockAt
+		appModel.navigator.addLog(loc("availableuntil_messeage", [loc("resource_title_2") + " " + Challenge.getUnlockAt(game, challenge.index), ""]));
 		return;
 	}
-	
-	_owner.dispatchEventWith(Event.TRIGGERED, false, chIndex);
+	if( _owner != null )
+		_owner.dispatchEventWith(Event.TRIGGERED, false, challenge.index);
+	else
+		dispatchEventWith(Event.TRIGGERED, false, challenge.index);
+
 }
 
 protected function infoButton_triggeredHandler(event:Event) : void
@@ -241,7 +245,13 @@ protected function tutorials_completeHandler(event:Event) : void
 	if( event.data.name != "challenge_tutorial" )
 		return;
 	tutorials.removeEventListener(GameEvent.TUTORIAL_TASKS_FINISH, tutorials_completeHandler);
-	if ( (player.getTutorStep() == PrefsTypes.T_72_NAME_SELECTED && index == 0) || (player.getTutorStep() == PrefsTypes.T_73_CHALLENGES_SHOWN && index == 1) )
+	backgroundImage.showTutorHint();
+}
+
+protected function createCompleteHandler(event:Event) : void
+{
+	removeEventListener(FeathersEventType.CREATION_COMPLETE, createCompleteHandler)
+	if( challenge.index ==  (player.getTutorStep() - 200) / 10 )
 		backgroundImage.showTutorHint();
 }
 }
