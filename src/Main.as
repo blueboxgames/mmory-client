@@ -7,6 +7,7 @@ import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.screens.BattleScreen;
 import com.gerantech.towercraft.controls.screens.SplashScreen;
 import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.models.vo.Descriptor;
 import com.gerantech.towercraft.utils.Localizations;
 import com.tuarua.FirebaseANE;
 import com.tuarua.firebase.FirebaseOptions;
@@ -39,7 +40,8 @@ private var splash:SplashScreen;
 public function Main()
 {
 	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) + "|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
-	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(AppModel.instance.descriptor.market));
+	var desc:Descriptor = AppModel.instance.descriptor;
+	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(desc.market));
 	/*var str:String = "";
 	var ret:Number = -0.05;
 	for( var level:int=1; level<=13; level++ )
@@ -57,13 +59,13 @@ public function Main()
 	currencies.push(ResourceType.R2_POINT.toString());
 	currencies.push(ResourceType.R4_CURRENCY_HARD.toString());
 	currencies.push(ResourceType.R3_CURRENCY_SOFT.toString());
-	
+
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
-		.setBuildAndroid(AppModel.instance.descriptor.versionNumber).setGameKeyAndroid("df4b20d8b9a4b0ec2fdf5ac49471d5b2").setGameSecretAndroid("972a1c900218b46f42d8a93e2f69710545903307")
-		.setBuildWindows(AppModel.instance.descriptor.versionNumber).setGameKeyWindows("").setGameSecretWindows("")
+		/*.setBuildiOS(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec) */
+		.setBuildWindows(desc.versionNumber).setGameKeyWindows("").setGameSecretWindows("")
+		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
 		.setResourceCurrencies(currencies)
 		.setResourceItemTypes(new <String>["outcome", "special", "book", "purchase", "exchange", "upgrade", "donate"]);
-	/*.setBuildiOS(AppModel.instance.descriptor.versionNumber).setGameKeyiOS("[ios_game_key]").setGameSecretiOS("[ios_secret_key]")*/
 	if ( GameAnalytics.isSupported )
 	{
 		try {
