@@ -153,11 +153,14 @@ public function process(item : ExchangeItem) : void
 				{
 					// send analytics events
 					var outs:Vector.<int> = item.outcomes.keys();
-					GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, outs[0].toString(), item.outcomes.get(outs[0]), "IAP", result.purchase.sku);
+					if(GameAnalytics.isInitialized)
+					{
+						GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, outs[0].toString(), item.outcomes.get(outs[0]), "IAP", result.purchase.sku);
 					
-					var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
-					var amount:int = item.requirements.get(outs[0]) * (appModel.descriptor.market == "google" ? 1 : 10);
-					GameAnalytics.addBusinessEvent(currency, amount, result.purchase.itemType, result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
+						var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
+						var amount:int = item.requirements.get(outs[0]) * (appModel.descriptor.market == "google" ? 1 : 10);
+						GameAnalytics.addBusinessEvent(currency, amount, result.purchase.itemType, result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
+					}
 					
 					dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);
 				}
