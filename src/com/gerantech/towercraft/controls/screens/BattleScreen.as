@@ -140,7 +140,12 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		else
 			battleField.elixirUpdater.updateAt(1 - battleField.side, data.getInt(String(1 - battleField.side)));
 		break;
+
+	case "u":
+		trace(data.getDump());
+		break;
 	}
+
 	//trace(event.params.cmd, data.getDump());
 }
 
