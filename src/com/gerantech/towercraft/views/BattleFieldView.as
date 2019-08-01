@@ -34,6 +34,7 @@ import starling.display.Sprite;
 import starling.events.Event;
 
 import starlingbuilder.engine.DefaultAssetMediator;
+import com.gerantech.mmory.core.battle.GameObject;
 
 public class BattleFieldView extends Sprite
 {
@@ -196,13 +197,8 @@ public function hitUnits(buletId:int, targets:ISFSArray) : void
 	}
 }
 
-public function updateUnits(unitDAta:SFSObject) : void
+public function updateUnits(unitData:SFSObject) : void
 {
-
-/* 	if( !battleData.room.containsVariable("units") )
-		return;
-	
-	var unitData:SFSObject = battleData.room.getVariable("units").getValue() as SFSObject;
 	var serverUnitIds:Array = unitData.getIntArray("keys");
 	var clientUnitIds:Vector.<int> = battleData.battleField.units.keys();
 	for( var i:int = 0; i < clientUnitIds.length; i++ )
@@ -225,8 +221,7 @@ public function updateUnits(unitDAta:SFSObject) : void
 			var u:UnitView = new UnitView(getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0);
 			u.alpha = 0.3;
 			u.isDump = true;
-			u.movable = false;
-			units.set(vars[0], u);
+			units.set(vars[0], u as Unit);
 		}
 	}
 
@@ -238,7 +233,7 @@ public function updateUnits(unitDAta:SFSObject) : void
 			units.get(clientUnitIds[i]).dispose();
 			units.remove(clientUnitIds[i]);
 		}
-	}*/
+	}
 }
 
 override public function dispose() : void
