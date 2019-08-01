@@ -1,5 +1,15 @@
 package com.gerantech.towercraft.views
 {
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.bullets.Bullet;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.battle.units.Unit;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.events.BattleEvent;
+import com.gerantech.mmory.core.utils.GraphicMetrics;
+import com.gerantech.mmory.core.utils.Point2;
+import com.gerantech.mmory.core.utils.Point3;
+import com.gerantech.mmory.core.utils.maps.IntUnitMap;
 import com.gerantech.towercraft.controls.headers.BattleFooter;
 import com.gerantech.towercraft.managers.DropTargets;
 import com.gerantech.towercraft.managers.SoundManager;
@@ -9,19 +19,12 @@ import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.views.units.UnitView;
 import com.gerantech.towercraft.views.weapons.BulletView;
-import com.gerantech.mmory.core.battle.BattleField;
-import com.gerantech.mmory.core.battle.GameObject;
-import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.events.BattleEvent;
-import com.gerantech.mmory.core.utils.GraphicMetrics;
-import com.gerantech.mmory.core.utils.Point2;
-import com.gerantech.mmory.core.utils.Point3;
-import com.gerantech.mmory.core.utils.maps.IntUnitMap;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import flash.filesystem.File;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -29,9 +32,8 @@ import starling.display.DisplayObjectContainer;
 import starling.display.Quad;
 import starling.display.Sprite;
 import starling.events.Event;
+
 import starlingbuilder.engine.DefaultAssetMediator;
-import com.gerantech.mmory.core.battle.bullets.Bullet;
-import com.gerantech.mmory.core.battle.units.Unit;
 
 public class BattleFieldView extends Sprite
 {
@@ -194,8 +196,9 @@ public function hitUnits(buletId:int, targets:ISFSArray) : void
 	}
 }
 
-public function updateUnits() : void
+public function updateUnits(unitDAta:SFSObject) : void
 {
+
 /* 	if( !battleData.room.containsVariable("units") )
 		return;
 	

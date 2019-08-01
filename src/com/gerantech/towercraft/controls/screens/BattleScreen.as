@@ -142,7 +142,7 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		break;
 
 	case "u":
-		trace(data.getDump());
+		appModel.battleFieldView.updateUnits(data);
 		break;
 	}
 
@@ -209,7 +209,6 @@ private function startBattle():void
 	addChild(hud);
 	
 	resetAll(battleData.sfsData);
-	appModel.battleFieldView.updateUnits();
 	appModel.loadingManager.serverData.putBool("inBattle", false);
 	
 	// play battle theme -_-_-_
