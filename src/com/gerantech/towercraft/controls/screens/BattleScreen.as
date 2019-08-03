@@ -141,7 +141,7 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 			battleField.elixirUpdater.updateAt(1 - battleField.side, data.getInt(String(1 - battleField.side)));
 		break;
 
-	case "u":
+	case SFSCommands.BATTLE_UNIT_CHANGE:
 		appModel.battleFieldView.updateUnits(data);
 		break;
 	}
