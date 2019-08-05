@@ -12,6 +12,10 @@ import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+import com.zarinpal.Item;
+import com.zarinpal.PaymentRequest;
+import com.zarinpal.ZarinPal;
+import com.zarinpal.events.ZarinPalEvent;
 
 import feathers.events.FeathersEventType;
 
@@ -79,13 +83,24 @@ public function init():void
 			packageURL = "com.arioclub.android";
 			break;
 		
+		case "zarinpal":
+			base64Key = "b37e90ce-b2bc-11e9-832c-000c29344814";
+			bindURL = "k2k://zarinpal";
+			break;
+		
 		default://cafebazaar
 			base64Key = "MIHNMA0GCSqGSIb3DQEBAQUAA4G7ADCBtwKBrwCoKU7EhXq5BhXRVJPe1JvmuPyJhHpsg6Ei9XM6dF0T1a4B4Czca8awJAzaSgx8/NEVYX8pBoP36/GqZ6XRi7yBORtoMHnVzL6qbGtPrGvLww1RwlPRnwVqkIxWhCFqa1U4J/WnskeL/K7SBjHoJlIoc2Mb1xeOWOZZQM1bU10LpkblO6lzSdMnTw9Jgs+UptXC6lLy/+sdfwcUjBfgBfJplPxS2Gtvk5yHkCacfkUCAwEAAQ==";
 			bindURL = "ir.cafebazaar.pardakht.InAppBillingService.BIND";
 			packageURL = "com.farsitel.bazaar";
 			break;
-	}			
+	}
 
+	if(appModel.descriptor.market == "zarinpal")
+	{
+		ZarinPal.instance.addEventListener(ZarinPalEvent.INITIALIZE_FINISHED, zarinpal_initializeFinishedHandler);
+		ZarinPal.instance.initialize(base64Key, bindURL, "", "");
+		return;
+	}
 	Iab.instance.addEventListener(IabEvent.SETUP_FINISHED, iab_setupFinishedHandler);
 	Iab.instance.startSetup(base64Key, bindURL, packageURL);
 }
@@ -96,6 +111,26 @@ protected function iab_setupFinishedHandler(event:IabEvent):void
 	dispatchEventWith(FeathersEventType.INITIALIZE);
 	if( event.result.succeed )
 		queryInventory();
+}
+
+protected function zarinpal_initializeFinishedHandler(event:ZarinPalEvent):void
+{
+	ZarinPal.instance.removeEventListener(ZarinPalEvent.INITIALIZE_FINISHED, zarinpal_initializeFinishedHandler);
+	var item:Item;
+	for each ( var key:int in exchanger.items.keys() )
+	{
+		if(exchanger.items.get(key).requirements.toString().match("5:([0-9]+)"))
+			var requirement:String = exchanger.items.get(key).requirements.toString().match("5:([0-9]+)").pop();
+		if (requirement!=null)
+		{
+			item = new Item(
+				"k2k.item_" + key.toString(),
+				loc("exchange_title_" + key.toString()),
+				int(requirement)
+			);
+			ZarinPal.instance.storage.addItem(item);
+		}
+	}
 }
 
 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_- QUERY INVENTORY -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -131,8 +166,18 @@ protected function iab_queryInventoryFinishedHandler(event:IabEvent):void
 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_- PURCHASE -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 public function purchase(sku:String):void
 {
-	Iab.instance.addEventListener(IabEvent.PURCHASE_FINISHED, iab_purchaseFinishedHandler);
-	Iab.instance.purchase(sku);
+	if(appModel.descriptor.market == "zarinpal")
+	{
+		var request:PaymentRequest = ZarinPal.instance.getPaymentRequest(sku);
+		appModel.navigator.addLog(loc("waiting_message"));
+		ZarinPal.instance.sendPaymentRequest(request);
+		ZarinPal.instance.addEventListener(ZarinPalEvent.TRANSACTION_SUCCESS, zarinpal_transactionSuccessHandler);
+	}
+	else
+	{
+		Iab.instance.addEventListener(IabEvent.PURCHASE_FINISHED, iab_purchaseFinishedHandler);
+		Iab.instance.purchase(sku);
+	}
 }
 
 protected function iab_purchaseFinishedHandler(event:IabEvent):void
@@ -150,6 +195,12 @@ protected function iab_purchaseFinishedHandler(event:IabEvent):void
 		verify(purchase);
 	else
 		queryInventory();
+}
+
+protected function zarinpal_transactionSuccessHandler(event:ZarinPalEvent):void
+{
+	log("purchase: " + JSON.stringify(event.data));
+	verifyZarinPal(event.data);
 }
 
 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_- PURCHASE VERIFICATION AND CONSUMPTION -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -179,6 +230,37 @@ private function verify(purchase:Purchase):void
 				if(  result.getInt("consumptionState") == 0 )
 					consume(purchase.sku);
 			}
+		}
+		else
+		{
+			log("purchase verify=>invalid: " + purchase.sku);
+			explain(Iab.IABHELPER_VERIFICATION_FAILED);
+		}
+	}	
+}
+
+private function verifyZarinPal(response:Object):void
+{
+	appModel.navigator.addLog(loc("waiting_message"));
+	var param:SFSObject = new SFSObject();
+	param.putText("productID", response["ProductID"]);
+	param.putText("purchaseToken", response["Authority"]);
+	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_purchaseVerifyHandler);
+	SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, param);
+	function sfsConnection_purchaseVerifyHandler(event:SFSEvent):void
+	{
+		if( event.params.cmd != SFSCommands.VERIFY_PURCHASE )
+			return;
+		SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_purchaseVerifyHandler);
+		var result:SFSObject = event.params.params;
+		if( result.getBool("success") )
+		{
+			var params:SFSObject = new SFSObject();
+			params.putText("productID", response["ProductID"]);
+			params.putText("purchaseToken", response["Authority"]);
+			params.putBool("consume", true);
+			SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, params);
+			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {success:true});
 		}
 		else
 		{

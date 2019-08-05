@@ -1,7 +1,5 @@
 package com.gerantech.towercraft.managers 
 {
-import com.gameanalytics.sdk.GAResourceFlowType;
-import com.gameanalytics.sdk.GameAnalytics;
 import com.gerantech.extensions.iab.IabResult;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.MessageTypes;
@@ -146,18 +144,18 @@ public function process(item : ExchangeItem) : void
 		function billinManager_endInteractionHandler ( event:Event ) : void {
 			BillingManager.instance.removeEventListener(FeathersEventType.END_INTERACTION, billinManager_endInteractionHandler);
 			var result:IabResult = event.data as IabResult;
-			if( result.succeed )
+			if( event.data.succeed )
 			{
 				exchange(item, params);
 				if( item.category == ExchangeType.C0_HARD )
 				{
 					// send analytics events
-					var outs:Vector.<int> = item.outcomes.keys();
-					GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, outs[0].toString(), item.outcomes.get(outs[0]), "IAP", result.purchase.sku);
+					// var outs:Vector.<int> = item.outcomes.keys();
+					// GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, outs[0].toString(), item.outcomes.get(outs[0]), "IAP", result.purchase.sku);
 					
-					var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
-					var amount:int = item.requirements.get(outs[0]) * (appModel.descriptor.market == "google" ? 1 : 10);
-					GameAnalytics.addBusinessEvent(currency, amount, result.purchase.itemType, result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
+					// var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
+					// var amount:int = item.requirements.get(outs[0]) * (appModel.descriptor.market == "google" ? 1 : 10);
+					// GameAnalytics.addBusinessEvent(currency, amount, result.purchase.itemType, result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
 					
 					dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);
 				}
