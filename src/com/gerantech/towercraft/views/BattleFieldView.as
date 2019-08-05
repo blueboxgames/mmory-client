@@ -201,6 +201,8 @@ public function updateUnits(unitData:SFSObject) : void
 {
 	var serverUnitIds:Array = unitData.getIntArray("keys");
 	var clientUnitIds:Vector.<int> = battleData.battleField.units.keys();
+	
+	// force remove units from server
 	for( var i:int = 0; i < clientUnitIds.length; i++ )
 		if( serverUnitIds.indexOf(clientUnitIds[i]) == -1 )
 			battleData.battleField.units.get(clientUnitIds[i]).hit(100);
