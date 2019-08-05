@@ -295,6 +295,7 @@ protected function iab_consumeFinishedHandler(event:IabEvent):void
 		currency = "IRR";;
 	price = StrUtils.getLatinNumber(price);
 	trace(int(price), currency)
+	if (GameAnalytics.isInitialized) TODO:
 	GameAnalytics.addBusinessEvent("USD", 1000, "item", "id", "cart", "[receipt]", "[signature]");*/
 	
 	var params:SFSObject = new SFSObject();

@@ -140,7 +140,12 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		else
 			battleField.elixirUpdater.updateAt(1 - battleField.side, data.getInt(String(1 - battleField.side)));
 		break;
+
+	case SFSCommands.BATTLE_UNIT_CHANGE:
+		appModel.battleFieldView.updateUnits(data);
+		break;
 	}
+
 	//trace(event.params.cmd, data.getDump());
 }
 
@@ -204,7 +209,6 @@ private function startBattle():void
 	addChild(hud);
 	
 	resetAll(battleData.sfsData);
-	appModel.battleFieldView.updateUnits();
 	appModel.loadingManager.serverData.putBool("inBattle", false);
 	
 	// play battle theme -_-_-_

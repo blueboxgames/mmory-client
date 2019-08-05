@@ -65,7 +65,7 @@ public function setInt(key:int, value:int):void
 		return;
 	
 	setString(key, value.toString());
-	if( key == PrefsTypes.TUTOR )
+	if( key == PrefsTypes.TUTOR && GameAnalytics.isInitialized )
 		GameAnalytics.addDesignEvent("tutorial:step-" + value);
 	// if( key == PrefsTypes.TROPHY_REWARD )
 	// 	GameAnalytics.addProgressionEvent(0, "trophy-reward", null, null, value);

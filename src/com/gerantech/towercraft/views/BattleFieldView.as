@@ -1,5 +1,15 @@
 package com.gerantech.towercraft.views
 {
+import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.bullets.Bullet;
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.battle.units.Unit;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.events.BattleEvent;
+import com.gerantech.mmory.core.utils.GraphicMetrics;
+import com.gerantech.mmory.core.utils.Point2;
+import com.gerantech.mmory.core.utils.Point3;
+import com.gerantech.mmory.core.utils.maps.IntUnitMap;
 import com.gerantech.towercraft.controls.headers.BattleFooter;
 import com.gerantech.towercraft.managers.DropTargets;
 import com.gerantech.towercraft.managers.SoundManager;
@@ -9,19 +19,12 @@ import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.views.units.UnitView;
 import com.gerantech.towercraft.views.weapons.BulletView;
-import com.gerantech.mmory.core.battle.BattleField;
-import com.gerantech.mmory.core.battle.GameObject;
-import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.events.BattleEvent;
-import com.gerantech.mmory.core.utils.GraphicMetrics;
-import com.gerantech.mmory.core.utils.Point2;
-import com.gerantech.mmory.core.utils.Point3;
-import com.gerantech.mmory.core.utils.maps.IntUnitMap;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import flash.filesystem.File;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -29,9 +32,9 @@ import starling.display.DisplayObjectContainer;
 import starling.display.Quad;
 import starling.display.Sprite;
 import starling.events.Event;
+
 import starlingbuilder.engine.DefaultAssetMediator;
-import com.gerantech.mmory.core.battle.bullets.Bullet;
-import com.gerantech.mmory.core.battle.units.Unit;
+import com.gerantech.mmory.core.battle.GameObject;
 
 public class BattleFieldView extends Sprite
 {
@@ -194,14 +197,12 @@ public function hitUnits(buletId:int, targets:ISFSArray) : void
 	}
 }
 
-public function updateUnits() : void
+public function updateUnits(unitData:SFSObject) : void
 {
-/* 	if( !battleData.room.containsVariable("units") )
-		return;
-	
-	var unitData:SFSObject = battleData.room.getVariable("units").getValue() as SFSObject;
 	var serverUnitIds:Array = unitData.getIntArray("keys");
 	var clientUnitIds:Vector.<int> = battleData.battleField.units.keys();
+	
+	// force remove units from server
 	for( var i:int = 0; i < clientUnitIds.length; i++ )
 		if( serverUnitIds.indexOf(clientUnitIds[i]) == -1 )
 			battleData.battleField.units.get(clientUnitIds[i]).hit(100);
@@ -222,8 +223,7 @@ public function updateUnits() : void
 			var u:UnitView = new UnitView(getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0);
 			u.alpha = 0.3;
 			u.isDump = true;
-			u.movable = false;
-			units.set(vars[0], u);
+			units.set(vars[0], u as Unit);
 		}
 	}
 
@@ -235,7 +235,7 @@ public function updateUnits() : void
 			units.get(clientUnitIds[i]).dispose();
 			units.remove(clientUnitIds[i]);
 		}
-	}*/
+	}
 }
 
 override public function dispose() : void

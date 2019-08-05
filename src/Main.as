@@ -62,7 +62,6 @@ public function Main()
 
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
 		/*.setBuildiOS(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec) */
-		.setBuildWindows(desc.versionNumber).setGameKeyWindows("").setGameSecretWindows("")
 		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
 		.setResourceCurrencies(currencies)
 		.setResourceItemTypes(new <String>["outcome", "special", "book", "purchase", "exchange", "upgrade", "donate"]);
@@ -196,8 +195,9 @@ protected function loaderInfo_uncaughtErrorHandler(event:UncaughtErrorEvent):voi
 		text = event.error.toString();
 		severity = GAErrorSeverity.WARNING;
 	}
-	GameAnalytics.addErrorEvent(severity, text);
-	//navigateToURL(new URLRequest("http://127.0.0.1:8080/towerslet/towers?" + severity + "--" + text));
+	if(GameAnalytics.isInitialized)
+		GameAnalytics.addErrorEvent(severity, text);
+	// new GTStreamer(File.applicationStorageDirectory.resolvePath("log.txt"), null, null, null, false, false).save(text);
 }
 }
 }

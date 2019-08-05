@@ -42,7 +42,7 @@ public class LeagueItemRenderer extends AbstractListItemRenderer
 {
 static public var LEAGUE:int;
 static public var HEIGHT:int;
-static public const ICON_X:int = 310;
+static public const ICON_X:int = 300;
 static public const ICON_WIDTH:int = 160;
 static public const ICON_HEIGHT:int = 176;
 static public const CARDS_WIDTH:int = 210;
@@ -220,7 +220,7 @@ private function createRewardItem(r:int) : void
 	var collectible:Boolean = reward.collectible();
 	var colW:int = 240;
 	var itemX:int = 60;
-	var itemY:int = HEIGHT - (reward.point - league.min) / (league.max - league.min) * HEIGHT;
+	var itemY:int = HEIGHT - r / league.rewards.length * HEIGHT;
 	var itemW:int = 660;
 	var isCard:Boolean = ResourceType.isCard(reward.key);
 
@@ -236,7 +236,7 @@ private function createRewardItem(r:int) : void
 	item.touchGroup = true;
 	item.data = {index:r, reward:reward};
 	item.width = itemW;
-	item.height = isCard ? 340 : 260;
+	item.height = 340;
 	item.pivotX = item.width * 0.5;
 	item.pivotY = item.height * 0.5;
 	item.x = itemX + item.pivotX;
@@ -329,7 +329,7 @@ private function createEventItem(x:int, y:int, width:int, reward:TrophyReward, r
 	var item:ChallengeIndexItemRenderer = new ChallengeIndexItemRenderer();
 	ChallengeIndexItemRenderer.IS_FRIENDLY = true;
 	item.width = width;
-	item.height = 400;
+	item.height = reached ? 400 : 340;
 	item.x = x;
 	item.y = y - item.height * 0.5;
 	item.data = reward.key % 10;
@@ -341,7 +341,7 @@ private function createPoint(reward:TrophyReward, y:int):void
 	pointDisplay.height = 100;
 	pointDisplay.pivotY = pointDisplay.height * 0.5
 	pointDisplay.y = y;
-	pointDisplay.x = stageWidth - 140;
+	pointDisplay.x = stageWidth - 160;
 	addChild(pointDisplay);
 }
 
