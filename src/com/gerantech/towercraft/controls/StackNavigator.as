@@ -3,6 +3,11 @@ package com.gerantech.towercraft.controls
 	import avmplus.getQualifiedClassName;
 
 	import com.gerantech.extensions.NativeAbilities;
+	import com.gerantech.mmory.core.constants.PrefsTypes;
+	import com.gerantech.mmory.core.constants.ResourceType;
+	import com.gerantech.mmory.core.scripts.ScriptEngine;
+	import com.gerantech.mmory.core.utils.maps.IntIntMap;
+	import com.gerantech.mmory.core.utils.maps.IntStrMap;
 	import com.gerantech.towercraft.Game;
 	import com.gerantech.towercraft.controls.animations.AchievedItem;
 	import com.gerantech.towercraft.controls.overlays.BaseOverlay;
@@ -28,15 +33,11 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.models.vo.UserData;
 	import com.gerantech.towercraft.utils.StrUtils;
 	import com.gerantech.towercraft.utils.Utils;
-	import com.gerantech.mmory.core.constants.PrefsTypes;
-	import com.gerantech.mmory.core.constants.ResourceType;
-	import com.gerantech.mmory.core.socials.Challenge;
-	import com.gerantech.mmory.core.utils.maps.IntIntMap;
-	import com.gerantech.mmory.core.utils.maps.IntStrMap;
 	import com.smartfoxserver.v2.core.SFSEvent;
 	import com.smartfoxserver.v2.entities.Buddy;
 	import com.smartfoxserver.v2.entities.data.ISFSObject;
 	import com.smartfoxserver.v2.entities.data.SFSObject;
+	import com.zarinpal.ZarinpalCallbackHandler;
 
 	import feathers.controls.LayoutGroup;
 	import feathers.controls.StackScreenNavigator;
@@ -51,7 +52,6 @@ package com.gerantech.towercraft.controls
 	import starling.core.Starling;
 	import starling.events.Event;
 	import starling.textures.Texture;
-	import com.gerantech.mmory.core.scripts.ScriptEngine;
 	
 	public class StackNavigator extends StackScreenNavigator
 	{
@@ -353,6 +353,13 @@ package com.gerantech.towercraft.controls
 						popScreen();
 						break;
 					}
+				}
+				else if(a.indexOf("zarinpal?") > -1)
+				{
+					AppModel.instance.navigator.addLog("zarinpal");
+					var callbackHandler:ZarinpalCallbackHandler = new ZarinpalCallbackHandler(arguments[0]);
+					var response:Object = callbackHandler.getResponse();
+					BillingManager.instance.verifyZarinPal(response);
 				}
 			}
 			AppModel.instance.invokes = null;			//trace("k:", a, "v:", pars[a]);	

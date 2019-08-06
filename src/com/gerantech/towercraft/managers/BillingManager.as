@@ -5,17 +5,20 @@ import com.gerantech.extensions.iab.Iab;
 import com.gerantech.extensions.iab.Purchase;
 import com.gerantech.extensions.iab.events.IabEvent;
 import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.towercraft.controls.popups.MessagePopup;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.models.vo.UserData;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import com.zarinpal.Item;
-import com.zarinpal.PaymentRequest;
 import com.zarinpal.ZarinPal;
-import com.zarinpal.events.ZarinPalEvent;
+import com.zarinpal.ZarinpalGatewayRequest;
+import com.zarinpal.events.ZarinpalRequestEvent;
+import com.zarinpal.inventory.ZarinpalStockItem;
 
 import feathers.events.FeathersEventType;
 
@@ -97,7 +100,8 @@ public function init():void
 
 	if(appModel.descriptor.market == "zarinpal")
 	{
-		ZarinPal.instance.addEventListener(ZarinPalEvent.INITIALIZE_FINISHED, zarinpal_initializeFinishedHandler);
+		ZarinPal.instance.addEventListener(ZarinpalRequestEvent.INITIALIZE_FINISHED, zarinpal_initializeFinishedHandler);
+		// TODO: Must get user mobile or email for purchase verification.. @fudo
 		ZarinPal.instance.initialize(base64Key, bindURL, "", "");
 		return;
 	}
@@ -113,23 +117,18 @@ protected function iab_setupFinishedHandler(event:IabEvent):void
 		queryInventory();
 }
 
-protected function zarinpal_initializeFinishedHandler(event:ZarinPalEvent):void
+protected function zarinpal_initializeFinishedHandler(event:ZarinpalRequestEvent):void
 {
-	ZarinPal.instance.removeEventListener(ZarinPalEvent.INITIALIZE_FINISHED, zarinpal_initializeFinishedHandler);
-	var item:Item;
-	for each ( var key:int in exchanger.items.keys() )
+	ZarinPal.instance.removeEventListener(ZarinpalRequestEvent.INITIALIZE_FINISHED, zarinpal_initializeFinishedHandler);
+	var keys:Vector.<int> = exchanger.items.keys();
+	for each(var k:int in keys)
 	{
-		if(exchanger.items.get(key).requirements.toString().match("5:([0-9]+)"))
-			var requirement:String = exchanger.items.get(key).requirements.toString().match("5:([0-9]+)").pop();
-		if (requirement!=null)
-		{
-			item = new Item(
-				"k2k.item_" + key.toString(),
-				loc("exchange_title_" + key.toString()),
-				int(requirement)
-			);
-			ZarinPal.instance.storage.addItem(item);
-		}
+		var exchangeItem:ExchangeItem = exchanger.items.get(k);
+		if( ExchangeType.getCategory(k) == ExchangeType.C0_HARD )
+			ZarinPal.instance.inventory.add("k2k.item_" + k, loc("exchange_title_" + k), exchangeItem.requirements._map["h"][ResourceType.R5_CURRENCY_REAL], exchangeItem.outcomes._map["h"][ResourceType.R4_CURRENCY_HARD]);
+		else if( ExchangeType.getCategory(k) == ExchangeType.C30_BUNDLES )
+			ZarinPal.instance.inventory.add("k2k.bundle_" + k, loc("exchange_title_" + k), exchangeItem.requirements._map["h"][ResourceType.R5_CURRENCY_REAL], exchangeItem.outcomes._map["h"][ResourceType.R4_CURRENCY_HARD]);
+		// TODO: No idea for bundles ? @fudo
 	}
 }
 
@@ -168,10 +167,20 @@ public function purchase(sku:String):void
 {
 	if(appModel.descriptor.market == "zarinpal")
 	{
-		var request:PaymentRequest = ZarinPal.instance.getPaymentRequest(sku);
-		appModel.navigator.addLog(loc("waiting_message"));
-		ZarinPal.instance.sendPaymentRequest(request);
-		ZarinPal.instance.addEventListener(ZarinPalEvent.TRANSACTION_SUCCESS, zarinpal_transactionSuccessHandler);
+		var useZarinGate:Boolean = true;
+		var gatewayRequest:ZarinpalGatewayRequest = new ZarinpalGatewayRequest(useZarinGate);
+		gatewayRequest.addEventListener(ZarinpalRequestEvent.PAYMENT_REQUEST_RESPONSE_RECIEVED, gatewayRequest_responseRecievedHandler);
+		var item:ZarinpalStockItem = ZarinPal.instance.inventory.getItem(sku);
+		gatewayRequest.createRequest(item.sku, item.description, item.amount);
+		gatewayRequest.send();
+		function gatewayRequest_responseRecievedHandler(e:ZarinpalRequestEvent):void
+		{
+			var sku:String = e.response["ProductID"];
+			var authCode:String = e.response["Authority"];
+			UserData.instance.setPurchaseActivity(sku, authCode);
+			var urlRequest:URLRequest = new URLRequest(gatewayRequest.getGatewayUrl(authCode));
+			navigateToURL(urlRequest);
+		}
 	}
 	else
 	{
@@ -195,12 +204,6 @@ protected function iab_purchaseFinishedHandler(event:IabEvent):void
 		verify(purchase);
 	else
 		queryInventory();
-}
-
-protected function zarinpal_transactionSuccessHandler(event:ZarinPalEvent):void
-{
-	log("purchase: " + JSON.stringify(event.data));
-	verifyZarinPal(event.data);
 }
 
 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_- PURCHASE VERIFICATION AND CONSUMPTION -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
@@ -239,12 +242,20 @@ private function verify(purchase:Purchase):void
 	}	
 }
 
-private function verifyZarinPal(response:Object):void
+public function verifyZarinPal(response:Object):void
 {
 	appModel.navigator.addLog(loc("waiting_message"));
 	var param:SFSObject = new SFSObject();
-	param.putText("productID", response["ProductID"]);
-	param.putText("purchaseToken", response["Authority"]);
+	if(response["Status"]!="OK")
+	{
+		dispatchEventWith(FeathersEventType.END_INTERACTION, false, {success:false});
+		explain(Iab.IABHELPER_USER_CANCELLED);
+		return;
+	}
+	var authority:String = response["Authority"];
+	var product:String = UserData.instance.getPurchaseActivity(authority);
+	param.putText("productID", product);
+	param.putText("purchaseToken", authority);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_purchaseVerifyHandler);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, param);
 	function sfsConnection_purchaseVerifyHandler(event:SFSEvent):void
@@ -256,8 +267,8 @@ private function verifyZarinPal(response:Object):void
 		if( result.getBool("success") )
 		{
 			var params:SFSObject = new SFSObject();
-			params.putText("productID", response["ProductID"]);
-			params.putText("purchaseToken", response["Authority"]);
+			params.putText("productID", product);
+			params.putText("purchaseToken", authority);
 			params.putBool("consume", true);
 			SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, params);
 			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {success:true});
@@ -265,9 +276,10 @@ private function verifyZarinPal(response:Object):void
 		else
 		{
 			log("purchase verify=>invalid: " + purchase.sku);
+			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {success:false});
 			explain(Iab.IABHELPER_VERIFICATION_FAILED);
 		}
-	}	
+	}
 }
 
 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_- CONSUMING PURCHASED ITEM -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
