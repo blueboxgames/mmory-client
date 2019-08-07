@@ -2,7 +2,6 @@ package com.gerantech.towercraft.managers
 {
 import com.gameanalytics.sdk.GAResourceFlowType;
 import com.gameanalytics.sdk.GameAnalytics;
-import com.gerantech.extensions.iab.IabResult;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.mmory.core.constants.PrefsTypes;
@@ -145,7 +144,7 @@ public function process(item : ExchangeItem) : void
 		BillingManager.instance.purchase((item.category == ExchangeType.C30_BUNDLES ? "k2k.bundle_" : "k2k.item_") + item.type);
 		function billinManager_endInteractionHandler ( event:Event ) : void {
 			BillingManager.instance.removeEventListener(FeathersEventType.END_INTERACTION, billinManager_endInteractionHandler);
-			var result:IabResult = event.data as IabResult;
+			var result:Object = event.data;
 			if( event.data.succeed )
 			{
 				exchange(item, params);
@@ -159,7 +158,7 @@ public function process(item : ExchangeItem) : void
 					
 						var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
 						var amount:int = item.requirements.get(outs[0]) * (appModel.descriptor.market == "google" ? 1 : 10);
-						GameAnalytics.addBusinessEvent(currency, amount, result.purchase.itemType, result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
+						GameAnalytics.addBusinessEvent(currency, amount, item.type.toString(), result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
 					}
 					
 					dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);

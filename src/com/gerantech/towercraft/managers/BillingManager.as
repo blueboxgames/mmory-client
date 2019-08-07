@@ -172,6 +172,7 @@ public function purchase(sku:String):void
 		gatewayRequest.addEventListener(ZarinpalRequestEvent.PAYMENT_REQUEST_RESPONSE_RECIEVED, gatewayRequest_responseRecievedHandler);
 		var item:ZarinpalStockItem = ZarinPal.instance.inventory.getItem(sku);
 		gatewayRequest.createRequest(item.sku, item.description, item.amount);
+		appModel.navigator.addLog(loc("waiting_message"));
 		gatewayRequest.send();
 		function gatewayRequest_responseRecievedHandler(e:ZarinpalRequestEvent):void
 		{
@@ -244,16 +245,17 @@ private function verify(purchase:Purchase):void
 
 public function verifyZarinPal(response:Object):void
 {
-	appModel.navigator.addLog(loc("waiting_message"));
 	var param:SFSObject = new SFSObject();
 	if(response["Status"]!="OK")
 	{
-		dispatchEventWith(FeathersEventType.END_INTERACTION, false, {success:false});
+		dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed:false});
 		explain(Iab.IABHELPER_USER_CANCELLED);
 		return;
 	}
+	if(!response["Authority"])
+		return;
 	var authority:String = response["Authority"];
-	var product:String = UserData.instance.getPurchaseActivity(authority);
+	var product:String = UserData.instance.getPurchaseActivity(authority) ? UserData.instance.getPurchaseActivity(authority) : "";
 	param.putText("productID", product);
 	param.putText("purchaseToken", authority);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_purchaseVerifyHandler);
@@ -271,12 +273,16 @@ public function verifyZarinPal(response:Object):void
 			params.putText("purchaseToken", authority);
 			params.putBool("consume", true);
 			SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, params);
-			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {success:true});
+			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed:true, purchase: {sku: product, auth: authority}});
+		}
+		else if ( result.getText("message") == "already used")
+		{
+			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed:false});
+			explain(Iab.IABHELPER_VERIFICATION_FAILED)
 		}
 		else
 		{
-			log("purchase verify=>invalid: " + purchase.sku);
-			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {success:false});
+			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed:false});
 			explain(Iab.IABHELPER_VERIFICATION_FAILED);
 		}
 	}

@@ -173,7 +173,8 @@ protected function nativeApplication_invokeHandler(event:InvokeEvent):void
 {
 	//NativeApplication.nativeApplication.removeEventListener(InvokeEvent.INVOKE, nativeApplication_invokeHandler);
 	AppModel.instance.invokes = event.arguments;
-	AppModel.instance.navigator.handleInvokes();
+	if(AppModel.instance.navigator)
+		AppModel.instance.navigator.handleInvokes();
 }
 
 protected function loaderInfo_uncaughtErrorHandler(event:UncaughtErrorEvent):void 

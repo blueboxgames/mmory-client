@@ -356,7 +356,6 @@ package com.gerantech.towercraft.controls
 				}
 				else if(a.indexOf("zarinpal?") > -1)
 				{
-					AppModel.instance.navigator.addLog("zarinpal");
 					var callbackHandler:ZarinpalCallbackHandler = new ZarinpalCallbackHandler(arguments[0]);
 					var response:Object = callbackHandler.getResponse();
 					BillingManager.instance.verifyZarinPal(response);
