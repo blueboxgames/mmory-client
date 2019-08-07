@@ -123,6 +123,5 @@ static public function titleFormatter(type:int, count:int) : String
 		return StrUtils.loc("arena_text") + " " + StrUtils.loc("num_" + (count + 1));
 	return "x" + StrUtils.getNumber(count);
 }
-
 }
 }

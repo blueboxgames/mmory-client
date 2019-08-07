@@ -16,6 +16,7 @@ import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
+import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
@@ -24,6 +25,7 @@ import feathers.layout.VerticalAlign;
 
 import flash.geom.Rectangle;
 
+import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
@@ -134,7 +136,8 @@ public class ExCategoryPlaceHolder extends TowersLayout
       this.countdownDisplay.time = this.exchanger.items.get(this.line.category + 1).expiredAt - this.timeManager.now;
       this.addChild(this.countdownDisplay);
 
-      this.timeManager.addEventListener(Event.CHANGE, timeManager_changeHandler);
+      this.timeManager.addEventListener(Event.CHANGE, this.timeManager_changeHandler);
+      this.exchangeManager.addEventListener(FeathersEventType.END_INTERACTION, this.exchangeManager_endInteractionHandler);
     }
 
     // title display
@@ -166,11 +169,19 @@ public class ExCategoryPlaceHolder extends TowersLayout
     this.countdownDisplay.time = this.exchanger.items.get(this.line.category + 1).expiredAt - this.timeManager.now;
   }
   
+  protected function exchangeManager_endInteractionHandler(event:Object):void
+  {
+    if( this.line.category != ExchangeType.C30_BUNDLES )
+      return;
+    this.removeChildren();
+    Starling.juggler.tween(this, 0.5, {height:0})
+  }
+
   override public function dispose():void 
   {
-    timeManager.removeEventListener(Event.CHANGE, timeManager_changeHandler);
+    this.exchangeManager.removeEventListener(FeathersEventType.END_INTERACTION, this.exchangeManager_endInteractionHandler);
+    this.timeManager.removeEventListener(Event.CHANGE, this.timeManager_changeHandler);
     super.dispose();
-  }
-  
+  }  
 }
 }

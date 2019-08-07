@@ -19,13 +19,13 @@ import feathers.layout.VerticalAlign;
 import flash.geom.Rectangle;
 
 import starling.events.Event;
+import starling.core.Starling;
 
 public class ExBundleItemRenderer extends ExDefaultItemRenderer
 {
 public function ExBundleItemRenderer(category:int) { super(category); }
 override protected function initialize() : void
 {
-	this.exchangeManager.addEventListener(FeathersEventType.BEGIN_INTERACTION, exchangeManager_beginInteractionHandler);
 	super.initialize();
 	
 	var insideLayout:AnchorLayoutData = new AnchorLayoutData(20, 20, 196, 20);
@@ -34,16 +34,16 @@ override protected function initialize() : void
 	insideSkin.source = Assets.getTexture("shop/gradient-gold-bg", "gui");
   insideSkin.layoutData = insideLayout;
   this.addChildAt(insideSkin, 0);
-
 }
 
 override protected function commitData() : void
 {
 	super.commitData();
+
 	if( this.exchange.numExchanges > 0 )
 	{
-		this.buttonDisplay.label = loc("achieved_label");
-		this.buttonDisplay.iconTexture = null;
+		// this.buttonDisplay.label = loc("achieved_label");
+		// this.buttonDisplay.iconTexture = null;
 		return;
 	}
 
@@ -84,7 +84,6 @@ override protected function commitData() : void
 
 override protected function iconFactory() : void {}
 override protected function titleFactory() : void {}
-override protected function exchangeManager_endInteractionHandler(event:Event):void {}
 override protected function buttonFactory():void
 {
 	super.buttonFactory();
@@ -96,9 +95,11 @@ override protected function buttonFactory():void
 	line.layoutData = new AnchorLayoutData(NaN, 280, 148, 460);
 	this.addChild(line);
 }
-protected function exchangeManager_beginInteractionHandler(event:Event):void 
+override protected function exchangeManager_endInteractionHandler(event:Event):void 
 {
-	this.resetData(event.data as ExchangeItem);
+	var item:ExchangeItem = event.data as ExchangeItem;
+	if( item.type == exchange.type )
+		showAchieveAnimation(item);
 }
 
 override protected function showAchieveAnimation(item:ExchangeItem):void 
