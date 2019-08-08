@@ -50,13 +50,27 @@
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 	<permission android:name="air.__APPID__.permission.C2D_MESSAGE" android:protectionLevel="signature" />
 	<uses-permission android:name="air.__APPID__.permission.C2D_MESSAGE" />
+	
+	<!-- Chartboost addition -->
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
 	<application android:enabled="true" >
 		
 		<!-- Google Play -->
 		<meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ 123068560070" />
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+
+		<!-- Chartboost -->
+		<meta-data android:name="__ChartboostAir__AppID" android:value="5d4aabb67469d40a95c06aa1" />
+		<meta-data android:name="__ChartboostAir__AppSignature" android:value="c1df304e53f77dc233ae059f7034f39e8b8ebf0b" />
 		
+		<activity android:name="com.chartboost.sdk.CBImpressionActivity"
+							android:excludeFromRecents="true"
+							android:hardwareAccelerated="true"
+							android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+							android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" />
+
+
 		<activity android:excludeFromRecents="false">
 		  <intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
@@ -189,5 +203,8 @@
 
 		<!-- Game Analytics -->
 		<extensionID>com.gameanalytics.sdk</extensionID>
+
+		<!-- Chartboost -->
+		<extensionID>com.chartboost.plugin.air</extensionID>
   </extensions>
 </application>

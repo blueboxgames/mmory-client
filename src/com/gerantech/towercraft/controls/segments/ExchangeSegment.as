@@ -104,7 +104,7 @@ override public function updateData():void
 			emotes.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C120_MAGICS && player.get_arena(0) > 1 )
 			magics.add(itemKeys[i]);
-		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS && player.unlocked_challenge() )
+		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS /* && player.unlocked_challenge() */ )
 			tickets.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C0_HARD && itemKeys[i] != ExchangeType.C0_HARD )
 			hards.add(itemKeys[i]);

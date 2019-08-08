@@ -1,13 +1,16 @@
 package com.gerantech.towercraft.managers
 {
+	import com.chartboost.plugin.air.Chartboost;
+	import com.chartboost.plugin.air.model.CBLocation;
+	import com.gerantech.towercraft.models.AppModel;
 	import com.gerantech.towercraft.models.vo.VideoAd;
-	
+
 	import flash.utils.Dictionary;
-	
+
 	import ir.tapsell.sdk.air.Tapsell;
 	import ir.tapsell.sdk.air.TapsellAdRequestListener;
 	import ir.tapsell.sdk.air.TapsellAdShowFinishedListener;
-	
+
 	import starling.events.Event;
 	import starling.events.EventDispatcher;
 
@@ -18,6 +21,7 @@ package com.gerantech.towercraft.managers
 		
 		private var adIds:Dictionary;
 		private var tapsell:Tapsell;
+		private var chartboost:Chartboost;
 		private static var _intance:VideoAdsManager;
 		
 		public static function get instance():VideoAdsManager
@@ -40,6 +44,17 @@ package com.gerantech.towercraft.managers
 			adIds["59d5f6814684650cb96b01ec"] = new VideoAd(TYPE_OPERATIONS, "59d5f6814684650cb96b01ec") ;
 			//adIds["59c925d44684653f256499bc"] = new VideoAd(ExchangeType.C32_CHEST, "59c925d44684653f256499bc") ;
 			//adIds["59c8e6114684656c505cb957"] = new VideoAd(ExchangeType.C33_CHEST, "59c8e6114684656c505cb957") ;
+
+			if (Chartboost.isAndroid())
+			{
+				Chartboost.startWith(AppModel.instance.navigator.stage.starling.nativeStage, "5d4aabb67469d40a95c06aa1", "c1df304e53f77dc233ae059f7034f39e8b8ebf0b");
+			}
+			/*
+			else if (Chartboost.isIOS())
+			{
+				Chartboost.startWith(AppModel.instance.navigator.stage.starling.nativeStage, "IOS_APP_ID", "IOS_APP_SIGN");
+			}
+			*/
 		}
 		
 		public function requestAll():void
@@ -85,6 +100,11 @@ package com.gerantech.towercraft.managers
 
 		public function showAd( type:int ):void
 		{
+			if (type == 0)
+			{
+				Chartboost.showRewardedVideo(CBLocation.IAP_STORE);
+				return;
+			}
 			var vid:VideoAd = getAdByType(type);
 			if( vid == null )
 			{
@@ -133,7 +153,7 @@ package com.gerantech.towercraft.managers
 			dispatchEventWith(Event.COMPLETE, false, vid);
 			trace("Ad show was finished, zoneId: "+zoneId+", completed? "+(completed)+", rewarded? "+(rewarded));
 		}
-		public function getVersion():String
+		public function getTapsellVersion():String
 		{
 			return tapsell.getVersion();
 		}

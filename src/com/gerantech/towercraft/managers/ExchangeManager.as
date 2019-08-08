@@ -210,6 +210,12 @@ private function exchange( item:ExchangeItem, params:SFSObject ) : int
 	else
 		bookType = item.category == ExchangeType.BOOKS_50 ? item.type : item.outcome; // reserved because outcome changed after exchange
 
+	if( item.type == ExchangeType.C71_TICKET )
+	{
+		VideoAdsManager.instance.showAd(0);
+		return 0;
+	}
+
 	var response:int = exchanger.exchange(item, timeManager.now, params.containsKey("hards") ? params.getInt("hards") : 0);
 	if( response == MessageTypes.RESPONSE_SUCCEED )
 	{
