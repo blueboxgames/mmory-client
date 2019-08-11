@@ -101,6 +101,8 @@ protected function loadingManager_loadedHandler(event:LoadingEvent) : void
 
 protected function navigator_achieveResourceHandler(event:Event) : void 
 {
+	if( event.data == null )
+		return;
 	var params:Array = event.data as Array;
 	if( !ResourceType.isBook(params[2]) )
 		addResourceAnimation(params[0], params[1], params[2], params[3]);

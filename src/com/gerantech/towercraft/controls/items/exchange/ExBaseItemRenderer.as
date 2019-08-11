@@ -42,6 +42,8 @@ override protected function commitData():void
 
 protected function exchangeManager_endInteractionHandler(event:Event):void 
 {
+	if( event.data == null );
+		return;
 	resetData(event.data as ExchangeItem);
 }
 
@@ -54,6 +56,8 @@ protected function resetData(item:ExchangeItem):void
 
 protected function showAchieveAnimation(item:ExchangeItem):void 
 {
+	if( item == null )
+		return;
 	var outs:Vector.<int> = item.outcomes.keys();
 	var rect:Rectangle = getBounds(stage);
 	for( var i:int = 0; i < outs.length; i++ )

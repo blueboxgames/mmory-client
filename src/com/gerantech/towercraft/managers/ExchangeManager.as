@@ -1,5 +1,7 @@
 package com.gerantech.towercraft.managers 
 {
+import com.chartboost.plugin.air.ChartboostEvent;
+import com.chartboost.plugin.air.model.CBLocation;
 import com.gameanalytics.sdk.GAResourceFlowType;
 import com.gameanalytics.sdk.GameAnalytics;
 import com.gerantech.extensions.iab.IabResult;
@@ -180,6 +182,19 @@ public function process(item : ExchangeItem) : void
 			return;
 		}
 		var confirm1:ConfirmPopup = new ConfirmPopup(loc("popup_sure_label"));
+		if( item.type == ExchangeType.C71_TICKET )
+		{
+			VideoAdsManager.instance.adProvider = VideoAdsManager.AD_PROVIDER_CHARTBOOST;
+			VideoAdsManager.instance.requestAdIn(ExchangeType.C43_ADS, false, CBLocation.DEFAULT);
+			VideoAdsManager.instance.addEventListener(Event.READY, videoAd_readyHandler);
+
+			function videoAd_readyHandler(e:Event):void
+			{
+				VideoAdsManager.instance.removeEventListener(Event.READY, videoAd_readyHandler);
+				showAd();
+			}
+			return;
+		}
 		//confirm1.acceptStyle = "danger";
 		confirm1.addEventListener(Event.SELECT, confirm1_selectHandler);
 		confirm1.addEventListener(Event.CLOSE, confirm1_closeHandler);
@@ -209,12 +224,6 @@ private function exchange( item:ExchangeItem, params:SFSObject ) : int
 		bookType = item.containBook(); // reterive a book from bundle. if not found show golden book
 	else
 		bookType = item.category == ExchangeType.BOOKS_50 ? item.type : item.outcome; // reserved because outcome changed after exchange
-
-	if( item.type == ExchangeType.C71_TICKET )
-	{
-		VideoAdsManager.instance.showAd(0);
-		return 0;
-	}
 
 	var response:int = exchanger.exchange(item, timeManager.now, params.containsKey("hards") ? params.getInt("hards") : 0);
 	if( response == MessageTypes.RESPONSE_SUCCEED )
@@ -273,14 +282,12 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 			return;
 		}
 		
-		var outcomes:IntIntMap = EarnOverlay.getOutcomse(data.getSFSArray("rewards"))		
+		var outcomes:IntIntMap = EarnOverlay.getOutcomse(data.getSFSArray("rewards"))
 		player.addResources(outcomes);
 		earnOverlay.outcomes = outcomes;
 		earnOverlay.addEventListener(Event.CLOSE, openChestOverlay_closeHandler);
 		function openChestOverlay_closeHandler(event:Event):void {
 			earnOverlay.removeEventListener(Event.CLOSE, openChestOverlay_closeHandler);
-			if( item.category != ExchangeType.C43_ADS )
-				showAd();
 			earnOverlay = null;
 			gotoDeckTutorial();
 		}
@@ -302,28 +309,48 @@ private function gotoDeckTutorial():void
 
 private function showAd():void
 {
-	return;
-	if( player.inTutorial() || player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) || !VideoAdsManager.instance.getAdByType(VideoAdsManager.TYPE_CHESTS).available )
+	if( player.inTutorial() )
 		return;
-	
 	var adConfirmPopup:AdConfirmPopup = new AdConfirmPopup();
 	adConfirmPopup.addEventListener(Event.SELECT, adConfirmPopup_selectHandler);
+	adConfirmPopup.addEventListener(Event.CLOSE, adConfirmPopup_closeHandler);
 	appModel.navigator.addPopup(adConfirmPopup);
 	function adConfirmPopup_selectHandler(event:Event):void {
 		adConfirmPopup.removeEventListener(Event.SELECT, adConfirmPopup_selectHandler);
-		VideoAdsManager.instance.showAd(VideoAdsManager.TYPE_CHESTS);
+		VideoAdsManager.instance.showAdIn(VideoAdsManager.TYPE_CHESTS, CBLocation.DEFAULT);
 		VideoAdsManager.instance.addEventListener(Event.COMPLETE, videoIdsManager_completeHandler);
+		VideoAdsManager.instance.addEventListener(ChartboostEvent.DID_FAIL_TO_LOAD_REWARDED_VIDEO, adManager_failToLoadHandler);
+	}
+	function adConfirmPopup_closeHandler(event:Event):void {
+		adConfirmPopup.removeEventListener(Event.CLOSE, adConfirmPopup_closeHandler);
+		
+		var item:ExchangeItem = exchanger.items.get(ExchangeType.C71_TICKET); 
+		item.enabled = true;
+		dispatchEventWith(FeathersEventType.END_INTERACTION, false, null);
+	}
+	function adManager_failToLoadHandler(event:Event):void {
+		VideoAdsManager.instance.removeEventListener(ChartboostEvent.DID_FAIL_TO_LOAD_REWARDED_VIDEO, adManager_failToLoadHandler);
 	}
 }
 private function videoIdsManager_completeHandler(event:Event):void
 {
 	VideoAdsManager.instance.removeEventListener(Event.COMPLETE, videoIdsManager_completeHandler);
+	var params:SFSObject = new SFSObject();
+	if( VideoAdsManager.instance.adProvider == VideoAdsManager.AD_PROVIDER_CHARTBOOST )
+	{
+		if( !event.data.reward )
+			return;
+		var item:ExchangeItem = exchanger.items.get(ExchangeType.C71_TICKET);
+		params.putInt("type", item.type );
+		exchange(item, params);
+		dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);
+		return;
+	}
+	
 	VideoAdsManager.instance.requestAd(VideoAdsManager.TYPE_CHESTS, true);
 	var ad:VideoAd = event.data as VideoAd;
 	if( !ad.rewarded )
 		return;
-	
-	var params:SFSObject = new SFSObject();
 	params.putInt("type", ExchangeType.C43_ADS );
 	exchange(exchanger.items.get(ExchangeType.C43_ADS), params);
 }

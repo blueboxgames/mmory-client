@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.managers
 {
 	import com.chartboost.plugin.air.Chartboost;
+	import com.chartboost.plugin.air.ChartboostEvent;
 	import com.chartboost.plugin.air.model.CBLocation;
 	import com.gerantech.towercraft.models.AppModel;
 	import com.gerantech.towercraft.models.vo.VideoAd;
@@ -18,21 +19,41 @@ package com.gerantech.towercraft.managers
 	{
 		public static const TYPE_OPERATIONS:int = 0;
 		public static const TYPE_CHESTS:int = 1;
+
+		public static const AD_PROVIDER_TAPSELL:int = 0;
+		public static const AD_PROVIDER_CHARTBOOST:int = 1;
 		
 		private var adIds:Dictionary;
 		private var tapsell:Tapsell;
 		private var chartboost:Chartboost;
-		private static var _intance:VideoAdsManager;
+		private static var _instance:VideoAdsManager;
 		
 		public static function get instance():VideoAdsManager
 		{
-			if( _intance == null )
-				_intance = new VideoAdsManager();
-			return _intance;
+			if( _instance == null )
+				_instance = new VideoAdsManager();
+			return _instance;
+		}
+
+		private var _adProvider:int;
+		
+		public function get adProvider():int
+		{
+			return _adProvider;
+		}
+		
+		public function set adProvider(value:int):void
+		{
+			_adProvider = value;
 		}
 		
 		public function VideoAdsManager()
 		{
+			/**
+			 * ---------------------------------------------------------------
+			 * Initialize Tapsell.
+			 * ---------------------------------------------------------------
+			 */
 			tapsell = Tapsell.getInstance()
 			tapsell.initialize("iafbrgahcrlntbpstnondthtsofkpibkcniodogbcgqtetlddnrphbphfbopganmnbtghq");
 			tapsell.setDebugMode(true);
@@ -45,20 +66,21 @@ package com.gerantech.towercraft.managers
 			//adIds["59c925d44684653f256499bc"] = new VideoAd(ExchangeType.C32_CHEST, "59c925d44684653f256499bc") ;
 			//adIds["59c8e6114684656c505cb957"] = new VideoAd(ExchangeType.C33_CHEST, "59c8e6114684656c505cb957") ;
 
-			if (Chartboost.isAndroid())
-			{
+			/**
+			 * ---------------------------------------------------------------
+			 * Initialize Chartboost.
+			 * ---------------------------------------------------------------
+			 */
+			if( Chartboost.isAndroid() )
 				Chartboost.startWith(AppModel.instance.navigator.stage.starling.nativeStage, "5d4aabb67469d40a95c06aa1", "c1df304e53f77dc233ae059f7034f39e8b8ebf0b");
-			}
-			/*
-			else if (Chartboost.isIOS())
-			{
+			else if( Chartboost.isIOS() )
 				Chartboost.startWith(AppModel.instance.navigator.stage.starling.nativeStage, "IOS_APP_ID", "IOS_APP_SIGN");
-			}
-			*/
 		}
 		
 		public function requestAll():void
 		{
+			if( adProvider == AD_PROVIDER_CHARTBOOST )
+				return;
 			for (var k:String in adIds) 
 				tapsell.requestAd( k, true );
 		}
@@ -80,6 +102,8 @@ package com.gerantech.towercraft.managers
 		
 		public function getAdByType(type:int):VideoAd
 		{
+			if( adProvider == AD_PROVIDER_CHARTBOOST )
+				return null;
 			for (var k:String in adIds) 
 				if( VideoAd(adIds[k]).type == type )
 					return adIds[k];
@@ -88,6 +112,25 @@ package com.gerantech.towercraft.managers
 
 		public function requestAd(type:int, isCached:Boolean):void
 		{
+			requestAdIn(type, isCached, CBLocation.DEFAULT);
+		}
+
+		public function requestAdIn(type:int, isCached:Boolean, location:String):void
+		{
+			if( adProvider == AD_PROVIDER_CHARTBOOST )
+			{
+				// Test:
+				// -----------------------------------
+				// trace("Start chaching ad.");
+				// dispatchEventWith(Event.READY);
+				//------------------------------------
+				// Real:
+				//------------------------------------
+				Chartboost.cacheRewardedVideo(location);
+				Chartboost.addDelegateEvent(ChartboostEvent.DID_CACHE_REWARDED_VIDEO, chartboost_didCacheRewardedVideoHandler);
+				//------------------------------------
+				return;
+			}
 			var vid:VideoAd = getAdByType(type);
 			if( vid == null )
 			{
@@ -100,9 +143,26 @@ package com.gerantech.towercraft.managers
 
 		public function showAd( type:int ):void
 		{
-			if (type == 0)
+			showAdIn(type, CBLocation.DEFAULT);
+		}
+
+		public function showAdIn( type:int, location:String ):void
+		{
+			if( adProvider == AD_PROVIDER_CHARTBOOST )
 			{
-				Chartboost.showRewardedVideo(CBLocation.IAP_STORE);
+				// Test Show reward:
+				// chartboost_didCompleteRewardedVideoHandler("Default", 1);
+				// return;
+				if( Chartboost.hasRewardedVideo(location) )
+				{
+					Chartboost.showRewardedVideo(location);
+					Chartboost.addDelegateEvent(ChartboostEvent.DID_COMPLETE_REWARDED_VIDEO, chartboost_didCompleteRewardedVideoHandler);
+				}
+				else 
+				{
+					requestAdIn(type, true, location);
+					dispatchEventWith(ChartboostEvent.DID_FAIL_TO_LOAD_REWARDED_VIDEO);
+				}
 				return;
 			}
 			var vid:VideoAd = getAdByType(type);
@@ -118,6 +178,15 @@ package com.gerantech.towercraft.managers
 			}
 			tapsell.showAd(vid.adId, false, true, Tapsell.ORIENTATION_UNLOCKED, true);
 			vid.adId = null;
+		}
+
+		protected function chartboost_didCompleteRewardedVideoHandler(location:String, reward:int):void
+		{
+			dispatchEventWith(Event.COMPLETE, false, {zone: location, reward: reward});
+		}
+		protected function chartboost_didCacheRewardedVideoHandler(location:String):void
+		{
+			dispatchEventWith(Event.READY);
 		}
 		public function onNoAdAvailable(zoneId:String):void{
 			trace("No ad available.");
