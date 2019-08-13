@@ -20,6 +20,7 @@ import com.gerantech.towercraft.controls.popups.AdConfirmPopup;
 import com.gerantech.towercraft.controls.popups.BookDetailsPopup;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.popups.EmoteDetailsPopup;
+import com.gerantech.towercraft.controls.popups.MessagePopup;
 import com.gerantech.towercraft.controls.popups.SimpleHeaderPopup;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.controls.segments.ExchangeSegment;
@@ -185,14 +186,7 @@ public function process(item : ExchangeItem) : void
 		if( item.type == ExchangeType.C71_TICKET )
 		{
 			VideoAdsManager.instance.adProvider = VideoAdsManager.AD_PROVIDER_CHARTBOOST;
-			VideoAdsManager.instance.requestAdIn(ExchangeType.C43_ADS, false, CBLocation.DEFAULT);
-			VideoAdsManager.instance.addEventListener(Event.READY, videoAd_readyHandler);
-
-			function videoAd_readyHandler(e:Event):void
-			{
-				VideoAdsManager.instance.removeEventListener(Event.READY, videoAd_readyHandler);
-				showAd();
-			}
+			showAd();
 			return;
 		}
 		//confirm1.acceptStyle = "danger";
@@ -310,16 +304,27 @@ private function gotoDeckTutorial():void
 private function showAd():void
 {
 	if( player.inTutorial() )
-		return;
+		return
 	var adConfirmPopup:AdConfirmPopup = new AdConfirmPopup();
 	adConfirmPopup.addEventListener(Event.SELECT, adConfirmPopup_selectHandler);
 	adConfirmPopup.addEventListener(Event.CLOSE, adConfirmPopup_closeHandler);
 	appModel.navigator.addPopup(adConfirmPopup);
 	function adConfirmPopup_selectHandler(event:Event):void {
 		adConfirmPopup.removeEventListener(Event.SELECT, adConfirmPopup_selectHandler);
-		VideoAdsManager.instance.showAdIn(VideoAdsManager.TYPE_CHESTS, CBLocation.DEFAULT);
-		VideoAdsManager.instance.addEventListener(Event.COMPLETE, videoIdsManager_completeHandler);
-		VideoAdsManager.instance.addEventListener(ChartboostEvent.DID_FAIL_TO_LOAD_REWARDED_VIDEO, adManager_failToLoadHandler);
+		if( VideoAdsManager.instance.hasAd && appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) )
+		{
+			VideoAdsManager.instance.showAdIn(VideoAdsManager.TYPE_CHESTS, CBLocation.DEFAULT);
+			VideoAdsManager.instance.addEventListener(Event.COMPLETE, videoIdsManager_completeHandler);
+			VideoAdsManager.instance.addEventListener(ChartboostEvent.DID_FAIL_TO_LOAD_REWARDED_VIDEO, adManager_failToLoadHandler);
+		}
+		else
+		{
+			// Show no ad available popup.
+			var noAdAvailablePopup:MessagePopup = new MessagePopup(loc("popup_ad_not_available"), loc("popup_ok_label"));
+			appModel.navigator.addPopup(noAdAvailablePopup);
+			// Optionaly request for ad cache for failure maybe?
+			VideoAdsManager.instance.requestAdIn(VideoAdsManager.TYPE_CHESTS, false, CBLocation.DEFAULT);
+		}
 	}
 	function adConfirmPopup_closeHandler(event:Event):void {
 		adConfirmPopup.removeEventListener(Event.CLOSE, adConfirmPopup_closeHandler);
@@ -336,6 +341,7 @@ private function videoIdsManager_completeHandler(event:Event):void
 {
 	VideoAdsManager.instance.removeEventListener(Event.COMPLETE, videoIdsManager_completeHandler);
 	var params:SFSObject = new SFSObject();
+	VideoAdsManager.instance.adProvider = VideoAdsManager.AD_PROVIDER_CHARTBOOST;
 	if( VideoAdsManager.instance.adProvider == VideoAdsManager.AD_PROVIDER_CHARTBOOST )
 	{
 		if( !event.data.reward )

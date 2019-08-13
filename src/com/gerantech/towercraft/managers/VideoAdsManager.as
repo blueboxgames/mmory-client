@@ -23,6 +23,7 @@ package com.gerantech.towercraft.managers
 		public static const AD_PROVIDER_TAPSELL:int = 0;
 		public static const AD_PROVIDER_CHARTBOOST:int = 1;
 		
+		private var _hasAd:Boolean;
 		private var adIds:Dictionary;
 		private var tapsell:Tapsell;
 		private var chartboost:Chartboost;
@@ -45,6 +46,11 @@ package com.gerantech.towercraft.managers
 		public function set adProvider(value:int):void
 		{
 			_adProvider = value;
+		}
+
+		public function get hasAd():Boolean
+		{
+			return this._hasAd;
 		}
 		
 		public function VideoAdsManager()
@@ -75,6 +81,8 @@ package com.gerantech.towercraft.managers
 				Chartboost.startWith(AppModel.instance.navigator.stage.starling.nativeStage, "5d4aabb67469d40a95c06aa1", "c1df304e53f77dc233ae059f7034f39e8b8ebf0b");
 			else if( Chartboost.isIOS() )
 				Chartboost.startWith(AppModel.instance.navigator.stage.starling.nativeStage, "IOS_APP_ID", "IOS_APP_SIGN");
+
+			this._hasAd = false;
 		}
 		
 		public function requestAll():void
@@ -117,7 +125,7 @@ package com.gerantech.towercraft.managers
 
 		public function requestAdIn(type:int, isCached:Boolean, location:String):void
 		{
-			if( adProvider == AD_PROVIDER_CHARTBOOST )
+			if( adProvider == AD_PROVIDER_CHARTBOOST && ( Chartboost.isAndroid() || Chartboost.isIOS() ) )
 			{
 				// Test:
 				// -----------------------------------
@@ -182,11 +190,14 @@ package com.gerantech.towercraft.managers
 
 		protected function chartboost_didCompleteRewardedVideoHandler(location:String, reward:int):void
 		{
+			this._hasAd = false;
 			dispatchEventWith(Event.COMPLETE, false, {zone: location, reward: reward});
+			requestAdIn(TYPE_CHESTS, true, location);
 		}
 		protected function chartboost_didCacheRewardedVideoHandler(location:String):void
 		{
 			dispatchEventWith(Event.READY);
+			this._hasAd = true;
 		}
 		public function onNoAdAvailable(zoneId:String):void{
 			trace("No ad available.");

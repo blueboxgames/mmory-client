@@ -42,7 +42,7 @@ override protected function commitData():void
 
 protected function exchangeManager_endInteractionHandler(event:Event):void 
 {
-	if( event.data == null );
+	if( event.data == null )
 		return;
 	resetData(event.data as ExchangeItem);
 }
