@@ -240,7 +240,7 @@ private function exchange( item:ExchangeItem, params:SFSObject ) : int
 		}
 	}
 	
-	if( item.requirements.keys()[0] != ResourceType.R5_CURRENCY_REAL )
+	if( !item.requirements.exists(ResourceType.R5_CURRENCY_REAL) )
 	{
 		dispatchCustomEvent(FeathersEventType.BEGIN_INTERACTION, item);
 		SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_extensionResponseHandler);
