@@ -347,9 +347,8 @@ protected function stickerList_changeHandler(event:Event):void
 	appModel.battleFieldView.responseSender.sendSticker(sticker);
 	showBubble(sticker);
 	stickerList.selectedIndex = -1;
-	if(GameAnalytics.isInitialized){
+	if( GameAnalytics.isInitialized )
 		GameAnalytics.addDesignEvent("sticker:st" + sticker);
-	}
 }
 
 public function showBubble(type:int, itsMe:Boolean=true):void

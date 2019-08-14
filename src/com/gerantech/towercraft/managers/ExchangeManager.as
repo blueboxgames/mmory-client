@@ -152,7 +152,7 @@ public function process(item : ExchangeItem) : void
 				{
 					// send analytics events
 					var outs:Vector.<int> = item.outcomes.keys();
-					if(GameAnalytics.isInitialized)
+					if( GameAnalytics.isInitialized )
 					{
 						GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, outs[0].toString(), item.outcomes.get(outs[0]), "IAP", result.purchase.sku);
 					
@@ -239,7 +239,7 @@ private function exchange( item:ExchangeItem, params:SFSObject ) : int
 		}
 	}
 	
-	if( item.category != ExchangeType.C0_HARD )
+	if( !item.requirements.exists(ResourceType.R5_CURRENCY_REAL) )
 	{
 		dispatchCustomEvent(FeathersEventType.BEGIN_INTERACTION, item);
 		SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_extensionResponseHandler);
