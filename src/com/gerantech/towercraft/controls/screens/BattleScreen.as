@@ -129,7 +129,7 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 	
 	case SFSCommands.BATTLE_NEW_ROUND:
 		if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN )
-			battleField.requestReset();
+			battleField.killPioneers(data.getInt("winner"));
 		if( hud != null )
 			hud.updateScores(data.getInt("round"), data.getInt("winner"), data.getInt(battleField.side + ""), data.getInt(battleField.side == 0 ? "1" : "0"), data.getInt("unitId"));
 		break;
