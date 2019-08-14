@@ -153,7 +153,7 @@ public function process(item : ExchangeItem) : void
 				{
 					// send analytics events
 					var outs:Vector.<int> = item.outcomes.keys();
-					if(GameAnalytics.isInitialized)
+					if( GameAnalytics.isInitialized )
 					{
 						GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, outs[0].toString(), item.outcomes.get(outs[0]), "IAP", result.purchase.sku);
 					
