@@ -52,35 +52,5 @@ public function get registered():Boolean
 {
 	return id != 0;
 }
-
-public function getPurchaseActivity(authCode:String):String
-{
-	var so:SharedObject = SharedObject.getLocal(AppModel.instance.descriptor.server + "-purchase-data");
-	if( so.data[authCode] == null )
-		return null;
-	return so.data[authCode];
-}
-
-public function setPurchaseActivity(sku:String, authCode:String):void
-{
-	var so:SharedObject = SharedObject.getLocal(AppModel.instance.descriptor.server + "-purchase-data");
-	so.data[authCode] = sku;
-	so.flush(100000);
-}
-
-public function clearPurchase(authCode:String):void
-{
-	var so:SharedObject = SharedObject.getLocal(AppModel.instance.descriptor.server + "-purchase-data");
-	if( so.data[authCode] == null )
-		return;
-	so.data[authCode] = null;
-	so.flush(100000);
-}
-
-public function clearPurchaseHistory():void
-{
-	var so:SharedObject = SharedObject.getLocal(AppModel.instance.descriptor.server + "-purchase-data");
-	so.clear();
-}
 }
 }

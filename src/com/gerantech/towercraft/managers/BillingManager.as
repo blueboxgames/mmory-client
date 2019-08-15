@@ -12,12 +12,12 @@ import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.vo.UserData;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.zarinpal.ZarinPal;
 import com.zarinpal.ZarinpalGatewayRequest;
 import com.zarinpal.events.ZarinpalRequestEvent;
+import com.zarinpal.inventory.ZarinpalPurchaseActivity;
 import com.zarinpal.inventory.ZarinpalStockItem;
 
 import feathers.events.FeathersEventType;
@@ -178,7 +178,6 @@ public function purchase(sku:String):void
 		{
 			var sku:String = e.response["ProductID"];
 			var authCode:String = e.response["Authority"];
-			UserData.instance.setPurchaseActivity(sku, authCode);
 			var urlRequest:URLRequest = new URLRequest(gatewayRequest.getGatewayUrl(authCode));
 			navigateToURL(urlRequest);
 		}
@@ -255,7 +254,7 @@ public function verifyZarinPal(response:Object):void
 	if(!response["Authority"])
 		return;
 	var authority:String = response["Authority"];
-	var product:String = UserData.instance.getPurchaseActivity(authority) ? UserData.instance.getPurchaseActivity(authority) : "";
+	var product:String = ZarinpalPurchaseActivity.getPurchaseActivity(authority) ? ZarinpalPurchaseActivity.getPurchaseActivity(authority) : "";
 	param.putText("productID", product);
 	param.putText("purchaseToken", authority);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_purchaseVerifyHandler);
