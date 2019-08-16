@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.views
 {
 import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.GameObject;
 import com.gerantech.mmory.core.battle.bullets.Bullet;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
@@ -29,12 +30,13 @@ import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
+import starling.display.Image;
 import starling.display.Quad;
 import starling.display.Sprite;
 import starling.events.Event;
+import starling.textures.Texture;
 
 import starlingbuilder.engine.DefaultAssetMediator;
-import com.gerantech.mmory.core.battle.GameObject;
 
 public class BattleFieldView extends Sprite
 {
@@ -141,7 +143,7 @@ public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Nu
 		trace("not able to summon id: " + id, "type: " + type, "side: " + side)
 		return;
 	}
-	
+
 	var card:Card = getCard(side, type, level);
 	if( CardTypes.isSpell(type) )
 	{
@@ -154,7 +156,6 @@ public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Nu
 
 	var u:UnitView = new UnitView(card, id, side, x, y, 0);
 	u.addEventListener("findPath", findPathHandler);
-
 	if( health >= 0 )
 		u.health = health;
 	battleData.battleField.units.set(id, u as Unit);
@@ -182,6 +183,27 @@ private function findPathHandler(e:BattleEvent):void
 	var c:uint = Math.random() * 0xFFFFFF;
 	for (var i:int = 0; i < u.path.length; i ++)
 		drawTile(u.path[i].x, u.path[i].y, c, battleData.battleField.field.tileMap.tileWidth, battleData.battleField.field.tileMap.tileHeight, 0.3);
+}
+
+public function newRound(side:int):void 
+{
+	var color:int = side == battleData.battleField.side ? 1 : 0;
+	crazyDriving(-200, 1160, color == 1 ? -140 : 140, color);
+	crazyDriving(1160, -200, color == 1 ? -420 : 420, color);
+	function crazyDriving(fromX:int, toX:int, y:int, color:int) : void
+	{
+		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/base");
+		var car:Image = new Image(txt);
+		car.width = txt.frameWidth * 2.4;
+		car.height = txt.frameHeight * 2.4;
+		car.scaleX *= fromX < toX ? 1 : -1;
+		car.x = fromX;
+		car.y = y + BattleField.HEIGHT * 0.5 - car.height * 0.7;
+		unitsContainer.addChild(car);
+		Starling.juggler.tween(car, 1, {x:toX, onComplete:car.removeFromParent, onCompleteArgs:[true]});
+	}
+
+ 	battleData.battleField.killPioneers(side);
 }
 
 public function hitUnits(buletId:int, targets:ISFSArray) : void
