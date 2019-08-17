@@ -50,14 +50,16 @@ public class ExCategoryPlaceHolder extends TowersLayout
   private var list:List;
   private var owner:List;
   private var line:ShopLine;
+  private var showInfo:Boolean;
   private var listCollection:ListCollection;
   private var countdownDisplay:CountdownLabel;
 
-  public function ExCategoryPlaceHolder(line:ShopLine, owner:List)
+  public function ExCategoryPlaceHolder(line:ShopLine, owner:List, showInfo:Boolean = true)
   {
     super();
     this.line = line;
     this.owner = owner;
+    this.showInfo = showInfo;
     this.layout = new AnchorLayout();
     this.listCollection = new ListCollection();
   }
@@ -117,15 +119,18 @@ public class ExCategoryPlaceHolder extends TowersLayout
     this.listCollection.data = this.line.items;
     
     // info button
-    var infoButton:IndicatorButton = new IndicatorButton();
-    infoButton.label = StrUtils.getNumber("?");
-    infoButton.width = 64;
-    infoButton.height = 68;
-    infoButton.fixed = false;
-    infoButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
-    infoButton.addEventListener(Event.TRIGGERED, this.infoButton_trigeredHandler);
-    infoButton.layoutData = new AnchorLayoutData(20, 20);
-    this.addChild(infoButton as DisplayObject);
+    if( showInfo )
+    {
+      var infoButton:IndicatorButton = new IndicatorButton();
+      infoButton.label = StrUtils.getNumber("?");
+      infoButton.width = 64;
+      infoButton.height = 68;
+      infoButton.fixed = false;
+      infoButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
+      infoButton.addEventListener(Event.TRIGGERED, this.infoButton_trigeredHandler);
+      infoButton.layoutData = new AnchorLayoutData(20, 20);
+      this.addChild(infoButton as DisplayObject);
+    }
 
     // countdown display
     if( this.line.category == ExchangeType.C20_SPECIALS || this.line.category == ExchangeType.C30_BUNDLES  || this.line.category == ExchangeType.C80_EMOTES )
@@ -152,7 +157,8 @@ public class ExCategoryPlaceHolder extends TowersLayout
     if( !ei.enabled )
       return;
     ei.enabled = false;
-    this.owner.dispatchEventWith(Event.SELECT, false, ei);
+    if( this.owner != null )
+      this.owner.dispatchEventWith(Event.SELECT, false, ei);
     this.list.removeEventListener(Event.CHANGE, this.list_changeHandler);
     this.list.selectedIndex = -1;
     this.list.addEventListener(Event.CHANGE, this.list_changeHandler);

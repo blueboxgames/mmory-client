@@ -11,11 +11,12 @@ import com.gerantech.towercraft.controls.buttons.IconButton;
 import com.gerantech.towercraft.controls.buttons.Indicator;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
 import com.gerantech.towercraft.controls.groups.HomeBooksLine;
-import com.gerantech.towercraft.controls.groups.OfferView;
 import com.gerantech.towercraft.controls.groups.Profile;
 import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRenderer;
+import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
 import com.gerantech.towercraft.controls.popups.RankingPopup;
 import com.gerantech.towercraft.controls.popups.SelectNamePopup;
+import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
 import com.gerantech.towercraft.managers.net.LoadingManager;
@@ -40,7 +41,8 @@ import starling.events.Event;
 
 public class HomeSegment extends Segment
 {
-static private var SOCIAL_AUTH_WARNED:Boolean
+static private var OFFER_BUNDLE:Boolean
+static private var OFFER_SOCIAL_AUTH:Boolean
 private var league:int;
 private var battleTimeoutId:uint;
 private var googleButton:IconButton;
@@ -150,35 +152,35 @@ override public function init():void
 		googleButton.layoutData = new AnchorLayoutData(330, paddingH + 36 + starsButton.width);
 		googleButton.width = googleButton.height = 140;
 		addButton(googleButton, "googleButton");
-				
-		if( !SOCIAL_AUTH_WARNED )
-		{
-			setTimeout(warnAuthentication, 1000);
-			SOCIAL_AUTH_WARNED = true;
-		}
 	}
+
+	setTimeout(showOffers, 2000);
 }
 
-private	function warnAuthentication () : void
+private	function showOffers () : void
 {
-	var tt:BaseTooltip = new BaseTooltip(loc("socials_signin_warn"), new Rectangle(googleButton.x, googleButton.y, googleButton.width, googleButton.height));
-	this.addChild(tt);
+	if( DashboardScreen.TAB_INDEX != 2 )
+		return;
+	if( exchanger.items.exists(ExchangeType.C31_BUNDLE) && !OFFER_BUNDLE )
+	{
+		OFFER_BUNDLE = true;
+		var bundlePopup:BundleDetailsPopup = new BundleDetailsPopup(exchanger.items.get(ExchangeType.C31_BUNDLE));
+		appModel.navigator.addChild(bundlePopup);
+		return;
+	}
+
+	if( googleButton != null && !OFFER_SOCIAL_AUTH )
+	{
+		OFFER_SOCIAL_AUTH = true;
+		var googleTooltip:BaseTooltip = new BaseTooltip(loc("socials_signin_warn"), new Rectangle(googleButton.x, googleButton.y, googleButton.width, googleButton.height));
+		this.addChild(googleTooltip);
+	}
 }
 
 override public function focus():void
 {
 	if( initializeCompleted )
 		showTutorial();
-}
-
-private function showOffers():void 
-{
-	var offers:OfferView = new OfferView();
-	offers.layoutData = new AnchorLayoutData(NaN, appModel.isLTR?NaN:0, NaN, appModel.isLTR?0:NaN);
-	offers.width = 780;
-	offers.height = 160;
-	offers.y = 50;
-	addChild(offers);
 }
 
 private function addButton(button:DisplayObject, name:String, x:int=0, y:int=0, delay:Number=0, scale:Number = 1):void
@@ -231,7 +233,7 @@ private function mainButtons_triggeredHandler(event:Event):void
 	switch( buttonName )
 	{
 		case "eventsButton":	appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
-		case "battleButton":	appModel.navigator.runBattle(UserData.instance.challengeIndex);			return;
+		case "battleButton":	appModel.navigator.runBattle(UserData.instance.challengeIndex);	return;
 	}
 	
 	if( league <= 0 )
