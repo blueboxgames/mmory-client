@@ -173,6 +173,11 @@ public class ExCategoryPlaceHolder extends TowersLayout
   {
     if( this.line.category != ExchangeType.C30_BUNDLES )
       return;
+
+    var item:ExchangeItem = event.data as ExchangeItem;
+    if( item.category != ExchangeType.C30_BUNDLES )
+      return;
+    
     this.removeChildren();
     Starling.juggler.tween(this, 0.5, {height:0})
   }
