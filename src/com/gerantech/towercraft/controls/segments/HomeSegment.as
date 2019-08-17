@@ -157,14 +157,6 @@ override public function init():void
 			SOCIAL_AUTH_WARNED = true;
 		}
 	}
-	
-	/*adsButton = new NotifierButton(Assets.getTexture("button-spectate"));
-	adsButton.width = adsButton.height = 140;
-	adsButton.layoutData = new AnchorLayoutData(120, NaN, NaN, 20);
-	if( exchanger.items.get(ExchangeType.C43_ADS).getState(timeManager.now) == ExchangeItem.CHEST_STATE_READY )
-		adsButton.badgeLabel = "!";
-	adsButton.addEventListener(Event.TRIGGERED, mainButtons_triggeredHandler);
-	addChild(adsButton);*/
 }
 
 private	function warnAuthentication () : void
