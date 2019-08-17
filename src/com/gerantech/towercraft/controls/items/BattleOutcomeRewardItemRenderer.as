@@ -73,8 +73,10 @@ override protected function commitData():void
 protected function owner_createCompleteHandler(e:Event):void 
 {
 	_owner.removeEventListener(FeathersEventType.CREATION_COMPLETE, owner_createCompleteHandler);
-	if( _data.c != 0 )// && !SFSConnection.instance.mySelf.isSpectator
+	if( _data.c != 0 ) // && !SFSConnection.instance.mySelf.isSpectator
 	{
+		if( _data.c < 0 && _data.t == ResourceType.R2_POINT )
+			return;
 		var rect:Rectangle = getBounds(stage);
 		battleData.outcomes.push(new RewardData(rect.x + rect.width * 0.5, rect.y + rect.height * 0.5, _data.t, _data.c));
 	}
