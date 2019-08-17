@@ -171,7 +171,6 @@ protected function stage_activateHandler(event:Event):void
 
 protected function nativeApplication_invokeHandler(event:InvokeEvent):void
 {
-	//NativeApplication.nativeApplication.removeEventListener(InvokeEvent.INVOKE, nativeApplication_invokeHandler);
 	AppModel.instance.invokes = event.arguments;
 	if(AppModel.instance.navigator)
 		AppModel.instance.navigator.handleInvokes();

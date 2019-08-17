@@ -221,7 +221,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	
 	appModel.sounds.addAndPlay("main-theme", null, SoundManager.CATE_THEME, SoundManager.SINGLE_BYPASS_THIS, 100);
 	
-	appModel.navigator.handleInvokes();
+	setTimeout(appModel.navigator.handleInvokes, 2000);
 	exchangeManager.addEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
 	
 	SFSConnection.instance.lobbyManager.addEventListener(Event.UPDATE, lobbyManager_updateHandler);

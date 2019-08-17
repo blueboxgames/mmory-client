@@ -13,11 +13,11 @@ import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.smartfoxserver.v2.core.SFSEvent;
+import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.zarinpal.ZarinPal;
 import com.zarinpal.ZarinpalGatewayRequest;
 import com.zarinpal.events.ZarinpalRequestEvent;
-import com.zarinpal.inventory.ZarinpalPurchaseActivity;
 import com.zarinpal.inventory.ZarinpalStockItem;
 
 import feathers.events.FeathersEventType;
@@ -201,20 +201,32 @@ protected function iab_purchaseFinishedHandler(event:IabEvent):void
 	}
 	var purchase:Purchase = Iab.instance.getPurchase(event.result.purchase.sku);
 	if( purchase != null )
-		verify(purchase);
+	{
+		var param:SFSObject = new SFSObject();
+		param.putText("productID", purchase.sku);
+		param.putText("purchaseToken", purchase.token);
+		verify(param);
+	}
 	else
 		queryInventory();
 }
 
 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_- PURCHASE VERIFICATION AND CONSUMPTION -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-private function verify(purchase:Purchase):void
+public function verify(purchase:Object):void
 {
 	appModel.navigator.addLog(loc("waiting_message"));
 	var param:SFSObject = new SFSObject();
-	param.putText("productID", purchase.sku);
-	param.putText("purchaseToken", purchase.token);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_purchaseVerifyHandler);
-	SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, param);
+	if(appModel.descriptor.market == "zarinpal")
+	{
+		SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, purchase as ISFSObject);
+	}
+	else
+	{
+		param.putText("productID", purchase.sku);
+		param.putText("purchaseToken", purchase.token);
+		SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, param);
+	}
 	function sfsConnection_purchaseVerifyHandler(event:SFSEvent):void
 	{
 		if( event.params.cmd != SFSCommands.VERIFY_PURCHASE )
@@ -228,60 +240,34 @@ private function verify(purchase:Purchase):void
 				if(  result.getInt("consumptionState") == 1 )
 					consume(purchase.sku);
 			}
+			else if ( appModel.descriptor.market == "zarinpal" )
+			{
+				/**
+				 * No consume method for zarinpal.
+				 */
+				// var params:SFSObject = new SFSObject();
+				// params.putText("productID", "$?PRODUCT_ID");
+				// params.putText("purchaseToken","$?PURCHASE_TOKEN");
+				// params.putBool("consume", true);
+				// SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, params);
+				var productID:int = int( result.getText("productID").split("_")[1] );
+				var item:ExchangeItem = exchanger.items.get(productID);
+				item.enabled = true;
+				// Dispatch event directly to exchange manager cause we might have lost
+				// the process.
+				ExchangeManager.instance.dispatchEventWith(FeathersEventType.END_INTERACTION, false, item);
+				// false sucess cause we already dispatched end interaction.
+				// dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed: false});
+			}
 			else
 			{
 				if(  result.getInt("consumptionState") == 0 )
-					consume(purchase.sku);
+					consume(param.getText("productID"));
 			}
 		}
 		else
 		{
 			log("purchase verify=>invalid: " + purchase.sku);
-			explain(Iab.IABHELPER_VERIFICATION_FAILED);
-		}
-	}	
-}
-
-public function verifyZarinPal(response:Object):void
-{
-	var param:SFSObject = new SFSObject();
-	if(response["Status"]!="OK")
-	{
-		dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed:false});
-		explain(Iab.IABHELPER_USER_CANCELLED);
-		return;
-	}
-	if(!response["Authority"])
-		return;
-	var authority:String = response["Authority"];
-	var product:String = ZarinpalPurchaseActivity.getPurchaseActivity(authority) ? ZarinpalPurchaseActivity.getPurchaseActivity(authority) : "";
-	param.putText("productID", product);
-	param.putText("purchaseToken", authority);
-	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_purchaseVerifyHandler);
-	SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, param);
-	function sfsConnection_purchaseVerifyHandler(event:SFSEvent):void
-	{
-		if( event.params.cmd != SFSCommands.VERIFY_PURCHASE )
-			return;
-		SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_purchaseVerifyHandler);
-		var result:SFSObject = event.params.params;
-		if( result.getBool("success") )
-		{
-			var params:SFSObject = new SFSObject();
-			params.putText("productID", product);
-			params.putText("purchaseToken", authority);
-			params.putBool("consume", true);
-			SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, params);
-			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed:true, purchase: {sku: product, auth: authority}});
-		}
-		else if ( result.getText("message") == "already used")
-		{
-			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed:false});
-			explain(Iab.IABHELPER_VERIFICATION_FAILED)
-		}
-		else
-		{
-			dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed:false});
 			explain(Iab.IABHELPER_VERIFICATION_FAILED);
 		}
 	}

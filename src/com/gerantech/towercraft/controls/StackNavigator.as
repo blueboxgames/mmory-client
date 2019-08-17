@@ -17,6 +17,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.popups.AbstractPopup;
 	import com.gerantech.towercraft.controls.popups.InvitationPopup;
 	import com.gerantech.towercraft.controls.popups.LobbyDetailsPopup;
+	import com.gerantech.towercraft.controls.popups.MessagePopup;
 	import com.gerantech.towercraft.controls.screens.DashboardScreen;
 	import com.gerantech.towercraft.controls.segments.ExchangeSegment;
 	import com.gerantech.towercraft.controls.segments.InboxSegment;
@@ -38,6 +39,7 @@ package com.gerantech.towercraft.controls
 	import com.smartfoxserver.v2.entities.data.ISFSObject;
 	import com.smartfoxserver.v2.entities.data.SFSObject;
 	import com.zarinpal.ZarinpalCallbackHandler;
+	import com.zarinpal.inventory.ZarinpalPurchaseActivity;
 
 	import feathers.controls.LayoutGroup;
 	import feathers.controls.StackScreenNavigator;
@@ -358,7 +360,20 @@ package com.gerantech.towercraft.controls
 				{
 					var callbackHandler:ZarinpalCallbackHandler = new ZarinpalCallbackHandler(arguments[0]);
 					var response:Object = callbackHandler.getResponse();
-					BillingManager.instance.verifyZarinPal(response);
+					if( response["Status"]!="OK" )
+						AppModel.instance.navigator.addPopup(new MessagePopup(loc("popup_purchase_" + -1005)));
+					else if( !response["Authority"] )
+						AppModel.instance.navigator.addPopup(new MessagePopup(loc("popup_purchase_" + -1008)));
+					else if( !ZarinpalPurchaseActivity.getPurchaseActivity(response["Authority"]) )
+						AppModel.instance.navigator.addPopup(new MessagePopup(loc("popup_purchase_" + -1008)));
+					else
+					{
+						var param:SFSObject = new SFSObject();
+						param.putText("productID", ZarinpalPurchaseActivity.getPurchaseActivity(response["Authority"]));
+						param.putText("purchaseToken", response["Authority"]);
+						gotoShop(ResourceType.R4_CURRENCY_HARD);
+						BillingManager.instance.verify(param);
+					}
 				}
 			}
 			AppModel.instance.invokes = null;			//trace("k:", a, "v:", pars[a]);	
