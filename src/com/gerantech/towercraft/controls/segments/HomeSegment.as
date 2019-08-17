@@ -154,7 +154,7 @@ override public function init():void
 		addButton(googleButton, "googleButton");
 	}
 
-	setTimeout(showOffers, 2000);
+	setTimeout(showOffers, 1500);
 }
 
 private	function showOffers () : void
@@ -164,8 +164,7 @@ private	function showOffers () : void
 	if( exchanger.items.exists(ExchangeType.C31_BUNDLE) && !OFFER_BUNDLE )
 	{
 		OFFER_BUNDLE = true;
-		var bundlePopup:BundleDetailsPopup = new BundleDetailsPopup(exchanger.items.get(ExchangeType.C31_BUNDLE));
-		appModel.navigator.addChild(bundlePopup);
+		appModel.navigator.addPopup(new BundleDetailsPopup(exchanger.items.get(ExchangeType.C31_BUNDLE)));
 		return;
 	}
 

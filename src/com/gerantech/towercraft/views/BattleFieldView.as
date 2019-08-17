@@ -188,15 +188,15 @@ private function findPathHandler(e:BattleEvent):void
 public function newRound(side:int):void 
 {
 	var color:int = side == battleData.battleField.side ? 1 : 0;
-	crazyDriving(-200, 1160, color == 1 ? -140 : 140, color);
-	crazyDriving(1160, -200, color == 1 ? -420 : 420, color);
+	crazyDriving(color == 0 ? -400 : 1160, color == 0 ? 1160 : -400, color == 1 ? -140 : 140, color);
+	crazyDriving(color == 0 ? -200 : 1360, color == 0 ? 1360 : -200, color == 1 ? -420 : 420, color);
 	function crazyDriving(fromX:int, toX:int, y:int, color:int) : void
 	{
 		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/base");
 		var car:Image = new Image(txt);
 		car.width = txt.frameWidth * 2.4;
 		car.height = txt.frameHeight * 2.4;
-		car.scaleX *= fromX < toX ? 1 : -1;
+		// car.scaleX *= fromX < toX ? 1 : -1;
 		car.x = fromX;
 		car.y = y + BattleField.HEIGHT * 0.5 - car.height * 0.7;
 		unitsContainer.addChild(car);
