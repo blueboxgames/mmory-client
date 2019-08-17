@@ -204,8 +204,9 @@ public function requestKillPioneers(side:int):void
 
  	battleData.battleField.requestKillPioneers(side);
 	var time:int = battleData.battleField.resetTime - battleData.battleField.now - 500;
-	setTimeout(crazyDriving, time, color == 0 ? -400 : 1160, color == 0 ? 1160 : -400, color == 1 ? -140 : 140, color);
-	setTimeout(crazyDriving, time, color == 0 ? -200 : 1360, color == 0 ? 1360 : -200, color == 1 ? -420 : 420, color);
+	AppModel.instance.sounds.addAndPlay("car-passing-by");
+	setTimeout(crazyDriving, time, color == 0 ? -600 : 1160, color == 0 ? 1160 : -600, color == 1 ? -140 : 140, color);
+	setTimeout(crazyDriving, time, color == 0 ? -400 : 1360, color == 0 ? 1360 : -400, color == 1 ? -420 : 420, color);
 }
 
 public function hitUnits(buletId:int, targets:ISFSArray) : void
