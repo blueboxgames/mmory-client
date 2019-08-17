@@ -74,7 +74,7 @@ public function load() : void
 {
 	var pattern:String = '<?xml version="1.0" encoding="UTF-8"?>\r\n<SmartFoxConfig>';
 	var cnfFile:File = File.applicationStorageDirectory.resolvePath("config.xml");
-	var url:String = "http://gerantech.com/towers/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&version=" + AppModel.instance.descriptor.versionCode + "&r=" + Math.round(Math.random() * 1000);
+	var url:String = "http://192.168.43.137"; //"http://gerantech.com/towers/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&version=" + AppModel.instance.descriptor.versionCode + "&r=" + Math.round(Math.random() * 1000);
 	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, false, 0, pattern);
 	trace(url);
 	cnfLoader.addEventListener(Event.COMPLETE,			cnfLoader_completeHandler);
