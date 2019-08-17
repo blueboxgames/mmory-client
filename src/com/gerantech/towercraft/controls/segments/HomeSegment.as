@@ -150,13 +150,10 @@ override public function init():void
 		googleButton.layoutData = new AnchorLayoutData(330, paddingH + 36 + starsButton.width);
 		googleButton.width = googleButton.height = 140;
 		addButton(googleButton, "googleButton");
-		
+				
 		if( !SOCIAL_AUTH_WARNED )
 		{
 			setTimeout(warnAuthentication, 1000);
-			function warnAuthentication () : void {
-				appModel.navigator.addChild(new BaseTooltip(loc("socials_signin_warn"), googleButton.getBounds(appModel.navigator)));
-			}
 			SOCIAL_AUTH_WARNED = true;
 		}
 	}
@@ -169,6 +166,13 @@ override public function init():void
 	adsButton.addEventListener(Event.TRIGGERED, mainButtons_triggeredHandler);
 	addChild(adsButton);*/
 }
+
+private	function warnAuthentication () : void
+{
+	var tt:BaseTooltip = new BaseTooltip(loc("socials_signin_warn"), new Rectangle(googleButton.x, googleButton.y, googleButton.width, googleButton.height));
+	this.addChild(tt);
+}
+
 override public function focus():void
 {
 	if( initializeCompleted )
