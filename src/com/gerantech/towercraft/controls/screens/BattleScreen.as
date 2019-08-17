@@ -128,8 +128,8 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		break;
 	
 	case SFSCommands.BATTLE_NEW_ROUND:
-		if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN )
-			appModel.battleFieldView.newRound(data.getInt("winner"));
+		if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN && Math.max(data.getInt("0"), data.getInt("1")) < 3 )
+			appModel.battleFieldView.requestKillPioneers(data.getInt("winner"));
 		if( hud != null )
 			hud.updateScores(data.getInt("round"), data.getInt("winner"), data.getInt(battleField.side + ""), data.getInt(battleField.side == 0 ? "1" : "0"), data.getInt("unitId"));
 		break;
@@ -327,7 +327,7 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	else
 		endOverlay = new EndBattleOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);
 	endOverlay.addEventListener(Event.CLOSE, endOverlay_closeHandler);
-	setTimeout(hud.end, Math.max(200, 1000 - player.get_battleswins() * 300), endOverlay);// delay for noobs
+	setTimeout(hud.end, 1000, endOverlay);// delay for noobs
 }
 
 private function endOverlay_closeHandler(event:Event):void

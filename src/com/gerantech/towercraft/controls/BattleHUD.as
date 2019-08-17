@@ -41,7 +41,6 @@ import feathers.layout.TiledRowsLayout;
 import feathers.layout.VerticalAlign;
 
 import flash.geom.Rectangle;
-import flash.utils.setTimeout;
 
 import starling.animation.Transitions;
 import starling.core.Starling;
@@ -266,7 +265,7 @@ public function updateScores(round:int, winnerSide:int, allise:int, axis:int, un
 		scoreBoard.update(allise, axis);
 
 	// prevent end of battle state
-	if( allise > 2 || axis > 2 || (battleData.battleField.now * 0.001 - battleData.battleField.startAt) > battleData.battleField.getTime(2) )
+	if( (battleData.battleField.now * 0.001 - battleData.battleField.startAt) > battleData.battleField.getTime(2) )
 		return;
 	
 	// uniit focus only appeared  in touchdown battles
@@ -275,11 +274,10 @@ public function updateScores(round:int, winnerSide:int, allise:int, axis:int, un
 		var unit:UnitView = battleData.battleField.units.get(unitId) as UnitView;
 		if( unit != null )
 			unit.showWinnerFocus();
-		setTimeout(appModel.navigator.addLog, 3000, loc("round_label", [loc("num_" + round)]));
 	}
 	
 	// invalid data
-	if( allise <= 0 && axis <= 0 )
+	if( allise <= 0 && axis <= 0 || allise > 2 || axis > 2 )
 		return;
 	
 	var side:int = winnerSide == battleData.battleField.side ? 0 : 1;

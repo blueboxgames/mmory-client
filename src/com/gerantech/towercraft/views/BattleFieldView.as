@@ -37,6 +37,7 @@ import starling.events.Event;
 import starling.textures.Texture;
 
 import starlingbuilder.engine.DefaultAssetMediator;
+import flash.utils.setTimeout;
 
 public class BattleFieldView extends Sprite
 {
@@ -185,11 +186,9 @@ private function findPathHandler(e:BattleEvent):void
 		drawTile(u.path[i].x, u.path[i].y, c, battleData.battleField.field.tileMap.tileWidth, battleData.battleField.field.tileMap.tileHeight, 0.3);
 }
 
-public function newRound(side:int):void 
+public function requestKillPioneers(side:int):void 
 {
 	var color:int = side == battleData.battleField.side ? 1 : 0;
-	crazyDriving(color == 0 ? -400 : 1160, color == 0 ? 1160 : -400, color == 1 ? -140 : 140, color);
-	crazyDriving(color == 0 ? -200 : 1360, color == 0 ? 1360 : -200, color == 1 ? -420 : 420, color);
 	function crazyDriving(fromX:int, toX:int, y:int, color:int) : void
 	{
 		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/base");
@@ -203,7 +202,10 @@ public function newRound(side:int):void
 		Starling.juggler.tween(car, 1, {x:toX, onComplete:car.removeFromParent, onCompleteArgs:[true]});
 	}
 
- 	battleData.battleField.killPioneers(side);
+ 	battleData.battleField.requestKillPioneers(side);
+	var time:int = battleData.battleField.resetTime - battleData.battleField.now - 500;
+	setTimeout(crazyDriving, time, color == 0 ? -400 : 1160, color == 0 ? 1160 : -400, color == 1 ? -140 : 140, color);
+	setTimeout(crazyDriving, time, color == 0 ? -200 : 1360, color == 0 ? 1360 : -200, color == 1 ? -420 : 420, color);
 }
 
 public function hitUnits(buletId:int, targets:ISFSArray) : void

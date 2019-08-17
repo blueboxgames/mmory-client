@@ -449,7 +449,7 @@ private function showDieAnimation():void
 	dieDisplay.color = 0xFF0000 + Math.random() * 5000;
 	dieDisplay.x = getSideX();
 	dieDisplay.y = getSideY();
-	fieldView.unitsContainer.addChildAt(dieDisplay, 0);
+	fieldView.shadowsContainer.addChild(dieDisplay);
 	dieDisplay.play();
 	Starling.juggler.add(dieDisplay);
 	dieDisplay.addEventListener(Event.COMPLETE, function() : void { Starling.juggler.remove(dieDisplay); dieDisplay.removeFromParent(true); });
