@@ -150,17 +150,7 @@ public function process(item : ExchangeItem) : void
 				exchange(item, params);
 				if( item.category == ExchangeType.C0_HARD )
 				{
-					// send analytics events
-					var outs:Vector.<int> = item.outcomes.keys();
-					if( GameAnalytics.isInitialized )
-					{
-						GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, outs[0].toString(), item.outcomes.get(outs[0]), "IAP", result.purchase.sku);
-					
-						var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
-						var amount:int = item.requirements.get(outs[0]) * (appModel.descriptor.market == "google" ? 1 : 10);
-						GameAnalytics.addBusinessEvent(currency, amount, item.type.toString(), result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
-					}
-					
+					sendAnalyticsEvent(item);
 					dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);
 				}
 				return;
@@ -327,6 +317,23 @@ private function dispatchCustomEvent( type:String, item:ExchangeItem ) : void
 {
 	item.enabled = true;
 	dispatchEventWith(type, false, item);
+}
+
+public function sendAnalyticsEvent( item:ExchangeItem ) : void
+{
+	// send analytics events
+	var outs:Vector.<int> = item.outcomes.keys();
+	var itemID:String = (item.category == ExchangeType.C30_BUNDLES ? "k2k.bundle_" : "k2k.item_") + item.type;
+	if( GameAnalytics.isInitialized )
+	{
+		GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, ResourceType.getName(outs[0]), item.outcomes.get(outs[0]), "IAP", itemID);
+	
+		var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
+		var amount:int = item.requirements.get(outs[0]) * (appModel.descriptor.market == "google" ? 1 : 10);
+		GameAnalytics.addBusinessEvent(currency, amount, ResourceType.getName(outs[0]), itemID , "IAP");
+		// Might need this:
+		// GameAnalytics.addBusinessEvent(currency, amount, item.type.toString(), result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
+	}
 }
 }
 }

@@ -256,6 +256,8 @@ public function verify(purchase:Object):void
 				// Dispatch event directly to exchange manager cause we might have lost
 				// the process.
 				ExchangeManager.instance.dispatchEventWith(FeathersEventType.END_INTERACTION, false, item);
+				// send event.
+				ExchangeManager.instance.sendAnalyticsEvent(item);
 				// false sucess cause we already dispatched end interaction.
 				// dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed: false});
 			}

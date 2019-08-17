@@ -55,16 +55,17 @@ public function Main()
 	// var bt:Array = CardTypes.getAll();
 	// for each( var r:int in bt )
 	// 	currencies.push(r.toString());
-	currencies.push(ResourceType.R1_XP.toString());
-	currencies.push(ResourceType.R2_POINT.toString());
-	currencies.push(ResourceType.R4_CURRENCY_HARD.toString());
-	currencies.push(ResourceType.R3_CURRENCY_SOFT.toString());
+	currencies.push(ResourceType.getName(ResourceType.R1_XP));
+	currencies.push(ResourceType.getName(ResourceType.R2_POINT));
+	currencies.push(ResourceType.getName(ResourceType.R4_CURRENCY_HARD));
+	currencies.push(ResourceType.getName(ResourceType.R3_CURRENCY_SOFT));
 
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
 		/*.setBuildiOS(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec) */
 		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
 		.setResourceCurrencies(currencies)
 		.setResourceItemTypes(new <String>["outcome", "special", "book", "purchase", "exchange", "upgrade", "donate"]);
+	GameAnalytics.setEnabledInfoLog(true);
 	if ( GameAnalytics.isSupported )
 	{
 		try {
