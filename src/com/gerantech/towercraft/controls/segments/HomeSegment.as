@@ -161,7 +161,7 @@ private	function showOffers () : void
 {
 	if( DashboardScreen.TAB_INDEX != 2 )
 		return;
-	if( exchanger.items.exists(ExchangeType.C31_BUNDLE) && !OFFER_BUNDLE )
+	if( exchanger.items.exists(ExchangeType.C31_BUNDLE) && exchanger.items.get(ExchangeType.C31_BUNDLE).expiredAt > timeManager.now && !OFFER_BUNDLE )
 	{
 		OFFER_BUNDLE = true;
 		appModel.navigator.addPopup(new BundleDetailsPopup(exchanger.items.get(ExchangeType.C31_BUNDLE)));
