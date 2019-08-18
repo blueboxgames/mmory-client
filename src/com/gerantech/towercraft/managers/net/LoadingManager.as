@@ -1,6 +1,8 @@
 package com.gerantech.towercraft.managers.net
 {
+import com.chartboost.plugin.air.model.CBLocation;
 import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
@@ -10,6 +12,7 @@ import com.gerantech.towercraft.managers.BillingManager;
 import com.gerantech.towercraft.managers.InboxService;
 import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.UserPrefs;
+import com.gerantech.towercraft.managers.VideoAdsManager;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
@@ -202,8 +205,13 @@ protected function prefs_completeHandler(e:*):void
         return;
 
 	// catch video ads
-/*	VideoAdsManager.instance.requestAd(VideoAdsManager.TYPE_CHESTS, true);
-	if( appModel.game.player.getLastOperation() < appModel.game.fieldProvider.operations.keys().length )
+	VideoAdsManager.instance.adProvider = VideoAdsManager.AD_PROVIDER_CHARTBOOST;
+	if( VideoAdsManager.instance.adProvider == VideoAdsManager.AD_PROVIDER_CHARTBOOST )
+	{
+		VideoAdsManager.instance.requestAd(VideoAdsManager.TYPE_CHESTS, true);
+		VideoAdsManager.instance.requestAdIn(ExchangeType.C43_ADS, false, CBLocation.DEFAULT);
+	}
+	/* if( appModel.game.player.getLastOperation() < appModel.game.fieldProvider.operations.keys().length )
 		VideoAdsManager.instance.requestAd(VideoAdsManager.TYPE_OPERATIONS, true);*/
 }
 

@@ -263,6 +263,8 @@ protected function pageList_readyHandler(event:Event):void
 }
 protected function exchangeManager_endHandler(event:Event):void
 {
+	if( event.data == null )
+		return;
 	if( ExchangeType.getCategory(event.data.type) == ExchangeType.C110_BATTLES ) //open first pack
 		segmentsCollection.updateItemAt(1);
 	else if( event.data.type == -100 ) //upgrade initial card
