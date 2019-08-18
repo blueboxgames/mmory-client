@@ -20,13 +20,13 @@ import com.gerantech.towercraft.controls.popups.AdConfirmPopup;
 import com.gerantech.towercraft.controls.popups.BookDetailsPopup;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.popups.EmoteDetailsPopup;
-import com.gerantech.towercraft.controls.popups.MessagePopup;
 import com.gerantech.towercraft.controls.popups.SimpleHeaderPopup;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.controls.segments.ExchangeSegment;
 import com.gerantech.towercraft.events.GameEvent;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.models.vo.VideoAd;
 import com.smartfoxserver.v2.core.SFSEvent;
@@ -310,8 +310,10 @@ private function showAd():void
 		return
 	if( !VideoAdsManager.instance.hasAd || !appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) )
 	{
-		var noAdAvailablePopup:MessagePopup = new MessagePopup(loc("popup_ad_not_available"), loc("popup_ok_label"));
-		appModel.navigator.addPopup(noAdAvailablePopup);
+		// Add Log for not being available.
+		AppModel.instance.navigator.addLog(loc("popup_ad_not_available"));
+		if( appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) )
+			VideoAdsManager.instance.requestAdIn(VideoAdsManager.TYPE_CHESTS, false, CBLocation.DEFAULT);
 		var item:ExchangeItem = exchanger.items.get(ExchangeType.C71_TICKET); 
 		item.enabled = true;
 		dispatchEventWith(FeathersEventType.END_INTERACTION, false, null);
@@ -328,14 +330,6 @@ private function showAd():void
 			VideoAdsManager.instance.showAdIn(VideoAdsManager.TYPE_CHESTS, CBLocation.DEFAULT);
 			VideoAdsManager.instance.addEventListener(Event.COMPLETE, videoIdsManager_completeHandler);
 			VideoAdsManager.instance.addEventListener(ChartboostEvent.DID_FAIL_TO_LOAD_REWARDED_VIDEO, adManager_failToLoadHandler);
-		}
-		else
-		{
-			// Show no ad available popup.
-			var noAdAvailablePopup:MessagePopup = new MessagePopup(loc("popup_ad_not_available"), loc("popup_ok_label"));
-			appModel.navigator.addPopup(noAdAvailablePopup);
-			// Optionaly request for ad cache for failure maybe?
-			VideoAdsManager.instance.requestAdIn(VideoAdsManager.TYPE_CHESTS, false, CBLocation.DEFAULT);
 		}
 	}
 	function adConfirmPopup_closeHandler(event:Event):void {

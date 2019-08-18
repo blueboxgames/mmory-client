@@ -8,6 +8,7 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 
+import feathers.controls.Button;
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
 import feathers.layout.AnchorLayoutData;
@@ -30,9 +31,9 @@ protected var container:LayoutGroup;
 protected var titleDisplay:ShadowLabel;
 protected var descriptionDisplay:RTLLabel;
 protected var outcomeGroupDisplay:LayoutGroup;
-protected var acceptButton:MMOryButton;
-protected var acceptButtonSkin:ImageSkin;
-protected var acceptButtonStyle:String = MainTheme.STYLE_BUTTON_SMALL_NORMAL;
+protected var actionButton:Button;
+protected var actionButtonSkin:ImageSkin;
+protected var actionButtonStyle:String = MainTheme.STYLE_BUTTON_SMALL_NORMAL;
 protected var closeButton:MMOryButton;
 protected var closeButtonStyle:String = MainTheme.STYLE_BUTTON_SMALL_DANGER;
 
@@ -91,12 +92,12 @@ override protected function initialize():void
 	outcomeGroupDisplay.addChild(currencyImage);
 
 	// -=-=-=-=-=-=-=-=-=-=-=-=-=-[Accept Button]-=-=-=-=-=-=-=-=-=-=-=-=-=-
-	acceptButton = new MMOryButton();
-	acceptButton.styleName = acceptButtonStyle;
-	acceptButton.label = loc("popup_ad_accept");
-	acceptButton.addEventListener(Event.TRIGGERED, acceptButton_triggeredHandler);
-	acceptButton.padding = 24;
-	container.addChild(acceptButton);
+	actionButton = new Button();
+	actionButton.styleName = actionButtonStyle;
+	actionButton.label = loc("popup_ad_accept");
+	actionButton.addEventListener(Event.TRIGGERED, acceptButton_triggeredHandler);
+	actionButton.padding = 24;
+	container.addChild(actionButton);
 	
 	// -=-=-=-=-=-=-=-=-=-=-=-=-=-[Close Button]-=-=-=-=-=-=-=-=-=-=-=-=-=-
 	this.closeButton = new MMOryButton();
@@ -127,7 +128,7 @@ protected function closeButton_triggeredHandler(event:Event):void
 override public function dispose():void
 {
   this.closeButton.removeEventListener(Event.TRIGGERED, this.closeButton_triggeredHandler);
-	this.acceptButton.removeEventListener(Event.TRIGGERED, this.acceptButton_triggeredHandler);
+	this.actionButton.removeEventListener(Event.TRIGGERED, this.acceptButton_triggeredHandler);
 	super.dispose();
 }
 }
