@@ -305,6 +305,15 @@ private function showAd():void
 {
 	if( player.inTutorial() )
 		return
+	if( !VideoAdsManager.instance.hasAd || !appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) )
+	{
+		var noAdAvailablePopup:MessagePopup = new MessagePopup(loc("popup_ad_not_available"), loc("popup_ok_label"));
+		appModel.navigator.addPopup(noAdAvailablePopup);
+		var item:ExchangeItem = exchanger.items.get(ExchangeType.C71_TICKET); 
+		item.enabled = true;
+		dispatchEventWith(FeathersEventType.END_INTERACTION, false, null);
+		return;
+	}
 	var adConfirmPopup:AdConfirmPopup = new AdConfirmPopup();
 	adConfirmPopup.addEventListener(Event.SELECT, adConfirmPopup_selectHandler);
 	adConfirmPopup.addEventListener(Event.CLOSE, adConfirmPopup_closeHandler);
