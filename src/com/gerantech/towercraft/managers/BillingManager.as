@@ -264,7 +264,7 @@ public function verify(purchase:Object):void
 			else
 			{
 				if(  result.getInt("consumptionState") == 0 )
-					consume(param.getText("productID"));
+					consume(purchase.sku);
 			}
 		}
 		else
