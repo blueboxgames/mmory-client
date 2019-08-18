@@ -65,7 +65,6 @@ public function Main()
 		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
 		.setResourceCurrencies(currencies)
 		.setResourceItemTypes(new <String>["outcome", "special", "book", "purchase", "exchange", "upgrade", "donate"]);
-	GameAnalytics.setEnabledInfoLog(true);
 	if ( GameAnalytics.isSupported )
 	{
 		try {

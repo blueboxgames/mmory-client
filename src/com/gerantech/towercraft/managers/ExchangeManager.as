@@ -1,12 +1,10 @@
 package com.gerantech.towercraft.managers 
 {
-import com.gameanalytics.sdk.GAResourceFlowType;
 import com.gameanalytics.sdk.GameAnalytics;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.events.ExchangeEvent;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
@@ -195,7 +193,6 @@ public function process(item : ExchangeItem) : void
 
 private function exchange( item:ExchangeItem, params:SFSObject ) : int
 {
-	exchanger.addEventListener(ExchangeEvent.COMPLETE, exchanger_completeHandler);
 	if( item.category == ExchangeType.C100_FREES )
 		exchanger.findRandomOutcome(item, timeManager.now);
 	var bookType:int = -1;
@@ -274,17 +271,6 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		}
 	}
 	dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);
-}
-
-protected function exchanger_completeHandler(event:ExchangeEvent):void
-{
-	exchanger.removeEventListener(ExchangeEvent.COMPLETE, exchanger_completeHandler);
-	var outs:Vector.<int> = event.item.outcomes.keys();
-	var itemID:String = (event.item.category == ExchangeType.C30_BUNDLES ? "k2k.bundle_" : "k2k.item_") + event.item.type;
-	if( GameAnalytics.isInitialized )
-	{
-		GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, ResourceType.getName(outs[0]), event.item.outcomes.get(outs[0]), "Exchnage", itemID);
-	}
 }
 
 private function gotoDeckTutorial():void
