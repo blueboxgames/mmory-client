@@ -78,7 +78,7 @@ package com.gerantech.towercraft.managers
 			 * ---------------------------------------------------------------
 			 */
 			if( Chartboost.isAndroid() )
-				Chartboost.startWith(AppModel.instance.navigator.stage.starling.nativeStage, "5d4aabb67469d40a95c06aa1", "c1df304e53f77dc233ae059f7034f39e8b8ebf0b");
+				Chartboost.startWith(AppModel.instance.navigator.stage.starling.nativeStage, "5d5926a28ba1610dcbdf2db0", "903cee4e2ad0dfd9d7691bcd4f17ff325843bcee");
 			else if( Chartboost.isIOS() )
 				Chartboost.startWith(AppModel.instance.navigator.stage.starling.nativeStage, "IOS_APP_ID", "IOS_APP_SIGN");
 
