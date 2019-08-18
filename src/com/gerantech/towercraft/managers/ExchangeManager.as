@@ -2,11 +2,11 @@ package com.gerantech.towercraft.managers
 {
 import com.gameanalytics.sdk.GAResourceFlowType;
 import com.gameanalytics.sdk.GameAnalytics;
-import com.gerantech.extensions.iab.IabResult;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.events.ExchangeEvent;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
@@ -145,23 +145,13 @@ public function process(item : ExchangeItem) : void
 		BillingManager.instance.purchase((item.category == ExchangeType.C30_BUNDLES ? "k2k.bundle_" : "k2k.item_") + item.type);
 		function billinManager_endInteractionHandler ( event:Event ) : void {
 			BillingManager.instance.removeEventListener(FeathersEventType.END_INTERACTION, billinManager_endInteractionHandler);
-			var result:IabResult = event.data as IabResult;
-			if( result.succeed )
+			var result:Object = event.data;
+			if( event.data.succeed )
 			{
 				exchange(item, params);
 				if( item.category == ExchangeType.C0_HARD )
 				{
-					// send analytics events
-					var outs:Vector.<int> = item.outcomes.keys();
-					if( GameAnalytics.isInitialized )
-					{
-						GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, outs[0].toString(), item.outcomes.get(outs[0]), "IAP", result.purchase.sku);
-					
-						var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
-						var amount:int = item.requirements.get(outs[0]) * (appModel.descriptor.market == "google" ? 1 : 10);
-						GameAnalytics.addBusinessEvent(currency, amount, result.purchase.itemType, result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
-					}
-					
+					sendAnalyticsEvent(item);
 					dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);
 				}
 				return;
@@ -205,6 +195,7 @@ public function process(item : ExchangeItem) : void
 
 private function exchange( item:ExchangeItem, params:SFSObject ) : int
 {
+	exchanger.addEventListener(ExchangeEvent.COMPLETE, exchanger_completeHandler);
 	if( item.category == ExchangeType.C100_FREES )
 		exchanger.findRandomOutcome(item, timeManager.now);
 	var bookType:int = -1;
@@ -285,6 +276,17 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 	dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);
 }
 
+protected function exchanger_completeHandler(event:ExchangeEvent):void
+{
+	exchanger.removeEventListener(ExchangeEvent.COMPLETE, exchanger_completeHandler);
+	var outs:Vector.<int> = event.item.outcomes.keys();
+	var itemID:String = (event.item.category == ExchangeType.C30_BUNDLES ? "k2k.bundle_" : "k2k.item_") + event.item.type;
+	if( GameAnalytics.isInitialized )
+	{
+		GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, ResourceType.getName(outs[0]), event.item.outcomes.get(outs[0]), "Exchnage", itemID);
+	}
+}
+
 private function gotoDeckTutorial():void
 {
 	if( !player.inSlotTutorial() )
@@ -328,6 +330,22 @@ private function dispatchCustomEvent( type:String, item:ExchangeItem ) : void
 {
 	item.enabled = true;
 	dispatchEventWith(type, false, item);
+}
+
+public function sendAnalyticsEvent( item:ExchangeItem ) : void
+{
+	// send analytics events
+	var outs:Vector.<int> = item.outcomes.keys();
+	var itemID:String = (item.category == ExchangeType.C30_BUNDLES ? "k2k.bundle_" : "k2k.item_") + item.type;
+	if( GameAnalytics.isInitialized )
+	{
+		// GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, ResourceType.getName(outs[0]), item.outcomes.get(outs[0]), "IAP", itemID);
+		var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
+		var amount:int = item.requirements.get(outs[0]) * (appModel.descriptor.market == "google" ? 1 : 10);
+		GameAnalytics.addBusinessEvent(currency, amount, ResourceType.getName(outs[0]), itemID , "IAP");
+		// Might need this:
+		// GameAnalytics.addBusinessEvent(currency, amount, item.type.toString(), result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
+	}
 }
 }
 }
