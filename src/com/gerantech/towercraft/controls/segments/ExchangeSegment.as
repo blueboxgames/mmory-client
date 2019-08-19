@@ -71,7 +71,7 @@ protected function animation_loadCallback():void
 override public function focus():void
 {
 	//if( !initializeCompleted )
-		return;
+		// return;
 	///////////////////////showTutorial();
 	//var time:Number = Math.abs(focusedCategory * 520 - itemslist.verticalScrollPosition) * 0.003;
 	if( SELECTED_CATEGORY == 0 )
@@ -104,7 +104,7 @@ override public function updateData():void
 			emotes.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C120_MAGICS && player.get_arena(0) > 1 )
 			magics.add(itemKeys[i]);
-		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS && player.unlocked_challenge() )
+		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS )
 			tickets.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C0_HARD && itemKeys[i] != ExchangeType.C0_HARD )
 			hards.add(itemKeys[i]);

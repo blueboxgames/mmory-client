@@ -9,7 +9,6 @@ import com.gerantech.towercraft.models.Assets;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
-import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.HorizontalLayout;
@@ -19,7 +18,6 @@ import feathers.layout.VerticalAlign;
 import flash.geom.Rectangle;
 
 import starling.events.Event;
-import starling.core.Starling;
 
 public class ExBundleItemRenderer extends ExDefaultItemRenderer
 {
@@ -97,6 +95,8 @@ override protected function buttonFactory():void
 }
 override protected function exchangeManager_endInteractionHandler(event:Event):void 
 {
+	if( event.data == null )
+		return;
 	var item:ExchangeItem = event.data as ExchangeItem;
 	if( item.type == exchange.type )
 		showAchieveAnimation(item);

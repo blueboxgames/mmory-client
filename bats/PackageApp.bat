@@ -74,6 +74,7 @@ echo  [2] myket
 echo  [3] ario
 echo  [4] cando
 echo  [5] google
+echo  [6] zarinpal
 
 :choice
 set /P M=[Choice]: 
@@ -85,6 +86,7 @@ if "%M%"=="2" set MARKET=myket
 if "%M%"=="3" set MARKET=ario
 if "%M%"=="4" set MARKET=cando
 if "%M%"=="5" set MARKET=google
+if "%M%"=="6" set MARKET=zarinpal
 
 
 set PAUSE_ERRORS=1
