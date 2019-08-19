@@ -57,7 +57,7 @@ override protected function commitData():void
 		addChild(nameDisplay);
 		
 		var btn:MMOryButton = addIconButton(settingData.key);
-		btn.styleName = settingData.value ? MainTheme.STYLE_BUTTON_SMALL_NORMAL : MainTheme.STYLE_BUTTON_SMALL_DANGER;
+		btn.styleName = settingData.value ? MainTheme.STYLE_BUTTON_SMALL_NORMAL : MainTheme.STYLE_BUTTON_SMALL_DARK;
 	}
 	else if( settingData.type == SettingsData.TYPE_ICON_BUTTONS )
 	{

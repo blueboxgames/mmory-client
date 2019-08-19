@@ -3,7 +3,6 @@ package com.gerantech.towercraft.controls.buttons
 import com.gerantech.towercraft.controls.texts.CountdownLabel;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import feathers.events.FeathersEventType;
-import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import starling.events.Event;
 
@@ -44,6 +43,10 @@ protected function countdownFactory() : CountdownLabel
 
 protected function exchangeManager_endInteractionHandler(event:Event) : void 
 {
+	// Sometimes we might want item to reenable but no resource given.
+	// Return null item.
+	if( event.data == null )
+		return;
 	var item:ExchangeItem = event.data as ExchangeItem;
 	if( item.type != exchange.type )
 		return;
