@@ -158,7 +158,10 @@ protected function iab_queryInventoryFinishedHandler(event:IabEvent):void
 		var purchase:Purchase = Iab.instance.getPurchase(k);
 		if( purchase == null || purchase.itemType == Iab.ITEM_TYPE_SUBS )
 			continue;
-		verify(purchase);
+		var param:SFSObject = new SFSObject();
+		param.putText("productID", purchase.sku);
+		param.putText("purchaseToken", purchase.token);
+		verify(param);
 	}
 }
 
@@ -212,19 +215,20 @@ protected function iab_purchaseFinishedHandler(event:IabEvent):void
 }
 
 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_- PURCHASE VERIFICATION AND CONSUMPTION -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-public function verify(purchase:Object):void
+public function verify(purchase:ISFSObject):void
 {
+	// TODO: Waiting message give bad vibes, better solution?
 	appModel.navigator.addLog(loc("waiting_message"));
 	var param:SFSObject = new SFSObject();
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_purchaseVerifyHandler);
 	if(appModel.descriptor.market == "zarinpal")
 	{
-		SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, purchase as ISFSObject);
+		SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, purchase);
 	}
 	else
 	{
-		param.putText("productID", purchase.sku);
-		param.putText("purchaseToken", purchase.token);
+		param.putText("productID", purchase.getText("productID"));
+		param.putText("purchaseToken", purchase.getText("purchaseToken"));
 		SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, param);
 	}
 	function sfsConnection_purchaseVerifyHandler(event:SFSEvent):void
@@ -235,12 +239,7 @@ public function verify(purchase:Object):void
 		var result:SFSObject = event.params.params;
 		if( result.getBool("success") )
 		{
-			if( appModel.descriptor.market == "cafebazaar" || appModel.descriptor.market == "ario" )
-			{
-				if(  result.getInt("consumptionState") == 1 )
-					consume(purchase.sku);
-			}
-			else if ( appModel.descriptor.market == "zarinpal" )
+			if ( appModel.descriptor.market == "zarinpal" )
 			{
 				/**
 				 * No consume method for zarinpal.
@@ -261,15 +260,21 @@ public function verify(purchase:Object):void
 				// false sucess cause we already dispatched end interaction.
 				// dispatchEventWith(FeathersEventType.END_INTERACTION, false, {succeed: false});
 			}
+			else if( appModel.descriptor.market == "cafebazaar" || appModel.descriptor.market == "ario" )
+			{
+				if(  result.getInt("consumptionState") == 1 ){
+					consume(result.getText("productID"));
+				}
+			}
 			else
 			{
 				if(  result.getInt("consumptionState") == 0 )
-					consume(purchase.sku);
+					consume(result.getText("productID"));
 			}
 		}
 		else
 		{
-			log("purchase verify=>invalid: " + purchase.sku);
+			log("purchase verify=>invalid: " + result.getText("productID"));
 			explain(Iab.IABHELPER_VERIFICATION_FAILED);
 		}
 	}
