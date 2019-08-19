@@ -61,8 +61,8 @@
 		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
 		<!-- Chartboost -->
-		<meta-data android:name="__ChartboostAir__AppID" android:value="5d5926a28ba1610dcbdf2db0" />
-		<meta-data android:name="__ChartboostAir__AppSignature" android:value="903cee4e2ad0dfd9d7691bcd4f17ff325843bcee" />
+		<meta-data android:name="__ChartboostAir__AppID" android:value="5d5a9cc80c7ec60cc5b67c06" />
+		<meta-data android:name="__ChartboostAir__AppSignature" android:value="fc3d771153452cbc1fd0e83891b30d8aa096e50a" />
 		
 		<activity android:name="com.chartboost.sdk.CBImpressionActivity"
 							android:excludeFromRecents="true"
