@@ -7,6 +7,7 @@ import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.events.ExchangeEvent;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
@@ -205,6 +206,7 @@ public function process(item : ExchangeItem) : void
 
 private function exchange( item:ExchangeItem, params:SFSObject ) : int
 {
+	exchanger.addEventListener(ExchangeEvent.COMPLETE, exchanger_completeHandler);
 	if( item.category == ExchangeType.C100_FREES )
 		exchanger.findRandomOutcome(item, timeManager.now);
 	var bookType:int = -1;
