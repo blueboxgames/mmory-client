@@ -285,6 +285,25 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 	dispatchCustomEvent(FeathersEventType.END_INTERACTION, item);
 }
 
+protected function exchanger_completeHandler(event:ExchangeEvent):void
+{
+	exchanger.removeEventListener(ExchangeEvent.COMPLETE, exchanger_completeHandler);
+	var outs:Vector.<int> = event.item.outcomes.keys();
+	var reqs:Vector.<int> = event.item.requirements.keys();
+	var itemID:String = (event.item.category == ExchangeType.C30_BUNDLES ? "k2k.bundle_" : "k2k.item_") + event.item.type;
+	if( GameAnalytics.isInitialized )
+	{
+		if( event.item.category == ExchangeType.C0_HARD )
+			GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, ResourceType.getName(outs[0]), event.item.outcomes.get(outs[0]), "Exchange", itemID);
+		else
+		{
+			// TODO: might require a for loop to get all requirements and outcomes.
+			GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, ResourceType.getName(outs[0]), event.item.outcomes.get(outs[0]), "Exchange", itemID);
+			GameAnalytics.addResourceEvent(GAResourceFlowType.SINK, ResourceType.getName(reqs[0]), event.item.requirements.get(reqs[0]), "Exchange", itemID);
+		}
+	}
+}
+
 private function gotoDeckTutorial():void
 {
 	if( !player.inSlotTutorial() )
