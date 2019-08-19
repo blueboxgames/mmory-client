@@ -72,7 +72,7 @@ protected function sliderFactory() : Indicator
 // remove key achieve item when indicator is not exists
 protected function navigator_achieveResourceHandler(event:Event) : void 
 {
-	if(event.data == null)
+	if( event.data == null )
 		return;
 	if( appModel.battleFieldView == null || appModel.battleFieldView.battleData == null || appModel.battleFieldView.battleData.outcomes == null )
 		return;

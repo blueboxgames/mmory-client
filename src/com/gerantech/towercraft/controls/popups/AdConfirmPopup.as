@@ -95,7 +95,7 @@ override protected function initialize():void
 	actionButton = new Button();
 	actionButton.styleName = actionButtonStyle;
 	actionButton.label = loc("popup_ad_accept");
-	actionButton.addEventListener(Event.TRIGGERED, acceptButton_triggeredHandler);
+	actionButton.addEventListener(Event.TRIGGERED, this.actionButton_triggeredHandler);
 	actionButton.padding = 24;
 	container.addChild(actionButton);
 	
@@ -114,7 +114,7 @@ override protected function initialize():void
 	transitionOut.sourceBound = transitionIn.destinationBound = new Rectangle(stage.stageWidth*0.1, stage.stageHeight*0.30,  container.bounds.width, container.bounds.height);
 	rejustLayoutByTransitionData();
 }
-protected function acceptButton_triggeredHandler(event:Event):void
+protected function actionButton_triggeredHandler(event:Event):void
 {
 	dispatchEventWith(Event.SELECT);
 	close();
@@ -128,7 +128,7 @@ protected function closeButton_triggeredHandler(event:Event):void
 override public function dispose():void
 {
   this.closeButton.removeEventListener(Event.TRIGGERED, this.closeButton_triggeredHandler);
-	this.actionButton.removeEventListener(Event.TRIGGERED, this.acceptButton_triggeredHandler);
+	this.actionButton.removeEventListener(Event.TRIGGERED, this.actionButton_triggeredHandler);
 	super.dispose();
 }
 }
