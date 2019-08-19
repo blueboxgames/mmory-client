@@ -201,7 +201,7 @@ protected function prefs_completeHandler(e:*):void
 	registerFCMPushManager();
 	
 	// prevent ADs for new users
-	if( appModel.game.player.get_arena(0) == 0 || appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) )
+	if( appModel.game.player.get_arena(0) == 0 || !appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_ADS) )
         return;
 
 	// catch video ads

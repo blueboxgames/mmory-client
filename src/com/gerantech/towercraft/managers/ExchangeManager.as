@@ -307,16 +307,18 @@ private function gotoDeckTutorial():void
 private function showAd():void
 {
 	if( player.inTutorial() )
-		return
-	if( !VideoAdsManager.instance.hasAd || !appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) )
+		return;
+	
+	if( !appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_ADS) )
+	{
+		finilizeAdError("popup_ad_disabled");
+		return;
+	}
+	if( !VideoAdsManager.instance.hasAd )
 	{
 		// Add Log for not being available.
-		AppModel.instance.navigator.addLog(loc("popup_ad_not_available"));
-		if( appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) )
-			VideoAdsManager.instance.requestAdIn(VideoAdsManager.TYPE_CHESTS, false, CBLocation.DEFAULT);
-		var item:ExchangeItem = exchanger.items.get(ExchangeType.C71_TICKET); 
-		item.enabled = true;
-		dispatchEventWith(FeathersEventType.END_INTERACTION, false, null);
+		VideoAdsManager.instance.requestAdIn(VideoAdsManager.TYPE_CHESTS, false, CBLocation.DEFAULT);
+		finilizeAdError("popup_ad_not_available");
 		return;
 	}
 	var adConfirmPopup:AdConfirmPopup = new AdConfirmPopup();
@@ -325,7 +327,7 @@ private function showAd():void
 	appModel.navigator.addPopup(adConfirmPopup);
 	function adConfirmPopup_selectHandler(event:Event):void {
 		adConfirmPopup.removeEventListener(Event.SELECT, adConfirmPopup_selectHandler);
-		if( VideoAdsManager.instance.hasAd && appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS) )
+		if( VideoAdsManager.instance.hasAd && appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_ADS) )
 		{
 			VideoAdsManager.instance.showAdIn(VideoAdsManager.TYPE_CHESTS, CBLocation.DEFAULT);
 			VideoAdsManager.instance.addEventListener(Event.COMPLETE, videoIdsManager_completeHandler);
@@ -334,10 +336,7 @@ private function showAd():void
 	}
 	function adConfirmPopup_closeHandler(event:Event):void {
 		adConfirmPopup.removeEventListener(Event.CLOSE, adConfirmPopup_closeHandler);
-		
-		var item:ExchangeItem = exchanger.items.get(ExchangeType.C71_TICKET); 
-		item.enabled = true;
-		dispatchEventWith(FeathersEventType.END_INTERACTION, false, null);
+		finilizeAdError("popup_ad_not_available");
 	}
 	function adManager_failToLoadHandler(event:Event):void {
 		VideoAdsManager.instance.removeEventListener(ChartboostEvent.DID_FAIL_TO_LOAD_REWARDED_VIDEO, adManager_failToLoadHandler);
@@ -365,6 +364,13 @@ private function videoIdsManager_completeHandler(event:Event):void
 		return;
 	params.putInt("type", ExchangeType.C43_ADS );
 	exchange(exchanger.items.get(ExchangeType.C43_ADS), params);
+}
+private function finilizeAdError(message:String):void
+{
+	if( message != null )
+		AppModel.instance.navigator.addLog(loc(message));
+	exchanger.items.get(ExchangeType.C71_TICKET).enabled = true;
+	dispatchEventWith(FeathersEventType.END_INTERACTION, false, null);
 }
 private function dispatchCustomEvent( type:String, item:ExchangeItem ) : void 
 {
