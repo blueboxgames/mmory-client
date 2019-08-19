@@ -7,6 +7,7 @@ import com.gerantech.extensions.iab.events.IabEvent;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.towercraft.controls.popups.MessagePopup;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.net.LoadingManager;
@@ -244,13 +245,14 @@ public function verify(purchase:ISFSObject):void
 				/**
 				 * No consume method for zarinpal.
 				 */
-				// var params:SFSObject = new SFSObject();
-				// params.putText("productID", "$?PRODUCT_ID");
-				// params.putText("purchaseToken","$?PURCHASE_TOKEN");
-				// params.putBool("consume", true);
-				// SFSConnection.instance.sendExtensionRequest(SFSCommands.VERIFY_PURCHASE, params);
 				var productID:int = int( result.getText("productID").split("_")[1] );
 				var item:ExchangeItem = exchanger.items.get(productID);
+
+				var params:SFSObject = new SFSObject();
+				params.putInt("type", item.type)
+				params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+				ExchangeManager.instance.exchange(item, params);
+
 				item.enabled = true;
 				// Dispatch event directly to exchange manager cause we might have lost
 				// the process.

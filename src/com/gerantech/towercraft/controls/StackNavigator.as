@@ -5,6 +5,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.extensions.NativeAbilities;
 	import com.gerantech.mmory.core.constants.PrefsTypes;
 	import com.gerantech.mmory.core.constants.ResourceType;
+	import com.gerantech.mmory.core.exchanges.ExchangeItem;
 	import com.gerantech.mmory.core.scripts.ScriptEngine;
 	import com.gerantech.mmory.core.utils.maps.IntIntMap;
 	import com.gerantech.mmory.core.utils.maps.IntStrMap;
@@ -27,6 +28,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.toasts.SimpleToast;
 	import com.gerantech.towercraft.events.LoadingEvent;
 	import com.gerantech.towercraft.managers.BillingManager;
+	import com.gerantech.towercraft.managers.ExchangeManager;
 	import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 	import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 	import com.gerantech.towercraft.models.AppModel;
@@ -360,12 +362,23 @@ package com.gerantech.towercraft.controls
 				{
 					var callbackHandler:ZarinpalCallbackHandler = new ZarinpalCallbackHandler(arguments[0]);
 					var response:Object = callbackHandler.getResponse();
+					var itemID:int = ZarinpalPurchaseActivity.getPurchaseActivity(response["Authority"]) ? ZarinpalPurchaseActivity.getPurchaseActivity(response["Authority"]).split("_")[1] : 0;
+					var item:ExchangeItem = AppModel.instance.game.exchanger.items.get(itemID);
 					if( response["Status"]!="OK" )
+					{
 						AppModel.instance.navigator.addPopup(new MessagePopup(loc("popup_purchase_" + -1005)));
+						item.enabled = true;
+					}
 					else if( !response["Authority"] )
+					{
 						AppModel.instance.navigator.addPopup(new MessagePopup(loc("popup_purchase_" + -1008)));
+						item.enabled = true;
+					}
 					else if( !ZarinpalPurchaseActivity.getPurchaseActivity(response["Authority"]) )
+					{
 						AppModel.instance.navigator.addPopup(new MessagePopup(loc("popup_purchase_" + -1008)));
+						item.enabled = true;
+					}
 					else
 					{
 						var param:SFSObject = new SFSObject();

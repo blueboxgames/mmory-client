@@ -191,7 +191,7 @@ public function process(item : ExchangeItem) : void
 	exchange(item, params);
 }
 
-private function exchange( item:ExchangeItem, params:SFSObject ) : int
+public function exchange( item:ExchangeItem, params:SFSObject ) : int
 {
 	if( item.category == ExchangeType.C100_FREES )
 		exchanger.findRandomOutcome(item, timeManager.now);
