@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
@@ -104,7 +105,7 @@ override public function updateData():void
 			emotes.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C120_MAGICS && player.get_arena(0) > 1 )
 			magics.add(itemKeys[i]);
-		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS )
+		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS && player.getResource(ResourceType.R6_TICKET) < 20 )
 			tickets.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C0_HARD && itemKeys[i] != ExchangeType.C0_HARD )
 			hards.add(itemKeys[i]);
