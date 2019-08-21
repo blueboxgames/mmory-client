@@ -191,6 +191,7 @@ public function requestKillPioneers(side:int):void
 	var color:int = side == battleData.battleField.side ? 1 : 0;
 	function crazyDriving(fromX:int, toX:int, y:int, color:int) : void
 	{
+		AppModel.instance.sounds.addAndPlay("car-passing-by", null, 1, SoundManager.SINGLE_NONE);
 		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/base");
 		var car:Image = new Image(txt);
 		car.width = txt.frameWidth * 2.4;
@@ -204,7 +205,6 @@ public function requestKillPioneers(side:int):void
 
  	battleData.battleField.requestKillPioneers(side);
 	var time:int = battleData.battleField.resetTime - battleData.battleField.now - 500;
-	AppModel.instance.sounds.addAndPlay("car-passing-by");
 	setTimeout(crazyDriving, time, color == 0 ? -600 : 1160, color == 0 ? 1160 : -600, color == 1 ? -140 : 140, color);
 	setTimeout(crazyDriving, time, color == 0 ? -400 : 1360, color == 0 ? 1360 : -400, color == 1 ? -420 : 420, color);
 }
