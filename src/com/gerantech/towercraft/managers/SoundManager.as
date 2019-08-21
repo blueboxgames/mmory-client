@@ -1,13 +1,15 @@
 package com.gerantech.towercraft.managers
 {
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.mmory.core.constants.PrefsTypes;
+
 import flash.events.Event;
 import flash.media.Sound;
 import flash.media.SoundChannel;
 import flash.media.SoundTransform;
 import flash.utils.Dictionary;
+
 import starling.core.Starling;
 
 public class SoundManager 
@@ -22,6 +24,7 @@ static public const SINGLE_BYPASS_THIS:int = 2;
 private var loadings:Dictionary;			// contains all the sounds loading with the Sound Manager
 private var loadeds:Dictionary;				// contains all the sounds registered with the Sound Manager
 private var playings:Dictionary;			// contains all the sounds that are currently playing
+private var volumes:Dictionary;				// all the channel volumes
 private var _isMuted:Boolean = false;		// When true, every change in volume for ALL sounds is ignored
 
 public function SoundManager() 
@@ -29,6 +32,8 @@ public function SoundManager()
 	loadings = new Dictionary();
 	loadeds = new Dictionary();
 	playings = new Dictionary();
+	volumes = new Dictionary();
+	volumes[-1] = volumes[0] = volumes[1] = 0.4;
 }
 
 // -------------------------------------------------------------------------------------------------------------------------			
@@ -76,7 +81,7 @@ public function addAndPlayRandom(sounds:Array, category:int = 1, singlePlaying:i
 public function addAndPlay(id:String, sound:Sound = null, category:int = 1, singlePlaying:int = 0, repeats:int = 1) : void 
 {
 	addSound(id, sound, soundAdded, category);
-	function soundAdded():void{play(id, 1, repeats, 0, singlePlaying); }
+	function soundAdded():void{play(id, NaN, repeats, 0, singlePlaying); }
 }
 
 // -------------------------------------------------------------------------------------------------------------------------		
@@ -108,7 +113,7 @@ public function isPlaying(id:String) : Boolean
 
 // -------------------------------------------------------------------------------------------------------------------------		
 /** Play a sound */
-public function play(id:String, volume:Number = 1.0, repeats:int = 1, panning:Number = 0, singlePlaying:int = 0) : void
+public function play(id:String, volume:Number = NaN, repeats:int = 1, panning:Number = 0, singlePlaying:int = 0) : void
 {
 	// decide single playing
 	if( isPlaying(id) )
@@ -140,6 +145,8 @@ public function play(id:String, volume:Number = 1.0, repeats:int = 1, panning:Nu
 		
 		channel.addEventListener(Event.SOUND_COMPLETE, channel_soundCompleteHandler);
 		
+		if( isNaN(volume) )
+			volume = volumes[category];
 		// if the sound manager is muted, set the sound's volume to zero
 		channel.soundTransform = new SoundTransform(_isMuted ? 0 : volume, panning);
 		
@@ -250,13 +257,19 @@ public function crossFade(fadeOutId:String, fadeInId:String, tweenDuration:Numbe
 /** Sets a new volume for all the sounds currently playing 
  *  @param volume the new volume value 
  */
-public function setGlobalVolume(volume:Number):void {
+public function setGlobalVolume(volume:Number, category:int = -1):void
+{
 	var s:SoundTransform;
-	for (var currID:String in playings) {
+	for (var currID:String in playings)
+	{
 		s = new SoundTransform(volume);
-		SoundChannel(playings[currID].channel).soundTransform = s;
-		playings[currID].volume = volume;
+		if( category == -1 || playings[currID].c == category )
+		{
+			SoundChannel(playings[currID].channel).soundTransform = s;
+			playings[currID].volume = volume;
+		}
 	}
+	volumes[category] = volume;
 }
 
 // -------------------------------------------------------------------------------------------------------------------------		

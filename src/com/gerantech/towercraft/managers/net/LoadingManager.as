@@ -208,7 +208,7 @@ protected function prefs_completeHandler(e:*):void
 	VideoAdsManager.instance.adProvider = VideoAdsManager.AD_PROVIDER_CHARTBOOST;
 	if( VideoAdsManager.instance.adProvider == VideoAdsManager.AD_PROVIDER_CHARTBOOST )
 	{
-		VideoAdsManager.instance.requestAd(VideoAdsManager.TYPE_CHESTS, true);
+		// VideoAdsManager.instance.requestAd(VideoAdsManager.TYPE_CHESTS, true);
 		VideoAdsManager.instance.requestAdIn(ExchangeType.C43_ADS, false, CBLocation.DEFAULT);
 	}
 	/* if( appModel.game.player.getLastOperation() < appModel.game.fieldProvider.operations.keys().length )

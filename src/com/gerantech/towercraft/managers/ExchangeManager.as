@@ -341,8 +341,8 @@ private function showAd():void
 		}
 	}
 	function adConfirmPopup_closeHandler(event:Event):void {
-		adConfirmPopup.removeEventListener(Event.CLOSE, adConfirmPopup_closeHandler);
-		finilizeAdError("popup_ad_not_available");
+		adConfirmPopup.removeEventListener(Event.CANCEL, adConfirmPopup_closeHandler);
+		finilizeAdError(null);
 	}
 	function adManager_failToLoadHandler(event:Event):void {
 		VideoAdsManager.instance.removeEventListener(ChartboostEvent.DID_FAIL_TO_LOAD_REWARDED_VIDEO, adManager_failToLoadHandler);
