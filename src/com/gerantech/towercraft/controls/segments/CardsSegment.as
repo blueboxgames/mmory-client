@@ -126,6 +126,7 @@ override public function init():void
 
 	//tutorial appearance
 	scroller.scrollToPosition(NaN, 2900, 0.5);
+	scroller.verticalScrollPolicy = ScrollPolicy.OFF;
 	scroller.addEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_fscrollCompleteHandler);
 	function scroller_fscrollCompleteHandler(event:Event) : void
 	{
