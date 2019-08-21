@@ -88,7 +88,7 @@ private function list_focusInHandler(event:Event):void
 		if( settingData.key == PrefsTypes.SETTINGS_1_MUSIC )
 		{
 			if( player.prefs.getAsBool(PrefsTypes.SETTINGS_1_MUSIC) )
-				appModel.sounds.play("main-theme", 1, 100, 0, SoundManager.SINGLE_FORCE_THIS);
+				appModel.sounds.play("main-theme", NaN, 100, 0, SoundManager.SINGLE_FORCE_THIS);
 			else
 				appModel.sounds.stopAll();
 		}

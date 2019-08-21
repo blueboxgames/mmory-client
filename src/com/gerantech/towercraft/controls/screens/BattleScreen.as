@@ -420,7 +420,7 @@ override public function dispose():void
 {
 	removeConnectionListeners();
 	appModel.sounds.stopAll();
-	setTimeout(appModel.sounds.play, 2000, "main-theme", 1, 100, 0, SoundManager.SINGLE_BYPASS_THIS);
+	setTimeout(appModel.sounds.play, 2000, "main-theme", NaN, 100, 0, SoundManager.SINGLE_BYPASS_THIS);
 	removeChild(appModel.battleFieldView, true);
 	super.dispose();
 }
