@@ -220,7 +220,7 @@ private function createRewardItem(r:int) : void
 	var collectible:Boolean = reward.collectible();
 	var colW:int = 240;
 	var itemX:int = 60;
-	var itemY:int = HEIGHT - r / league.rewards.length * HEIGHT;
+	var itemY:int = HEIGHT - (r+1) / league.rewards.length * HEIGHT;
 	var itemW:int = 660;
 	var isCard:Boolean = ResourceType.isCard(reward.key);
 
