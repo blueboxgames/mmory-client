@@ -33,7 +33,8 @@ public function SoundManager()
 	loadeds = new Dictionary();
 	playings = new Dictionary();
 	volumes = new Dictionary();
-	volumes[-1] = volumes[0] = volumes[1] = 0.4;
+	volumes[-1] = volumes[0] = 0.4; 	// 0 = theme music
+	volumes[1] = 0.2; 								// 1 = SFX
 }
 
 // -------------------------------------------------------------------------------------------------------------------------			
