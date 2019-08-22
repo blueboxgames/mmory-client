@@ -221,7 +221,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	
 	appModel.sounds.addAndPlay("main-theme", null, SoundManager.CATE_THEME, SoundManager.SINGLE_BYPASS_THIS, 100);
 	
-	appModel.navigator.handleInvokes();
+	setTimeout(appModel.navigator.handleInvokes, 2000);
 	exchangeManager.addEventListener(FeathersEventType.END_INTERACTION, exchangeManager_endHandler);
 	
 	SFSConnection.instance.lobbyManager.addEventListener(Event.UPDATE, lobbyManager_updateHandler);
@@ -263,6 +263,8 @@ protected function pageList_readyHandler(event:Event):void
 }
 protected function exchangeManager_endHandler(event:Event):void
 {
+	if( event.data == null )
+		return;
 	if( ExchangeType.getCategory(event.data.type) == ExchangeType.C110_BATTLES ) //open first pack
 		segmentsCollection.updateItemAt(1);
 	else if( event.data.type == -100 ) //upgrade initial card

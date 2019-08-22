@@ -3,6 +3,12 @@ package com.gerantech.towercraft.controls
 	import avmplus.getQualifiedClassName;
 
 	import com.gerantech.extensions.NativeAbilities;
+	import com.gerantech.mmory.core.constants.PrefsTypes;
+	import com.gerantech.mmory.core.constants.ResourceType;
+	import com.gerantech.mmory.core.exchanges.ExchangeItem;
+	import com.gerantech.mmory.core.scripts.ScriptEngine;
+	import com.gerantech.mmory.core.utils.maps.IntIntMap;
+	import com.gerantech.mmory.core.utils.maps.IntStrMap;
 	import com.gerantech.towercraft.Game;
 	import com.gerantech.towercraft.controls.animations.AchievedItem;
 	import com.gerantech.towercraft.controls.overlays.BaseOverlay;
@@ -12,6 +18,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.popups.AbstractPopup;
 	import com.gerantech.towercraft.controls.popups.InvitationPopup;
 	import com.gerantech.towercraft.controls.popups.LobbyDetailsPopup;
+	import com.gerantech.towercraft.controls.popups.MessagePopup;
 	import com.gerantech.towercraft.controls.screens.DashboardScreen;
 	import com.gerantech.towercraft.controls.segments.ExchangeSegment;
 	import com.gerantech.towercraft.controls.segments.InboxSegment;
@@ -21,6 +28,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.toasts.SimpleToast;
 	import com.gerantech.towercraft.events.LoadingEvent;
 	import com.gerantech.towercraft.managers.BillingManager;
+	import com.gerantech.towercraft.managers.ExchangeManager;
 	import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 	import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 	import com.gerantech.towercraft.models.AppModel;
@@ -28,15 +36,12 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.models.vo.UserData;
 	import com.gerantech.towercraft.utils.StrUtils;
 	import com.gerantech.towercraft.utils.Utils;
-	import com.gerantech.mmory.core.constants.PrefsTypes;
-	import com.gerantech.mmory.core.constants.ResourceType;
-	import com.gerantech.mmory.core.socials.Challenge;
-	import com.gerantech.mmory.core.utils.maps.IntIntMap;
-	import com.gerantech.mmory.core.utils.maps.IntStrMap;
 	import com.smartfoxserver.v2.core.SFSEvent;
 	import com.smartfoxserver.v2.entities.Buddy;
 	import com.smartfoxserver.v2.entities.data.ISFSObject;
 	import com.smartfoxserver.v2.entities.data.SFSObject;
+	import com.zarinpal.ZarinpalCallbackHandler;
+	import com.zarinpal.inventory.ZarinpalPurchaseActivity;
 
 	import feathers.controls.LayoutGroup;
 	import feathers.controls.StackScreenNavigator;
@@ -51,7 +56,6 @@ package com.gerantech.towercraft.controls
 	import starling.core.Starling;
 	import starling.events.Event;
 	import starling.textures.Texture;
-	import com.gerantech.mmory.core.scripts.ScriptEngine;
 	
 	public class StackNavigator extends StackScreenNavigator
 	{
@@ -352,6 +356,36 @@ package com.gerantech.towercraft.controls
 						SocialSegment.TAB_INDEX = int(pars["socialTab"]);
 						popScreen();
 						break;
+					}
+				}
+				else if(a.indexOf("zarinpal?") > -1)
+				{
+					var callbackHandler:ZarinpalCallbackHandler = new ZarinpalCallbackHandler(arguments[0]);
+					var response:Object = callbackHandler.getResponse();
+					var itemID:int = ZarinpalPurchaseActivity.getPurchaseActivity(response["Authority"]) ? ZarinpalPurchaseActivity.getPurchaseActivity(response["Authority"]).split("_")[1] : 0;
+					var item:ExchangeItem = AppModel.instance.game.exchanger.items.get(itemID);
+					if( response["Status"]!="OK" )
+					{
+						AppModel.instance.navigator.addPopup(new MessagePopup(loc("popup_purchase_" + -1005)));
+						item.enabled = true;
+					}
+					else if( !response["Authority"] )
+					{
+						AppModel.instance.navigator.addPopup(new MessagePopup(loc("popup_purchase_" + -1008)));
+						item.enabled = true;
+					}
+					else if( !ZarinpalPurchaseActivity.getPurchaseActivity(response["Authority"]) )
+					{
+						AppModel.instance.navigator.addPopup(new MessagePopup(loc("popup_purchase_" + -1008)));
+						item.enabled = true;
+					}
+					else
+					{
+						var param:SFSObject = new SFSObject();
+						param.putText("productID", ZarinpalPurchaseActivity.getPurchaseActivity(response["Authority"]));
+						param.putText("purchaseToken", response["Authority"]);
+						gotoShop(ResourceType.R4_CURRENCY_HARD);
+						BillingManager.instance.verify(param);
 					}
 				}
 			}

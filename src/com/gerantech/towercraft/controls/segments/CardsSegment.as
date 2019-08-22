@@ -126,6 +126,7 @@ override public function init():void
 
 	//tutorial appearance
 	scroller.scrollToPosition(NaN, 2900, 0.5);
+	scroller.verticalScrollPolicy = ScrollPolicy.OFF;
 	scroller.addEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_fscrollCompleteHandler);
 	function scroller_fscrollCompleteHandler(event:Event) : void
 	{
@@ -135,7 +136,7 @@ override public function init():void
 	function appearPage() : void
 	{
 		scroller.addEventListener(FeathersEventType.SCROLL_COMPLETE, scroller_lscrollCompleteHandler);
-		Starling.juggler.delayCall(scroller.scrollToPosition, 1, NaN, 0, 2);
+		Starling.juggler.delayCall(scroller.scrollToPosition, 0.5, NaN, 0, 1.0);
 	}
 	function scroller_lscrollCompleteHandler(event:Event) : void
 	{

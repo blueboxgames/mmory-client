@@ -88,7 +88,7 @@ private function list_focusInHandler(event:Event):void
 		if( settingData.key == PrefsTypes.SETTINGS_1_MUSIC )
 		{
 			if( player.prefs.getAsBool(PrefsTypes.SETTINGS_1_MUSIC) )
-				appModel.sounds.play("main-theme", 1, 100, 0, SoundManager.SINGLE_FORCE_THIS);
+				appModel.sounds.play("main-theme", NaN, 100, 0, SoundManager.SINGLE_FORCE_THIS);
 			else
 				appModel.sounds.stopAll();
 		}
@@ -159,10 +159,10 @@ private function navigateTo(key:int):void
 private function getSettingsData():ListCollection
 {
 	var source:Array = new Array();
-	source.push( new SettingsData(PrefsTypes.SETTINGS_1_MUSIC,			SettingsData.TYPE_TOGGLE, player.prefs.getAsBool(PrefsTypes.SETTINGS_1_MUSIC)));
-	source.push( new SettingsData(PrefsTypes.SETTINGS_2_SFX,			SettingsData.TYPE_TOGGLE, player.prefs.getAsBool(PrefsTypes.SETTINGS_2_SFX)));
+	source.push( new SettingsData(PrefsTypes.SETTINGS_1_MUSIC,					SettingsData.TYPE_TOGGLE, player.prefs.getAsBool(PrefsTypes.SETTINGS_1_MUSIC)));
+	source.push( new SettingsData(PrefsTypes.SETTINGS_2_SFX,						SettingsData.TYPE_TOGGLE, player.prefs.getAsBool(PrefsTypes.SETTINGS_2_SFX)));
 	source.push( new SettingsData(PrefsTypes.SETTINGS_3_NOTIFICATION, 	SettingsData.TYPE_TOGGLE, player.prefs.getAsBool(PrefsTypes.SETTINGS_3_NOTIFICATION)));
-	//source.push( new SettingsData(PrefsTypes.SETTINGS_5_REMOVE_ADS, 	SettingsData.TYPE_TOGGLE, player.prefs.getAsBool(PrefsTypes.SETTINGS_5_REMOVE_ADS)));
+	source.push( new SettingsData(PrefsTypes.SETTINGS_5_ADS, 						SettingsData.TYPE_TOGGLE, player.prefs.getAsBool(PrefsTypes.SETTINGS_5_ADS)));
 	source.push( new SettingsData(PrefsTypes.AUTH_41_GOOGLE,            SettingsData.TYPE_TOGGLE, player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE)));
 	
 	source.push( new SettingsData(SettingsData.TYPE_BUTTON, 			SettingsData.TYPE_LABEL_BUTTONS,	null,	[PrefsTypes.SETTINGS_4_LOCALE, SettingsData.RENAME]));

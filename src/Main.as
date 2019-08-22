@@ -55,14 +55,13 @@ public function Main()
 	// var bt:Array = CardTypes.getAll();
 	// for each( var r:int in bt )
 	// 	currencies.push(r.toString());
-	currencies.push(ResourceType.R1_XP.toString());
-	currencies.push(ResourceType.R2_POINT.toString());
-	currencies.push(ResourceType.R4_CURRENCY_HARD.toString());
-	currencies.push(ResourceType.R3_CURRENCY_SOFT.toString());
+	currencies.push(ResourceType.getName(ResourceType.R1_XP));
+	currencies.push(ResourceType.getName(ResourceType.R2_POINT));
+	currencies.push(ResourceType.getName(ResourceType.R4_CURRENCY_HARD));
+	currencies.push(ResourceType.getName(ResourceType.R3_CURRENCY_SOFT));
 
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
 		/*.setBuildiOS(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec) */
-		.setBuildWindows(desc.versionNumber).setGameKeyWindows("").setGameSecretWindows("")
 		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
 		.setResourceCurrencies(currencies)
 		.setResourceItemTypes(new <String>["outcome", "special", "book", "purchase", "exchange", "upgrade", "donate"]);
@@ -172,8 +171,9 @@ protected function stage_activateHandler(event:Event):void
 
 protected function nativeApplication_invokeHandler(event:InvokeEvent):void
 {
-	NativeApplication.nativeApplication.removeEventListener(InvokeEvent.INVOKE, nativeApplication_invokeHandler);
 	AppModel.instance.invokes = event.arguments;
+	if(AppModel.instance.navigator)
+		AppModel.instance.navigator.handleInvokes();
 }
 
 protected function loaderInfo_uncaughtErrorHandler(event:UncaughtErrorEvent):void 
@@ -196,7 +196,8 @@ protected function loaderInfo_uncaughtErrorHandler(event:UncaughtErrorEvent):voi
 		text = event.error.toString();
 		severity = GAErrorSeverity.WARNING;
 	}
-	GameAnalytics.addErrorEvent(severity, text);
+	if(GameAnalytics.isInitialized)
+		GameAnalytics.addErrorEvent(severity, text);
 	// new GTStreamer(File.applicationStorageDirectory.resolvePath("log.txt"), null, null, null, false, false).save(text);
 }
 }
