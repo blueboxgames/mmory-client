@@ -128,8 +128,8 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		break;
 	
 	case SFSCommands.BATTLE_NEW_ROUND:
-		if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN )
-			battleField.requestReset();
+		if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN && Math.max(data.getInt("0"), data.getInt("1")) < 3 )
+			appModel.battleFieldView.requestKillPioneers(data.getInt("winner"));
 		if( hud != null )
 			hud.updateScores(data.getInt("round"), data.getInt("winner"), data.getInt(battleField.side + ""), data.getInt(battleField.side == 0 ? "1" : "0"), data.getInt("unitId"));
 		break;
@@ -140,7 +140,12 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		else
 			battleField.elixirUpdater.updateAt(1 - battleField.side, data.getInt(String(1 - battleField.side)));
 		break;
+
+	case SFSCommands.BATTLE_UNIT_CHANGE:
+		appModel.battleFieldView.updateUnits(data);
+		break;
 	}
+
 	//trace(event.params.cmd, data.getDump());
 }
 
@@ -204,7 +209,6 @@ private function startBattle():void
 	addChild(hud);
 	
 	resetAll(battleData.sfsData);
-	appModel.battleFieldView.updateUnits();
 	appModel.loadingManager.serverData.putBool("inBattle", false);
 	
 	// play battle theme -_-_-_
@@ -323,7 +327,7 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	else
 		endOverlay = new EndBattleOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);
 	endOverlay.addEventListener(Event.CLOSE, endOverlay_closeHandler);
-	setTimeout(hud.end, Math.max(200, 1000 - player.get_battleswins() * 300), endOverlay);// delay for noobs
+	setTimeout(hud.end, 1000, endOverlay);// delay for noobs
 }
 
 private function endOverlay_closeHandler(event:Event):void
@@ -416,7 +420,7 @@ override public function dispose():void
 {
 	removeConnectionListeners();
 	appModel.sounds.stopAll();
-	setTimeout(appModel.sounds.play, 2000, "main-theme", 1, 100, 0, SoundManager.SINGLE_BYPASS_THIS);
+	setTimeout(appModel.sounds.play, 2000, "main-theme", NaN, 100, 0, SoundManager.SINGLE_BYPASS_THIS);
 	removeChild(appModel.battleFieldView, true);
 	super.dispose();
 }

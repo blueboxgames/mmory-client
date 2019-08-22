@@ -16,6 +16,7 @@ import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
+import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
@@ -24,6 +25,7 @@ import feathers.layout.VerticalAlign;
 
 import flash.geom.Rectangle;
 
+import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
@@ -48,14 +50,16 @@ public class ExCategoryPlaceHolder extends TowersLayout
   private var list:List;
   private var owner:List;
   private var line:ShopLine;
+  private var showInfo:Boolean;
   private var listCollection:ListCollection;
   private var countdownDisplay:CountdownLabel;
 
-  public function ExCategoryPlaceHolder(line:ShopLine, owner:List)
+  public function ExCategoryPlaceHolder(line:ShopLine, owner:List, showInfo:Boolean = true)
   {
     super();
     this.line = line;
     this.owner = owner;
+    this.showInfo = showInfo;
     this.layout = new AnchorLayout();
     this.listCollection = new ListCollection();
   }
@@ -115,15 +119,18 @@ public class ExCategoryPlaceHolder extends TowersLayout
     this.listCollection.data = this.line.items;
     
     // info button
-    var infoButton:IndicatorButton = new IndicatorButton();
-    infoButton.label = StrUtils.getNumber("?");
-    infoButton.width = 64;
-    infoButton.height = 68;
-    infoButton.fixed = false;
-    infoButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
-    infoButton.addEventListener(Event.TRIGGERED, this.infoButton_trigeredHandler);
-    infoButton.layoutData = new AnchorLayoutData(20, 20);
-    this.addChild(infoButton as DisplayObject);
+    if( showInfo )
+    {
+      var infoButton:IndicatorButton = new IndicatorButton();
+      infoButton.label = StrUtils.getNumber("?");
+      infoButton.width = 64;
+      infoButton.height = 68;
+      infoButton.fixed = false;
+      infoButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
+      infoButton.addEventListener(Event.TRIGGERED, this.infoButton_trigeredHandler);
+      infoButton.layoutData = new AnchorLayoutData(20, 20);
+      this.addChild(infoButton as DisplayObject);
+    }
 
     // countdown display
     if( this.line.category == ExchangeType.C20_SPECIALS || this.line.category == ExchangeType.C30_BUNDLES  || this.line.category == ExchangeType.C80_EMOTES )
@@ -134,7 +141,8 @@ public class ExCategoryPlaceHolder extends TowersLayout
       this.countdownDisplay.time = this.exchanger.items.get(this.line.category + 1).expiredAt - this.timeManager.now;
       this.addChild(this.countdownDisplay);
 
-      this.timeManager.addEventListener(Event.CHANGE, timeManager_changeHandler);
+      this.timeManager.addEventListener(Event.CHANGE, this.timeManager_changeHandler);
+      this.exchangeManager.addEventListener(FeathersEventType.END_INTERACTION, this.exchangeManager_endInteractionHandler);
     }
 
     // title display
@@ -149,7 +157,8 @@ public class ExCategoryPlaceHolder extends TowersLayout
     if( !ei.enabled )
       return;
     ei.enabled = false;
-    this.owner.dispatchEventWith(Event.SELECT, false, ei);
+    if( this.owner != null )
+      this.owner.dispatchEventWith(Event.SELECT, false, ei);
     this.list.removeEventListener(Event.CHANGE, this.list_changeHandler);
     this.list.selectedIndex = -1;
     this.list.addEventListener(Event.CHANGE, this.list_changeHandler);
@@ -166,11 +175,26 @@ public class ExCategoryPlaceHolder extends TowersLayout
     this.countdownDisplay.time = this.exchanger.items.get(this.line.category + 1).expiredAt - this.timeManager.now;
   }
   
+  protected function exchangeManager_endInteractionHandler(event:Object):void
+  {
+    if( this.line.category != ExchangeType.C30_BUNDLES )
+      return;
+
+    if( event.data == null )
+      return;
+
+    var item:ExchangeItem = event.data as ExchangeItem;
+    if( item.category != ExchangeType.C30_BUNDLES )
+      return;
+    this.removeChildren();
+    Starling.juggler.tween(this, 0.5, {height:0})
+  }
+
   override public function dispose():void 
   {
-    timeManager.removeEventListener(Event.CHANGE, timeManager_changeHandler);
+    this.exchangeManager.removeEventListener(FeathersEventType.END_INTERACTION, this.exchangeManager_endInteractionHandler);
+    this.timeManager.removeEventListener(Event.CHANGE, this.timeManager_changeHandler);
     super.dispose();
-  }
-  
+  }  
 }
 }

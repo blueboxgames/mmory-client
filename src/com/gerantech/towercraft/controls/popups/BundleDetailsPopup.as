@@ -42,6 +42,7 @@ public function BundleDetailsPopup(exchange:ExchangeItem)
 {
   super();
 	this.exchange = exchange;
+	closeOnStage = closeOnOverlay = closeWithKeyboard = false;
 }
 
 override protected function initialize():void
