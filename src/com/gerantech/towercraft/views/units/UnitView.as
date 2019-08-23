@@ -27,6 +27,7 @@ import starling.display.MovieClip;
 import starling.events.Event;
 import starling.filters.ColorMatrixFilter;
 import starling.utils.Color;
+import com.gerantech.towercraft.views.units.elements.ImageElement;
 
 public class UnitView extends BaseUnit
 {
@@ -37,8 +38,6 @@ static public const _PIVOT_Y:Number = 0.75;
 
 private var shadowScale:Number;
 private var bodyScale:Number;
-private var rangeDisplay:Image;
-private var sizeDisplay:Image;
 private var __x:Number;
 private var __y:Number;
 private var __yz:Number;
@@ -47,9 +46,9 @@ private var _muted:Boolean = true;
 public var fireDisplayFactory:Function;
 
 private var deployIcon:CountdownIcon;
-private var enemyHint:ShadowLabel;
-private var aimDisplay:Image;
-private var baseDisplay:Image;
+private var baseDisplay:ImageElement;
+private var rangeDisplay:ImageElement;
+private var sizeDisplay:ImageElement;
 private var bodyDisplay:UnitMC;
 private var shadowDisplay:UnitMC;
 private var healthDisplay:HealthBarLeveled;
@@ -69,7 +68,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	
 	if( appModel.artRules.get(card.type, ArtRules.BASE) != "" )
 	{
-		baseDisplay = new Image(appModel.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/base"));
+		baseDisplay = new ImageElement(this, appModel.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/base"));
 		baseDisplay.pivotX = baseDisplay.width * 0.5;
 		baseDisplay.pivotY = baseDisplay.height * _PIVOT_Y;
 		baseDisplay.x = __x;
@@ -80,7 +79,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		fieldView.unitsContainer.addChild(baseDisplay);
 	}
 	
-	bodyDisplay = new UnitMC(card.type + "/" + battleField.getColorIndex(side) + "/", "m_" + (side == battleField.side ? "000_" : "180_"));
+	bodyDisplay = new UnitMC(this, card.type + "/" + battleField.getColorIndex(side) + "/", "m_" + (side == battleField.side ? "000_" : "180_"));
 	bodyDisplay.pivotX = bodyDisplay.width * 0.5;
 	bodyDisplay.pivotY = bodyDisplay.height * _PIVOT_Y;
 	bodyDisplay.x = __x;
@@ -92,7 +91,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	Starling.juggler.add(bodyDisplay);
 	fieldView.unitsContainer.addChild(bodyDisplay);
 	
-	shadowDisplay = new UnitMC(card.type + "/", "m_" + (side == battleField.side ? "000_" : "180_"));
+	shadowDisplay = new UnitMC(this, card.type + "/", "m_" + (side == battleField.side ? "000_" : "180_"));
 	shadowDisplay.alpha = 0.2;
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y;
@@ -130,7 +129,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	
 	if( BattleField.DEBUG_MODE )
 	{
-		sizeDisplay = new Image(appModel.assets.getTexture("damage-range"));
+		sizeDisplay = new ImageElement(this, appModel.assets.getTexture("damage-range"));
 		sizeDisplay.pivotX = sizeDisplay.width * 0.5;
 		sizeDisplay.pivotY = sizeDisplay.height * 0.5;
 		sizeDisplay.width = card.sizeH * 2;
@@ -140,7 +139,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		sizeDisplay.y = __y;
 		fieldView.unitsContainer.addChildAt(sizeDisplay, 0);
 		
-		rangeDisplay = new Image(appModel.assets.getTexture("damage-range"));
+		rangeDisplay = new ImageElement(this, appModel.assets.getTexture("damage-range"));
 		rangeDisplay.pivotX = rangeDisplay.width * 0.5;
 		rangeDisplay.pivotY = rangeDisplay.height * 0.5;
 		rangeDisplay.width = card.bulletRangeMax * 2;
@@ -348,7 +347,7 @@ protected function defaultSummonEffectFactory() : void
 {
 	Starling.juggler.tween(bodyDisplay, 0.2, {alpha:0, repeatCount:9});
 
-	var summonParticle:BattleParticleSystem = new BattleParticleSystem("summon-base", "summons/summon-base", 1, false, true);
+	var summonParticle:BattleParticleSystem = new BattleParticleSystem(this, "summon-base", "summons/summon-base", 1, false, true);
 	summonParticle.scaleY = BattleField.CAMERA_ANGLE;
 	summonParticle.x = getSideX();
 	summonParticle.y = getSideY();
@@ -390,7 +389,7 @@ protected function defaultFireDisplayFactory(x:Number, y:Number, rotation:Number
 	if( flame != "" )
 	{
 		if( flameParticle == null )
-			flameParticle = new BattleParticleSystem("flame-" + flame, "flames/flame-" + flame, 1, false, false);
+			flameParticle = new BattleParticleSystem(this, "flame-" + flame, "flames/flame-" + flame, 1, false, false);
 		flameParticle.scale = ArtRules.getFlameSize(card.type)
 		flameParticle.x = x;
 		flameParticle.pivotY = flameParticle.height *	0.9;
@@ -405,7 +404,7 @@ protected function defaultFireDisplayFactory(x:Number, y:Number, rotation:Number
 	if( smoke != "" )
 	{
 		if( smokeParticle == null )
-			smokeParticle = new BattleParticleSystem("smoke-" + smoke, "smokes/smoke-" + flame, 1, false, false);
+			smokeParticle = new BattleParticleSystem(this, "smoke-" + smoke, "smokes/smoke-" + flame, 1, false, false);
 		smokeParticle.scale = ArtRules.getSmokeSize(card.type)
 		smokeParticle.x = x;
 		smokeParticle.y = y;
@@ -419,7 +418,7 @@ protected function defaultFireDisplayFactory(x:Number, y:Number, rotation:Number
 	if( bulletPS.substr(0,3) == "ps-" )
 	{
 		if( bulletParticle == null )
-			bulletParticle = new BattleParticleSystem(bulletPS, "bullets/" + bulletPS + "/" + bulletPS, 1, false, false);
+			bulletParticle = new BattleParticleSystem(this, bulletPS, "bullets/" + bulletPS + "/" + bulletPS, 1, false, false);
 		bulletParticle.x = x;
 		bulletParticle.pivotY = bulletParticle.height *	0.9;
 		bulletParticle.y = y;

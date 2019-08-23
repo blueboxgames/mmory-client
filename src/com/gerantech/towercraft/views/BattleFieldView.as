@@ -38,6 +38,8 @@ import starling.textures.Texture;
 
 import starlingbuilder.engine.DefaultAssetMediator;
 import flash.utils.setTimeout;
+import com.gerantech.towercraft.views.units.elements.ImageElement;
+import com.gerantech.towercraft.views.units.elements.IElement;
 
 public class BattleFieldView extends Sprite
 {
@@ -132,9 +134,11 @@ protected function timeManager_updateHandler(e:Event):void
 	unitsContainer.sortChildren(unitSortMethod);
 }
 
-private function unitSortMethod(left:DisplayObject, right:DisplayObject) : Number
+private function unitSortMethod(left:IElement, right:IElement) : Number
 {
-	return left.y - right.y;
+	if( left.unit == null || right.unit == null )
+		return 0;
+	return left.unit.y - right.unit.y;
 }
 
 public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number = -1, fixedPosition:Boolean = false) : void
@@ -193,7 +197,7 @@ public function requestKillPioneers(side:int):void
 	{
 		AppModel.instance.sounds.addAndPlay("car-passing-by", null, 1, SoundManager.SINGLE_NONE);
 		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/base");
-		var car:Image = new Image(txt);
+		var car:ImageElement = new ImageElement(null, txt);
 		car.width = txt.frameWidth * 2.4;
 		car.height = txt.frameHeight * 2.4;
 		// car.scaleX *= fromX < toX ? 1 : -1;

@@ -1,10 +1,10 @@
-package com.gerantech.towercraft.views 
+package com.gerantech.towercraft.views.units.elements
 {
+import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.towercraft.models.AppModel;
+
 import starling.display.MovieClip;
 import starling.textures.Texture;
-import com.gerantech.towercraft.views.units.elements.MovieElement;
-import com.gerantech.mmory.core.battle.units.Unit;
 
 /**
 * ...
@@ -17,9 +17,9 @@ private var animTextureName:String;
 
 public function UnitMC(unit:Unit, baseTextureName:String, animTextureName:String) 
 {
-	super(unit, AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 15);
 	this.baseTextureName = baseTextureName;
 	this.animTextureName = animTextureName;
+	super(unit, AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 15);
 }
 
 public function updateTexture(anim:String, dir:String):void 

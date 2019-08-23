@@ -14,6 +14,7 @@ import starling.display.Image;
 import starling.display.MovieClip;
 import starling.events.Event;
 import starling.utils.MathUtil;
+import com.gerantech.towercraft.views.units.elements.ImageElement;
 
 /**
 * ...
@@ -112,7 +113,7 @@ private function defaultBulletDisplayFactory() : void
 		bulletDisplay.play();
 	}
 	
-	shadowDisplay = new Image(appModel.assets.getTexture("troops-shadow"));
+	shadowDisplay = new ImageElement(null, appModel.assets.getTexture("troops-shadow"));
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.pivotY = shadowDisplay.height * 0.5;
 	fieldView.unitsContainer.addChildAt(shadowDisplay, 0);
