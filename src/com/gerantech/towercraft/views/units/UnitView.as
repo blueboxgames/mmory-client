@@ -27,6 +27,7 @@ import starling.display.MovieClip;
 import starling.events.Event;
 import starling.filters.ColorMatrixFilter;
 import starling.utils.Color;
+import com.gerantech.towercraft.views.units.elements.UnitBody;
 
 public class UnitView extends BaseUnit
 {
@@ -48,7 +49,7 @@ private var deployIcon:CountdownIcon;
 private var baseDisplay:ImageElement;
 private var rangeDisplay:ImageElement;
 private var sizeDisplay:ImageElement;
-private var bodyDisplay:UnitMC;
+private var bodyDisplay:UnitBody;
 private var shadowDisplay:UnitMC;
 private var healthDisplay:HealthBarLeveled;
 private var flameParticle:BattleParticleSystem;
@@ -77,9 +78,8 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		baseDisplay.scale *= _SCALE;
 		fieldView.unitsContainer.addChild(baseDisplay);
 	}
-	
-	var startFrame:Number = Math.random();
-	bodyDisplay = new UnitMC(this, card.type + "/" + battleField.getColorIndex(side) + "/", "m_" + (side == battleField.side ? "000_" : "180_"), startFrame);
+
+	bodyDisplay = new UnitBody(this);
 	bodyDisplay.pivotX = bodyDisplay.width * 0.5;
 	bodyDisplay.pivotY = bodyDisplay.height * _PIVOT_Y;
 	bodyDisplay.x = __x;
@@ -87,11 +87,9 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	bodyDisplay.width = _WIDTH;
 	bodyDisplay.height = _HEIGHT;
 	bodyScale = bodyDisplay.scale *= _SCALE;
-	bodyDisplay.pause();
-	Starling.juggler.add(bodyDisplay);
 	fieldView.unitsContainer.addChild(bodyDisplay);
-	
-	shadowDisplay = new UnitMC(this, card.type + "/", "m_" + (side == battleField.side ? "000_" : "180_"), startFrame);
+
+	shadowDisplay = new UnitMC(card.type + "/", "m_" + (side == battleField.side ? "000_" : "180_"));
 	shadowDisplay.alpha = 0.4;
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y;
@@ -100,6 +98,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	shadowDisplay.width = _WIDTH;
 	shadowDisplay.height = _HEIGHT;
 	shadowScale = shadowDisplay.scale *= _SCALE;
+	shadowDisplay.currentFrame = bodyDisplay.startFrame;
 	shadowDisplay.pause();
 	Starling.juggler.add(shadowDisplay);
 	fieldView.shadowsContainer.addChild(shadowDisplay);
@@ -288,13 +287,13 @@ private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, o
 		flipped = true;
 	}
 	
-	bodyDisplay.loop = anim == "m_";
-	bodyDisplay.scaleX = (flipped ? -bodyScale : bodyScale );
-	bodyDisplay.updateTexture(anim, dir);
-	
-	shadowDisplay.loop = bodyDisplay.loop;
+	shadowDisplay.loop = anim == "m_";;
 	//shadowDisplay.scaleX = (flipped ? -shadowDisplay.scaleY : shadowDisplay.scaleY );
 	shadowDisplay.updateTexture(anim, dir);
+	
+	bodyDisplay.loop = shadowDisplay.loop;
+	bodyDisplay.scaleX = (flipped ? -bodyScale : bodyScale );
+	bodyDisplay.updateTexture(anim, dir);
 }
 
 override public function setHealth(health:Number) : Number
@@ -485,7 +484,6 @@ override public function dispose() : void
 	battleField.removeEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
 	if( CardTypes.isHero(card.type) && side != battleField.side )
 		fieldView.mapBuilder.changeSummonArea(id < 4);
-	Starling.juggler.remove(bodyDisplay);
 	bodyDisplay.removeFromParent(true);
 	if( shadowDisplay != null )
 		shadowDisplay.removeFromParent(true);
