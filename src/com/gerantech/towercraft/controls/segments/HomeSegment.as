@@ -79,9 +79,9 @@ override public function init():void
 
 	// battle button background panel
 	var bg:ImageLoader = new ImageLoader();
-	bg.source = appModel.theme.roundMediumSkin;
-	bg.scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;
-	bg.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.055);
+	bg.source = appModel.theme.roundBigSkin;
+	bg.scale9Grid = MainTheme.ROUND_BIG_SCALE9_GRID;
+	bg.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.052);
 	
 	bg.height = eventsButton.height + 40;
 	bg.width = eventsButton.width + 60;
@@ -89,12 +89,12 @@ override public function init():void
 	addChildAt(bg, getChildIndex(eventsButton));
 	
 	var bgd:ImageLoader = new ImageLoader();
-	bgd.source = appModel.theme.roundMediumSkin;
-	bgd.scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;
+	bgd.source = appModel.theme.roundBigSkin;
+	bgd.scale9Grid = MainTheme.ROUND_BIG_SCALE9_GRID;
 	bgd.layoutData = battleButton.layoutData;
 	bgd.height = battleButton.height + 90;
 	bgd.width = battleButton.width + 60;
-	bgd.color = 0x194685;
+	bgd.color = bg.color;
 	addChildAt(bgd, getChildIndex(eventsButton));
 	
 	// bookline

@@ -191,6 +191,7 @@ static public const VERTICAL_SCROLL_BAR_THUMB_SCALE9_GRID:Rectangle = new Rectan
 static public const SHADOW_SIDE_SCALE9_GRID:Rectangle = new Rectangle(2, 2, 14, 14);
 static public const HEADER_SKIN_TEXTURE_REGION:Rectangle = new Rectangle(1, 1, 128, 64);
 static public const RIBBON_SCALE9_GRID:Rectangle = new Rectangle(92, 60, 6, 6);
+static public const ROUND_BIG_SCALE9_GRID:Rectangle = new Rectangle(31, 31, 2, 2);
 static public const ROUND_MEDIUM_SCALE9_GRID:Rectangle = new Rectangle(18, 18, 2, 2);
 static public const ROUND_SMALL_SCALE9_GRID:Rectangle = new Rectangle(11, 11, 1, 1);
 
@@ -638,6 +639,8 @@ public function get popupHeaderedBackgroundSkinTexture() : Texture { return Asse
 public function get popupInsideBackgroundSkinTexture() : Texture { return Assets.getTexture("theme/popup-inside-background-skin", "gui"); }
 public function get headerBackgroundSkinTexture() : Texture { return Assets.getTexture("theme/header-background-skin", "gui"); }
 public function get headerPopupBackgroundSkinTexture() : Texture { return Assets.getTexture("theme/header-popup-background-skin", "gui"); }
+public function get roundBigSkin() : Texture { return Assets.getTexture("theme/round-big-skin", "gui"); }
+public function get roundBigInnerSkin() : Texture { return Assets.getTexture("theme/round-big-inner-skin", "gui"); }
 public function get roundMediumSkin() : Texture { return Assets.getTexture("theme/round-medium-skin", "gui"); }
 public function get roundMediumInnerSkin() : Texture { return Assets.getTexture("theme/round-medium-inner-skin", "gui"); }
 public function get roundSmallSkin() : Texture { return Assets.getTexture("theme/round-small-skin", "gui"); }
