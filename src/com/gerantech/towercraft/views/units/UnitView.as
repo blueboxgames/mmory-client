@@ -12,10 +12,10 @@ import com.gerantech.mmory.core.utils.Point3;
 import com.gerantech.towercraft.controls.indicators.CountdownIcon;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.UnitMC;
 import com.gerantech.towercraft.views.effects.BattleParticleSystem;
+import com.gerantech.towercraft.views.units.elements.ImageElement;
 import com.gerantech.towercraft.views.weapons.BulletView;
 
 import flash.utils.setTimeout;
@@ -27,13 +27,12 @@ import starling.display.MovieClip;
 import starling.events.Event;
 import starling.filters.ColorMatrixFilter;
 import starling.utils.Color;
-import com.gerantech.towercraft.views.units.elements.ImageElement;
 
 public class UnitView extends BaseUnit
 {
 static public const _WIDTH:int = 300;
 static public const _HEIGHT:int = 300;
-static public const _SCALE:Number = 0.85;
+static public const _SCALE:Number = 0.95;
 static public const _PIVOT_Y:Number = 0.75;
 
 private var shadowScale:Number;
@@ -79,7 +78,8 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		fieldView.unitsContainer.addChild(baseDisplay);
 	}
 	
-	bodyDisplay = new UnitMC(this, card.type + "/" + battleField.getColorIndex(side) + "/", "m_" + (side == battleField.side ? "000_" : "180_"));
+	var startFrame:Number = Math.random();
+	bodyDisplay = new UnitMC(this, card.type + "/" + battleField.getColorIndex(side) + "/", "m_" + (side == battleField.side ? "000_" : "180_"), startFrame);
 	bodyDisplay.pivotX = bodyDisplay.width * 0.5;
 	bodyDisplay.pivotY = bodyDisplay.height * _PIVOT_Y;
 	bodyDisplay.x = __x;
@@ -91,8 +91,8 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	Starling.juggler.add(bodyDisplay);
 	fieldView.unitsContainer.addChild(bodyDisplay);
 	
-	shadowDisplay = new UnitMC(this, card.type + "/", "m_" + (side == battleField.side ? "000_" : "180_"));
-	shadowDisplay.alpha = 0.2;
+	shadowDisplay = new UnitMC(this, card.type + "/", "m_" + (side == battleField.side ? "000_" : "180_"), startFrame);
+	shadowDisplay.alpha = 0.4;
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y;
 	shadowDisplay.x = __x;

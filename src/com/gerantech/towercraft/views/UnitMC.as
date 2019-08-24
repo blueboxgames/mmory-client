@@ -12,14 +12,16 @@ import com.gerantech.mmory.core.battle.units.Unit;
 */
 public class UnitMC extends MovieElement
 {
+public var startFrame:Number;
 private var baseTextureName:String;
 private var animTextureName:String;
 
-public function UnitMC(unit:Unit, baseTextureName:String, animTextureName:String) 
+public function UnitMC(unit:Unit, baseTextureName:String, animTextureName:String, startFrame:Number) 
 {
-	super(unit, AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 15);
+	super(unit, AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 12);
 	this.baseTextureName = baseTextureName;
 	this.animTextureName = animTextureName;
+	this.startFrame = startFrame;
 }
 
 public function updateTexture(anim:String, dir:String):void 
