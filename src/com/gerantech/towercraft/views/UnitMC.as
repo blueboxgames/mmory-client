@@ -5,6 +5,7 @@ import starling.display.MovieClip;
 import starling.textures.Texture;
 import com.gerantech.towercraft.views.units.elements.MovieElement;
 import com.gerantech.mmory.core.battle.units.Unit;
+import com.gerantech.towercraft.views.units.UnitView;
 
 /**
 * ...
@@ -16,7 +17,7 @@ public var startFrame:Number;
 private var baseTextureName:String;
 private var animTextureName:String;
 
-public function UnitMC(unit:Unit, baseTextureName:String, animTextureName:String, startFrame:Number) 
+public function UnitMC(unit:UnitView, baseTextureName:String, animTextureName:String, startFrame:Number) 
 {
 	super(unit, AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 12);
 	this.baseTextureName = baseTextureName;

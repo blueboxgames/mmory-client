@@ -1,10 +1,9 @@
 package com.gerantech.towercraft.views.units.elements
 {
-  import com.gerantech.mmory.core.battle.units.Unit;
-
+  import com.gerantech.towercraft.views.units.UnitView;
   public interface IElement
   {
-    function set unit(value:Unit) : void;
-    function get unit():Unit;
+    function set unit(value:UnitView) : void;
+    function get unit():UnitView;
   } 
 }
