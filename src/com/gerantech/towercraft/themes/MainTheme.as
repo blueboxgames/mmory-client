@@ -825,6 +825,7 @@ protected function initializeStyleProviders():void
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_SMALL_HILIGHT, this.setSmallHilightButtonStyles);
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_SMALL_NEUTRAL, this.setSmallNeutralButtonStyles);
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_SMALL_DARK, this.setSmallDarkButtonStyles);
+	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_SMALL_DISABLE, this.setSmallDisableButtonStyles);
 
 	//button group
 	this.getStyleProviderForClass(ButtonGroup).defaultStyleFunction = this.setButtonGroupStyles;
@@ -1217,6 +1218,8 @@ public function setSmallNeutralButtonStyles(button:Button):void {
 	setButtonColorStyle(button, this.buttonSmallNeutralUpSkinTexture,	this.buttonSmallNeutralDownSkinTexture,	this.buttonSmallDisabledSkinTexture, BUTTON_SMALL_SCALE9_GRID); }
 public function setSmallDarkButtonStyles(button:Button):void {
 	setButtonColorStyle(button, this.buttonSmallDarkUpSkinTexture,		this.buttonSmallDarkDownSkinTexture,	this.buttonSmallDisabledSkinTexture, BUTTON_SMALL_SCALE9_GRID); }
+public function setSmallDisableButtonStyles(button:Button):void {
+	setButtonColorStyle(button, this.buttonSmallDisabledSkinTexture,		this.buttonSmallDisabledSkinTexture,	this.buttonSmallDisabledSkinTexture, BUTTON_SMALL_SCALE9_GRID); }
 
 public function setButtonColorStyle(button:Button, upTexture:Texture, downTexture:Texture, disableTexture:Texture, scaleGrid:Rectangle):void
 {
