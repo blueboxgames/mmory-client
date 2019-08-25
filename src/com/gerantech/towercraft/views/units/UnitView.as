@@ -28,6 +28,7 @@ import starling.events.Event;
 import starling.filters.ColorMatrixFilter;
 import starling.utils.Color;
 import com.gerantech.towercraft.views.units.elements.UnitBody;
+import com.gerantech.towercraft.views.units.elements.MovieElement;
 
 public class UnitView extends BaseUnit
 {
@@ -355,7 +356,7 @@ protected function defaultSummonEffectFactory() : void
 	fieldView.unitsContainer.addChildAt(summonParticle, 0);
 	return;
 	
-	var summonDisplay:MovieClip = new MovieClip(appModel.assets.getTextures("summons/explode-"), 35);
+	var summonDisplay:MovieElement = new MovieElement(this, appModel.assets.getTextures("summons/explode-"), 35);
 	summonDisplay.pivotX = summonDisplay.width * 0.5;
 	summonDisplay.pivotY = summonDisplay.height * 0.5;
 	summonDisplay.width = ArtRules.getShadowSize(card.type) * 2.00;
@@ -370,7 +371,7 @@ protected function defaultSummonEffectFactory() : void
 
 public function showWinnerFocus():void 
 {
-	var winnerDisplay:Image = new Image(appModel.assets.getTexture("damage-range"));
+	var winnerDisplay:ImageElement = new ImageElement(this, appModel.assets.getTexture("damage-range"));
 	winnerDisplay.pivotX = winnerDisplay.width * 0.5;
 	winnerDisplay.pivotY = winnerDisplay.height * 0.5;
 	winnerDisplay.width = 500;

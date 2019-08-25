@@ -113,10 +113,10 @@ private function defaultBulletDisplayFactory() : void
 		bulletDisplay.play();
 	}
 	
-	shadowDisplay = new ImageElement(null, appModel.assets.getTexture("troops-shadow"));
+	shadowDisplay = new Image(appModel.assets.getTexture("troops-shadow"));
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.pivotY = shadowDisplay.height * 0.5;
-	fieldView.unitsContainer.addChildAt(shadowDisplay, 0);
+	fieldView.shadowsContainer.addChild(shadowDisplay);
 }
 
 protected function defaultHitDisplayFactory() : void
