@@ -208,7 +208,7 @@ protected function buttonOverlay_triggeredHandler():void
 		pullCard();
 		lastTappedTime = getTimer();
 	}
-	else if( collectedItemIndex == rewardKeys.length - 1 && lastTappedTime < getTimer() - 1200 )
+	else if( collectedItemIndex == rewardKeys.length - 1 && lastTappedTime < getTimer() - 600 )
 	{
 		buttonOverlay.removeEventListener(Event.TRIGGERED, buttonOverlay_triggeredHandler);
 		setTimeout(bookArmature.animation.gotoAndPlayByTime, 400, "hide", 0, 1);
