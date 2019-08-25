@@ -1,12 +1,10 @@
 package com.gerantech.towercraft.controls
 {
-	import com.gerantech.towercraft.controls.texts.RTLLabel;
 	import com.gerantech.towercraft.controls.texts.ShadowLabel;
-	import com.gerantech.towercraft.models.AppModel;
-	
+
 	import feathers.layout.AnchorLayout;
 	import feathers.layout.AnchorLayoutData;
-	
+
 	import starling.animation.Transitions;
 	import starling.core.Starling;
 	import starling.events.Event;
@@ -17,10 +15,12 @@ package com.gerantech.towercraft.controls
 		public static var GAP:int;
 		
 		public var text:String;
-		
-		public function GameLog(text:String)
+		public var color:uint;
+
+		public function GameLog(text:String, color:uint)
 		{
 			this.text = text;
+			this.color = color;
 		}
 		
 		override protected function initialize():void
@@ -29,7 +29,7 @@ package com.gerantech.towercraft.controls
 			layout = new AnchorLayout();
 			touchable = false;
 			
-			var labelDisplay:ShadowLabel = new ShadowLabel(text, 1, 0,"center", null, true, "center", 1.0, null, "bold");
+			var labelDisplay:ShadowLabel = new ShadowLabel(this.text, this.color, 0,"center", null, true, "center", 1.0, null, "bold");
 			labelDisplay.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 			labelDisplay.pixelSnapping = false;
 			addChild(labelDisplay);

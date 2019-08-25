@@ -211,9 +211,9 @@ package com.gerantech.towercraft.controls
 		
 		private var battleconfirmToast:ConfirmToast;
 		
-		public function addLog(text:String, offsetY:int = 0):void
+		public function addLog(text:String, offsetY:int = 0, color:uint = 1):void
 		{
-			addLogGame(new GameLog(text), offsetY);
+			addLogGame(new GameLog(text, color), offsetY);
 		}
 		
 		public function addLogGame(log:GameLog, offsetY:int = 0):void
