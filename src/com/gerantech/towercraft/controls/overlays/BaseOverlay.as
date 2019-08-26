@@ -2,7 +2,9 @@ package com.gerantech.towercraft.controls.overlays
 {
 import com.gerantech.towercraft.controls.ClosableLayout;
 import com.gerantech.towercraft.controls.groups.Devider;
+
 import flash.ui.Keyboard;
+
 import starling.display.DisplayObject;
 import starling.events.Event;
 import starling.events.KeyboardEvent;
@@ -55,7 +57,10 @@ override protected function stage_keyUpHandler(event:KeyboardEvent):void
 	{
 		event.preventDefault();
 		if( closeWithKeyboard && _isEnabled )
+		{
+			dispatchEventWith(ClosableLayout.ONLY_CLOSE);
 			close();
+		}
 	}
 }
 override protected function stage_touchHandler(event:TouchEvent):void
@@ -69,6 +74,7 @@ override protected function stage_touchHandler(event:TouchEvent):void
 		touch = event.getTouch(overlay, TouchPhase.ENDED);
 		if( touch != null )
 		{
+			dispatchEventWith(ClosableLayout.ONLY_CLOSE);
 			close();
 			return;
 		}
@@ -84,6 +90,7 @@ override protected function stage_touchHandler(event:TouchEvent):void
 
 	/*touch.getLocation( overlay, HELPER_POINT );
 	if(!this.contains( stage.hitTest( HELPER_POINT ) ))*/
+	dispatchEventWith(ClosableLayout.ONLY_CLOSE);
 	close();
 }
 }

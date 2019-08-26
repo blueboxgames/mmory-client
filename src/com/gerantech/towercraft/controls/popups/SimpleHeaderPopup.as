@@ -3,11 +3,14 @@ package com.gerantech.towercraft.controls.popups
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.Button;
 import feathers.layout.AnchorLayoutData;
+
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
+import com.gerantech.towercraft.controls.ClosableLayout;
 /**
 * @author Mansour Djawadi
 */
@@ -50,6 +53,7 @@ override protected function transitionInCompleted() : void
 
 protected function closeButton_triggeredHandler():void
 {
+	dispatchEventWith(ClosableLayout.ONLY_CLOSE);
 	close();
 }
 override public function dispose():void

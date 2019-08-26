@@ -13,6 +13,7 @@ import starling.events.TouchPhase;
 
 public class ClosableLayout extends TowersLayout
 {
+static public const ONLY_CLOSE:String = "onlyClose"
 public var transitionIn:TransitionData;
 public var transitionOut:TransitionData;
 public var data:Object;
@@ -91,7 +92,7 @@ protected function stage_touchHandler(event:TouchEvent):void
 public function close(dispose:Boolean=true):void
 {
 	if( !dispose )
-		addEventListener( Event.ADDED_TO_STAGE, addedToStageHandler);
+		addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
 	
 	if( hasEventListener(Event.CLOSE) )
 		dispatchEventWith(Event.CLOSE);
