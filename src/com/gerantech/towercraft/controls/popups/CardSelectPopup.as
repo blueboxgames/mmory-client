@@ -1,9 +1,11 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.towercraft.controls.CardView;
+import com.gerantech.towercraft.controls.ClosableLayout;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.mmory.core.battle.units.Card;
 
 import feathers.controls.Button;
 import feathers.layout.AnchorLayout;
@@ -65,7 +67,10 @@ override protected function stage_touchHandler(event:TouchEvent):void
 	if( touch == null || _bounds == null )
 		return;
 	if( !_bounds.contains(touch.globalX, touch.globalY) )
+	{
+		dispatchEventWith(ClosableLayout.ONLY_CLOSE);
 		close();
+	}
 }
 
 override protected function transitionInCompleted():void
@@ -97,7 +102,7 @@ override protected function transitionInCompleted():void
 }
 private function showTutorHint () : void
 {
-	if( player.inDeckTutorial() && card.upgradable() )
+	if( player.inDeckTutorial() && card.type == CardTypes.INITIAL )
 		detailsButton.showTutorHint();
 }
 
