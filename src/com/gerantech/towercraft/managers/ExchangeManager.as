@@ -288,13 +288,13 @@ protected function exchanger_completeHandler(event:ExchangeEvent):void
 	exchanger.removeEventListener(ExchangeEvent.COMPLETE, this.exchanger_completeHandler);
 	var currency:String = ResourceType.getName(ResourceType.R4_CURRENCY_HARD);
 	var itemID:String = event.item.type.toString();
-	var itemType:String = event.item.category == ExchangeType.C0_HARD ? "IAP" : "EXC";
+	var itemType:String = ExchangeType.getName(event.item.type);
 	if( GameAnalytics.isInitialized )
 	{
 		if( event.item.outcomes.exists(ResourceType.R4_CURRENCY_HARD) )
 			GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, currency, event.item.outcomes.get(ResourceType.R4_CURRENCY_HARD), itemType, itemID);
 		else if( event.item.requirements.exists(ResourceType.R4_CURRENCY_HARD) )
-			GameAnalytics.addResourceEvent(GAResourceFlowType.SINK, currency, event.item.requirements.get(ResourceType.R4_CURRENCY_HARD), itemType, itemID);
+			GameAnalytics.addResourceEvent(GAResourceFlowType.SINK, currency, -event.item.requirements.get(ResourceType.R4_CURRENCY_HARD), itemType, itemID);
 	}
 }
 
@@ -392,9 +392,9 @@ public function sendAnalyticsEvent( item:ExchangeItem ) : void
 	if( GameAnalytics.isInitialized )
 	{
 		// GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, ResourceType.getName(outs[0]), item.outcomes.get(outs[0]), "IAP", itemID);
-		var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
-		var amount:int = item.requirements.get(outs[0]) * (appModel.descriptor.market == "google" ? 1 : 10);
-		GameAnalytics.addBusinessEvent(currency, amount, ResourceType.getName(outs[0]), itemID , "IAP");
+		// var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
+		var amount:int = int(item.requirements.get(outs[0]) * 0.001);
+		GameAnalytics.addBusinessEvent("USD", amount, ResourceType.getName(outs[0]), itemID, appModel.descriptor.market);
 		// Might need this:
 		// GameAnalytics.addBusinessEvent(currency, amount, item.type.toString(), result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
 	}
