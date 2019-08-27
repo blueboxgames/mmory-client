@@ -13,6 +13,7 @@ import com.gerantech.mmory.core.utils.CoreUtils;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.display.Sprite;
+import com.gerantech.towercraft.views.units.elements.ImageElement;
 
 /**
 * ...
@@ -88,7 +89,7 @@ public function set type(value:int) : void
 	var nums:int = AppModel.instance.game.player.cards.get(_type).quantity;
 	for (var i:int = 0; i < card.quantity; i++)
 	{
-		var unitDisplay:Image = new Image(AppModel.instance.assets.getTexture(_type + "/0/m_000_001"));
+		var unitDisplay:ImageElement = new ImageElement(null, AppModel.instance.assets.getTexture(_type + "/0/m_000_001"));
 		unitDisplay.pivotX = unitDisplay.width * 0.5;
 		unitDisplay.pivotY = unitDisplay.height * UnitView._PIVOT_Y;
 		unitDisplay.width = UnitView._WIDTH;
