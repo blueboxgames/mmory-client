@@ -4,10 +4,12 @@ import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.towercraft.controls.CardView;
+import com.gerantech.towercraft.controls.ClosableLayout;
 import com.gerantech.towercraft.controls.headers.DeckHeader;
 import com.gerantech.towercraft.controls.items.CardItemRenderer;
 import com.gerantech.towercraft.controls.overlays.CardUpgradeOverlay;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
+import com.gerantech.towercraft.controls.popups.AbstractPopup;
 import com.gerantech.towercraft.controls.popups.CardDetailsPopup;
 import com.gerantech.towercraft.controls.popups.CardSelectPopup;
 import com.gerantech.towercraft.controls.popups.RequirementConfirmPopup;
@@ -39,6 +41,7 @@ import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
+import com.gerantech.towercraft.controls.overlays.BaseOverlay;
 
 public class CardsSegment extends Segment
 {
@@ -221,11 +224,13 @@ private function selectCard(cardType:int, cardBounds:Rectangle):void
 	selectPopup.transitionIn = ti;
 	selectPopup.transitionOut = to;
 	selectPopup.addEventListener(Event.CLOSE, selectPopup_closeHandler);
-	appModel.navigator.addPopup(selectPopup);
+	appModel.navigator.addPopup(selectPopup as AbstractPopup);
+	selectPopup.addEventListener(Event.SELECT, popups_selectHandler);
 	selectPopup.addEventListener(Event.OPEN, selectPopup_openHandler);
-	selectPopup.addEventListener(Event.SELECT, selectPopup_selectHandler);
+	selectPopup.addEventListener(ClosableLayout.ONLY_CLOSE, selectPopup_ocloseHandler);
 	function selectPopup_closeHandler(event:Event):void { availableList.selectedIndex = -1; }
 	function selectPopup_openHandler(event:Event):void { showCardDetails(cardType); }	
+	function selectPopup_ocloseHandler(event:Event):void { showDeckHint(); }	
 }
 
 private function availabledList_focusInHandler(event:Event):void
@@ -237,11 +242,13 @@ private function showCardDetails(cardType:int):void
 {
 	detailsPopup = new CardDetailsPopup();
 	detailsPopup.cardType = cardType;
-	detailsPopup.addEventListener(Event.SELECT, selectPopup_selectHandler);
+	detailsPopup.addEventListener(ClosableLayout.ONLY_CLOSE, selectPopup_ocloseHandler);
+	detailsPopup.addEventListener(Event.SELECT, popups_selectHandler);
 	detailsPopup.addEventListener(Event.UPDATE, details_updateHandler);
-	appModel.navigator.addPopup(detailsPopup);	
+	appModel.navigator.addPopup(detailsPopup as AbstractPopup);	
+	function selectPopup_ocloseHandler(event:Event):void { showDeckHint(); }	
 }
-private function selectPopup_selectHandler(event:Event):void
+private function popups_selectHandler(event:Event):void
 {
 	var type:int = -1;
 	if( event.currentTarget is CardDetailsPopup )
@@ -249,6 +256,11 @@ private function selectPopup_selectHandler(event:Event):void
 	else
 		type = selectPopup.cardType;
 	setTimeout(setEditMode, 10, true, type);
+}
+
+private function showDeckHint():void
+{
+	deckHeader.cards[0].showHint();
 }
 
 private function stage_touchHandler(event:TouchEvent):void
@@ -356,7 +368,7 @@ private function details_updateHandler(event:Event):void
 		confirm.data = card;
 		confirm.addEventListener(FeathersEventType.ERROR, upgradeConfirm_errorHandler);
 		confirm.addEventListener(Event.SELECT, upgradeConfirm_selectHandler);
-		appModel.navigator.addPopup(confirm);
+		appModel.navigator.addPopup(confirm as AbstractPopup);
 		return;
 	}
 	
@@ -392,7 +404,7 @@ private function seudUpgradeRequest(card:Card, confirmedHards:int):void
 	
 	var upgradeOverlay:CardUpgradeOverlay = new CardUpgradeOverlay();
 	upgradeOverlay.card = card;
-	appModel.navigator.addOverlay(upgradeOverlay);
+	appModel.navigator.addOverlay(upgradeOverlay as BaseOverlay);
 	
 	deckHeader.update();
 	updateData();

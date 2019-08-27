@@ -1,10 +1,12 @@
 package com.gerantech.towercraft.controls.texts
 {
 import com.gerantech.towercraft.models.AppModel;
+
 import feathers.controls.TextInput;
 import feathers.controls.text.StageTextTextEditor;
 import feathers.core.ITextEditor;
 import feathers.core.ITextRenderer;
+
 import starling.events.Event;
 
 public class CustomTextInput extends TextInput
@@ -32,7 +34,7 @@ public function CustomTextInput(softKeyboardType:String, returnKeyLabel:String, 
 	promptFactory = function():ITextRenderer
 	{
 		var pr:RTLLabel = new RTLLabel("", textColor, "center", null, false, null, 0.8);
-		pr.alpha = 0.7;
+		pr.alpha = 0.4;
 		return pr;
 	}
 

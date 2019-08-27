@@ -38,6 +38,8 @@ import flash.utils.setTimeout;
 import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.events.Event;
+import feathers.controls.ImageLoader;
+import com.gerantech.towercraft.themes.MainTheme;
 
 public class HomeSegment extends Segment
 {
@@ -62,17 +64,38 @@ override public function init():void
 	ChallengeIndexItemRenderer.SHOW_INFO = false;
 	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
 	var eventsButton:ChallengeIndexItemRenderer = new ChallengeIndexItemRenderer();
+	eventsButton.width = 840;
 	eventsButton.height = Math.min(410, stageHeight * 0.23)
-	eventsButton.layoutData = new AnchorLayoutData(NaN, paddingH + 150, NaN, paddingH + 150, NaN, -stageHeight * 0.05);
+	eventsButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.05);
 	eventsButton.data = UserData.instance.challengeIndex;
 	addButton(eventsButton, "eventsButton");
 	
 	// battle button
 	var battleButton:BattleButton = new BattleButton("button-battle", loc("button_battle"), new Rectangle(75, 75, 1, 35), new Rectangle(0, 0, 0, 30));
-	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, stageHeight * 0.14);
+	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, stageHeight * 0.10);
 	battleButton.height = Math.min(260, stageHeight * 0.16);
 	battleButton.width = 420;
 	addButton(battleButton, "battleButton");
+
+	// battle button background panel
+	var bg:ImageLoader = new ImageLoader();
+	bg.source = appModel.theme.roundBigSkin;
+	bg.scale9Grid = MainTheme.ROUND_BIG_SCALE9_GRID;
+	bg.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.052);
+	
+	bg.height = eventsButton.height + 40;
+	bg.width = eventsButton.width + 60;
+	bg.color = 0x194685;
+	addChildAt(bg, getChildIndex(eventsButton));
+	
+	var bgd:ImageLoader = new ImageLoader();
+	bgd.source = appModel.theme.roundBigSkin;
+	bgd.scale9Grid = MainTheme.ROUND_BIG_SCALE9_GRID;
+	bgd.layoutData = battleButton.layoutData;
+	bgd.height = battleButton.height + 90;
+	bgd.width = battleButton.width + 60;
+	bgd.color = bg.color;
+	addChildAt(bgd, getChildIndex(eventsButton));
 	
 	// bookline
 	Starling.juggler.delayCall(showBookline, 0.2);

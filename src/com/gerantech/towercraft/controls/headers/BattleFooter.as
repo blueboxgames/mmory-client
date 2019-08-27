@@ -146,7 +146,7 @@ public function updateScore(round:int, winnerSide:int, allise:int, axis:int, uni
 		return;
 	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "newround", player.get_battleswins());
 	if( summonData != null )
-		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3]);
+		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3], summonData[4]);
 }
 
 private function createDeckItem(cardType:int) : void
@@ -163,17 +163,15 @@ public function transitionInCompleteHandler() : void
 		return;
 	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "start", player.get_battleswins());
 	if( summonData != null )
-		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3]);
+		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3], summonData[4]);
 }
 
-private function showSummonTutorial(index:Number, point:Point, delay:int) : void 
+private function showSummonTutorial(index:Number, point:Point, delay:int, forced:Boolean) : void 
 {
 	var c:Rectangle = cards[index].getBounds(stage);
-	task = new TutorialTask(TutorialTask.TYPE_SWIPE, "", [new Point(c.x + cards[index].width * 0.5, c.y + cards[index].height * 0.5), point], delay, 1500);
-	var swipeoverlay:TutorialSwipeOverlay = new TutorialSwipeOverlay(task);
-	appModel.navigator.addChild(swipeoverlay);
+	task = new TutorialTask(TutorialTask.TYPE_SWIPE, "", [new Point(c.x + cards[index].width * 0.5, c.y + cards[index].height * 0.5), point], delay, 1500, forced);
+	appModel.navigator.addChild(new TutorialSwipeOverlay(task));
 }
-
 
 protected function stage_touchHandler(event:TouchEvent) : void
 {
@@ -229,7 +227,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 			touchPosition.y -= (appModel.battleFieldView.y - BattleField.HEIGHT * 0.5);
 			if( validateSummonPosition() && appModel.battleFieldView.battleData.getAlliseEllixir() >= draggableCard.elixir )
 			{
-				if( task != null )
+				if( task != null && task.data )
 				{
 					touchPosition.x = task.points[1].x - (appModel.battleFieldView.x - BattleField.WIDTH * 0.5);
 					touchPosition.y = task.points[1].y - (appModel.battleFieldView.y - BattleField.HEIGHT * 0.5);	
@@ -285,7 +283,7 @@ private function coverUnitTutorial():void
 		return;
 	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "cover", player.get_battleswins() * 10 + battleField.numSummonedUnits);
 	if( summonData != null )
-		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3]);
+		showSummonTutorial(summonData[0], new Point(summonData[1], summonData[2]), summonData[3], summonData[4]);
 }
 
 private function validateSummonPosition() : Boolean
@@ -318,7 +316,7 @@ private function setTouchPosition(touch:Touch) : void
 			if( appModel.battleFieldView.mapBuilder.summonAreaMode >= MapBuilder.SUMMON_AREA_BOTH )
 				limitY = -0.24;
 			else if( touch.globalX > stageWidth * 0.5 )
-				limitY = appModel.battleFieldView.mapBuilder.summonAreaMode == MapBuilder.SUMMON_AREA_RIFGT ? -0.24 : 0.01;
+				limitY = appModel.battleFieldView.mapBuilder.summonAreaMode == MapBuilder.SUMMON_AREA_RIGHT ? -0.24 : 0.01;
 			else
 				limitY = appModel.battleFieldView.mapBuilder.summonAreaMode == MapBuilder.SUMMON_AREA_LEFT ? -0.24 : 0.01;
 		}
@@ -389,5 +387,5 @@ public function Draggable()
 	hilight.layoutData = new AnchorLayoutData(-2, -2, -2, -2);
 	hilight.source = Assets.getTexture("cards/hilight", "gui");
 	addChild(hilight);
+} */
 }
- */}

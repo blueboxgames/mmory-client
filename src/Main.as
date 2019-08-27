@@ -2,6 +2,7 @@ package
 {
 import com.gameanalytics.sdk.GAErrorSeverity;
 import com.gameanalytics.sdk.GameAnalytics;
+import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.screens.BattleScreen;
@@ -51,29 +52,16 @@ public function Main()
 	return;*/
     
 	// GameAnalytic Configurations
-	var currencies:Vector.<String> = new Vector.<String>();
-	// var bt:Array = CardTypes.getAll();
-	// for each( var r:int in bt )
-	// 	currencies.push(r.toString());
-	currencies.push(ResourceType.getName(ResourceType.R1_XP));
-	currencies.push(ResourceType.getName(ResourceType.R2_POINT));
-	currencies.push(ResourceType.getName(ResourceType.R4_CURRENCY_HARD));
-	currencies.push(ResourceType.getName(ResourceType.R3_CURRENCY_SOFT));
-
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
 		/*.setBuildiOS(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec) */
 		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
-		.setResourceCurrencies(currencies)
-		.setResourceItemTypes(new <String>["outcome", "special", "book", "purchase", "exchange", "upgrade", "donate"]);
-	if ( GameAnalytics.isSupported )
+		.setResourceCurrencies(new <String>[ResourceType.getName(ResourceType.R1_XP), ResourceType.getName(ResourceType.R2_POINT), ResourceType.getName(ResourceType.R3_CURRENCY_SOFT), ResourceType.getName(ResourceType.R4_CURRENCY_HARD), ResourceType.getName(ResourceType.R6_TICKET)])
+		.setResourceItemTypes(new <String>[ExchangeType.getName(0), ExchangeType.getName(10), ExchangeType.getName(20), ExchangeType.getName(30), ExchangeType.getName(70), ExchangeType.getName(80), ExchangeType.getName(100), ExchangeType.getName(110), ExchangeType.getName(120)]);
+	if( GameAnalytics.isSupported )
 	{
 		try {
 			GameAnalytics.init();
-		}
-		catch (error:Error)
-		{
-			trace(error.message);
-		}
+		} catch (error:Error) { trace(error.message);	}
 	}
 	
 	t = getTimer();

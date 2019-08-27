@@ -1,19 +1,19 @@
 package com.gerantech.towercraft.views.units 
 {
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.utils.StrUtils;
 import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.CoreUtils;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
+import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.models.Assets;
+import com.gerantech.towercraft.utils.StrUtils;
+import com.gerantech.towercraft.views.units.elements.ImageElement;
 
 import starling.core.Starling;
 import starling.display.Image;
 import starling.display.Sprite;
-import com.gerantech.towercraft.views.units.elements.ImageElement;
 
 /**
 * ...
@@ -67,10 +67,11 @@ public function set type(value:int) : void
 	var isSpell:Boolean = CardTypes.isSpell(_type);
 	var card:Card = AppModel.instance.game.player.cards.get(_type);
 
-	if( isSpell )
+	if( isSpell || card.speed == 0 )
 	{
-		zoneDisplay.width = card.bulletDamageArea * 2;
-		zoneDisplay.height = card.bulletDamageArea * 2 * BattleField.CAMERA_ANGLE;
+		var w:Number = isSpell ? card.bulletDamageArea : card.focusRange;
+		zoneDisplay.width = w * 2;
+		zoneDisplay.height = w * 2 * BattleField.CAMERA_ANGLE;
 		zoneDisplay.texture = AppModel.instance.assets.getTexture("damage-range");
 	}
 	else

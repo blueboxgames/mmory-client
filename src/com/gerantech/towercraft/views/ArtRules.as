@@ -2,6 +2,7 @@ package com.gerantech.towercraft.views
 {
 import com.gerantech.mmory.core.utils.CoreUtils;
 import com.gerantech.mmory.core.utils.Point3;
+
 import flash.utils.Dictionary;
 /**
 * ...
@@ -243,14 +244,10 @@ static public function getFlameSize(type:int): Number
 	switch( type )
 	{
 		case	101	:	return 0.8;
-		case	102	:	return 1.0;
 		case	104	:	return 0.7;
 		case	111	:	return 0.7;
-		
-		case	201 :	return 1.0;
-		case	222 :	return 1.0;
 	}
-	return 10;
+	return 1.0;
 }
 
 static public function getSmokeSize(type:int): Number
@@ -259,13 +256,11 @@ static public function getSmokeSize(type:int): Number
 	{
 		case	101	:	return 0.6;
 		case	102	:	return 1.2;
-		case	104	:	return 1.0;
-		case	111	:	return 1.0;
 		
 		case	201 :	return 0.7;
 		case	222 :	return 0.5;
 	}
-	return 10;
+	return 1.0;
 }
 }
 }
