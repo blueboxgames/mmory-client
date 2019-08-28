@@ -294,7 +294,7 @@ protected function exchanger_completeHandler(event:ExchangeEvent):void
 		if( event.item.outcomes.exists(ResourceType.R4_CURRENCY_HARD) )
 			GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, currency, event.item.outcomes.get(ResourceType.R4_CURRENCY_HARD), itemType, itemID);
 		else if( event.item.requirements.exists(ResourceType.R4_CURRENCY_HARD) )
-			GameAnalytics.addResourceEvent(GAResourceFlowType.SINK, currency, -event.item.requirements.get(ResourceType.R4_CURRENCY_HARD), itemType, itemID);
+			GameAnalytics.addResourceEvent(GAResourceFlowType.SINK, currency, event.item.requirements.get(ResourceType.R4_CURRENCY_HARD), itemType, itemID);
 	}
 }
 
