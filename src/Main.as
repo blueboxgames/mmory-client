@@ -53,10 +53,8 @@ public function Main()
     
 	var itemTypes:Vector.<String> = new Vector.<String>();
 	for( var index:int = 0; index < 130; index++ )
-	{
-		if( ExchangeType.getName(index) != "" )
+		if( ExchangeType.getName(index) != null )
 			itemTypes.push(ExchangeType.getName(index))
-	}
 
 	// GameAnalytic Configurations
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
