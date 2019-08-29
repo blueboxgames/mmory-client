@@ -51,12 +51,19 @@ public function Main()
 	NativeApplication.nativeApplication.exit();
 	return;*/
     
+	var itemTypes:Vector.<String> = new Vector.<String>();
+	for( var index:int = 0; index < 130; index++ )
+	{
+		if( ExchangeType.getName(index) != "" )
+			itemTypes.push(ExchangeType.getName(index))
+	}
+
 	// GameAnalytic Configurations
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
 		/*.setBuildiOS(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec) */
 		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
 		.setResourceCurrencies(new <String>[ResourceType.getName(ResourceType.R1_XP), ResourceType.getName(ResourceType.R2_POINT), ResourceType.getName(ResourceType.R3_CURRENCY_SOFT), ResourceType.getName(ResourceType.R4_CURRENCY_HARD), ResourceType.getName(ResourceType.R6_TICKET)])
-		.setResourceItemTypes(new <String>[ExchangeType.getName(0), ExchangeType.getName(10), ExchangeType.getName(20), ExchangeType.getName(30), ExchangeType.getName(70), ExchangeType.getName(80), ExchangeType.getName(100), ExchangeType.getName(110), ExchangeType.getName(120)]);
+		.setResourceItemTypes(itemTypes);
 	if( GameAnalytics.isSupported )
 	{
 		try {

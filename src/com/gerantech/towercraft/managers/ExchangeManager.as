@@ -287,8 +287,8 @@ protected function exchanger_completeHandler(event:ExchangeEvent):void
 {
 	exchanger.removeEventListener(ExchangeEvent.COMPLETE, this.exchanger_completeHandler);
 	var currency:String = ResourceType.getName(ResourceType.R4_CURRENCY_HARD);
-	var itemID:String = event.item.type.toString();
-	var itemType:String = ExchangeType.getName(event.item.type);
+	var itemID:String = ExchangeType.getName(event.item.type);
+	var itemType:String = ExchangeType.getName(event.item.category);
 	if( GameAnalytics.isInitialized )
 	{
 		if( event.item.outcomes.exists(ResourceType.R4_CURRENCY_HARD) )
