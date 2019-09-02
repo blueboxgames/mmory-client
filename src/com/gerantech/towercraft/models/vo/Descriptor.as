@@ -1,6 +1,8 @@
 package com.gerantech.towercraft.models.vo
 {
 	import com.gerantech.towercraft.utils.Utils;
+	import com.gerantech.extensions.NativeAbilities;
+	import com.gerantech.towercraft.managers.BillingManager;
 
 	public class Descriptor
 	{
@@ -13,13 +15,12 @@ package com.gerantech.towercraft.models.vo
 		
 		public var description:String;
 		public var market:String;
-		public var marketIndex:int;
 		public var platform:String;
 		public var server:String;
 		public var analyticskey:String;
 		public var analyticssec:String;
 		
-		private var markets:Array = ["google", "appstore", "cafebazaar", "myket", "cando", "vitrin", "ario", "iranapps"]
+		public var markets:Array = ["google", "appstore", "cafebazaar", "myket", "cando", "vitrin", "ario", "iranapps", "zarinpal", "payping"]
 		
 		public function Descriptor(xml:XML)
 		{
@@ -34,7 +35,6 @@ package com.gerantech.towercraft.models.vo
 			var descriptJson:Object = JSON.parse(description);
 			for(var n:String in descriptJson)
 				this[n] = descriptJson[n];
-			marketIndex = markets.indexOf(market);
 		}
 		
 		private function getNodesByName(xml:XML, nodeName:String) : String 
