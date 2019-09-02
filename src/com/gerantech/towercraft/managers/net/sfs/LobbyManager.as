@@ -56,9 +56,9 @@ public function initialize():void
 	if( lobby != null && lobby.id == _lobby.id )
 		return;
 	
-	var sdfs:* = _lobby.properties;
+/* 	var sdfs:* = _lobby.properties;
 	for ( var s:String in _lobby.properties )
-	trace(s, _lobby.properties[s]);
+	trace(s, _lobby.properties[s]); */
 		
 	dispose();
 	lobby = _lobby;

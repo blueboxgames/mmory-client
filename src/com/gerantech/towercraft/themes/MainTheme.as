@@ -191,6 +191,7 @@ static public const VERTICAL_SCROLL_BAR_THUMB_SCALE9_GRID:Rectangle = new Rectan
 static public const SHADOW_SIDE_SCALE9_GRID:Rectangle = new Rectangle(2, 2, 14, 14);
 static public const HEADER_SKIN_TEXTURE_REGION:Rectangle = new Rectangle(1, 1, 128, 64);
 static public const RIBBON_SCALE9_GRID:Rectangle = new Rectangle(92, 60, 6, 6);
+static public const ROUND_BIG_SCALE9_GRID:Rectangle = new Rectangle(31, 31, 2, 2);
 static public const ROUND_MEDIUM_SCALE9_GRID:Rectangle = new Rectangle(18, 18, 2, 2);
 static public const ROUND_SMALL_SCALE9_GRID:Rectangle = new Rectangle(11, 11, 1, 1);
 
@@ -638,6 +639,8 @@ public function get popupHeaderedBackgroundSkinTexture() : Texture { return Asse
 public function get popupInsideBackgroundSkinTexture() : Texture { return Assets.getTexture("theme/popup-inside-background-skin", "gui"); }
 public function get headerBackgroundSkinTexture() : Texture { return Assets.getTexture("theme/header-background-skin", "gui"); }
 public function get headerPopupBackgroundSkinTexture() : Texture { return Assets.getTexture("theme/header-popup-background-skin", "gui"); }
+public function get roundBigSkin() : Texture { return Assets.getTexture("theme/round-big-skin", "gui"); }
+public function get roundBigInnerSkin() : Texture { return Assets.getTexture("theme/round-big-inner-skin", "gui"); }
 public function get roundMediumSkin() : Texture { return Assets.getTexture("theme/round-medium-skin", "gui"); }
 public function get roundMediumInnerSkin() : Texture { return Assets.getTexture("theme/round-medium-inner-skin", "gui"); }
 public function get roundSmallSkin() : Texture { return Assets.getTexture("theme/round-small-skin", "gui"); }
@@ -816,12 +819,14 @@ protected function initializeStyleProviders():void
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(Button.ALTERNATE_STYLE_NAME_FORWARD_BUTTON, this.setForwardButtonStyles);
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_HILIGHT, this.setHilightButtonStyles);
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_NEUTRAL, this.setNeutralButtonStyles);
+	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_DISABLE, this.setDisableButtonStyles);
 	
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_SMALL_NORMAL, this.setSmallNormalButtonStyles);
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_SMALL_DANGER, this.setSmallDangerButtonStyles);
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_SMALL_HILIGHT, this.setSmallHilightButtonStyles);
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_SMALL_NEUTRAL, this.setSmallNeutralButtonStyles);
 	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_SMALL_DARK, this.setSmallDarkButtonStyles);
+	this.getStyleProviderForClass(Button).setFunctionForStyleName(STYLE_BUTTON_SMALL_DISABLE, this.setSmallDisableButtonStyles);
 
 	//button group
 	this.getStyleProviderForClass(ButtonGroup).defaultStyleFunction = this.setButtonGroupStyles;
@@ -1163,7 +1168,7 @@ protected function setQuietButtonStyles(button:Button):void
 	otherSkin.setTextureForState(ButtonState.DISABLED, this.buttonDisabledSkinTexture);
 	button.downSkin = otherSkin;
 	button.disabledSkin = otherSkin;
-	if(button is ToggleButton)
+	if( button is ToggleButton )
 	{
 		//for convenience, this function can style both a regular button
 		//and a toggle button
@@ -1200,12 +1205,14 @@ protected function setQuietButtonStyles(button:Button):void
 public function setDangerButtonStyles(button:Button):void {
 	setButtonColorStyle(button, this.buttonDangerUpSkinTexture,			this.buttonDangerDownSkinTexture,		this.buttonDisabledSkinTexture,		BUTTON_SCALE9_GRID); }
 public function setNeutralButtonStyles(button:Button):void {
-	setButtonColorStyle(button, this.buttonNeutralUpSkinTexture,		this.buttonNeutralDownSkinTexture,		this.buttonDisabledSkinTexture,		BUTTON_SCALE9_GRID); }
+	setButtonColorStyle(button, this.buttonNeutralUpSkinTexture,		this.buttonNeutralDownSkinTexture,	this.buttonDisabledSkinTexture,		BUTTON_SCALE9_GRID); }
 public function setHilightButtonStyles(button:Button):void {
-	setButtonColorStyle(button, this.buttonHilightUpSkinTexture,		this.buttonHilightDownSkinTexture,		this.buttonDisabledSkinTexture,		BUTTON_SCALE9_GRID); }
+	setButtonColorStyle(button, this.buttonHilightUpSkinTexture,		this.buttonHilightDownSkinTexture,	this.buttonDisabledSkinTexture,		BUTTON_SCALE9_GRID); }
+public function setDisableButtonStyles(button:Button):void {
+	setButtonColorStyle(button, this.buttonDisabledSkinTexture,			this.buttonDisabledSkinTexture,			this.buttonDisabledSkinTexture, 	BUTTON_SCALE9_GRID); }
 
 public function setSmallNormalButtonStyles(button:Button):void {
-	setButtonColorStyle(button, this.buttonSmallUpSkinTexture,			this.buttonSmallDownSkinTexture,		this.buttonSmallDisabledSkinTexture, BUTTON_SMALL_SCALE9_GRID); }
+	setButtonColorStyle(button, this.buttonSmallUpSkinTexture,				this.buttonSmallDownSkinTexture,				this.buttonSmallDisabledSkinTexture, BUTTON_SMALL_SCALE9_GRID); }
 public function setSmallDangerButtonStyles(button:Button):void {
 	setButtonColorStyle(button, this.buttonSmallDangerUpSkinTexture,	this.buttonSmallDangerDownSkinTexture,	this.buttonSmallDisabledSkinTexture, BUTTON_SMALL_SCALE9_GRID); }
 public function setSmallHilightButtonStyles(button:Button):void {
@@ -1213,7 +1220,9 @@ public function setSmallHilightButtonStyles(button:Button):void {
 public function setSmallNeutralButtonStyles(button:Button):void {
 	setButtonColorStyle(button, this.buttonSmallNeutralUpSkinTexture,	this.buttonSmallNeutralDownSkinTexture,	this.buttonSmallDisabledSkinTexture, BUTTON_SMALL_SCALE9_GRID); }
 public function setSmallDarkButtonStyles(button:Button):void {
-	setButtonColorStyle(button, this.buttonSmallDarkUpSkinTexture,		this.buttonSmallDarkDownSkinTexture,	this.buttonSmallDisabledSkinTexture, BUTTON_SMALL_SCALE9_GRID); }
+	setButtonColorStyle(button, this.buttonSmallDarkUpSkinTexture,		this.buttonSmallDarkDownSkinTexture,		this.buttonSmallDisabledSkinTexture, BUTTON_SMALL_SCALE9_GRID); }
+public function setSmallDisableButtonStyles(button:Button):void {
+	setButtonColorStyle(button, this.buttonSmallDisabledSkinTexture,	this.buttonSmallDisabledSkinTexture,		this.buttonSmallDisabledSkinTexture, BUTTON_SMALL_SCALE9_GRID); }
 
 public function setButtonColorStyle(button:Button, upTexture:Texture, downTexture:Texture, disableTexture:Texture, scaleGrid:Rectangle):void
 {

@@ -13,6 +13,7 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.Assets;
+import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -49,8 +50,8 @@ override protected function initialize():void
 	transitionIn = new TransitionData();
 	transitionOut = new TransitionData();
 	transitionOut.destinationAlpha = 0;
-	transitionIn.sourceBound = transitionOut.destinationBound = new Rectangle(_p,	stageHeight* 0.5 - _h * 0.4,	stageWidth - _p * 2,	_h * 0.8);
-	transitionOut.sourceBound = transitionIn.destinationBound = new Rectangle(_p,	stageHeight* 0.5 - _h * 0.5,	stageWidth - _p * 2,	_h * 1.0);
+	transitionIn.sourceBound = transitionOut.destinationBound = new Rectangle(_p,	stageHeight * 0.28, stageWidth - _p * 2,	_h * 0.8);
+	transitionOut.sourceBound = transitionIn.destinationBound = new Rectangle(_p,	stageHeight * 0.22, stageWidth - _p * 2,	_h * 1.0);
 
 	super.initialize();
 	closeWithKeyboard = closeOnOverlay = player.nickName != "guest";
@@ -69,7 +70,7 @@ override protected function initialize():void
 	errorDisplay.alpha = 0;
 	container.addChild(errorDisplay);
 	
-	acceptButton.isEnabled = false;
+	acceptButton.styleName = MainTheme.STYLE_BUTTON_SMALL_DISABLE;
 	acceptButton.iconSize = MMOryButton.DEFAULT_ICON_SIZE;
 	acceptButton.width = 360;
 	if( closeOnOverlay && eItem.numExchanges > 0 )
@@ -80,7 +81,7 @@ override protected function initialize():void
 
 protected function textInput_changeHandler(event:Event):void
 {
-	acceptButton.isEnabled = textInput.text.length >= game.loginData.nameMinLen;
+	acceptButton.styleName = textInput.text.length >= game.loginData.nameMinLen ? MainTheme.STYLE_BUTTON_SMALL_HILIGHT : MainTheme.STYLE_BUTTON_SMALL_DISABLE;
 }
 
 protected override function acceptButton_triggeredHandler(event:Event):void
@@ -89,7 +90,8 @@ protected override function acceptButton_triggeredHandler(event:Event):void
 	var nameLen:int = selectedName.length;
 	if ( nameLen < game.loginData.nameMinLen || nameLen > game.loginData.nameMaxLen )
 	{
-		showError(loc("popup_select_name_-5", [game.loginData.nameMinLen, game.loginData.nameMaxLen]));
+		appModel.navigator.addLog(loc("popup_select_name_-5", [game.loginData.nameMinLen, game.loginData.nameMaxLen]), 600, 0xFF4444)
+		// showError();
 		return;
 	}
 	

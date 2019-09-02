@@ -156,7 +156,7 @@ private function bannerFactory() : void
 		bannerDisplay.layoutData = new AnchorLayoutData(150, 11, 60, 11);
 		addChild(bannerDisplay);
 	}
-	bannerDisplay.source = Assets.getTexture(locked ? "events/banner-locked" : "events/banner-" + challenge.mode, "gui");
+	bannerDisplay.source = appModel.assets.getTexture(locked ? "events/banner-locked" : "events/banner-" + challenge.mode);
 }
 
 private function backgroundFactory() : void

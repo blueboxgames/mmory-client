@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.views 
 {
 import com.gerantech.towercraft.models.AppModel;
+
 import starling.display.MovieClip;
 import starling.textures.Texture;
 
@@ -8,16 +9,16 @@ import starling.textures.Texture;
 * ...
 * @author Mansour Djawadi
 */
-public class UnitMC extends MovieClip 
+public class UnitMC extends MovieClip
 {
 private var baseTextureName:String;
 private var animTextureName:String;
 
 public function UnitMC(baseTextureName:String, animTextureName:String) 
 {
+	super(AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 12);
 	this.baseTextureName = baseTextureName;
 	this.animTextureName = animTextureName;
-	super(AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 15);
 }
 
 public function updateTexture(anim:String, dir:String):void 

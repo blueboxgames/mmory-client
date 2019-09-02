@@ -1,8 +1,9 @@
 package com.gerantech.towercraft.controls.sliders.battle 
 {
+import com.gerantech.mmory.core.utils.CoreUtils;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.views.BattleFieldView;
-import com.gerantech.mmory.core.utils.CoreUtils;
+
 import starling.display.Image;
 /**
 * ...
@@ -12,9 +13,9 @@ public class HealthBarLeveled extends HealthBar
 {
 private var level:int;
 private var levelDisplay:Image;
-public function HealthBarLeveled(filedView:BattleFieldView, side:int, level:int = 1, initValue:Number = 0, initMax:Number = 1)
+public function HealthBarLeveled(filedView:BattleFieldView, side:int, level:int = 1, maximum:Number = 1)
 {
-	super(filedView, side, initValue, initMax);
+	super(filedView, side, maximum);
 	this.level = level;
 }
 
@@ -24,7 +25,7 @@ override public function initialize() : void
 	
 	levelDisplay = new Image(AppModel.instance.assets.getTexture("sliders/" + _side + "/level-" + CoreUtils.clamp(level, 1, 13)));
 	levelDisplay.touchable = false;
-	levelDisplay.visible = value < maximum || _side > 0;
+	levelDisplay.visible = false;
 	filedView.guiImagesContainer.addChild(levelDisplay);	
 }
 
@@ -55,10 +56,6 @@ override public function set value(v:Number) : void
 	super.value = v;
 	
 	var __visible:Boolean = v < maximum || _side > 0;
-	if( sliderFillDisplay != null )
-		sliderFillDisplay.visible = __visible;
-	if( sliderBackDisplay != null )
-		sliderBackDisplay.visible = __visible;
 	if( levelDisplay != null )
 		levelDisplay.visible = __visible;
 }

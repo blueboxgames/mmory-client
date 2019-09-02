@@ -1,7 +1,5 @@
 package com.gerantech.towercraft.models.vo
 {
-import com.gerantech.towercraft.managers.TimeManager;
-import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.mmory.core.Game;
 import com.gerantech.mmory.core.InitData;
 import com.gerantech.mmory.core.battle.BattleField;
@@ -9,12 +7,14 @@ import com.gerantech.mmory.core.battle.fieldes.FieldData;
 import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.mmory.core.utils.maps.IntCardMap;
 import com.gerantech.mmory.core.utils.maps.IntIntCardMap;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.managers.TimeManager;
+import com.gerantech.towercraft.models.AppModel;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 public class BattleData
 {
@@ -45,15 +45,23 @@ public function BattleData(sfsData:ISFSObject)
 	{
 		var game:Game = new Game();
 		var initData:InitData = new InitData();
+		initData.id = gameSFS.getInt("id");
+		if( initData.id == AppModel.instance.game.player.id )
+		{
+			var rk:Vector.<int> = AppModel.instance.game.player.resources.keys();
+			var len:int = rk.length
+			for( var i:int = 0; i < len; i++ )
+				initData.resources.set(rk[i],	AppModel.instance.game.player.resources.get(rk[i]));
+		}
 		initData.resources.set(ResourceType.R1_XP,	 	gameSFS.getInt("xp"));
 		initData.resources.set(ResourceType.R2_POINT,	gameSFS.getInt("point"));
-		initData.cardsLevel = new IntIntMap(			gameSFS.getText("deck"));
+		initData.cardsLevel = new IntIntMap(					gameSFS.getText("deck"));
 		game.init(initData);
 		
 		var cards:Array = gameSFS.getText("deck").split(",");trace(cards)
 		game.loginData.deck = new Array();
 		var deck:Array = new Array();
-		var i:int = 0;
+		i = 0;
 		while ( i < cards.length )
 		{
 			game.loginData.deck.push(int(cards[i].split(":")[0]));

@@ -32,9 +32,9 @@ public var longPressDuration:Number = 0.5;
 public var keepDownStateOnRollOut:Boolean = false;
 protected var _touchBeginTime:int;
 protected var _hasLongPressed:Boolean = false;
+protected var handPoint:HandPoint;
 private var _currentState:String = ButtonState.UP;
 private var touchPointID:int;
-private var handPoint:HandPoint;
 
 [Event(name="triggered",type="starling.events.Event")]
 
@@ -213,7 +213,7 @@ public function showTutorHint(offsetX:Number = 0, offsetY:Number = 0) : void
 		handPoint.removeFromParent(true);
 	
 	handPoint = new HandPoint(width * 0.5 + offsetX, offsetY);
-//	handPoint.layoutData = new AnchorLayoutData(isUp ? NaN : 0, NaN, isUp ? -handPoint._height : NaN, NaN, 0);
+	// handPoint.layoutData = new AnchorLayoutData(isUp ? NaN : 0, NaN, isUp ? -handPoint._height : NaN, NaN, 0);
 	setTimeout(addChild, 200, handPoint);
 }
 }

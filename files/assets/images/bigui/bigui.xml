@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF - 8"?>
+<TextureAtlas imagePath="bigui.png" width="2048" height="2048">
+	<SubTexture name="poster/center" x="0" y="0" width="1080" height="1538" frameX="0" frameY="0" frameWidth="1080" frameHeight="1539"/>
+	<SubTexture name="poster/logo" x="1081" y="0" width="803" height="356" frameX="0" frameY="0" frameWidth="803" frameHeight="357"/>
+	<SubTexture name="events/banner-2" x="1081" y="357" width="540" height="111" frameX="0" frameY="0" frameWidth="540" frameHeight="142"/>
+	<SubTexture name="events/banner-0" x="1081" y="469" width="540" height="110" frameX="0" frameY="0" frameWidth="540" frameHeight="142"/>
+	<SubTexture name="events/banner-1" x="1081" y="580" width="540" height="110" frameX="0" frameY="0" frameWidth="540" frameHeight="142"/>
+	<SubTexture name="events/banner-locked" x="1622" y="357" width="197" height="176" frameX="-23" frameY="-23" frameWidth="760" frameHeight="200"/>
+</TextureAtlas>

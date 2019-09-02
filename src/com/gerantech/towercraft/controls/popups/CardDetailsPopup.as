@@ -133,12 +133,11 @@ override protected function transitionInCompleted():void
 	upgradeButton.message = loc("upgrade_label");
 	upgradeButton.messagePosition = RelativePosition.TOP;
 	upgradeButton.iconSize = MMOryButton.DEFAULT_ICON_SIZE;
-	upgradeButton.addEventListener(Event.SELECT, upgradeButton_selectHandler);
 	upgradeButton.addEventListener(Event.TRIGGERED, upgradeButton_triggeredHandler);
 	upgradeButton.iconTexture = MMOryButton.getIcon(ResourceType.R3_CURRENCY_SOFT, 1);
 	upgradeButton.label = MMOryButton.getLabel(0, upgradeCost);
 	upgradeButton.layoutData = new AnchorLayoutData(NaN, padding + 300, padding - 10);
-	upgradeButton.isEnabled = player.resources.get(cardType) >= Card.get_upgradeCards(card.level, card.rarity);
+	upgradeButton.styleName = enoughCards ? MainTheme.STYLE_BUTTON_NORMAL : MainTheme.STYLE_BUTTON_DISABLE;
 	var hasCoin:Boolean = player.resources.get(ResourceType.R3_CURRENCY_SOFT) >= upgradeCost;
 	upgradeButton.labelFactory = function () : ITextRenderer
 	{
@@ -149,7 +148,7 @@ override protected function transitionInCompleted():void
 	Starling.juggler.tween(upgradeButton, 0.3, {delay:0.1, alpha:1, onComplete:upgradeButton_tweenCompleted});
 	function upgradeButton_tweenCompleted () : void
 	{
-		if( player.inDeckTutorial() )
+		if( player.inDeckTutorial() && card.type == CardTypes.INITIAL )
 		{
 			UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_017_CARD_OPENED );
 			upgradeButton.showTutorHint();
@@ -165,7 +164,6 @@ override protected function transitionInCompleted():void
 		usingButton.width = 270;
 		usingButton.height = 160;
 		usingButton.paddingBottom = 26;
-		//usingButton.isEnabled = !
 		usingButton.addEventListener(Event.TRIGGERED, usingButton_triggeredHandler);
 		usingButton.layoutData = new AnchorLayoutData(NaN, padding, padding - 10);
 		addChild(usingButton);
@@ -182,15 +180,21 @@ private function usingButton_triggeredHandler():void
 	dispatchEventWith(Event.SELECT, false, cardType);
 	close();
 }
-private function upgradeButton_selectHandler(event:Event):void
-{
-	appModel.navigator.addLog(loc("popup_upgrade_building_error", [loc("card_title_" + cardType)]));
-	//cardDisplay.punchSlider()
-}
+
 private function upgradeButton_triggeredHandler():void
 {
+	if( !enoughCards )
+	{
+		appModel.navigator.addLog(loc("popup_upgrade_building_error", [loc("card_title_" + cardType)]));
+		return;
+	}
 	dispatchEventWith(Event.UPDATE, false, cardType);
 	close();
+}
+public function get enoughCards():Boolean
+{
+	var card:Card = player.cards.get(cardType);
+	return player.resources.get(card.type) >= Card.get_upgradeCards(card.level, card.rarity);
 }
 }
 }

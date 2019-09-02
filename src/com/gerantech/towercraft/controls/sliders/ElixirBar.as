@@ -100,7 +100,6 @@ public function set value(newValue:Number):void
 	if( _value == __v )
 		return;
 	_value = __v;
-	trace(_value)
 	invalidate(INVALIDATION_FLAG_DATA);
 }
 

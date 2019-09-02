@@ -25,9 +25,11 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;
+import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 
 import feathers.controls.Button;
+import feathers.controls.ImageLoader;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -62,17 +64,38 @@ override public function init():void
 	ChallengeIndexItemRenderer.SHOW_INFO = false;
 	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
 	var eventsButton:ChallengeIndexItemRenderer = new ChallengeIndexItemRenderer();
+	eventsButton.width = 840;
 	eventsButton.height = Math.min(410, stageHeight * 0.23)
-	eventsButton.layoutData = new AnchorLayoutData(NaN, paddingH + 150, NaN, paddingH + 150, NaN, -stageHeight * 0.05);
+	eventsButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.05);
 	eventsButton.data = UserData.instance.challengeIndex;
 	addButton(eventsButton, "eventsButton");
 	
 	// battle button
 	var battleButton:BattleButton = new BattleButton("button-battle", loc("button_battle"), new Rectangle(75, 75, 1, 35), new Rectangle(0, 0, 0, 30));
-	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, stageHeight * 0.14);
+	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, stageHeight * 0.10);
 	battleButton.height = Math.min(260, stageHeight * 0.16);
 	battleButton.width = 420;
 	addButton(battleButton, "battleButton");
+
+	// battle button background panel
+	var bg:ImageLoader = new ImageLoader();
+	bg.source = appModel.theme.roundBigSkin;
+	bg.scale9Grid = MainTheme.ROUND_BIG_SCALE9_GRID;
+	bg.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.052);
+	
+	bg.height = eventsButton.height + 40;
+	bg.width = eventsButton.width + 60;
+	bg.color = 0x194685;
+	addChildAt(bg, getChildIndex(eventsButton));
+	
+	var bgd:ImageLoader = new ImageLoader();
+	bgd.source = appModel.theme.roundBigSkin;
+	bgd.scale9Grid = MainTheme.ROUND_BIG_SCALE9_GRID;
+	bgd.layoutData = battleButton.layoutData;
+	bgd.height = battleButton.height + 90;
+	bgd.width = battleButton.width + 60;
+	bgd.color = bg.color;
+	addChildAt(bgd, getChildIndex(eventsButton));
 	
 	// bookline
 	Starling.juggler.delayCall(showBookline, 0.2);
@@ -231,7 +254,7 @@ private function mainButtons_triggeredHandler(event:Event):void
 	var buttonName:String = DisplayObject(event.currentTarget).name;
 	switch( buttonName )
 	{
-		case "eventsButton":	appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
+		case "eventsButton":	if( player.get_battleswins() > 3 ) appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
 		case "battleButton":	appModel.navigator.runBattle(UserData.instance.challengeIndex);	return;
 	}
 	
