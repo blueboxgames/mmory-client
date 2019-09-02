@@ -182,8 +182,8 @@
 		<extensionID>com.marpies.ane.googleplayservices.ads</extensionID>
 		<extensionID>com.marpies.ane.googleplayservices.games</extensionID>
 		<extensionID>com.marpies.ane.googleplayservices.location</extensionID>
-		<extensionID>com.gerantech.extensions.iabilling</extensionID>
 		<extensionID>com.gerantech.extensions.nativeabilities</extensionID>
+		<extensionID>com.gerantech.extensions.iabilling</extensionID>
 		<extensionID>ir.tapsell.sdk.air</extensionID> 
 
 		<!-- Dependencies -->

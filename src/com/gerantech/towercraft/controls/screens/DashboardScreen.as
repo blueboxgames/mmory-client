@@ -57,16 +57,21 @@ private var segmentsCollection:ListCollection;
 public function DashboardScreen()
 {
 	visible = false;	
-	if( appModel.assets.getTexture("packs_tex") == null )
-		Assets.loadAtlas("assets/animations/", "_tex", initialize, "packs");
+	if( appModel.assets.getTexture("poster/logo") == null )
+		Assets.loadAtlas("assets/images/", "", biguiLoaded, "bigui");
+	function biguiLoaded() : void {
+		setTimeout(Assets.loadAtlas, 5, "assets/animations/", "_tex", packLoaded, "packs");
+	}
+	function packLoaded() : void {
+		setTimeout(initialize, 5);
+	}
 }
 
 override protected function initialize():void
 {
-	if( appModel.assets.getTexture("packs_tex") == null )
+	if( appModel.assets.getTexture("poster/logo") == null )
 		return;
 	OpenBookOverlay.createFactory();
-
 	// =-=-=-=-=-=-=-=-=-=-=-=- background -=-=-=-=-=-=-=-=-=-=-=-=
 	var tileBacground:TileBackground = new TileBackground("home/pistole-tile", 0.3, true);
 	tileBacground.layoutData = new AnchorLayoutData(0, 0, FOOTER_SIZE, 0);
@@ -110,7 +115,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	// return to last open game
 	if( appModel.loadingManager.serverData.getBool("inBattle") )
 	{
-		appModel.navigator.runBattle(0);
+		appModel.navigator.runBattle(0, false);
 		return;
 	}
 

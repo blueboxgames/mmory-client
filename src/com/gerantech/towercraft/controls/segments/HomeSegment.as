@@ -25,9 +25,11 @@ import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;
+import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 
 import feathers.controls.Button;
+import feathers.controls.ImageLoader;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -38,8 +40,6 @@ import flash.utils.setTimeout;
 import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.events.Event;
-import feathers.controls.ImageLoader;
-import com.gerantech.towercraft.themes.MainTheme;
 
 public class HomeSegment extends Segment
 {
@@ -254,7 +254,7 @@ private function mainButtons_triggeredHandler(event:Event):void
 	var buttonName:String = DisplayObject(event.currentTarget).name;
 	switch( buttonName )
 	{
-		case "eventsButton":	appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
+		case "eventsButton":	if( player.get_battleswins() > 3 ) appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
 		case "battleButton":	appModel.navigator.runBattle(UserData.instance.challengeIndex);	return;
 	}
 	

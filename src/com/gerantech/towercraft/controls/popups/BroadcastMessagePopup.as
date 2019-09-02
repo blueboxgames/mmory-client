@@ -88,11 +88,11 @@ package com.gerantech.towercraft.controls.popups
 			var sfs:SFSObject = SFSObject.newInstance();
 			sfs.putUtfString("text", messageInput.text );
 			sfs.putText("data", dataInput.text );
-			sfs.putIntArray("receivers", receivers);
+			sfs.putIntArray("receiverIds", receivers);
 			sfs.putInt("type", typeSwitcher.value );
 			sfs.putBool("isPush", isPushSwitcher.value==1 );
 			SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsCOnnection_extensionResponseHandler);
-			SFSConnection.instance.sendExtensionRequest(SFSCommands.INBOX_BROADCAST, sfs );
+			SFSConnection.instance.sendExtensionRequest(SFSCommands.INBOX_BROADCAST, sfs);
 		}
 		
 		protected function sfsCOnnection_extensionResponseHandler(event:SFSEvent):void

@@ -61,6 +61,7 @@ static public function getFlamePosition(type:int, rad:Number) : Point3
 		case	111	:	return new Point3(15,-140, 0);
 		case	112	:	return new Point3(18, -141, 0);
 		case	113	:	return new Point3(18, -141, 0);
+		case	119	:	return new Point3(18, -141, 0);
 		
 		case	201 :	return new Point3(-27, -166, 0);
 		case	222 :	return new Point3(-24, -170, 0);
@@ -82,6 +83,7 @@ static public function getFlamePosition(type:int, rad:Number) : Point3
 		case	111	:	return new Point3(-52,-129, 0);
 		case	112	:	return new Point3(18, -141, 0);
 		case	113	:	return new Point3(18, -141, 0);
+		case	119	:	return new Point3(-52, -130, 0);
 		
 		case	201 :	return new Point3(-116, -130, 0);
 		case	222 :	return new Point3(-96, -142, 0);
@@ -103,6 +105,7 @@ static public function getFlamePosition(type:int, rad:Number) : Point3
 		case	111	:	return new Point3(-95,-82, 0);
 		case	112	:	return new Point3(18, -141, 0);
 		case	113	:	return new Point3(18, -141, 0);
+		case	119	:	return new Point3(-96, -83, 0);
 		
 		case	201 :	return new Point3(-148, -55, 0);
 		case	222 :	return new Point3(-130, -62, 0);
@@ -124,6 +127,7 @@ static public function getFlamePosition(type:int, rad:Number) : Point3
 		case	111	:	return new Point3(-83,-25, 0);
 		case	112	:	return new Point3(18, -141, 0);
 		case	113	:	return new Point3(18, -141, 0);
+		case	119	:	return new Point3(-90, -21, 0);
 		
 		case	201 :	return new Point3(-83, 33, 0);
 		case	222 :	return new Point3(-80, 4, 0);
@@ -145,6 +149,7 @@ static public function getFlamePosition(type:int, rad:Number) : Point3
 		case	111	:	return new Point3(-18,9, 0);
 		case	112	:	return new Point3(18, -141, 0);
 		case	113	:	return new Point3(18, -141, 0);
+		case	119	:	return new Point3(-21, 14, 0);
 		
 		case	201 :	return new Point3(32, 44, 0);
 		case	222 :	return new Point3(25, 11, 0);
@@ -166,6 +171,7 @@ static public function getFlamePosition(type:int, rad:Number) : Point3
 		case	111	:	return new Point3(52,-129, 0);
 		case	112	:	return new Point3(18, -141, 0);
 		case	113	:	return new Point3(18, -141, 0);
+		case	119	:	return new Point3(52, -130, 0);
 		
 		case	201 :	return new Point3(116, -130, 0);
 		case	222 :	return new Point3(96, -142, 0);
@@ -187,6 +193,7 @@ static public function getFlamePosition(type:int, rad:Number) : Point3
 		case	111	:	return new Point3(95,-82, 0);
 		case	112	:	return new Point3(18, -141, 0);
 		case	113	:	return new Point3(18, -141, 0);
+		case	119	:	return new Point3(96, -83, 0);
 		
 		case	201 :	return new Point3(148, -55, 0);
 		case	222 :	return new Point3(130, -62, 0);
@@ -208,6 +215,7 @@ static public function getFlamePosition(type:int, rad:Number) : Point3
 		case	111	:	return new Point3(83,-25, 0);
 		case	112	:	return new Point3(18, -141, 0);
 		case	113	:	return new Point3(18, -141, 0);
+		case	119	:	return new Point3(90, -21, 0);
 	
 		case	201 :	return new Point3(83, 33, 0);
 		case	222 :	return new Point3(80, 4, 0);
@@ -232,6 +240,7 @@ static public function getShadowSize(type:int): Number
 		case	111	:	return 80;
 		case	112	:	return 85;
 		case	113	:	return 85;
+		case	119	:	return 85;		
 		
 		case	201 :	return 80;
 		case	222 :	return 95;

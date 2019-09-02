@@ -52,7 +52,13 @@ public function init():void
 		appModel.loadingManager.addEventListener(LoadingEvent.LOADED, loadingManager_loadedHandler);
 		return;
 	}
-	
+
+	// missing market fixing
+	if( !NativeAbilities.instance.checkInstalled(BillingManager.instance.packageURL) )
+		appModel.descriptor.market = "zarinpal";
+	else if( (appModel.descriptor.market =="google" || appModel.descriptor.market =="appstore") && appModel.descriptor.server == "iran" )
+		appModel.descriptor.market = "zarinpal";
+
 	// provide all sku items
 	items = new Array("k2k.item_0");
 	var keys:Vector.<int> = exchanger.items.keys();
@@ -62,31 +68,27 @@ public function init():void
 		else if( ExchangeType.getCategory(k) == ExchangeType.C30_BUNDLES )
 			items.push("k2k.bundle_" + k);
 
-	var base64Key:String, bindURL:String, packageURL:String;
+	var base64Key:String, bindURL:String;
 	switch( appModel.descriptor.market )
 	{
 		case "google":
 			base64Key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1FccxhKFO5uuTqOy+KG/q3dddZ69FQ9a/XIrJ6rGjrAf8lG4wBzbgropt6T2+NEQOsN8lsqpvLEp/JprowBS8ANsM9E3D6nGGnsT649kceEKktImiilbEMfqmFjXqgGMbdfGV9VFuk40Vi/yPoHAV3SWP0P7XjtXFyi1rX8xV9IaUMvO+bOjLH4fuNJWhQbH7IxATA3OgCaBnGJ2FhjR0puv3401mlpkCpYxTeKYZ2TWE204QxalkTdY1BL+bFoxn8K9dCo8eNBmWDqizA3TDXHRvVCEOSURqoxB11q2LbL66bTgmwj6y46xEukLkeOFdCHLUS5EHMQYkyjk4RdBXwIDAQAB";
 			bindURL = "com.android.vending.billing.InAppBillingService.BIND";
-			packageURL = "com.android.vending";
 			break;
 		
 		case "myket":
 			base64Key = "";
 			bindURL = "ir.mservices.market.InAppBillingService.BIND";
-			packageURL = "ir.mservices.market";
 			break;
 		
 		case "cando":
 			base64Key = "";
 			bindURL = "com.ada.market.service.payment.BIND";
-			packageURL = "com.ada.market";
 			break;
 		
 		case "ario":
 			base64Key = "";
 			bindURL = "com.arioclub.android.sdk.iab.InAppBillingService.BIND";
-			packageURL = "com.arioclub.android";
 			break;
 		
 		case "zarinpal":
@@ -97,7 +99,6 @@ public function init():void
 		default://cafebazaar
 			base64Key = "MIHNMA0GCSqGSIb3DQEBAQUAA4G7ADCBtwKBrwCoKU7EhXq5BhXRVJPe1JvmuPyJhHpsg6Ei9XM6dF0T1a4B4Czca8awJAzaSgx8/NEVYX8pBoP36/GqZ6XRi7yBORtoMHnVzL6qbGtPrGvLww1RwlPRnwVqkIxWhCFqa1U4J/WnskeL/K7SBjHoJlIoc2Mb1xeOWOZZQM1bU10LpkblO6lzSdMnTw9Jgs+UptXC6lLy/+sdfwcUjBfgBfJplPxS2Gtvk5yHkCacfkUCAwEAAQ==";
 			bindURL = "ir.cafebazaar.pardakht.InAppBillingService.BIND";
-			packageURL = "com.farsitel.bazaar";
 			break;
 	}
 
@@ -393,6 +394,20 @@ public function get currency() : String
 	if( appModel.descriptor.market == "google" || appModel.descriptor.market == "appStore" )
 		return "USD";
 	return "IRR";
+}
+
+public function get packageURL() : String
+{
+	switch( appModel.descriptor.market )
+	{
+		case "google":		return "com.android.vending";
+		case "myket": 		return "ir.mservices.market";
+		case "cando": 		return "com.ada.market";
+		case "iranapps":	return "ir.tgbs.android.iranapp";		
+		case "ario":			return "com.arioclub.android";
+		case "cafebazaar":return "com.farsitel.bazaar";
+	}
+	return "";
 }
 }
 }

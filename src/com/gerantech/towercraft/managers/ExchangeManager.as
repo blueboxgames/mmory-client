@@ -288,14 +288,14 @@ protected function exchanger_completeHandler(event:ExchangeEvent):void
 {
 	exchanger.removeEventListener(ExchangeEvent.COMPLETE, this.exchanger_completeHandler);
 	var currency:String = ResourceType.getName(ResourceType.R4_CURRENCY_HARD);
-	var itemID:String = event.item.type.toString();
-	var itemType:String = ExchangeType.getName(event.item.type);
+	var itemID:String = ExchangeType.getName(event.item.type);
+	var itemType:String = ExchangeType.getName(event.item.category);
 	if( GameAnalytics.isInitialized )
 	{
 		if( event.item.outcomes.exists(ResourceType.R4_CURRENCY_HARD) )
 			GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, currency, event.item.outcomes.get(ResourceType.R4_CURRENCY_HARD), itemType, itemID);
 		else if( event.item.requirements.exists(ResourceType.R4_CURRENCY_HARD) )
-			GameAnalytics.addResourceEvent(GAResourceFlowType.SINK, currency, -event.item.requirements.get(ResourceType.R4_CURRENCY_HARD), itemType, itemID);
+			GameAnalytics.addResourceEvent(GAResourceFlowType.SINK, currency, event.item.requirements.get(ResourceType.R4_CURRENCY_HARD), itemType, itemID);
 	}
 }
 

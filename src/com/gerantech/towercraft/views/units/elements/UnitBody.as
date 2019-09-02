@@ -1,6 +1,8 @@
 package com.gerantech.towercraft.views.units.elements
 {
+  import com.gerantech.mmory.core.constants.CardTypes;
   import com.gerantech.towercraft.views.units.UnitView;
+
   import starling.core.Starling;
   import starling.display.Sprite;
 
@@ -14,7 +16,7 @@ package com.gerantech.towercraft.views.units.elements
     private var bodyDisplay:UnitMC;
     private var sideDisplay:UnitMC;
 
-    static public  function has_side(t:int) : Boolean { return t == 108; }
+    static public  function has_side(t:int) : Boolean { return t == 108 || t == 119; }
 
     public function UnitBody(unit:UnitView)
     {
@@ -23,7 +25,8 @@ package com.gerantech.towercraft.views.units.elements
       var angle:String = unit.side == unit.battleField.side ? "000_" : "180_";
 
       this.bodyDisplay = new UnitMC(unit.card.type + "/" + (hasSide ? 0 : unit.battleField.getColorIndex(unit.side)) + "/", "m_" + angle);
-    	this.bodyDisplay.currentFrame = Math.floor(Math.random() * bodyDisplay.numFrames);
+      if( CardTypes.isTroop(unit.card.type) )
+      	this.bodyDisplay.currentFrame = Math.floor(Math.random() * bodyDisplay.numFrames);
       this.bodyDisplay.pause();
     	Starling.juggler.add(this.bodyDisplay);
       this.addChild(this.bodyDisplay);

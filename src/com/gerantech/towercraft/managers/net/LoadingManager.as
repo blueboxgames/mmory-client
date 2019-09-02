@@ -31,6 +31,7 @@ import flash.events.EventDispatcher;
 import flash.system.Capabilities;
 import flash.utils.getTimer;
 import flash.utils.setTimeout;
+import com.gerantech.extensions.DeviceInfo;
 
 [Event(name="loaded",				type="com.gerantech.towercraft.events.LoadingEvent")]
 [Event(name="loginError",			type="com.gerantech.towercraft.events.LoadingEvent")]
@@ -115,8 +116,9 @@ private function login():void
 		//{
 		//}
 	}
-	loginParams.putText("udid", appModel.platform == AppModel.PLATFORM_ANDROID ? NativeAbilities.instance.deviceInfo.id : Utils.getPCUniqueCode());
-	loginParams.putText("device", appModel.platform == AppModel.PLATFORM_ANDROID ? StrUtils.truncateText(NativeAbilities.instance.deviceInfo.manufacturer+"-"+NativeAbilities.instance.deviceInfo.model, 32, "") : Capabilities.manufacturer);
+	var device:DeviceInfo = NativeAbilities.instance.deviceInfo;
+	loginParams.putText("udid", appModel.platform == AppModel.PLATFORM_ANDROID ? device.id : Utils.getPCUniqueCode());
+	loginParams.putText("device", appModel.platform == AppModel.PLATFORM_ANDROID ? StrUtils.truncateText(device.manufacturer+"-"+device.model, 32, "") : Capabilities.manufacturer);
 	loginParams.putInt("appver", appModel.descriptor.versionCode);
 	loginParams.putText("market", appModel.descriptor.market);
 
