@@ -26,6 +26,7 @@ import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.InvokeEvent;
 import flash.events.UncaughtErrorEvent;
+import flash.geom.Rectangle;
 import flash.utils.getTimer;
 
 import haxe.Log;
@@ -117,9 +118,7 @@ private function loaderInfo_completeHandler(event:Event):void
 
 private function starStarling():void
 {
-	//var _ratio:Number = 1080 / stage.fullScreenWidth;
-	//var _height:Number = Math.min(stage.fullScreenWidth * 2, stage.fullScreenHeight);
-	this.starling = new Starling(Game, stage, null, null, Context3DRenderMode.AUTO, Context3DProfile.BASELINE_EXTENDED);
+	this.starling = new Starling(Game, stage, new Rectangle(0,0,stage.fullScreenWidth,stage.fullScreenHeight), null, Context3DRenderMode.AUTO, Context3DProfile.BASELINE_EXTENDED);
 	this.starling.addEventListener("rootCreated", starling_rootCreatedHandler);
 	this.starling.supportHighResolutions = true;
 	this.starling.skipUnchangedFrames = true;
