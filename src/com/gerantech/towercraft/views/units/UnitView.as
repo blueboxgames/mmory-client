@@ -16,19 +16,17 @@ import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.UnitMC;
 import com.gerantech.towercraft.views.effects.BattleParticleSystem;
 import com.gerantech.towercraft.views.units.elements.ImageElement;
+import com.gerantech.towercraft.views.units.elements.MovieElement;
+import com.gerantech.towercraft.views.units.elements.UnitBody;
 import com.gerantech.towercraft.views.weapons.BulletView;
 
 import flash.utils.setTimeout;
 
 import starling.animation.Transitions;
 import starling.core.Starling;
-import starling.display.Image;
 import starling.display.MovieClip;
 import starling.events.Event;
-import starling.filters.ColorMatrixFilter;
 import starling.utils.Color;
-import com.gerantech.towercraft.views.units.elements.UnitBody;
-import com.gerantech.towercraft.views.units.elements.MovieElement;
 
 public class UnitView extends BaseUnit
 {
@@ -47,7 +45,6 @@ private var _muted:Boolean = true;
 public var fireDisplayFactory:Function;
 
 private var deployIcon:CountdownIcon;
-private var baseDisplay:ImageElement;
 private var rangeDisplay:ImageElement;
 private var sizeDisplay:ImageElement;
 private var bodyDisplay:UnitBody;
@@ -56,8 +53,6 @@ private var healthDisplay:HealthBarLeveled;
 private var flameParticle:BattleParticleSystem;
 private var smokeParticle:BattleParticleSystem;
 private var bulletParticle:BattleParticleSystem;
-private var hitFilterBase:ColorMatrixFilter;
-private var hitFilterBody:ColorMatrixFilter;
 
 public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Number)
 {
@@ -67,20 +62,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 
 	var appearanceDelay:Number = Math.random() * 0.5;
 	
-	if( appModel.artRules.get(card.type, ArtRules.BASE) != "" )
-	{
-		baseDisplay = new ImageElement(this, appModel.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/base"));
-		baseDisplay.pivotX = baseDisplay.width * 0.5;
-		baseDisplay.pivotY = baseDisplay.height * _PIVOT_Y;
-		baseDisplay.x = __x;
-		baseDisplay.y = __y - 1;
-		baseDisplay.width = _WIDTH;
-		baseDisplay.height = _HEIGHT;
-		baseDisplay.scale *= _SCALE;
-		fieldView.unitsContainer.addChild(baseDisplay);
-	}
-
-	bodyDisplay = new UnitBody(this);
+	bodyDisplay = new UnitBody(this, card, side);
 	bodyDisplay.pivotX = bodyDisplay.width * 0.5;
 	bodyDisplay.pivotY = bodyDisplay.height * _PIVOT_Y;
 	bodyDisplay.x = __x;
@@ -479,8 +461,8 @@ override public function dispose() : void
 	bodyDisplay.removeFromParent(true);
 	if( shadowDisplay != null )
 		shadowDisplay.removeFromParent(true);
-	if( baseDisplay != null )
-		baseDisplay.removeFromParent(true);
+	// if( baseDisplay != null )
+	// 	baseDisplay.removeFromParent(true);
 	if( rangeDisplay != null )
 		rangeDisplay.removeFromParent(true);
 	if( deployIcon != null )

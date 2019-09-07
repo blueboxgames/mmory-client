@@ -9,7 +9,7 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.towercraft.views.units.elements.ImageElement;
+import com.gerantech.towercraft.views.units.elements.UnitBody;
 
 import starling.core.Starling;
 import starling.display.Image;
@@ -90,7 +90,7 @@ public function set type(value:int) : void
 	var nums:int = AppModel.instance.game.player.cards.get(_type).quantity;
 	for (var i:int = 0; i < card.quantity; i++)
 	{
-		var unitDisplay:ImageElement = new ImageElement(null, AppModel.instance.assets.getTexture(_type + "/0/m_000_001"));
+		var unitDisplay:UnitBody = new UnitBody(null, card, 0);
 		unitDisplay.pivotX = unitDisplay.width * 0.5;
 		unitDisplay.pivotY = unitDisplay.height * UnitView._PIVOT_Y;
 		unitDisplay.width = UnitView._WIDTH;
