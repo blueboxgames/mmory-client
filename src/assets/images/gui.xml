@@ -104,180 +104,175 @@
 	<SubTexture name="home/dash-tab-3" x="1542" y="1389" width="111" height="90" frameX="-16" frameY="-42" frameWidth="144" frameHeight="176"/>
 	<SubTexture name="res-3" x="1290" y="1390" width="93" height="100" frameX="-9" frameY="-7" frameWidth="112" frameHeight="112"/>
 	<SubTexture name="events/lock" x="615" y="1392" width="85" height="109" frameX="-34" frameY="-20" frameWidth="150" frameHeight="150"/>
-	<SubTexture name="leagues/3" x="406" y="1393" width="96" height="95" frameX="0" frameY="0" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="home/gift" x="1077" y="1393" width="95" height="92" frameX="-25" frameY="-23" frameWidth="144" frameHeight="144"/>
-	<SubTexture name="res-cards" x="85" y="1396" width="91" height="96" frameX="-10" frameY="-8" frameWidth="112" frameHeight="112"/>
-	<SubTexture name="a1" x="177" y="1396" width="88" height="96" frameX="-11" frameY="-9" frameWidth="112" frameHeight="112"/>
-	<SubTexture name="res-2" x="177" y="1396" width="88" height="96" frameX="-11" frameY="-9" frameWidth="112" frameHeight="112"/>
-	<SubTexture name="books/51" x="701" y="1396" width="100" height="82" frameX="0" frameY="0" frameWidth="100" frameHeight="83"/>
-	<SubTexture name="books/52" x="931" y="1396" width="100" height="82" frameX="0" frameY="0" frameWidth="100" frameHeight="83"/>
-	<SubTexture name="books/53" x="1173" y="1396" width="100" height="82" frameX="0" frameY="0" frameWidth="100" frameHeight="83"/>
-	<SubTexture name="books/54" x="266" y="1411" width="100" height="82" frameX="0" frameY="0" frameWidth="100" frameHeight="83"/>
-	<SubTexture name="extra-time" x="503" y="1430" width="93" height="87" frameX="-3" frameY="-4" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="home/gift" x="406" y="1393" width="95" height="92" frameX="-25" frameY="-23" frameWidth="144" frameHeight="144"/>
+	<SubTexture name="res-cards" x="1077" y="1393" width="91" height="96" frameX="-10" frameY="-8" frameWidth="112" frameHeight="112"/>
+	<SubTexture name="a1" x="85" y="1396" width="88" height="96" frameX="-11" frameY="-9" frameWidth="112" frameHeight="112"/>
+	<SubTexture name="res-2" x="85" y="1396" width="88" height="96" frameX="-11" frameY="-9" frameWidth="112" frameHeight="112"/>
+	<SubTexture name="books/51" x="174" y="1396" width="100" height="82" frameX="0" frameY="0" frameWidth="100" frameHeight="83"/>
+	<SubTexture name="books/52" x="701" y="1396" width="100" height="82" frameX="0" frameY="0" frameWidth="100" frameHeight="83"/>
+	<SubTexture name="books/53" x="931" y="1396" width="100" height="82" frameX="0" frameY="0" frameWidth="100" frameHeight="83"/>
+	<SubTexture name="books/54" x="1169" y="1396" width="100" height="82" frameX="0" frameY="0" frameWidth="100" frameHeight="83"/>
+	<SubTexture name="extra-time" x="275" y="1411" width="93" height="87" frameX="-3" frameY="-4" frameWidth="96" frameHeight="96"/>
 	<SubTexture name="res-6" x="634" y="1186" width="83" height="95" frameX="-14" frameY="-7" frameWidth="112" frameHeight="112"/>
-	<SubTexture name="leagues/circle-0-small" x="1384" y="1470" width="84" height="91" frameX="0" frameY="0" frameWidth="84" frameHeight="92"/>
-	<SubTexture name="leagues/circle-1-small" x="1654" y="1477" width="84" height="91" frameX="0" frameY="0" frameWidth="84" frameHeight="92"/>
+	<SubTexture name="leagues/circle-0-small" x="502" y="1430" width="84" height="91" frameX="0" frameY="0" frameWidth="84" frameHeight="92"/>
+	<SubTexture name="leagues/circle-1-small" x="1384" y="1470" width="84" height="91" frameX="0" frameY="0" frameWidth="84" frameHeight="92"/>
 	<SubTexture name="shop/currency-1" x="201" y="933" width="114" height="65" frameX="-46" frameY="-74" frameWidth="206" frameHeight="206"/>
-	<SubTexture name="leagues/11" x="226" y="1286" width="82" height="90" frameX="-2" frameY="0" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="leagues/0" x="701" y="1479" width="96" height="73" frameX="0" frameY="-13" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="leagues/13" x="931" y="1479" width="85" height="82" frameX="-5" frameY="-7" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="cards/features/26" x="1173" y="1479" width="84" height="81" frameX="-1" frameY="-2" frameWidth="86" frameHeight="86"/>
-	<SubTexture name="cards/bevel-card" x="1739" y="1479" width="82" height="81" frameX="-7" frameY="-7" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="cards/bevel-card-back-0" x="1469" y="1480" width="82" height="81" frameX="-7" frameY="-7" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="cards/bevel-card-back-1" x="1552" y="1480" width="82" height="81" frameX="-7" frameY="-7" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="cards/bevel-card-back-2" x="1017" y="1486" width="82" height="81" frameX="-7" frameY="-7" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="leagues/8" x="367" y="1489" width="84" height="79" frameX="-6" frameY="-13" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="leagues/9" x="181" y="260" width="76" height="86" frameX="-8" frameY="-6" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="leagues/12" x="1703" y="1290" width="88" height="74" frameX="-2" frameY="-12" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="leagues/4" x="226" y="1286" width="82" height="90" frameX="-2" frameY="0" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="leagues/1" x="1654" y="1477" width="85" height="82" frameX="-5" frameY="-7" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="cards/features/26" x="174" y="1479" width="84" height="81" frameX="-1" frameY="-2" frameWidth="86" frameHeight="86"/>
+	<SubTexture name="cards/bevel-card" x="701" y="1479" width="82" height="81" frameX="-7" frameY="-7" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="cards/bevel-card-back-0" x="931" y="1479" width="82" height="81" frameX="-7" frameY="-7" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="cards/bevel-card-back-1" x="1169" y="1479" width="82" height="81" frameX="-7" frameY="-7" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="cards/bevel-card-back-2" x="1740" y="1479" width="82" height="81" frameX="-7" frameY="-7" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="leagues/9" x="1469" y="1480" width="84" height="79" frameX="-6" frameY="-13" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="leagues/7" x="181" y="260" width="76" height="86" frameX="-8" frameY="-6" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="leagues/6" x="1703" y="1290" width="88" height="74" frameX="-2" frameY="-12" frameWidth="96" frameHeight="96"/>
 	<SubTexture name="leagues/min-point-rect" x="310" y="1158" width="78" height="83" frameX="0" frameY="0" frameWidth="78" frameHeight="84"/>
-	<SubTexture name="cards/features/22" x="1258" y="1491" width="81" height="78" frameX="-5" frameY="-4" frameWidth="86" frameHeight="86"/>
-	<SubTexture name="leagues/15" x="85" y="1493" width="80" height="78" frameX="-8" frameY="-12" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="socials/icon-battle" x="166" y="1493" width="76" height="82" frameX="-9" frameY="-11" frameWidth="100" frameHeight="100"/>
-	<SubTexture name="cards/features/11" x="243" y="1494" width="80" height="75" frameX="-2" frameY="-6" frameWidth="86" frameHeight="86"/>
+	<SubTexture name="cards/features/22" x="1554" y="1480" width="81" height="78" frameX="-5" frameY="-4" frameWidth="86" frameHeight="86"/>
+	<SubTexture name="leagues/5" x="369" y="1486" width="80" height="78" frameX="-8" frameY="-12" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="socials/icon-battle" x="1014" y="1490" width="76" height="82" frameX="-9" frameY="-11" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="cards/features/11" x="1252" y="1491" width="80" height="75" frameX="-2" frameY="-6" frameWidth="86" frameHeight="86"/>
 	<SubTexture name="settings/315" x="181" y="347" width="75" height="79" frameX="-8" frameY="-5" frameWidth="92" frameHeight="92"/>
-	<SubTexture name="leagues/7" x="1822" y="1499" width="92" height="64" frameX="-2" frameY="-22" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="leagues/2" x="0" y="1497" width="92" height="64" frameX="-2" frameY="-22" frameWidth="96" frameHeight="96"/>
 	<SubTexture name="socials/balloon-me" x="1979" y="1379" width="64" height="88" frameX="-26" frameY="0" frameWidth="90" frameHeight="89"/>
 	<SubTexture name="socials/balloon-who" x="1979" y="1468" width="64" height="88" frameX="0" frameY="0" frameWidth="90" frameHeight="89"/>
 	<SubTexture name="cards/features/12" x="442" y="177" width="76" height="74" frameX="-5" frameY="-6" frameWidth="86" frameHeight="86"/>
 	<SubTexture name="cards/features/22_1" x="362" y="429" width="76" height="74" frameX="-5" frameY="-6" frameWidth="86" frameHeight="86"/>
-	<SubTexture name="cards/features/23" x="0" y="1497" width="76" height="74" frameX="-5" frameY="-6" frameWidth="86" frameHeight="86"/>
-	<SubTexture name="cards/features/3" x="597" y="1502" width="76" height="74" frameX="-5" frameY="-7" frameWidth="86" frameHeight="86"/>
-	<SubTexture name="cards/features/4" x="798" y="1508" width="76" height="74" frameX="-5" frameY="-6" frameWidth="86" frameHeight="86"/>
-	<SubTexture name="leagues/5" x="452" y="1518" width="75" height="74" frameX="-10" frameY="-14" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="theme/back-button-down-skin" x="674" y="1553" width="83" height="63" frameX="0" frameY="0" frameWidth="83" frameHeight="64"/>
-	<SubTexture name="leagues/2" x="1915" y="1557" width="91" height="57" frameX="-3" frameY="-24" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="leagues/10" x="1100" y="1561" width="74" height="70" frameX="-10" frameY="-16" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="leagues/6" x="875" y="1562" width="87" height="59" frameX="-8" frameY="-19" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="leagues/4" x="1100" y="1486" width="71" height="72" frameX="-11" frameY="-16" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="shop/plus" x="1175" y="1561" width="72" height="71" frameX="0" frameY="0" frameWidth="72" frameHeight="72"/>
-	<SubTexture name="socials/icon-emote" x="1739" y="1561" width="72" height="70" frameX="-11" frameY="-14" frameWidth="100" frameHeight="100"/>
-	<SubTexture name="socials/icon-text" x="1340" y="1562" width="72" height="70" frameX="-11" frameY="-14" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="cards/features/23" x="1091" y="1490" width="76" height="74" frameX="-5" frameY="-6" frameWidth="86" frameHeight="86"/>
+	<SubTexture name="cards/features/3" x="93" y="1493" width="76" height="74" frameX="-5" frameY="-7" frameWidth="86" frameHeight="86"/>
+	<SubTexture name="cards/features/4" x="259" y="1499" width="76" height="74" frameX="-5" frameY="-6" frameWidth="86" frameHeight="86"/>
+	<SubTexture name="leagues/8" x="1823" y="1499" width="75" height="74" frameX="-10" frameY="-14" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="theme/back-button-down-skin" x="587" y="1502" width="83" height="63" frameX="0" frameY="0" frameWidth="83" frameHeight="64"/>
+	<SubTexture name="leagues/0" x="1899" y="1499" width="71" height="72" frameX="-11" frameY="-16" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="shop/plus" x="784" y="1508" width="72" height="71" frameX="0" frameY="0" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="socials/icon-emote" x="857" y="1508" width="72" height="70" frameX="-11" frameY="-14" frameWidth="100" frameHeight="100"/>
+	<SubTexture name="socials/icon-text" x="450" y="1522" width="72" height="70" frameX="-11" frameY="-14" frameWidth="100" frameHeight="100"/>
 	<SubTexture name="events/index-bg-0-up" x="1991" y="464" width="48" height="104" frameX="0" frameY="0" frameWidth="48" frameHeight="105"/>
 	<SubTexture name="events/index-bg-10-up" x="1991" y="569" width="48" height="104" frameX="0" frameY="0" frameWidth="48" frameHeight="105"/>
 	<SubTexture name="events/index-bg-1-up" x="1290" y="1284" width="48" height="104" frameX="0" frameY="0" frameWidth="48" frameHeight="105"/>
-	<SubTexture name="events/index-bg-2-up" x="528" y="1518" width="48" height="104" frameX="0" frameY="0" frameWidth="48" frameHeight="105"/>
-	<SubTexture name="events/index-bg-3-up" x="963" y="1562" width="48" height="104" frameX="0" frameY="0" frameWidth="48" frameHeight="105"/>
-	<SubTexture name="events/index-bg-4-up" x="1413" y="1562" width="48" height="104" frameX="0" frameY="0" frameWidth="48" frameHeight="105"/>
-	<SubTexture name="search-icon" x="1462" y="1562" width="67" height="72" frameX="-4" frameY="-5" frameWidth="80" frameHeight="80"/>
-	<SubTexture name="theme/item-renderer-bulgy-danger-skin" x="1530" y="1562" width="62" height="77" frameX="0" frameY="0" frameWidth="62" frameHeight="78"/>
-	<SubTexture name="theme/item-renderer-bulgy-disabled-skin" x="1812" y="1564" width="62" height="77" frameX="0" frameY="0" frameWidth="62" frameHeight="78"/>
-	<SubTexture name="theme/item-renderer-bulgy-selected-skin" x="1012" y="1568" width="62" height="77" frameX="0" frameY="0" frameWidth="62" frameHeight="78"/>
-	<SubTexture name="theme/item-renderer-bulgy-up-skin" x="324" y="1569" width="62" height="77" frameX="0" frameY="0" frameWidth="62" frameHeight="78"/>
-	<SubTexture name="leagues/14" x="1593" y="1569" width="68" height="69" frameX="-14" frameY="-20" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="settings/5" x="1662" y="1569" width="66" height="69" frameX="-3" frameY="-1" frameWidth="72" frameHeight="72"/>
-	<SubTexture name="leagues/1" x="243" y="1570" width="67" height="66" frameX="-15" frameY="-18" frameWidth="96" frameHeight="96"/>
-	<SubTexture name="settings/313" x="1248" y="1570" width="65" height="67" frameX="-3" frameY="0" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="events/index-bg-2-up" x="1333" y="1491" width="48" height="104" frameX="0" frameY="0" frameWidth="48" frameHeight="105"/>
+	<SubTexture name="events/index-bg-3-up" x="523" y="1522" width="48" height="104" frameX="0" frameY="0" frameWidth="48" frameHeight="105"/>
+	<SubTexture name="events/index-bg-4-up" x="1971" y="1557" width="48" height="104" frameX="0" frameY="0" frameWidth="48" frameHeight="105"/>
+	<SubTexture name="search-icon" x="1554" y="1559" width="67" height="72" frameX="-4" frameY="-5" frameWidth="80" frameHeight="80"/>
+	<SubTexture name="theme/item-renderer-bulgy-danger-skin" x="1469" y="1560" width="62" height="77" frameX="0" frameY="0" frameWidth="62" frameHeight="78"/>
+	<SubTexture name="theme/item-renderer-bulgy-disabled-skin" x="1622" y="1560" width="62" height="77" frameX="0" frameY="0" frameWidth="62" frameHeight="78"/>
+	<SubTexture name="theme/item-renderer-bulgy-selected-skin" x="170" y="1561" width="62" height="77" frameX="0" frameY="0" frameWidth="62" frameHeight="78"/>
+	<SubTexture name="theme/item-renderer-bulgy-up-skin" x="671" y="1561" width="62" height="77" frameX="0" frameY="0" frameWidth="62" frameHeight="78"/>
+	<SubTexture name="leagues/3" x="930" y="1561" width="68" height="69" frameX="-14" frameY="-20" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="settings/5" x="1168" y="1561" width="66" height="69" frameX="-3" frameY="-1" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="leagues/10" x="1685" y="1561" width="67" height="66" frameX="-15" frameY="-18" frameWidth="96" frameHeight="96"/>
+	<SubTexture name="settings/313" x="1753" y="1561" width="65" height="67" frameX="-3" frameY="0" frameWidth="72" frameHeight="72"/>
 	<SubTexture name="cards/back" x="1384" y="1390" width="57" height="76" frameX="0" frameY="0" frameWidth="57" frameHeight="77"/>
-	<SubTexture name="cards/frame" x="387" y="1569" width="57" height="76" frameX="0" frameY="0" frameWidth="57" frameHeight="77"/>
-	<SubTexture name="home/open-ribbon" x="0" y="1572" width="51" height="84" frameX="0" frameY="0" frameWidth="51" frameHeight="85"/>
-	<SubTexture name="settings/314" x="52" y="1572" width="70" height="61" frameX="-1" frameY="-5" frameWidth="72" frameHeight="72"/>
-	<SubTexture name="settings/41" x="123" y="1576" width="72" height="59" frameX="0" frameY="-9" frameWidth="72" frameHeight="72"/>
-	<SubTexture name="settings/312" x="577" y="1577" width="63" height="67" frameX="-5" frameY="0" frameWidth="72" frameHeight="72"/>
-	<SubTexture name="settings/2" x="758" y="1583" width="68" height="62" frameX="-2" frameY="-2" frameWidth="72" frameHeight="72"/>
-	<SubTexture name="theme/round-big-inner-skin" x="445" y="1593" width="64" height="63" frameX="0" frameY="0" frameWidth="64" frameHeight="64"/>
-	<SubTexture name="theme/round-big-skin" x="1875" y="1615" width="64" height="63" frameX="0" frameY="0" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="cards/frame" x="0" y="1562" width="57" height="76" frameX="0" frameY="0" frameWidth="57" frameHeight="77"/>
+	<SubTexture name="home/open-ribbon" x="1382" y="1562" width="51" height="84" frameX="0" frameY="0" frameWidth="51" frameHeight="85"/>
+	<SubTexture name="settings/314" x="336" y="1565" width="70" height="61" frameX="-1" frameY="-5" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="settings/41" x="1091" y="1565" width="72" height="59" frameX="0" frameY="-9" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="settings/312" x="572" y="1566" width="63" height="67" frameX="-5" frameY="0" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="settings/2" x="1235" y="1567" width="68" height="62" frameX="-2" frameY="-2" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="theme/round-big-inner-skin" x="58" y="1568" width="64" height="63" frameX="0" frameY="0" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="theme/round-big-skin" x="1899" y="1572" width="64" height="63" frameX="0" frameY="0" frameWidth="64" frameHeight="64"/>
 	<SubTexture name="shop/cate-blue" x="1793" y="1127" width="33" height="118" frameX="0" frameY="0" frameWidth="33" frameHeight="119"/>
-	<SubTexture name="shop/cate-purple" x="2007" y="1557" width="33" height="118" frameX="0" frameY="0" frameWidth="33" frameHeight="119"/>
-	<SubTexture name="shop/cate-red" x="196" y="1576" width="33" height="118" frameX="0" frameY="0" frameWidth="33" frameHeight="119"/>
-	<SubTexture name="shop/cate-yellow" x="827" y="1583" width="33" height="118" frameX="0" frameY="0" frameWidth="33" frameHeight="119"/>
+	<SubTexture name="shop/cate-purple" x="734" y="1561" width="33" height="118" frameX="0" frameY="0" frameWidth="33" frameHeight="119"/>
+	<SubTexture name="shop/cate-red" x="1434" y="1562" width="33" height="118" frameX="0" frameY="0" frameWidth="33" frameHeight="119"/>
+	<SubTexture name="shop/cate-yellow" x="407" y="1565" width="33" height="118" frameX="0" frameY="0" frameWidth="33" frameHeight="119"/>
 	<SubTexture name="theme/popup-headered-background-skin" x="2016" y="1104" width="30" height="127" frameX="0" frameY="0" frameWidth="30" frameHeight="128"/>
 	<SubTexture name="home/button-bg-2" x="1991" y="674" width="48" height="79" frameX="0" frameY="0" frameWidth="48" frameHeight="80"/>
-	<SubTexture name="shop/playback" x="641" y="1617" width="88" height="43" frameX="0" frameY="0" frameWidth="88" frameHeight="44"/>
-	<SubTexture name="settings/311" x="1940" y="1615" width="64" height="59" frameX="-2" frameY="-5" frameWidth="72" frameHeight="72"/>
-	<SubTexture name="theme/warn" x="861" y="1622" width="63" height="58" frameX="0" frameY="0" frameWidth="63" frameHeight="59"/>
-	<SubTexture name="settings/21" x="510" y="1623" width="60" height="59" frameX="-5" frameY="-5" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="shop/playback" x="999" y="1573" width="88" height="43" frameX="0" frameY="0" frameWidth="88" frameHeight="44"/>
+	<SubTexture name="settings/311" x="233" y="1574" width="64" height="59" frameX="-2" frameY="-5" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="theme/warn" x="1819" y="1574" width="63" height="58" frameX="0" frameY="0" frameWidth="63" frameHeight="59"/>
+	<SubTexture name="settings/21" x="857" y="1579" width="60" height="59" frameX="-5" frameY="-5" frameWidth="72" frameHeight="72"/>
 	<SubTexture name="home/button-bg-0" x="1654" y="1389" width="44" height="76" frameX="-1" frameY="-3" frameWidth="48" frameHeight="80"/>
 	<SubTexture name="home/button-bg-1" x="1654" y="1389" width="44" height="76" frameX="-1" frameY="-3" frameWidth="48" frameHeight="80"/>
 	<SubTexture name="socials/balloon" x="802" y="1396" width="38" height="88" frameX="-26" frameY="0" frameWidth="90" frameHeight="89"/>
-	<SubTexture name="settings/3" x="1075" y="1632" width="52" height="64" frameX="-10" frameY="-1" frameWidth="72" frameHeight="72"/>
-	<SubTexture name="settings/1" x="1128" y="1632" width="46" height="64" frameX="-13" frameY="-1" frameWidth="72" frameHeight="72"/>
-	<SubTexture name="tooltip-bg-bot-left" x="1915" y="1499" width="54" height="53" frameX="0" frameY="0" frameWidth="54" frameHeight="54"/>
-	<SubTexture name="tooltip-bg-bot-right" x="875" y="1508" width="54" height="53" frameX="0" frameY="0" frameWidth="54" frameHeight="54"/>
-	<SubTexture name="tooltip-bg-top-left" x="1729" y="1632" width="54" height="53" frameX="0" frameY="0" frameWidth="54" frameHeight="54"/>
-	<SubTexture name="tooltip-bg-top-right" x="1175" y="1633" width="54" height="53" frameX="0" frameY="0" frameWidth="54" frameHeight="54"/>
-	<SubTexture name="theme/popup-background-skin" x="925" y="1622" width="30" height="94" frameX="0" frameY="0" frameWidth="30" frameHeight="95"/>
-	<SubTexture name="home/settings" x="1314" y="1633" width="53" height="53" frameX="0" frameY="0" frameWidth="53" frameHeight="54"/>
+	<SubTexture name="settings/3" x="768" y="1580" width="52" height="64" frameX="-10" frameY="-1" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="settings/1" x="123" y="1568" width="46" height="64" frameX="-13" frameY="-1" frameWidth="72" frameHeight="72"/>
+	<SubTexture name="tooltip-bg-bot-left" x="441" y="1593" width="54" height="53" frameX="0" frameY="0" frameWidth="54" frameHeight="54"/>
+	<SubTexture name="tooltip-bg-bot-right" x="1304" y="1596" width="54" height="53" frameX="0" frameY="0" frameWidth="54" frameHeight="54"/>
+	<SubTexture name="tooltip-bg-top-left" x="999" y="1617" width="54" height="53" frameX="0" frameY="0" frameWidth="54" frameHeight="54"/>
+	<SubTexture name="tooltip-bg-top-right" x="1054" y="1625" width="54" height="53" frameX="0" frameY="0" frameWidth="54" frameHeight="54"/>
+	<SubTexture name="theme/popup-background-skin" x="636" y="1566" width="30" height="94" frameX="0" frameY="0" frameWidth="30" frameHeight="95"/>
+	<SubTexture name="home/settings" x="1109" y="1625" width="53" height="53" frameX="0" frameY="0" frameWidth="53" frameHeight="54"/>
 	<SubTexture name="home/dash-bg" x="1032" y="1396" width="31" height="87" frameX="0" frameY="0" frameWidth="31" frameHeight="88"/>
 	<SubTexture name="home/ranking" x="1975" y="203" width="58" height="46" frameX="0" frameY="0" frameWidth="58" frameHeight="47"/>
-	<SubTexture name="theme/picker-list-item-renderer-selected-icon" x="52" y="1634" width="58" height="46" frameX="0" frameY="-8" frameWidth="59" frameHeight="59"/>
-	<SubTexture name="home/button-battle-footer" x="1462" y="1635" width="60" height="44" frameX="0" frameY="0" frameWidth="60" frameHeight="45"/>
-	<SubTexture name="theme/button-danger-up-skin" x="111" y="1636" width="46" height="57" frameX="0" frameY="0" frameWidth="46" frameHeight="58"/>
-	<SubTexture name="theme/button-hilight-up-skin" x="230" y="1637" width="46" height="57" frameX="0" frameY="0" frameWidth="46" frameHeight="58"/>
-	<SubTexture name="theme/button-neutral-up-skin" x="277" y="1637" width="46" height="57" frameX="0" frameY="0" frameWidth="46" frameHeight="58"/>
-	<SubTexture name="theme/button-normal-up-skin" x="1230" y="1638" width="46" height="57" frameX="0" frameY="0" frameWidth="46" frameHeight="58"/>
-	<SubTexture name="theme/first-inset-item-renderer-selected-up-skin" x="1368" y="1633" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
-	<SubTexture name="theme/first-inset-item-renderer-up-skin" x="158" y="1636" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
-	<SubTexture name="theme/last-inset-item-renderer-selected-up-skin" x="1277" y="1638" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
-	<SubTexture name="theme/last-inset-item-renderer-up-skin" x="1593" y="1639" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
-	<SubTexture name="theme/single-inset-item-renderer-selected-up-skin" x="1624" y="1639" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
-	<SubTexture name="theme/single-inset-item-renderer-up-skin" x="1655" y="1639" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
+	<SubTexture name="theme/picker-list-item-renderer-selected-icon" x="298" y="1627" width="58" height="46" frameX="0" frameY="-8" frameWidth="59" frameHeight="59"/>
+	<SubTexture name="home/button-battle-footer" x="496" y="1627" width="60" height="44" frameX="0" frameY="0" frameWidth="60" frameHeight="45"/>
+	<SubTexture name="theme/button-danger-up-skin" x="357" y="1627" width="46" height="57" frameX="0" frameY="0" frameWidth="46" frameHeight="58"/>
+	<SubTexture name="theme/button-hilight-up-skin" x="1685" y="1628" width="46" height="57" frameX="0" frameY="0" frameWidth="46" frameHeight="58"/>
+	<SubTexture name="theme/button-neutral-up-skin" x="1732" y="1629" width="46" height="57" frameX="0" frameY="0" frameWidth="46" frameHeight="58"/>
+	<SubTexture name="theme/button-normal-up-skin" x="1235" y="1630" width="46" height="57" frameX="0" frameY="0" frameWidth="46" frameHeight="58"/>
+	<SubTexture name="theme/first-inset-item-renderer-selected-up-skin" x="821" y="1580" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
+	<SubTexture name="theme/first-inset-item-renderer-up-skin" x="1779" y="1629" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
+	<SubTexture name="theme/last-inset-item-renderer-selected-up-skin" x="918" y="1631" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
+	<SubTexture name="theme/last-inset-item-renderer-up-skin" x="949" y="1631" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
+	<SubTexture name="theme/single-inset-item-renderer-selected-up-skin" x="1163" y="1631" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
+	<SubTexture name="theme/single-inset-item-renderer-up-skin" x="1194" y="1631" width="30" height="87" frameX="0" frameY="0" frameWidth="30" frameHeight="88"/>
 	<SubTexture name="socials/check-blue-1" x="1890" y="464" width="64" height="39" frameX="0" frameY="0" frameWidth="64" frameHeight="40"/>
 	<SubTexture name="settings/22" x="316" y="933" width="39" height="63" frameX="-18" frameY="-3" frameWidth="72" frameHeight="72"/>
-	<SubTexture name="theme/item-renderer-danger-skin" x="367" y="1411" width="38" height="61" frameX="0" frameY="0" frameWidth="38" frameHeight="62"/>
-	<SubTexture name="theme/item-renderer-disabled-skin" x="1340" y="1491" width="38" height="61" frameX="0" frameY="0" frameWidth="38" frameHeight="62"/>
-	<SubTexture name="theme/item-renderer-selected-skin" x="324" y="1494" width="38" height="61" frameX="0" frameY="0" frameWidth="38" frameHeight="62"/>
-	<SubTexture name="theme/item-renderer-up-skin" x="1686" y="1639" width="38" height="61" frameX="0" frameY="0" frameWidth="38" frameHeight="62"/>
-	<SubTexture name="theme/upgrade-ready" x="1523" y="1640" width="47" height="48" frameX="0" frameY="0" frameWidth="47" frameHeight="49"/>
-	<SubTexture name="theme/button-danger-down-skin" x="1784" y="1642" width="46" height="49" frameX="0" frameY="-8" frameWidth="46" frameHeight="58"/>
-	<SubTexture name="theme/button-hilight-down-skin" x="571" y="1645" width="46" height="49" frameX="0" frameY="-8" frameWidth="46" frameHeight="58"/>
-	<SubTexture name="theme/button-neutral-down-skin" x="387" y="1646" width="46" height="49" frameX="0" frameY="-8" frameWidth="46" frameHeight="58"/>
-	<SubTexture name="theme/button-normal-down-skin" x="730" y="1646" width="46" height="49" frameX="0" frameY="-8" frameWidth="46" frameHeight="58"/>
-	<SubTexture name="theme/button-disabled-skin" x="777" y="1646" width="45" height="49" frameX="0" frameY="-8" frameWidth="46" frameHeight="58"/>
-	<SubTexture name="shop/item-1889810" x="1831" y="1642" width="37" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
-	<SubTexture name="shop/item-4364029" x="1012" y="1646" width="37" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
-	<SubTexture name="shop/item-down" x="324" y="1647" width="37" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
-	<SubTexture name="theme/back-button-disabled-skin" x="0" y="1657" width="36" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
-	<SubTexture name="theme/forward-button-disabled-skin" x="434" y="1657" width="36" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
-	<SubTexture name="theme/forward-button-down-skin" x="471" y="1657" width="36" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
+	<SubTexture name="theme/item-renderer-danger-skin" x="58" y="1632" width="38" height="61" frameX="0" frameY="0" frameWidth="38" frameHeight="62"/>
+	<SubTexture name="theme/item-renderer-disabled-skin" x="1532" y="1632" width="38" height="61" frameX="0" frameY="0" frameWidth="38" frameHeight="62"/>
+	<SubTexture name="theme/item-renderer-selected-skin" x="1571" y="1632" width="38" height="61" frameX="0" frameY="0" frameWidth="38" frameHeight="62"/>
+	<SubTexture name="theme/item-renderer-up-skin" x="97" y="1633" width="38" height="61" frameX="0" frameY="0" frameWidth="38" frameHeight="62"/>
+	<SubTexture name="theme/upgrade-ready" x="1810" y="1633" width="47" height="48" frameX="0" frameY="0" frameWidth="47" frameHeight="49"/>
+	<SubTexture name="theme/button-danger-down-skin" x="233" y="1634" width="46" height="49" frameX="0" frameY="-8" frameWidth="46" frameHeight="58"/>
+	<SubTexture name="theme/button-hilight-down-skin" x="557" y="1634" width="46" height="49" frameX="0" frameY="-8" frameWidth="46" frameHeight="58"/>
+	<SubTexture name="theme/button-neutral-down-skin" x="1858" y="1636" width="46" height="49" frameX="0" frameY="-8" frameWidth="46" frameHeight="58"/>
+	<SubTexture name="theme/button-normal-down-skin" x="1905" y="1636" width="46" height="49" frameX="0" frameY="-8" frameWidth="46" frameHeight="58"/>
+	<SubTexture name="theme/button-disabled-skin" x="1468" y="1638" width="45" height="49" frameX="0" frameY="-8" frameWidth="46" frameHeight="58"/>
+	<SubTexture name="shop/item-1889810" x="1610" y="1638" width="37" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
+	<SubTexture name="shop/item-4364029" x="0" y="1639" width="37" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
+	<SubTexture name="shop/item-down" x="136" y="1639" width="37" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
+	<SubTexture name="theme/back-button-disabled-skin" x="369" y="1411" width="36" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
+	<SubTexture name="theme/forward-button-disabled-skin" x="1648" y="1638" width="36" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
+	<SubTexture name="theme/forward-button-down-skin" x="174" y="1639" width="36" height="55" frameX="0" frameY="0" frameWidth="37" frameHeight="56"/>
 	<SubTexture name="theme/mute-toggle-button-loud-down-icon" x="310" y="1242" width="47" height="40" frameX="0" frameY="0" frameWidth="47" frameHeight="41"/>
-	<SubTexture name="theme/mute-toggle-button-loud-up-icon" x="618" y="1661" width="47" height="40" frameX="0" frameY="0" frameWidth="47" frameHeight="41"/>
+	<SubTexture name="theme/mute-toggle-button-loud-up-icon" x="667" y="1639" width="47" height="40" frameX="0" frameY="0" frameWidth="47" frameHeight="41"/>
 	<SubTexture name="sticker-item" x="118" y="1250" width="54" height="34" frameX="0" frameY="0" frameWidth="54" frameHeight="35"/>
-	<SubTexture name="socials/check-blue-0" x="666" y="1661" width="45" height="39" frameX="0" frameY="0" frameWidth="64" frameHeight="40"/>
-	<SubTexture name="home/profile" x="1875" y="1564" width="37" height="46" frameX="-8" frameY="-3" frameWidth="53" frameHeight="54"/>
-	<SubTexture name="events/info" x="956" y="1667" width="30" height="51" frameX="0" frameY="0" frameWidth="30" frameHeight="52"/>
-	<SubTexture name="theme/mute-toggle-button-muted-down-icon" x="1399" y="1667" width="45" height="34" frameX="0" frameY="-3" frameWidth="47" frameHeight="41"/>
-	<SubTexture name="theme/mute-toggle-button-muted-up-icon" x="1940" y="1675" width="45" height="34" frameX="0" frameY="-3" frameWidth="47" frameHeight="41"/>
-	<SubTexture name="theme/callout-background-skin" x="1986" y="1676" width="30" height="46" frameX="0" frameY="0" frameWidth="30" frameHeight="48"/>
-	<SubTexture name="leagues/point-rect" x="1869" y="1679" width="37" height="35" frameX="0" frameY="0" frameWidth="37" frameHeight="36"/>
-	<SubTexture name="theme/background-inset-danger-skin" x="1445" y="1680" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
-	<SubTexture name="theme/background-inset-disabled-skin" x="1482" y="1680" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
-	<SubTexture name="theme/background-inset-focused-skin" x="37" y="1681" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
-	<SubTexture name="theme/background-inset-skin" x="74" y="1681" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
-	<SubTexture name="theme/icon-cross" x="861" y="1681" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
-	<SubTexture name="theme/round-medium-inner-skin" x="74" y="1681" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
-	<SubTexture name="theme/round-medium-skin" x="508" y="1683" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
+	<SubTexture name="socials/check-blue-0" x="852" y="1639" width="45" height="39" frameX="0" frameY="0" frameWidth="64" frameHeight="40"/>
+	<SubTexture name="home/profile" x="298" y="1574" width="37" height="46" frameX="-8" frameY="-3" frameWidth="53" frameHeight="54"/>
+	<SubTexture name="events/info" x="336" y="1499" width="30" height="51" frameX="0" frameY="0" frameWidth="30" frameHeight="52"/>
+	<SubTexture name="theme/mute-toggle-button-muted-down-icon" x="450" y="1486" width="45" height="34" frameX="0" frameY="-3" frameWidth="47" frameHeight="41"/>
+	<SubTexture name="theme/mute-toggle-button-muted-up-icon" x="768" y="1645" width="45" height="34" frameX="0" frameY="-3" frameWidth="47" frameHeight="41"/>
+	<SubTexture name="theme/callout-background-skin" x="604" y="1634" width="30" height="46" frameX="0" frameY="0" frameWidth="30" frameHeight="48"/>
+	<SubTexture name="leagues/point-rect" x="441" y="1647" width="37" height="35" frameX="0" frameY="0" frameWidth="37" frameHeight="36"/>
+	<SubTexture name="theme/background-inset-danger-skin" x="1359" y="1647" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
+	<SubTexture name="theme/background-inset-disabled-skin" x="1396" y="1647" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
+	<SubTexture name="theme/background-inset-focused-skin" x="1282" y="1650" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
+	<SubTexture name="theme/background-inset-skin" x="1319" y="1650" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
+	<SubTexture name="theme/icon-cross" x="1952" y="1662" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
+	<SubTexture name="theme/round-medium-inner-skin" x="1319" y="1650" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
+	<SubTexture name="theme/round-medium-skin" x="1989" y="1662" width="36" height="35" frameX="0" frameY="0" frameWidth="36" frameHeight="36"/>
 	<SubTexture name="cards/slider-background" x="1955" y="464" width="35" height="33" frameX="0" frameY="0" frameWidth="35" frameHeight="34"/>
 	<SubTexture name="theme/danger-callout-arrow-left-skin" x="859" y="1168" width="26" height="39" frameX="0" frameY="0" frameWidth="26" frameHeight="40"/>
 	<SubTexture name="theme/danger-callout-arrow-right-skin" x="859" y="1208" width="26" height="39" frameX="0" frameY="0" frameWidth="26" frameHeight="40"/>
 	<SubTexture name="theme/danger-callout-arrow-bottom-skin" x="521" y="1157" width="40" height="25" frameX="0" frameY="0" frameWidth="40" frameHeight="26"/>
 	<SubTexture name="theme/danger-callout-arrow-top-skin" x="1542" y="1360" width="40" height="25" frameX="0" frameY="0" frameWidth="40" frameHeight="26"/>
 	<SubTexture name="theme/check-disabled-icon" x="358" y="1242" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
-	<SubTexture name="theme/check-down-icon" x="266" y="1377" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
-	<SubTexture name="theme/check-selected-disabled-icon" x="641" y="1577" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
-	<SubTexture name="theme/check-selected-down-icon" x="1907" y="1679" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
-	<SubTexture name="theme/check-selected-up-icon" x="1725" y="1686" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
-	<SubTexture name="theme/check-up-icon" x="1175" y="1687" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
-	<SubTexture name="theme/radio-selected-disabled-icon" x="1308" y="1687" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
-	<SubTexture name="theme/radio-selected-down-icon" x="1519" y="1689" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
-	<SubTexture name="theme/radio-selected-up-icon" x="1552" y="1689" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
+	<SubTexture name="theme/check-down-icon" x="275" y="1377" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
+	<SubTexture name="theme/check-selected-disabled-icon" x="814" y="1668" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
+	<SubTexture name="theme/check-selected-down-icon" x="980" y="1671" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
+	<SubTexture name="theme/check-selected-up-icon" x="1013" y="1671" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
+	<SubTexture name="theme/check-up-icon" x="479" y="1672" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
+	<SubTexture name="theme/radio-selected-disabled-icon" x="512" y="1672" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
+	<SubTexture name="theme/radio-selected-down-icon" x="280" y="1674" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
+	<SubTexture name="theme/radio-selected-up-icon" x="313" y="1674" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
 	<SubTexture name="theme/toggle-button-selected-disabled-skin" x="2027" y="0" width="18" height="55" frameX="0" frameY="0" frameWidth="18" frameHeight="56"/>
 	<SubTexture name="theme/toggle-button-selected-up-skin" x="2027" y="56" width="18" height="55" frameX="0" frameY="0" frameWidth="18" frameHeight="56"/>
-	<SubTexture name="theme/button-small-danger-up-skin" x="674" y="1502" width="26" height="34" frameX="0" frameY="0" frameWidth="26" frameHeight="35"/>
-	<SubTexture name="theme/button-small-dark-up-skin" x="2017" y="1676" width="26" height="34" frameX="0" frameY="0" frameWidth="26" frameHeight="35"/>
-	<SubTexture name="theme/button-small-hilight-up-skin" x="898" y="1681" width="26" height="34" frameX="0" frameY="0" frameWidth="26" frameHeight="35"/>
-	<SubTexture name="theme/button-small-neutral-up-skin" x="1341" y="1687" width="26" height="34" frameX="0" frameY="0" frameWidth="26" frameHeight="35"/>
-	<SubTexture name="theme/button-small-up-skin" x="1758" y="1692" width="26" height="34" frameX="0" frameY="0" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-danger-up-skin" x="587" y="1430" width="26" height="34" frameX="0" frameY="0" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-dark-up-skin" x="587" y="1465" width="26" height="34" frameX="0" frameY="0" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-hilight-up-skin" x="671" y="1502" width="26" height="34" frameX="0" frameY="0" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-neutral-up-skin" x="2020" y="1557" width="26" height="34" frameX="0" frameY="0" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-up-skin" x="2020" y="1592" width="26" height="34" frameX="0" frameY="0" frameWidth="26" frameHeight="35"/>
 	<SubTexture name="theme/background-glass-skin" x="1068" y="1104" width="30" height="29" frameX="-1" frameY="-1" frameWidth="32" frameHeight="32"/>
 	<SubTexture name="theme/inset-item-renderer-selected-up-skin" x="2027" y="112" width="10" height="87" frameX="0" frameY="0" frameWidth="10" frameHeight="88"/>
 	<SubTexture name="theme/inset-item-renderer-up-skin" x="2026" y="954" width="10" height="87" frameX="0" frameY="0" frameWidth="10" frameHeight="88"/>
-	<SubTexture name="theme/popup-inside-background-skin" x="758" y="1553" width="30" height="29" frameX="0" frameY="0" frameWidth="30" frameHeight="30"/>
+	<SubTexture name="theme/popup-inside-background-skin" x="635" y="1661" width="30" height="29" frameX="0" frameY="0" frameWidth="30" frameHeight="30"/>
 	<SubTexture name="theme/spinner-list-selection-overlay-skin" x="2037" y="954" width="10" height="87" frameX="0" frameY="0" frameWidth="10" frameHeight="88"/>
-	<SubTexture name="theme/button-small-danger-down-skin" x="1785" y="1692" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
-	<SubTexture name="theme/button-small-dark-down-skin" x="111" y="1694" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
-	<SubTexture name="theme/button-small-disabled-skin" x="189" y="1695" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
-	<SubTexture name="theme/button-small-down-skin" x="216" y="1695" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
-	<SubTexture name="theme/button-small-hilight-down-skin" x="243" y="1695" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
-	<SubTexture name="theme/button-small-neutral-down-skin" x="270" y="1695" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-danger-down-skin" x="496" y="1593" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-dark-down-skin" x="2020" y="1627" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-disabled-skin" x="847" y="1679" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-down-skin" x="874" y="1679" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-hilight-down-skin" x="1046" y="1679" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
+	<SubTexture name="theme/button-small-neutral-down-skin" x="1073" y="1679" width="26" height="31" frameX="0" frameY="-3" frameWidth="26" frameHeight="35"/>
 	<SubTexture name="theme/callout-arrow-left-skin" x="887" y="996" width="20" height="39" frameX="0" frameY="0" frameWidth="20" frameHeight="40"/>
 	<SubTexture name="theme/callout-arrow-bottom-skin" x="0" y="913" width="40" height="19" frameX="0" frameY="0" frameWidth="40" frameHeight="20"/>
 	<SubTexture name="theme/callout-arrow-right-skin" x="41" y="913" width="40" height="19" frameX="0" frameY="0" frameWidth="40" frameHeight="20"/>
@@ -306,15 +301,15 @@
 	<SubTexture name="theme/gradeint-bottom" x="1607" y="1274" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
 	<SubTexture name="theme/gradeint-left" x="1624" y="1274" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
 	<SubTexture name="theme/gradeint-right" x="85" y="1377" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
-	<SubTexture name="theme/gradeint-top" x="597" y="1430" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
-	<SubTexture name="theme/list-background-skin" x="597" y="1446" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
-	<SubTexture name="theme/page-indicator-disabled-symbol" x="597" y="1462" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
-	<SubTexture name="theme/page-indicator-selected-disabled-symbol" x="367" y="1473" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
-	<SubTexture name="theme/page-indicator-selected-symbol" x="384" y="1473" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
-	<SubTexture name="theme/page-indicator-symbol" x="597" y="1478" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
-	<SubTexture name="theme/picker-list-button-disabled-icon" x="1822" y="1479" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
-	<SubTexture name="theme/picker-list-button-icon" x="1839" y="1479" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
-	<SubTexture name="theme/seek-slider-progress-skin" x="1856" y="1479" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="theme/gradeint-top" x="1270" y="1396" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="theme/list-background-skin" x="1270" y="1412" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="theme/page-indicator-disabled-symbol" x="1270" y="1428" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="theme/page-indicator-selected-disabled-symbol" x="1270" y="1444" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="theme/page-indicator-selected-symbol" x="1270" y="1460" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="theme/page-indicator-symbol" x="369" y="1467" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="theme/picker-list-button-disabled-icon" x="386" y="1467" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="theme/picker-list-button-icon" x="784" y="1479" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
+	<SubTexture name="theme/seek-slider-progress-skin" x="1823" y="1479" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>
 	<SubTexture name="theme/vertical-simple-scroll-bar-thumb-skin" x="562" y="1157" width="10" height="23" frameX="0" frameY="0" frameWidth="10" frameHeight="24"/>
 	<SubTexture name="theme/horizontal-simple-scroll-bar-thumb-skin" x="316" y="997" width="24" height="9" frameX="0" frameY="0" frameWidth="24" frameHeight="10"/>
 	<SubTexture name="theme/slider-fill-danger-skin" x="846" y="1287" width="10" height="21" frameX="-5" frameY="-6" frameWidth="20" frameHeight="34"/>
