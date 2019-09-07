@@ -1,6 +1,6 @@
 {
 "units":[
-{"id":101, "base":"",       "bullet":"blue-s",		    "bulletFX":"",	"smoke":"base",	"flame":"base",	"hit":"hit-",		"die":"blood-",	"summonSFX":["101-summon"], "attackSFX":["101-attack"],																		"hitSFX":[]},
+{"id":101, "base":"",       "bullet":"black-s",		    "bulletFX":"",	"smoke":"base",	"flame":"base",	"hit":"hit-",		"die":"blood-",	"summonSFX":["101-summon"], "attackSFX":["101-attack"],																		"hitSFX":[]},
 {"id":102, "base":"",       "bullet":"black-l",		    "bulletFX":"",	"smoke":"base",	"flame":"base",	"hit":"hit-",		"die":"blood-",	"summonSFX":["102-summon"], "attackSFX":["102-attack"], "hitSFX":[]},
 {"id":103, "base":"",       "bullet":"",				      "bulletFX":"",	"smoke":"",		"flame":"",		"hit":"ps-melee",	"die":"blood-",	"summonSFX":["103-summon"], "attackSFX":["103-attack-1", "103-attack-2", "103-attack-3", "103-attack-4", "103-attack-5"],	"hitSFX":[]},
 {"id":104, "base":"",       "bullet":"ps-splash",	    "bulletFX":"",	"smoke":"base",	"flame":"base",	"hit":"",			"die":"blood-",	"summonSFX":["104-summon"], "attackSFX":["104-attack"], "hitSFX":[]},
