@@ -1,20 +1,19 @@
 package com.gerantech.towercraft.views.weapons 
 {
-import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.views.ArtRules;
-import com.gerantech.towercraft.views.BattleFieldView;
-import com.gerantech.towercraft.views.effects.BattleParticleSystem;
 import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.battle.GameObject;
 import com.gerantech.mmory.core.battle.bullets.Bullet;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.events.BattleEvent;
+import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.views.ArtRules;
+import com.gerantech.towercraft.views.BattleFieldView;
+
 import starling.core.Starling;
 import starling.display.Image;
 import starling.display.MovieClip;
 import starling.events.Event;
 import starling.utils.MathUtil;
-import com.gerantech.towercraft.views.units.elements.ImageElement;
 
 /**
 * ...
@@ -113,9 +112,10 @@ private function defaultBulletDisplayFactory() : void
 		bulletDisplay.play();
 	}
 	
-	shadowDisplay = new Image(appModel.assets.getTexture("troops-shadow"));
+	shadowDisplay = new Image(appModel.assets.getTexture("bullets"));
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.pivotY = shadowDisplay.height * 0.5;
+	shadowDisplay.alpha = 0.7;
 	fieldView.shadowsContainer.addChild(shadowDisplay);
 }
 

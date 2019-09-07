@@ -30,10 +30,10 @@ import starling.utils.Color;
 
 public class UnitView extends BaseUnit
 {
-static public const _WIDTH:int = 300;
-static public const _HEIGHT:int = 300;
+static public const _WIDTH:int = 512;
+static public const _HEIGHT:int = 512;
 static public const _SCALE:Number = 0.95;
-static public const _PIVOT_Y:Number = 0.75;
+static public const _PIVOT_Y:Number = 0.65;
 
 private var shadowScale:Number;
 private var bodyScale:Number;
