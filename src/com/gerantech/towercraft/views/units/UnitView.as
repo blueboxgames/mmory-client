@@ -306,24 +306,15 @@ override public function setHealth(health:Number) : Number
 	if( damage == 0 )
 		return damage;
 	
-	if( bodyDisplay != null && damage > 0.01 )
+	if( bodyDisplay != null && damage > 0.005 )
 	{
-		if( hitFilterBody == null )
-		{
-			hitFilterBody = new ColorMatrixFilter();
-			hitFilterBody.adjustBrightness(0.6);
-			hitFilterBase = new ColorMatrixFilter();
-			hitFilterBase.adjustBrightness(0.6);
-		}
-		bodyDisplay.filter = hitFilterBody;
-		if( baseDisplay != null )
-			baseDisplay.filter = hitFilterBase;
+		bodyDisplay.color = side == 0 ? 0x8888FF : 0xFF8888;
+		bodyDisplay.scale = bodyScale * 0.9; 
 		setTimeout( function() : void
 		{
 			if( bodyDisplay != null && bodyDisplay.parent != null )
-				bodyDisplay.filter = null;
-			if( baseDisplay != null && baseDisplay.parent != null )
-				baseDisplay.filter = null;
+				bodyDisplay.color = 0xFFFFFF;
+				bodyDisplay.scale = bodyScale; 
 		}, 50);
 	}
 
