@@ -1,5 +1,7 @@
 package com.gerantech.towercraft.controls.buttons 
 {
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.events.CoreEvent;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.others.TrophyReward;
@@ -9,7 +11,6 @@ import feathers.controls.ImageLoader;
 
 import starling.animation.Transitions;
 import starling.core.Starling;
-import com.gerantech.mmory.core.constants.ResourceType;
 
 /**
 * @author Mansour Djawadi
@@ -38,12 +39,13 @@ private function checkLeagueRewardAchieved() : void
 {
 	for(var i:int = player.get_arena(0); i > 0; i--)
 	{
-		for(var j:int = 2; j >= 0; j--)
+		for(var j:int = game.arenas.get(i).rewards.length - 1; j >= 0; j--)
 		{
 			var tr:TrophyReward = game.arenas.get(i).rewards[j] as TrophyReward;
+			trace(i, j, player.get_point(), player.getResource(ResourceType.R25_REWARD_STEP), tr)
 			if( player.getResource(ResourceType.R25_REWARD_STEP) >= tr.step )
 				break;
-			if( player.get_point() >= tr.point )
+			if( player.get_point() >= tr.point && Math.floor(tr.key/10) != 3 )
 			{
 				state = ExchangeItem.CHEST_STATE_READY;
 				backgroundFactory();
