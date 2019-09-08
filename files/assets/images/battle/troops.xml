@@ -2739,7 +2739,7 @@
 	<SubTexture name="107/0/m_000_001" x="1568" y="3064" width="52" height="49" frameX="-114" frameY="-145" frameWidth="282" frameHeight="282"/>
 	<SubTexture name="107/0/s_000_001" x="1568" y="3064" width="52" height="49" frameX="-114" frameY="-145" frameWidth="282" frameHeight="282"/>
 	<SubTexture name="107/1/m_000_001" x="1749" y="3064" width="52" height="49" frameX="-114" frameY="-145" frameWidth="282" frameHeight="282"/>
-	<SubTexture name="107/1/S_000_001" x="1749" y="3064" width="52" height="49" frameX="-114" frameY="-145" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="107/1/s_000_001" x="1749" y="3064" width="52" height="49" frameX="-114" frameY="-145" frameWidth="282" frameHeight="282"/>
 	<SubTexture name="106/0/s_090_001" x="826" y="3044" width="43" height="59" frameX="-109" frameY="-128" frameWidth="282" frameHeight="282"/>
 	<SubTexture name="106/1/s_090_022" x="3294" y="3056" width="43" height="59" frameX="-109" frameY="-128" frameWidth="282" frameHeight="282"/>
 	<SubTexture name="109/0/m_180_006" x="2053" y="3064" width="43" height="59" frameX="-120" frameY="-124" frameWidth="282" frameHeight="282"/>
