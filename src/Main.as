@@ -118,13 +118,13 @@ private function loaderInfo_completeHandler(event:Event):void
 
 private function starStarling():void
 {
-	this.starling = new Starling(Game, stage, new Rectangle(0,0,stage.fullScreenWidth,stage.fullScreenHeight), null, Context3DRenderMode.AUTO, Context3DProfile.BASELINE_EXTENDED);
+	this.starling = new Starling(Game, stage, new Rectangle(0,0,stage.stageWidth,stage.stageHeight), null, Context3DRenderMode.AUTO, Context3DProfile.BASELINE_EXTENDED);
 	this.starling.addEventListener("rootCreated", starling_rootCreatedHandler);
 	this.starling.supportHighResolutions = true;
 	this.starling.skipUnchangedFrames = true;
 	this.starling.start();
 	this.starling.stage.stageWidth  = 1080;
-	this.starling.stage.stageHeight = 1080 * (stage.fullScreenHeight / stage.fullScreenWidth);
+	this.starling.stage.stageHeight = 1080 * (stage.stageHeight / stage.stageWidth);
 	//NativeAbilities.instance.showToast(stage.fullScreenWidth + "," + stage.fullScreenHeight + "," + this.starling.stage.stageWidth + "," + this.starling.stage.stageHeight + "," + this.starling.contentScaleFactor, 2);
 	//this.starling.showStatsAt("right", "top", 1 / this.starling.contentScaleFactor);
 	trace(stage.fullScreenWidth, stage.fullScreenHeight, this.starling.stage.stageWidth, this.starling.stage.stageHeight, this.starling.contentScaleFactor);
