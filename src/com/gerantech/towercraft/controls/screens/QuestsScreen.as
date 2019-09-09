@@ -23,6 +23,7 @@ import starling.events.Event;
 
 public class QuestsScreen extends ListScreen
 {
+public var readyToClose:Boolean = true;
 public var questsCollection:ListCollection;
 override protected function initialize():void
 {
@@ -125,6 +126,7 @@ private function passQuest(questItem:QuestItemRenderer):void
 		return;
 	}
 	
+	readyToClose = false;
 	questItem.hide();
 	
 	var rect:Rectangle = questItem.getBounds(stage);
@@ -158,7 +160,13 @@ private function sfs_rewardCollectHandler(e:SFSEvent):void
 	player.quests.push(quest);
 	if( list.dataProvider != null )
 		questsCollection.addItem(quest);
+	readyToClose = true;
 }
 
+override protected function backButtonFunction():void
+{
+	if( readyToClose )
+		super.backButtonFunction();
+}
 }
 }
