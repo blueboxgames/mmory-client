@@ -135,9 +135,8 @@ private function createElements():void
 	var currentLeague:Arena = game.arenas.get(LEAGUE);
 	if( LEAGUE  >= league.index )
 	{
-		var fillHeight:Number = HEIGHT * (currentLeague.max  - player.get_point()) / (currentLeague.max - currentLeague.min);
 		var sliderFill:ImageLoader = new ImageLoader();
-		sliderFill.layoutData = new AnchorLayoutData(LEAGUE  > league.index ? 0 : fillHeight, NaN, 0, NaN, ICON_X);
+		sliderFill.layoutData = new AnchorLayoutData(0, NaN, 0, NaN, ICON_X);
 		sliderFill.source = Assets.getTexture("leagues/slider-fill", "gui");
 		sliderFill.scale9Grid = MainTheme.SMALL_BACKGROUND_SCALE9_GRID;
 		sliderFill.width = SLIDER_WIDTH;
@@ -145,12 +144,25 @@ private function createElements():void
 		
 		if( LEAGUE  == league.index )
 		{
+			var stepH:int = HEIGHT / league.rewards.length;
+			var bottomStep:TrophyReward, topStep:TrophyReward;
+			for(var i:int = 0; i < league.rewards.length; i++ )
+			{
+				if( player.get_point() <= league.rewards[i].point )
+				{
+					bottomStep = i < 1 ? new TrophyReward(game, league.index, -1, league.min, 0, 0) : league.rewards[i-1];
+					topStep = league.rewards[i];
+					break;
+				}
+			}
+			var fillHeight:Number = HEIGHT - stepH * (1 + bottomStep.index + (player.get_point() - bottomStep.point) / (topStep.point - bottomStep.point));
+
 			var pointRect:ImageLoader = new ImageLoader();
 			pointRect.source = Assets.getTexture("leagues/point-rect", "gui");
 			pointRect.width = 150;
 			pointRect.height = 72;
 			pointRect.scale9Grid = new Rectangle(17, 17, 2, 2);
-			pointRect.layoutData = new AnchorLayoutData(fillHeight - pointRect.height * 0.5, -10);
+			pointRect.layoutData = new AnchorLayoutData(fillHeight - pointRect.height * 0.5, -10)
 			addChild(pointRect);
 			
 			var pointLine:ImageLoader = new ImageLoader();
@@ -167,6 +179,8 @@ private function createElements():void
 			pointIcon.width = pointIcon.height = 52;
 			pointIcon.layoutData = new AnchorLayoutData(fillHeight - pointIcon.height * 0.5, pointRect.width - 70);
 			addChild(pointIcon);
+
+			AnchorLayoutData(sliderFill.layoutData).top = fillHeight;
 		}
 	}
 	
