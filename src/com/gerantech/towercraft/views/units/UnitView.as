@@ -92,10 +92,9 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		bodyDisplay.alpha = 0;
 		bodyDisplay.y = __yz - 100;
 		bodyDisplay.scaleY = bodyScale * 4;
-		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,	alpha:0.5, y:__yz,	transition:Transitions.EASE_OUT});
+		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,	alpha:0.5, y:__yz,	transition:Transitions.EASE_OUT, onComplete:defaultSummonEffectFactory});
 		Starling.juggler.tween(bodyDisplay, 0.2, {delay:appearanceDelay+ 0.3,	alpha:0, repeatCount:9});
 		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay + 0.1,	scaleY:bodyScale,	transition:Transitions.EASE_OUT_BACK});
-		defaultSummonEffectFactory();
 		shadowDisplay.scale = 0.0
 		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scale:shadowScale,	transition:Transitions.EASE_OUT_BACK});
 	}
@@ -323,11 +322,12 @@ protected function defaultSummonEffectFactory() : void
 	var summon:String = appModel.artRules.get(card.type, ArtRules.SUMMON);
 	if( summon == "" )
 		return;
-	var summonParticle:MortalParticleSystem = new MortalParticleSystem(appModel.assets.getObject("summon-" + summon), ParticleManager.getTextureByBitmap("fire"), 0.5, true, false);
-	summonParticle.scaleY = BattleField.CAMERA_ANGLE;
+	var summonParticle:MortalParticleSystem = new MortalParticleSystem(appModel.assets.getObject("summon-" + summon), ParticleManager.getTextureByBitmap("fire"), -1, true, false);
+	summonParticle.scaleX = Math.min(0.3, card.sizeH * 0.01);
+	summonParticle.scaleY = summonParticle.scaleX * BattleField.CAMERA_ANGLE;
 	summonParticle.x = getSideX();
 	summonParticle.y = getSideY();
-	summonParticle.alpha = 0.1;
+	// summonParticle.alpha = 0.1;
 	fieldView.shadowsContainer.addChild(summonParticle);
 }
 
