@@ -12,11 +12,12 @@ import com.gerantech.mmory.core.utils.Point3;
 import com.gerantech.towercraft.controls.indicators.CountdownIcon;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
+import com.gerantech.towercraft.managers.ParticleManager;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.UnitMC;
 import com.gerantech.towercraft.views.effects.BattleParticleSystem;
+import com.gerantech.towercraft.views.effects.MortalParticleSystem;
 import com.gerantech.towercraft.views.units.elements.ImageElement;
-import com.gerantech.towercraft.views.units.elements.MovieElement;
 import com.gerantech.towercraft.views.units.elements.UnitBody;
 import com.gerantech.towercraft.views.weapons.BulletView;
 
@@ -91,11 +92,12 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		bodyDisplay.alpha = 0;
 		bodyDisplay.y = __yz - 100;
 		bodyDisplay.scaleY = bodyScale * 4;
-		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,		alpha:0.5, y:__yz,	transition:Transitions.EASE_OUT, onComplete:defaultSummonEffectFactory});
+		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,	alpha:0.5, y:__yz,	transition:Transitions.EASE_OUT});
+		Starling.juggler.tween(bodyDisplay, 0.2, {delay:appearanceDelay+ 0.3,	alpha:0, repeatCount:9});
 		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay + 0.1,	scaleY:bodyScale,	transition:Transitions.EASE_OUT_BACK});
-		
-		shadowDisplay.scale = 0.1
-		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.1,scale:shadowScale,	transition:Transitions.EASE_OUT_BACK});
+		defaultSummonEffectFactory();
+		shadowDisplay.scale = 0.0
+		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scale:shadowScale,	transition:Transitions.EASE_OUT_BACK});
 	}
 	
 	if( card.summonTime > 0 )
@@ -318,28 +320,15 @@ override public function setHealth(health:Number) : Number
 
 protected function defaultSummonEffectFactory() : void
 {
-	Starling.juggler.tween(bodyDisplay, 0.2, {alpha:0, repeatCount:9});
-
-	var summonParticle:BattleParticleSystem = new BattleParticleSystem(this, "summon-base", "summons/summon-base", 1, false, true);
+	var summon:String = appModel.artRules.get(card.type, ArtRules.SUMMON);
+	if( summon == "" )
+		return;
+	var summonParticle:MortalParticleSystem = new MortalParticleSystem(appModel.assets.getObject("summon-" + summon), ParticleManager.getTextureByBitmap("fire"), 0.5, true, false);
 	summonParticle.scaleY = BattleField.CAMERA_ANGLE;
 	summonParticle.x = getSideX();
 	summonParticle.y = getSideY();
-	summonParticle.alpha = 0.06;
-	summonParticle.start(-1);
-	fieldView.unitsContainer.addChildAt(summonParticle, 0);
-	return;
-	
-	var summonDisplay:MovieElement = new MovieElement(this, appModel.assets.getTextures("summons/explode-"), 35);
-	summonDisplay.pivotX = summonDisplay.width * 0.5;
-	summonDisplay.pivotY = summonDisplay.height * 0.5;
-	summonDisplay.width = ArtRules.getShadowSize(card.type) * 2.00;
-	summonDisplay.height = summonDisplay.width * BattleField.CAMERA_ANGLE;
-	summonDisplay.x = getSideX();
-	summonDisplay.y = getSideY();
-	fieldView.unitsContainer.addChildAt(summonDisplay, 0);
-	summonDisplay.play();
-	Starling.juggler.add(summonDisplay);
-	summonDisplay.addEventListener(Event.COMPLETE, function() : void { Starling.juggler.remove(summonDisplay); summonDisplay.removeFromParent(true); });
+	summonParticle.alpha = 0.1;
+	fieldView.shadowsContainer.addChild(summonParticle);
 }
 
 public function showWinnerFocus():void 

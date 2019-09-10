@@ -18,6 +18,7 @@ static public const FLAME:String = "flame";
 static public const SMOKE:String = "smoke";
 static public const HIT:String = "hit";
 static public const DIE:String = "die";
+static public const SUMMON:String = "summon";
 static public const SUMMON_SFX:String = "summonSFX";
 static public const ATTACK_SFX:String = "attackSFX";
 static public const HIT_SFX:String = "hitSFX";
