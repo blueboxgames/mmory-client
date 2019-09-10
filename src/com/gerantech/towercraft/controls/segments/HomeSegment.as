@@ -177,7 +177,7 @@ override public function init():void
 		addButton(googleButton, "googleButton");
 	}
 
-	setTimeout(showOffers, 1500);
+	Starling.juggler.delayCall(showOffers, 1.5);
 }
 
 private	function showOffers () : void
@@ -286,5 +286,11 @@ private function socialManager_signinHandler(e:Event):void
 	OAuthManager.instance.removeEventListener(OAuthManager.SINGIN, socialManager_signinHandler);
 	googleButton.removeFromParent();
 }
+
+override public function dispose():void
+{
+	Starling.juggler.removeDelayedCalls(showOffers);
+	super.dispose();
+} 
 }
 }
