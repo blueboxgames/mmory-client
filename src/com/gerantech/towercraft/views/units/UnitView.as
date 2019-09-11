@@ -33,15 +33,15 @@ public class UnitView extends BaseUnit
 {
 static public const _WIDTH:int = 512;
 static public const _HEIGHT:int = 512;
-static public const _SCALE:Number = 0.95;
+static public const _SCALE:Number = 1;
 static public const _PIVOT_Y:Number = 0.65;
+static public const _SHADOW_SCALE:Number = -0.3;
 
-private var shadowScale:Number;
-private var bodyScale:Number;
 private var __x:Number;
 private var __y:Number;
 private var __yz:Number;
 private var _muted:Boolean = true;
+private var __bodyScale:Number;
 
 public var fireDisplayFactory:Function;
 
@@ -70,18 +70,22 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	bodyDisplay.y = __y;
 	bodyDisplay.width = _WIDTH;
 	bodyDisplay.height = _HEIGHT;
-	bodyScale = bodyDisplay.scale *= _SCALE;
+	__bodyScale = bodyDisplay.scale *= _SCALE;
 	fieldView.unitsContainer.addChild(bodyDisplay);
 
-	shadowDisplay = new UnitMC(card.type + "/", "m_" + (side == battleField.side ? "000_" : "180_"));
-	shadowDisplay.alpha = 0.4;
+	var angle:String = side == battleField.side ? "000_" : "180_";
+  shadowDisplay = new UnitMC(card.type + "/0/", "m_" + angle);
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y;
+	// shadowDisplay.skewX = 10;
 	shadowDisplay.x = __x;
 	shadowDisplay.y = __y;
 	shadowDisplay.width = _WIDTH;
 	shadowDisplay.height = _HEIGHT;
-	shadowScale = shadowDisplay.scale *= _SCALE;
+	shadowDisplay.alpha = 0.3;
+	shadowDisplay.color = 0;
+	shadowDisplay.scaleX = __bodyScale;
+	shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
 	shadowDisplay.currentFrame = bodyDisplay.startFrame;
 	shadowDisplay.pause();
 	Starling.juggler.add(shadowDisplay);
@@ -91,12 +95,12 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	{
 		bodyDisplay.alpha = 0;
 		bodyDisplay.y = __yz - 100;
-		bodyDisplay.scaleY = bodyScale * 4;
+		bodyDisplay.scaleY = __bodyScale * 4;
 		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,	alpha:0.5, y:__yz,	transition:Transitions.EASE_OUT, onComplete:defaultSummonEffectFactory});
 		Starling.juggler.tween(bodyDisplay, 0.2, {delay:appearanceDelay+ 0.3,	alpha:0, repeatCount:9});
 		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay + 0.1,	scaleY:bodyScale,	transition:Transitions.EASE_OUT_BACK});
 		shadowDisplay.scale = 0.0
-		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scale:shadowScale,	transition:Transitions.EASE_OUT_BACK});
+		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scaleX:bodyScale,scaleY:bodyScale*_SHADOW_SCALE,	transition:Transitions.EASE_OUT_BACK});
 	}
 	
 	if( card.summonTime > 0 )
@@ -110,19 +114,19 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		setTimeout(fieldView.guiImagesContainer.addChild, appearanceDelay * 1000, deployIcon);
 	}
 	
-	if( BattleField.DEBUG_MODE )
+	if( true )
 	{
-		sizeDisplay = new ImageElement(this, appModel.assets.getTexture("damage-range"));
+		sizeDisplay = new ImageElement(null, appModel.assets.getTexture("manhole"));
 		sizeDisplay.pivotX = sizeDisplay.width * 0.5;
 		sizeDisplay.pivotY = sizeDisplay.height * 0.5;
-		sizeDisplay.width = card.sizeH * 2;
-		sizeDisplay.height = card.sizeH * 1.42;
+		sizeDisplay.width = 8//card.sizeH * 2;
+		sizeDisplay.height =8// card.sizeH * 1.42;
 		sizeDisplay.color = Color.NAVY;
 		sizeDisplay.x = __x;
 		sizeDisplay.y = __y;
-		fieldView.unitsContainer.addChildAt(sizeDisplay, 0);
+		fieldView.unitsContainer.addChild(sizeDisplay);
 		
-		rangeDisplay = new ImageElement(this, appModel.assets.getTexture("damage-range"));
+		/* rangeDisplay = new ImageElement(this, appModel.assets.getTexture("damage-range"));
 		rangeDisplay.pivotX = rangeDisplay.width * 0.5;
 		rangeDisplay.pivotY = rangeDisplay.height * 0.5;
 		rangeDisplay.width = card.bulletRangeMax * 2;
@@ -130,7 +134,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		rangeDisplay.alpha = 0.1;
 		rangeDisplay.x = __x;
 		rangeDisplay.y = __y;
-		fieldView.unitsContainer.addChildAt(rangeDisplay, 0);
+		fieldView.unitsContainer.addChildAt(rangeDisplay, 0); */
 	}
 	
 	if( fireDisplayFactory == null )
@@ -157,10 +161,11 @@ override public function setState(state:int) : Boolean
 		bodyDisplay.x = __x;
 		bodyDisplay.y = __yz;
 		bodyDisplay.alpha = 1;
-		bodyDisplay.scaleY = bodyScale;
+		bodyDisplay.scaleY = __bodyScale;
 		Starling.juggler.removeTweens(bodyDisplay);
 		
-		shadowDisplay.scale = shadowScale;
+		shadowDisplay.scaleX = __bodyScale;
+		shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
 		Starling.juggler.removeTweens(shadowDisplay);
 	}
 	else if( state == GameObject.STATE_3_WAITING )
@@ -272,11 +277,12 @@ private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, o
 	}
 	
 	shadowDisplay.loop = anim == "m_";;
-	//shadowDisplay.scaleX = (flipped ? -shadowDisplay.scaleY : shadowDisplay.scaleY );
+	shadowDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
+	shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
 	shadowDisplay.updateTexture(anim, dir);
 	
 	bodyDisplay.loop = shadowDisplay.loop;
-	bodyDisplay.scaleX = (flipped ? -bodyScale : bodyScale );
+	bodyDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 	bodyDisplay.updateTexture(anim, dir);
 }
 
@@ -292,12 +298,12 @@ override public function setHealth(health:Number) : Number
 	if( bodyDisplay != null && damage > 0.005 )
 	{
 		bodyDisplay.color = side == 0 ? 0x8888FF : 0xFF8888;
-		bodyDisplay.scale = bodyScale * 0.9; 
+		bodyDisplay.scale = __bodyScale * 0.9; 
 		setTimeout( function() : void
 		{
 			if( bodyDisplay != null && bodyDisplay.parent != null )
 				bodyDisplay.color = 0xFFFFFF;
-				bodyDisplay.scale = bodyScale; 
+				bodyDisplay.scale = __bodyScale; 
 		}, 50);
 	}
 
@@ -419,7 +425,7 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 		if( bodyDisplay != null )
 		{
 			Starling.juggler.removeTweens(bodyDisplay);
-			bodyDisplay.scale = bodyScale;
+			bodyDisplay.scale = __bodyScale;
 			bodyDisplay.alpha = 1;
 			bodyDisplay.pause();
 		}
@@ -427,8 +433,9 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 		if( shadowDisplay != null )
 		{
 			Starling.juggler.removeTweens(shadowDisplay);
-			shadowDisplay.scale = shadowScale;
-			shadowDisplay.alpha = 0.2;
+			shadowDisplay.scaleX = __bodyScale;
+			shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
+			shadowDisplay.alpha = 0.3;
 			shadowDisplay.pause();
 		}
 		return;
@@ -450,8 +457,6 @@ override public function dispose() : void
 	bodyDisplay.removeFromParent(true);
 	if( shadowDisplay != null )
 		shadowDisplay.removeFromParent(true);
-	// if( baseDisplay != null )
-	// 	baseDisplay.removeFromParent(true);
 	if( rangeDisplay != null )
 		rangeDisplay.removeFromParent(true);
 	if( deployIcon != null )
@@ -467,7 +472,7 @@ public function set alpha(value:Number):void
 {
 	bodyDisplay.alpha = value;
 	if( shadowDisplay != null )
-		shadowDisplay.alpha = value - 0.6;
+		shadowDisplay.alpha = value - 0.7;
 	if( rangeDisplay != null )
 		rangeDisplay.alpha = value;
 	if( healthDisplay != null )

@@ -31,10 +31,7 @@ package com.gerantech.towercraft.views.units.elements
       var battleField:BattleField = AppModel.instance.battleFieldView.battleData.battleField;
 
       if( AppModel.instance.artRules.get(card.type, ArtRules.BASE) != "" )
-      {
-        baseDisplay = new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/base"));
-        this.addChild(baseDisplay);
-      }
+        this.addChild(new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/base")));
 
     	var hasSide:Boolean = has_side(card.type);
       var angle:String = side == battleField.side ? "000_" : "180_";
@@ -46,11 +43,7 @@ package com.gerantech.towercraft.views.units.elements
       this.addChild(this.bodyDisplay);
 
       if( AppModel.instance.artRules.get(card.type, ArtRules.OVERLAY) != "" )
-      {
-        overlayDisplay = new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/overlay"));
-        this.addChild(overlayDisplay);
-      }
-
+        this.addChild(new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/overlay")));
 
       if( hasSide && side != battleField.side )
       {
