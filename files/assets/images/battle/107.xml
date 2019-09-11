@@ -15,7 +15,7 @@
 	<SubTexture name="107/0/m_000_001" x="175" y="64" width="52" height="49" frameX="-114" frameY="-145" frameWidth="282" frameHeight="282"/>
 	<SubTexture name="107/0/s_000_001" x="175" y="64" width="52" height="49" frameX="-114" frameY="-145" frameWidth="282" frameHeight="282"/>
 	<SubTexture name="107/1/m_000_001" x="0" y="123" width="52" height="49" frameX="-114" frameY="-145" frameWidth="282" frameHeight="282"/>
-	<SubTexture name="107/1/S_000_001" x="0" y="123" width="52" height="49" frameX="-114" frameY="-145" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="107/1/s_000_001" x="0" y="123" width="52" height="49" frameX="-114" frameY="-145" frameWidth="282" frameHeight="282"/>
 	<SubTexture name="107/0/m_180_001" x="53" y="123" width="53" height="42" frameX="-114" frameY="-148" frameWidth="282" frameHeight="282"/>
 	<SubTexture name="107/0/s_180_001" x="53" y="123" width="53" height="42" frameX="-114" frameY="-148" frameWidth="282" frameHeight="282"/>
 	<SubTexture name="107/1/m_180_001" x="107" y="123" width="53" height="42" frameX="-114" frameY="-148" frameWidth="282" frameHeight="282"/>
