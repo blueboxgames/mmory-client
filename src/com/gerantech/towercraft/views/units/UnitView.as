@@ -278,8 +278,10 @@ private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, o
 	
 	shadowDisplay.loop = anim == "m_";;
 	shadowDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
-	shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
 	shadowDisplay.updateTexture(anim, dir);
+	
+	if( card.type == 101 )
+		trace(anim, bodyDisplay.scaleX, __bodyScale);
 	
 	bodyDisplay.loop = shadowDisplay.loop;
 	bodyDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
@@ -298,12 +300,12 @@ override public function setHealth(health:Number) : Number
 	if( bodyDisplay != null && damage > 0.005 )
 	{
 		bodyDisplay.color = side == 0 ? 0x8888FF : 0xFF8888;
-		bodyDisplay.scale = __bodyScale * 0.9; 
+		bodyDisplay.scaleY = __bodyScale * 0.92; 
 		setTimeout( function() : void
 		{
 			if( bodyDisplay != null && bodyDisplay.parent != null )
 				bodyDisplay.color = 0xFFFFFF;
-				bodyDisplay.scale = __bodyScale; 
+				bodyDisplay.scaleY = __bodyScale; 
 		}, 50);
 	}
 
