@@ -35,7 +35,7 @@ static public const _WIDTH:int = 512;
 static public const _HEIGHT:int = 512;
 static public const _SCALE:Number = 1;
 static public const _PIVOT_Y:Number = 0.65;
-static public const _SHADOW_SCALE:Number = -0.3;
+static public const _SHADOW_SCALE:Number = -0.5;
 
 private var __x:Number;
 private var __y:Number;
