@@ -212,14 +212,14 @@ protected function timeManager_changeHandler(event:Event):void
 	if( duration == battleData.battleField.getTime(1) )
 	{
 		timerSlider.enableStars(0x08899);
-		animateShadow(0.5, null, 0x08899);
+		animateShadow(1.0, null, 0x08899);
 		appModel.navigator.addPopup(new BattleExtraTimeToast(BattleExtraTimeToast.MODE_ELIXIR_2X));
 	}
 	
 	if( battleData.allise.getInt("score") == battleData.axis.getInt("score") && duration == battleData.battleField.getTime(2) )
 	{
 		appModel.navigator.addPopup(new BattleExtraTimeToast(BattleExtraTimeToast.MODE_EXTRA_TIME));
-		animateShadow(0.4, null, 0xAA0000);
+		animateShadow(1.0, null, 0xAA0000);
 		timerSlider.enableStars(0xFF0000);
 	}
 	
@@ -236,8 +236,8 @@ public function animateShadow(alphaSeed:Number, shadow:Image, color:uint = 0) : 
 {
 	if( shadow == null )
 	{
-		shadow = new Image(Assets.getTexture("radial-gradient-shadow"));
-		shadow.scale9Grid = new Rectangle(2, 2, 12, 12);
+		shadow = new Image(Assets.getTexture("radial-gradient-shadow-larg"));
+		shadow.scale9Grid = new Rectangle(63, 63, 2, 2);
 		shadow.height = stageHeight;
 		shadow.width = stageWidth;
 		shadow.touchable = false;
