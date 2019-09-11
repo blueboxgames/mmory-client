@@ -37,6 +37,12 @@ public function get(type:int, attribute:String) : String
 		return "";
 	return rules[type][attribute];
 }
+public function getInt(type:int, attribute:String) : int
+{
+	if( rules[type] == null )
+		return 0;
+	return int(rules[type][attribute]);
+}
 public function getArray(type:int, attribute:String) : Array
 {
 	if( rules[type] == null )
