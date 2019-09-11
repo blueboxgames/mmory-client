@@ -20,8 +20,6 @@ import flash.desktop.NativeApplication;
 import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
-import flash.display3D.Context3DProfile;
-import flash.display3D.Context3DRenderMode;
 import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.InvokeEvent;
@@ -118,7 +116,7 @@ private function loaderInfo_completeHandler(event:Event):void
 
 private function starStarling():void
 {
-	this.starling = new Starling(Game, stage, new Rectangle(0,0,stage.stageWidth,stage.stageHeight), null, Context3DRenderMode.AUTO, Context3DProfile.BASELINE_EXTENDED);
+	this.starling = new Starling(Game, stage, new Rectangle(0,0,stage.stageWidth,stage.stageHeight));
 	this.starling.addEventListener("rootCreated", starling_rootCreatedHandler);
 	this.starling.supportHighResolutions = true;
 	this.starling.skipUnchangedFrames = true;
