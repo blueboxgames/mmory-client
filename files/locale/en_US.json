@@ -643,6 +643,7 @@
     "lobby_message_limit": "You can not send more messages!",
     "lobby_message_unauthorized": "Unauthorized message!",
     "lobby_remove_confirm": "Remove hood? are you sure?",
+    "lobby_imei_confirm": "We need phone id to access public lobby!",
     "": "",
     "log_not_enough": "Not enough #!",
     "": "",

@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.managers.net
 {
 import com.chartboost.plugin.air.model.CBLocation;
+import com.gerantech.extensions.DeviceInfo;
 import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.PrefsTypes;
@@ -31,7 +32,6 @@ import flash.events.EventDispatcher;
 import flash.system.Capabilities;
 import flash.utils.getTimer;
 import flash.utils.setTimeout;
-import com.gerantech.extensions.DeviceInfo;
 
 [Event(name="loaded",				type="com.gerantech.towercraft.events.LoadingEvent")]
 [Event(name="loginError",			type="com.gerantech.towercraft.events.LoadingEvent")]
@@ -117,10 +117,11 @@ private function login():void
 		//}
 	}
 	var device:DeviceInfo = NativeAbilities.instance.deviceInfo;
+	loginParams.putText("imei", appModel.platform == AppModel.PLATFORM_ANDROID ? device.imei : "");
 	loginParams.putText("udid", appModel.platform == AppModel.PLATFORM_ANDROID ? device.id : Utils.getPCUniqueCode());
 	loginParams.putText("device", appModel.platform == AppModel.PLATFORM_ANDROID ? StrUtils.truncateText(device.manufacturer+"-"+device.model, 32, "") : Capabilities.manufacturer);
-	loginParams.putInt("appver", appModel.descriptor.versionCode);
 	loginParams.putText("market", appModel.descriptor.market);
+	loginParams.putInt("appver", appModel.descriptor.versionCode);
 
 	sfsConnection.login(__id.toString(), UserData.instance.password, "", loginParams);
 }		
