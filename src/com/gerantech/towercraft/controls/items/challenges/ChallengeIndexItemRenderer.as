@@ -1,5 +1,6 @@
 package com.gerantech.towercraft.controls.items.challenges 
 {
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
@@ -71,7 +72,7 @@ override protected function commitData() : void
 	challenge = player.challenges.get(_data as int);
 	challenge.index = _data as int;
 	state = challenge.getState(timeManager.now);
-	locked = Challenge.getUnlockAt(game, challenge.index) > player.get_point();
+	locked = Challenge.getUnlockAt(game, challenge.index) > player.getResource(ResourceType.R7_MAX_POINT);
 	
 	backgroundFactory();
 	iconFactory();
@@ -222,9 +223,8 @@ protected function backgroundImage_stateChangeHandler(event:Event) : void
 }
 protected function backgroundImage_triggerdHandler(event:Event) : void
 {
-	if( locked )
+	if( locked && !IN_HOME)
 	{
-		challenge.unlockAt
 		appModel.navigator.addLog(loc("availableuntil_messeage", [loc("resource_title_2") + " " + Challenge.getUnlockAt(game, challenge.index), ""]));
 		return;
 	}

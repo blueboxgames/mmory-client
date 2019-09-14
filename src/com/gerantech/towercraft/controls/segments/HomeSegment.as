@@ -252,11 +252,11 @@ private function mainButtons_triggeredHandler(event:Event):void
 	var buttonName:String = DisplayObject(event.currentTarget).name;
 	switch( buttonName )
 	{
-		case "eventsButton":	if( player.get_battleswins() > 3 ) appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
+		case "eventsButton":	if( player.get_battleswins() > appModel.maxTutorBattles ) appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
 		case "battleButton":	appModel.navigator.runBattle(UserData.instance.challengeIndex);	return;
 	}
 	
-	if( league <= 0 )
+	if( league < 0 )
 	{
 		appModel.navigator.addLog(loc("try_to_league_up"));
 		return;
