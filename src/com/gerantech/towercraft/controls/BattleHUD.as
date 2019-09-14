@@ -48,6 +48,7 @@ import starling.display.Image;
 import starling.display.Quad;
 import starling.events.Event;
 import starling.utils.Color;
+import com.gerantech.towercraft.models.AppModel;
 
  public class BattleHUD extends TowersLayout
 {
@@ -401,7 +402,7 @@ override public function dispose():void
 
 static public function getAxisName(battleWins:int, name:String) : String
 {
-	return battleWins < 4 ? StrUtils.loc("trainer_label") : name;
+	return battleWins < AppModel.instance.maxTutorBattles ? StrUtils.loc("trainer_label") : name;
 }
 }
 }

@@ -35,7 +35,6 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 
 import flash.geom.Rectangle;
-import flash.utils.setTimeout;
 
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -169,7 +168,7 @@ override public function init():void
 	rankButton.width = rankButton.height = 140;
 	addButton(rankButton, "rankButton");
 	
-	if( player.get_battleswins() > 5 && !player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE) )
+	if( player.get_battleswins() > 10 && !player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE) )
 	{
 		googleButton = new IconButton(Assets.getTexture("settings/41"), 0.6, Assets.getTexture("home/button-bg-0"), new Rectangle(22, 38, 4, 4));
 		googleButton.layoutData = new AnchorLayoutData(330, paddingH + 36 + starsButton.width);

@@ -33,6 +33,7 @@ public function CoreLoader(serverData:SFSObject)
 	this.serverData = serverData;
 	this.version = this.serverData.getText("coreVersion");
 	ScriptEngine.initialize(serverData.getText("script"), this.serverData.getInt("forceVersion"));
+
 	initServerData(serverData);
 	
 	AppModel.instance.game = new Game();
@@ -41,6 +42,7 @@ public function CoreLoader(serverData:SFSObject)
 	AppModel.instance.game.player.hasOperations = !serverData.containsKey("hasOperations") || serverData.getBool("hasOperations");
 	AppModel.instance.game.player.tutorialMode = serverData.getInt("tutorialMode");
 	AppModel.instance.game.player.invitationCode = serverData.getText("invitationCode");
+	AppModel.instance.maxTutorBattles = ScriptEngine.getInt(ScriptEngine.T61_BATTLE_NUM_TUTORS, AppModel.instance.game.player.id);
 
 	loadExchanges(serverData);
 	loadChallenges(serverData, initData.id);
