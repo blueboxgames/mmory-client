@@ -24,6 +24,27 @@
 	<SubTexture name="hits/explode-013" x="0" y="465" width="128" height="101" frameX="-27" frameY="-36" frameWidth="180" frameHeight="180"/>
 	<SubTexture name="hits/explode-006" x="911" y="286" width="108" height="103" frameX="-36" frameY="-38" frameWidth="180" frameHeight="180"/>
 	<SubTexture name="hits/arrows-000" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-001" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-002" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-003" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-004" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-005" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-006" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-007" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-008" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-009" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-010" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-011" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-012" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-013" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-014" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-015" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-016" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-017" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-018" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-019" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-020" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
+	<SubTexture name="hits/arrows-021" x="467" y="287" width="110" height="91" frameX="-96" frameY="-119" frameWidth="300" frameHeight="300"/>
 	<SubTexture name="hits/explode-005" x="735" y="520" width="97" height="95" frameX="-42" frameY="-42" frameWidth="180" frameHeight="180"/>
 	<SubTexture name="hits/explode-004" x="159" y="201" width="87" height="83" frameX="-47" frameY="-48" frameWidth="180" frameHeight="180"/>
 	<SubTexture name="hits/ps-melee/ps-melee" x="956" y="0" width="64" height="63" frameX="0" frameY="0" frameWidth="64" frameHeight="64"/>

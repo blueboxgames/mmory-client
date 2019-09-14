@@ -31,7 +31,10 @@ package com.gerantech.towercraft.views.units.elements
       var battleField:BattleField = AppModel.instance.battleFieldView.battleData.battleField;
 
       if( AppModel.instance.artRules.get(card.type, ArtRules.BASE) != "" )
-        this.addChild(new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/base")));
+      {
+        this.baseDisplay = new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/base"));
+        this.addChild(this.baseDisplay);
+      }
 
     	var hasSide:Boolean = has_side(card.type);
       var angle:String = side == battleField.side ? "000_" : "180_";
@@ -43,7 +46,10 @@ package com.gerantech.towercraft.views.units.elements
       this.addChild(this.bodyDisplay);
 
       if( AppModel.instance.artRules.get(card.type, ArtRules.OVERLAY) != "" )
-        this.addChild(new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/overlay")));
+      {
+        this.overlayDisplay = new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/overlay"));
+        this.addChild(this.overlayDisplay);
+      }
 
       if( hasSide && side != battleField.side )
       {
@@ -53,109 +59,6 @@ package com.gerantech.towercraft.views.units.elements
         Starling.juggler.add(this.sideDisplay);
         this.addChild(this.sideDisplay);
       }
-    }
-
-    override public function get width () : Number
-    {
-      return this.bodyDisplay.width;
-    }
-    override public function set width (value:Number) : void
-    {
-      this.bodyDisplay.width = value;
-      if( this.baseDisplay !== null )
-        this.baseDisplay.width = value;
-      if( this.overlayDisplay !== null )
-        this.overlayDisplay.width = value;
-      if( this.sideDisplay !== null )
-        this.sideDisplay.width = value;
-    }
-    
-    override public function get height () : Number
-    {
-      return this.bodyDisplay.height;
-    }
-    override public function set height (value:Number) : void
-    {
-      this.bodyDisplay.height = value;
-      if( this.baseDisplay != null )
-        this.baseDisplay.height = value;
-      if( this.overlayDisplay != null )
-        this.overlayDisplay.height = value;
-      if( this.sideDisplay != null )
-        this.sideDisplay.height = value;
-      // super.height = value;
-    }
-
-    override public function get scale () : Number
-    {
-      return this.bodyDisplay.scale;
-    }
-    override public function set scale (value:Number) : void
-    {
-      this.bodyDisplay.scale = value;
-      if( this.baseDisplay != null )
-        this.baseDisplay.scale = value;
-      if( this.overlayDisplay != null )
-        this.overlayDisplay.scale = value;
-      if( this.sideDisplay != null )
-        this.sideDisplay.scale = value;
-    }
-    override public function get scaleX () : Number
-    {
-      return this.bodyDisplay.scaleX;
-    }
-    override public function set scaleX (value:Number) : void
-    {
-      this.bodyDisplay.scaleX = value;
-      // if( this.baseDisplay != null )
-      //   this.baseDisplay.scaleX = value;
-      // if( this.overlayDisplay != null )
-      //   this.overlayDisplay.scaleX = value;
-      if( this.sideDisplay != null )
-        this.sideDisplay.scaleX = value;
-    }
-    override public function get scaleY () : Number
-    {
-      return this.bodyDisplay.scaleY;
-    }
-    override public function set scaleY (value:Number) : void
-    {
-      this.bodyDisplay.scaleY = value;
-      // if( this.baseDisplay != null )
-      //   this.baseDisplay.scaleY = value;
-      // if( this.overlayDisplay != null )
-      //   this.overlayDisplay.scaleY = value;
-      if( this.sideDisplay != null )
-        this.sideDisplay.scaleY = value;
-    }
-
-    override public function get pivotX () : Number
-    {
-      return this.bodyDisplay.pivotX;
-    }
-    override public function set pivotX (value:Number) : void
-    {
-      this.bodyDisplay.pivotX = value;
-      if( this.baseDisplay != null )
-        this.baseDisplay.pivotX = value;
-      if( this.overlayDisplay != null )
-        this.overlayDisplay.pivotX = value;
-      if( this.sideDisplay != null )
-        this.sideDisplay.pivotX = value;
-    }
-    override public function get pivotY () : Number
-    {
-      return this.bodyDisplay.pivotY;
-    }
-    override public function set pivotY (value:Number) : void
-    {
-      this.bodyDisplay.pivotY = value;
-      if( this.baseDisplay != null )
-        this.baseDisplay.pivotY = value;
-      if( this.overlayDisplay != null )
-        this.overlayDisplay.pivotY = value;
-      if( this.sideDisplay != null )
-        this.sideDisplay.pivotY = value;
     }
 
     public function get color () : uint

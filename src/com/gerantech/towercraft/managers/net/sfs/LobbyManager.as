@@ -1,9 +1,9 @@
 package com.gerantech.towercraft.managers.net.sfs
 {
-import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.mmory.core.Player;
 import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.models.vo.UserData;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
@@ -14,6 +14,7 @@ import feathers.data.ListCollection;
 
 import starling.events.Event;
 import starling.events.EventDispatcher;
+import com.gerantech.extensions.NativeAbilities;
 
 public class LobbyManager extends EventDispatcher
 {
@@ -36,10 +37,12 @@ public function LobbyManager(isPublic:Boolean = false)
 	this.isPublic = isPublic;
 	initialize();
 }
-public function joinToPublic() : void
+public function joinToPublic(imei:String) : void
 {
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_joinPublicHandler);
-	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC);	
+	var params:SFSObject = new SFSObject();
+	params.putText("imei", imei);
+	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC, params);	
 }
 
 public function initialize():void
@@ -114,7 +117,10 @@ protected function sfs_joinPublicHandler(event:SFSEvent):void
 	if( event.params.cmd != SFSCommands.LOBBY_PUBLIC )
 		return;
 	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_joinPublicHandler);
-	
+	var params:SFSObject = event.params.params as SFSObject;
+	if( params != null )
+		AppModel.instance.loadingManager.serverData.putSFSObject("ban", params);
+
 	var _lobby:Room = SFSConnection.instance.getLobby(true);
 	if( _lobby == null )
 	{
