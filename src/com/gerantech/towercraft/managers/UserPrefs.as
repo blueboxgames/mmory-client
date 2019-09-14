@@ -1,7 +1,9 @@
 package com.gerantech.towercraft.managers
 {
+import com.gameanalytics.sdk.GAResourceFlowType;
 import com.gameanalytics.sdk.GameAnalytics;
 import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.managers.oauth.OAuthManager;
@@ -60,15 +62,20 @@ public function setBool(key:int, value:Boolean):void
 }
 public function setInt(key:int, value:int):void
 {
-	// prevent backward tutor steps
-	if( key == PrefsTypes.TUTOR &&  AppModel.instance.game.player.getTutorStep() >= value )
-		return;
+	if( key == PrefsTypes.TUTOR )
+	{
+		// prevent backward tutor steps
+		if( AppModel.instance.game.player.getTutorStep() >= value )
+			return;
+		if( value == PrefsTypes.T_000_FIRST_RUN )
+			GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, ResourceType.getName(ResourceType.R4_CURRENCY_HARD), 
+			AppModel.instance.game.player.getResource(ResourceType.R4_CURRENCY_HARD), "Initial", "Initial");
+
+		if( GameAnalytics.isInitialized )
+			GameAnalytics.addDesignEvent("tutorial:step-" + value);
+	}
 	
 	setString(key, value.toString());
-	if( key == PrefsTypes.TUTOR && GameAnalytics.isInitialized )
-		GameAnalytics.addDesignEvent("tutorial:step-" + value);
-	// if( key == PrefsTypes.TROPHY_REWARD )
-	// 	GameAnalytics.addProgressionEvent(0, "trophy-reward", null, null, value);
 }
 public function setFloat(key:int, value:Number):void
 {

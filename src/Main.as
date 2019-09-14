@@ -54,7 +54,7 @@ public function Main()
 		/*.setBuildiOS(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec) */
 		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
 		.setResourceCurrencies(new <String>[ResourceType.getName(ResourceType.R1_XP), ResourceType.getName(ResourceType.R2_POINT), ResourceType.getName(ResourceType.R3_CURRENCY_SOFT), ResourceType.getName(ResourceType.R4_CURRENCY_HARD), ResourceType.getName(ResourceType.R6_TICKET)])
-		.setResourceItemTypes(new <String>[ExchangeType.getName(ExchangeType.C0_HARD), ExchangeType.getName(ExchangeType.C10_SOFT), ExchangeType.getName(ExchangeType.C20_SPECIALS), ExchangeType.getName(ExchangeType.C30_BUNDLES), ExchangeType.getName(ExchangeType.C40_OTHERS), ExchangeType.getName(ExchangeType.BOOKS_50), ExchangeType.getName(ExchangeType.C70_TICKETS), ExchangeType.getName(ExchangeType.C80_EMOTES), ExchangeType.getName(ExchangeType.C100_FREES), ExchangeType.getName(ExchangeType.C110_BATTLES), ExchangeType.getName(ExchangeType.C120_MAGICS)]);
+		.setResourceItemTypes(new <String>["Initial", ExchangeType.getName(ExchangeType.C0_HARD), ExchangeType.getName(ExchangeType.C10_SOFT), ExchangeType.getName(ExchangeType.C20_SPECIALS), ExchangeType.getName(ExchangeType.C30_BUNDLES), ExchangeType.getName(ExchangeType.C40_OTHERS), ExchangeType.getName(ExchangeType.BOOKS_50), ExchangeType.getName(ExchangeType.C70_TICKETS), ExchangeType.getName(ExchangeType.C80_EMOTES), ExchangeType.getName(ExchangeType.C100_FREES), ExchangeType.getName(ExchangeType.C110_BATTLES), ExchangeType.getName(ExchangeType.C120_MAGICS)]);
 	if( GameAnalytics.isSupported )
 	{
 		try {
