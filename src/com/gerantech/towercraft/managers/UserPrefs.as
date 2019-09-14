@@ -67,7 +67,8 @@ public function setInt(key:int, value:int):void
 		// prevent backward tutor steps
 		if( AppModel.instance.game.player.getTutorStep() >= value )
 			return;
-		if( value == PrefsTypes.T_000_FIRST_RUN )
+		if( value == PrefsTypes.T_000_FIRST_RUN && GameAnalytics.isInitialized )
+
 			GameAnalytics.addResourceEvent(GAResourceFlowType.SOURCE, ResourceType.getName(ResourceType.R4_CURRENCY_HARD), 
 			AppModel.instance.game.player.getResource(ResourceType.R4_CURRENCY_HARD), "Initial", "Initial");
 
