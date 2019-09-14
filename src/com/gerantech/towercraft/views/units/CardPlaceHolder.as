@@ -69,7 +69,7 @@ public function set type(value:int) : void
 
 	if( isSpell || card.speed == 0 )
 	{
-		var w:Number = isSpell ? card.bulletDamageArea : card.focusRange;
+		var w:Number = isSpell ? card.bulletDamageArea : card.bulletRangeMax;
 		zoneDisplay.width = w * 2;
 		zoneDisplay.height = w * 2 * BattleField.CAMERA_ANGLE;
 		zoneDisplay.texture = AppModel.instance.assets.getTexture("damage-range");
