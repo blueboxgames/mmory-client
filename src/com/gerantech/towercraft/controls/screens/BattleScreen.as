@@ -119,7 +119,8 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		for( var i:int = 0; i < data.getSFSArray("units").size(); i++ )
 		{
 			var sfs:ISFSObject = data.getSFSArray("units").getSFSObject(i);
-			appModel.battleFieldView.summonUnit(sfs.getInt("i"), sfs.getInt("t"), sfs.getInt("l"), sfs.getInt("s"), sfs.getDouble("x"), sfs.getDouble("y"));
+			var serverDispatchTime:Number = data.getDouble("dis");
+			appModel.battleFieldView.summonUnit(sfs.getInt("i"), sfs.getInt("t"), sfs.getInt("l"), sfs.getInt("s"), sfs.getDouble("x"), sfs.getDouble("y"), serverDispatchTime);
 		}
 		break;
 	

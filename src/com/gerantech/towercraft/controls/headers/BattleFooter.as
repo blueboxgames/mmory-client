@@ -39,6 +39,7 @@ import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
+import com.gerantech.towercraft.managers.TimeManager;
 
 public class BattleFooter extends TowersLayout
 {
@@ -250,7 +251,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 					
 				touchPosition.x = battleField.side == 0 ? touchPosition.x : BattleField.WIDTH - touchPosition.x;
 				touchPosition.y = battleField.side == 0 ? touchPosition.y : BattleField.HEIGHT - touchPosition.y;
-				appModel.battleFieldView.responseSender.summonUnit(draggableCard.type, touchPosition.x, touchPosition.y);
+				appModel.battleFieldView.responseSender.summonUnit(draggableCard.type, touchPosition.x, touchPosition.y, TimeManager.instance.millis);
 				
 				task = null;
 				UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 2);

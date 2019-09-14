@@ -113,10 +113,11 @@ public function createPlaces(battleData:BattleData) : void
 	addChild(shadowsContainer);
 	addChild(unitsContainer);
 
+	var dispatchTime:Number = battleData.sfsData.getDouble("dis");
 	for( var i:int = 0; i < battleData.sfsData.getSFSArray("units").size(); i++ )
 	{
 		var u:ISFSObject =  battleData.sfsData.getSFSArray("units").getSFSObject(i);
-		summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), u.getDouble("h"), true);
+		summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), dispatchTime, u.getDouble("h"), true);
 	}
 
 	/*for ( i = 0; i < battleData.battleField.tileMap.width; i ++ )
@@ -141,8 +142,12 @@ private function unitSortMethod(left:IElement, right:IElement) : Number
 	return left.unit.y - right.unit.y;
 }
 
-public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number = -1, fixedPosition:Boolean = false) : void
+public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, serverDispatchTime:Number, health:Number = -1, fixedPosition:Boolean = false) : void
 {
+	// Rejoin ServerDispatchTime is null.
+	// trace("Server: " + serverDispatchTime);
+	// trace("Client: " + TimeManager.instance.millis);
+	trace("C-S: " + (serverDispatchTime) );
 	if( mapBuilder == null )
 	{
 		trace("not able to summon id: " + id, "type: " + type, "side: " + side)
@@ -159,11 +164,14 @@ public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Nu
 		return;
 	}
 
+
+	// this.battleData.battleField.update(serverDispatchTime);
 	var u:UnitView = new UnitView(card, id, side, x, y, card.z);
 	u.addEventListener("findPath", findPathHandler);
 	if( health >= 0 )
 		u.health = health;
 	battleData.battleField.units.set(id, u as Unit);
+	// this.battleData.battleField.update(-serverDispatchTime);
 	
 	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
 }
