@@ -231,7 +231,7 @@ private function showTutorials() : void
 	if( player.getTutorStep() < 81 )
 		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 1);
 
-	if( player.get_battleswins() > 3 )
+	if( player.get_battleswins() > appModel.maxTutorBattles - 1 )
 	{
 		readyBattle();
 		return;
@@ -247,7 +247,7 @@ private function showTutorials() : void
 
 private function readyBattle() : void 
 {
-	if( player.get_battleswins() < 3 )
+	if( player.get_battleswins() < appModel.maxTutorBattles - 1 )
 		appModel.battleFieldView.mapBuilder.showEnemyHint(battleField.field, player.get_battleswins());
 	
 	touchEnable = true;
@@ -258,7 +258,7 @@ private function readyBattle() : void
 private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 {
 	IN_BATTLE = false;
-	var inTutorial:Boolean = player.get_battleswins() < 5;
+	var inTutorial:Boolean = player.get_battleswins() < appModel.maxTutorBattles + 1;
 	battleField.state = BattleField.STATE_4_ENDED;
 	var field:FieldData = battleField.field;
 	touchEnable = false;
