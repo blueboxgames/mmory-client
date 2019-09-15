@@ -82,7 +82,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	shadowDisplay.y = __y;
 	shadowDisplay.width = _WIDTH;
 	shadowDisplay.height = _HEIGHT;
-	shadowDisplay.alpha = 0.3;
+	shadowDisplay.alpha = 0.2;
 	shadowDisplay.color = 0;
 	shadowDisplay.scaleX = __bodyScale;
 	shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
