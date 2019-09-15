@@ -82,7 +82,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	shadowDisplay.y = __y;
 	shadowDisplay.width = _WIDTH;
 	shadowDisplay.height = _HEIGHT;
-	shadowDisplay.alpha = 0.2;
+	shadowDisplay.alpha = 0.3;
 	shadowDisplay.color = 0;
 	shadowDisplay.scaleX = __bodyScale;
 	shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
@@ -296,10 +296,10 @@ override public function setHealth(health:Number) : Number
 	if( damage == 0 )
 		return damage;
 	
-	if( bodyDisplay != null && damage > 0.005 )
+	if( bodyDisplay != null && damage > 0.01 )
 	{
 		bodyDisplay.color = side == 0 ? 0x8888FF : 0xFF8888;
-		bodyDisplay.scaleY = __bodyScale * 0.92; 
+		bodyDisplay.scaleY = __bodyScale * 0.9; 
 		setTimeout( function() : void
 		{
 			if( bodyDisplay != null && bodyDisplay.parent != null )
