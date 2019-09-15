@@ -11,7 +11,10 @@ import com.gerantech.towercraft.controls.overlays.EndBattleOverlay;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
 import com.gerantech.towercraft.controls.toasts.BattleTurnToast;
+import com.gerantech.towercraft.models.tutorials.TutorialData;
+import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.BattleData;
+import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.views.BattleFieldView;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -76,6 +79,15 @@ override protected function initialize():void
 	// testOffer();
 	// testBattleToast();
 	// testBattleOverlay();
+
+	if( player.getTutorStep() == PrefsTypes.T_72_NAME_SELECTED )
+	{
+		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_75_TROPHY_ROAD);
+
+		var tutorialData:TutorialData = new TutorialData("tutor_end");
+		tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, "tutor_end", null, 500, 1500, 0));
+		tutorials.show(tutorialData);
+	}
 }
 
 private function testOpenBook():void 

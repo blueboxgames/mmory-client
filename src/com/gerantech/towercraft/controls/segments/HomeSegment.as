@@ -234,6 +234,7 @@ private function showTutorial():void
 		{
 			confirm.removeEventListener(Event.COMPLETE, confirm_eventsHandler);
 			UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_72_NAME_SELECTED);
+			appModel.navigator.pushScreen( Game.LEAGUES_SCREEN );
 		}
 	}
 
