@@ -1,6 +1,8 @@
 package com.gerantech.towercraft.views.units 
 {
 import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.tilemap.Tile;
+import com.gerantech.mmory.core.battle.tilemap.TileMap;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
@@ -96,8 +98,12 @@ public function set type(value:int) : void
 		unitDisplay.width = UnitView._WIDTH;
 		unitDisplay.height = UnitView._HEIGHT;
 		unitDisplay.scale *= UnitView._SCALE;
+
 		unitDisplay.x = CoreUtils.getXPosition(nums, i, 0);
 		unitDisplay.y = CoreUtils.getYPosition(nums, i, 0);
+		var tile:Tile = AppModel.instance.battleFieldView.battleData.battleField.field.tileMap.findTile(x + unitDisplay.x, y + unitDisplay.y, 1, TileMap.STATE_EMPTY);
+		unitDisplay.x = tile.x;
+		unitDisplay.y = tile.y;
 		unitsContainer.addChild(unitDisplay);
 	}
 }
