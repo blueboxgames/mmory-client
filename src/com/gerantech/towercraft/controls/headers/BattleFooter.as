@@ -251,7 +251,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 					
 				touchPosition.x = battleField.side == 0 ? touchPosition.x : BattleField.WIDTH - touchPosition.x;
 				touchPosition.y = battleField.side == 0 ? touchPosition.y : BattleField.HEIGHT - touchPosition.y;
-				appModel.battleFieldView.responseSender.summonUnit(draggableCard.type, touchPosition.x, touchPosition.y, TimeManager.instance.millis);
+				appModel.battleFieldView.responseSender.summonUnit(draggableCard.type, touchPosition.x, touchPosition.y, this.battleField.now);
 				
 				task = null;
 				UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 2);

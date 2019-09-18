@@ -62,7 +62,7 @@ public function initialize () : void
 	touchGroup = true;
 	alignPivot();
 	scale = 0.8;
-	
+
 	shadowsContainer = new Sprite();
 	unitsContainer = new Sprite();
 	effectsContainer = new Sprite();
@@ -142,12 +142,8 @@ private function unitSortMethod(left:IElement, right:IElement) : Number
 	return left.unit.y - right.unit.y;
 }
 
-public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, serverDispatchTime:Number, health:Number = -1, fixedPosition:Boolean = false) : void
+public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, summonTime:Number, health:Number = -1, fixedPosition:Boolean = false) : void
 {
-	// Rejoin ServerDispatchTime is null.
-	// trace("Server: " + serverDispatchTime);
-	// trace("Client: " + TimeManager.instance.millis);
-	trace("C-S: " + (serverDispatchTime) );
 	if( mapBuilder == null )
 	{
 		trace("not able to summon id: " + id, "type: " + type, "side: " + side)
@@ -164,14 +160,16 @@ public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Nu
 		return;
 	}
 
-
-	// this.battleData.battleField.update(serverDispatchTime);
+	var resTime:Number = this.battleData.battleField.now;
+	// trace("summonTime: " + summonTime + " beforeRollback: " + this.battleData.battleField.now + " time diff: " + (summonTime - this.battleData.battleField.now));
+	this.battleData.battleField.update(summonTime - this.battleData.battleField.now);
 	var u:UnitView = new UnitView(card, id, side, x, y, card.z);
 	u.addEventListener("findPath", findPathHandler);
 	if( health >= 0 )
 		u.health = health;
 	battleData.battleField.units.set(id, u as Unit);
-	// this.battleData.battleField.update(-serverDispatchTime);
+	this.battleData.battleField.update(resTime - this.battleData.battleField.now);
+	// trace("Now: " + this.battleData.battleField.now + " beforeRollback: " + resTime + " time diff: " + (resTime-this.battleData.battleField.now));
 	
 	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
 }
