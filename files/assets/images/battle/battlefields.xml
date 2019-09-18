@@ -25,7 +25,8 @@
 	<SubTexture name="manhole" x="1204" y="1109" width="162" height="111" frameX="-15" frameY="-52" frameWidth="200" frameHeight="200"/>
 	<SubTexture name="focus-rectangle" x="1057" y="477" width="80" height="79" frameX="0" frameY="0" frameWidth="80" frameHeight="80"/>
 	<SubTexture name="arrow" x="1057" y="557" width="64" height="82" frameX="0" frameY="0" frameWidth="64" frameHeight="83"/>
-	<SubTexture name="grid" x="1057" y="640" width="64" height="63" frameX="0" frameY="0" frameWidth="64" frameHeight="64"/>
+	<SubTexture name="bullets" x="1057" y="640" width="82" height="55" frameX="-8" frameY="-5" frameWidth="96" frameHeight="64"/>
+	<SubTexture name="grid" x="1057" y="696" width="64" height="63" frameX="0" frameY="0" frameWidth="64" frameHeight="64"/>
 	<SubTexture name="white-line" x="441" y="868" width="103" height="19" frameX="-97" frameY="0" frameWidth="200" frameHeight="20"/>
 	<SubTexture name="end-line" x="2007" y="0" width="32" height="31" frameX="0" frameY="0" frameWidth="32" frameHeight="32"/>
 	<SubTexture name="alpha-mask" x="2007" y="32" width="16" height="15" frameX="0" frameY="0" frameWidth="16" frameHeight="16"/>

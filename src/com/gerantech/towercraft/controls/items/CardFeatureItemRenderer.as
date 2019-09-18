@@ -1,24 +1,25 @@
 package com.gerantech.towercraft.controls.items
 {
+import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.controls.groups.GradientHilight;
 import com.gerantech.towercraft.controls.texts.LTRLable;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.battle.units.Card;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
-import starling.display.BlendMode;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.RelativePosition;
 import feathers.layout.TiledRowsLayout;
+
 import flash.filters.DropShadowFilter;
 import flash.filters.GlowFilter;
-import flash.geom.Rectangle;
+
 import starling.display.DisplayObject;
 import starling.display.Image;
-import com.gerantech.mmory.core.constants.CardTypes;
 
 public class CardFeatureItemRenderer extends FeatureItemRenderer
 {
@@ -47,10 +48,13 @@ override protected function commitData():void
 	
 	iconFactory();
 	super.commitData();
+	
 	width = TiledRowsLayout(_owner.layout).typicalItemWidth;
 	height = 86;
-
-	valueDisplay.text = "<span><br/>" + StrUtils.getNumber(Math.abs(Math.round(oldValue))) + (diff == 0?"":(' <font color="#00FF00"> + ' + StrUtils.getNumber(diff) + ' </font>')) + "</span>";
+	if( feature == ScriptEngine.T17_FOCUS_UNIT )
+		valueDisplay.text = card.focusUnit ? loc(card.focusHeight > -100 ? "card_target_1" : "card_target_2" ) : loc("card_target_0");
+	else
+		valueDisplay.text = "<span><br/>" + StrUtils.getNumber(Math.abs(Math.round(oldValue))) + (diff == 0?"":(' <font color="#00FF00"> + ' + StrUtils.getNumber(diff) + ' </font>')) + "</span>";
 	keyDisplay.text = loc("building_feature_" + feature + (oldValue > 0 ? "" : "_1"));
 	iconDisplay.source = Assets.getTexture("cards/features/" + feature + (oldValue > 0 ? "" : "_1"), "gui");
 }
@@ -101,13 +105,24 @@ override protected function valueLabelFactory(scale:Number = 0.75, color:uint = 
 {
 	if( valueDisplay != null )
 		return;
-	var l:LTRLable = new LTRLable("", 1, "left", false, scale);
 	var fs:Number = appModel.theme.gameFontSize * scale * 0.03;
-	l.layoutData = new AnchorLayoutData(NaN, NaN, -10, 100);
-	l.isHTML = true;
-	l.nativeFilters = [new GlowFilter(0, 1, fs, fs, fs * 3), new DropShadowFilter(fs, 90, 0, 1, 0, 0) ];
-	addChild(l);
-	valueDisplay = l;
+	if( feature == ScriptEngine.T17_FOCUS_UNIT )
+	{
+		var r:RTLLabel = new RTLLabel("", 1, "left", null, false, null, scale * 0.9);
+		r.layoutData = new AnchorLayoutData(NaN, NaN, 0, 100);
+		r.nativeFilters = [new GlowFilter(0, 1, fs, fs, fs * 3), new DropShadowFilter(fs, 90, 0, 1, 0, 0) ];
+		addChild(r);
+		valueDisplay = r;
+	}
+	else
+	{
+		var l:LTRLable = new LTRLable("", 1, "left", false, scale);
+		l.layoutData = new AnchorLayoutData(NaN, NaN, -10, 100);
+		l.isHTML = true;
+		l.nativeFilters = [new GlowFilter(0, 1, fs, fs, fs * 3), new DropShadowFilter(fs, 90, 0, 1, 0, 0) ];
+		addChild(l);
+		valueDisplay = l;
+	}
 }
 }
 }

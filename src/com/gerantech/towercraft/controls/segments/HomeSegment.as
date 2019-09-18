@@ -35,7 +35,6 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 
 import flash.geom.Rectangle;
-import flash.utils.setTimeout;
 
 import starling.core.Starling;
 import starling.display.DisplayObject;
@@ -120,15 +119,14 @@ override public function init():void
 		}
 	}
 	showTutorial();
-	
 	if( league < 1 )
 	{
 		var tutorProgressLayout:AnchorLayoutData = new AnchorLayoutData(stageHeight * 0.21, NaN, NaN, NaN, 10); 
 		var tutorialProgress:Indicator = new Indicator("ltr", 60, true, false, false);
 		tutorialProgress.addEventListener(FeathersEventType.CREATION_COMPLETE, function() : void {
 			AnchorLayoutData(tutorialProgress.iconDisplay.layoutData).left = -60; tutorialProgress.iconDisplay.width = tutorialProgress.iconDisplay.height = tutorialProgress.height + 76; });
-		tutorialProgress.formatValueFactory = function(value:Number, minimum:Number, maximum:Number) : String { return StrUtils.getNumber(Math.round(value) + "/4"); }
-		tutorialProgress.setData(0, player.get_battleswins(), 4, 1);
+		tutorialProgress.formatValueFactory = function(value:Number, minimum:Number, maximum:Number) : String { return StrUtils.getNumber(Math.round(value) + "/" + appModel.maxTutorBattles); }
+		tutorialProgress.setData(0, player.get_battleswins(), appModel.maxTutorBattles, 1);
 		tutorialProgress.layoutData = tutorProgressLayout;
 		tutorialProgress.height = stageHeight * 0.031;
 		tutorialProgress.width = stageWidth * 0.56;
@@ -169,7 +167,7 @@ override public function init():void
 	rankButton.width = rankButton.height = 140;
 	addButton(rankButton, "rankButton");
 	
-	if( player.get_battleswins() > 5 && !player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE) )
+	if( player.get_battleswins() > 10 && !player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE) )
 	{
 		googleButton = new IconButton(Assets.getTexture("settings/41"), 0.6, Assets.getTexture("home/button-bg-0"), new Rectangle(22, 38, 4, 4));
 		googleButton.layoutData = new AnchorLayoutData(330, paddingH + 36 + starsButton.width);
@@ -177,7 +175,7 @@ override public function init():void
 		addButton(googleButton, "googleButton");
 	}
 
-	setTimeout(showOffers, 1500);
+	Starling.juggler.delayCall(showOffers, 1.5);
 }
 
 private	function showOffers () : void
@@ -236,6 +234,7 @@ private function showTutorial():void
 		{
 			confirm.removeEventListener(Event.COMPLETE, confirm_eventsHandler);
 			UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_72_NAME_SELECTED);
+			appModel.navigator.pushScreen( Game.LEAGUES_SCREEN );
 		}
 	}
 
@@ -254,11 +253,11 @@ private function mainButtons_triggeredHandler(event:Event):void
 	var buttonName:String = DisplayObject(event.currentTarget).name;
 	switch( buttonName )
 	{
-		case "eventsButton":	if( player.get_battleswins() > 3 ) appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
+		case "eventsButton":	if( player.get_battleswins() > appModel.maxTutorBattles ) appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
 		case "battleButton":	appModel.navigator.runBattle(UserData.instance.challengeIndex);	return;
 	}
 	
-	if( league <= 0 )
+	if( league < 0 )
 	{
 		appModel.navigator.addLog(loc("try_to_league_up"));
 		return;
@@ -266,12 +265,12 @@ private function mainButtons_triggeredHandler(event:Event):void
 	
 	switch( buttonName )
 	{
-		case "leaguesButton":	appModel.navigator.pushScreen( Game.LEAGUES_SCREEN );					return;
-		case "questsButton":	appModel.navigator.pushScreen( Game.QUESTS_SCREEN );					return;
-		case "rankButton": 		appModel.navigator.addPopup( new RankingPopup() );						return;
+		case "leaguesButton":	appModel.navigator.pushScreen( Game.LEAGUES_SCREEN );										return;
+		case "questsButton":	appModel.navigator.pushScreen( Game.QUESTS_SCREEN );										return;
+		case "rankButton": 		appModel.navigator.addPopup( new RankingPopup() );											return;
 		case "starsButton":		exchangeManager.process(exchanger.items.get(ExchangeType.C104_STARS));	return;
-		case "adsButton":		exchangeManager.process(exchanger.items.get(ExchangeType.C43_ADS)); 	return;
-		case "googleButton":	socialSignin();														 	return;
+		case "adsButton":			exchangeManager.process(exchanger.items.get(ExchangeType.C43_ADS)); 		return;
+		case "googleButton":	socialSignin();														 															return;
 	}
 }
 
@@ -286,5 +285,11 @@ private function socialManager_signinHandler(e:Event):void
 	OAuthManager.instance.removeEventListener(OAuthManager.SINGIN, socialManager_signinHandler);
 	googleButton.removeFromParent();
 }
+
+override public function dispose():void
+{
+	Starling.juggler.removeDelayedCalls(showOffers);
+	super.dispose();
+} 
 }
 }

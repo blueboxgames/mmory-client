@@ -2,6 +2,7 @@ package com.gerantech.towercraft.managers
 {
 import com.chartboost.plugin.air.ChartboostEvent;
 import com.chartboost.plugin.air.model.CBLocation;
+import com.gameanalytics.sdk.GAProgressionStatus;
 import com.gameanalytics.sdk.GAResourceFlowType;
 import com.gameanalytics.sdk.GameAnalytics;
 import com.gerantech.mmory.core.constants.ExchangeType;
@@ -395,6 +396,7 @@ public function sendAnalyticsEvent( item:ExchangeItem ) : void
 		// var currency:String = appModel.descriptor.marketIndex <= 1 ? "USD" : "IRR";
 		var amount:int = int(item.requirements.get(outs[0]) * 0.001);
 		GameAnalytics.addBusinessEvent("USD", amount, ResourceType.getName(outs[0]), itemID, appModel.descriptor.market);
+		GameAnalytics.addProgressionEvent(GAProgressionStatus.COMPLETE, "purchase", appModel.descriptor.market, itemID);
 		// Might need this:
 		// GameAnalytics.addBusinessEvent(currency, amount, item.type.toString(), result.purchase.sku, outs[0].toString(), result.purchase != null?result.purchase.json:null, result.purchase != null?result.purchase.signature:null);  
 	}

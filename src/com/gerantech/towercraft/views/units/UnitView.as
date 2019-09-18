@@ -12,42 +12,40 @@ import com.gerantech.mmory.core.utils.Point3;
 import com.gerantech.towercraft.controls.indicators.CountdownIcon;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
+import com.gerantech.towercraft.managers.ParticleManager;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.UnitMC;
 import com.gerantech.towercraft.views.effects.BattleParticleSystem;
+import com.gerantech.towercraft.views.effects.MortalParticleSystem;
 import com.gerantech.towercraft.views.units.elements.ImageElement;
+import com.gerantech.towercraft.views.units.elements.UnitBody;
 import com.gerantech.towercraft.views.weapons.BulletView;
 
 import flash.utils.setTimeout;
 
 import starling.animation.Transitions;
 import starling.core.Starling;
-import starling.display.Image;
 import starling.display.MovieClip;
 import starling.events.Event;
-import starling.filters.ColorMatrixFilter;
 import starling.utils.Color;
-import com.gerantech.towercraft.views.units.elements.UnitBody;
-import com.gerantech.towercraft.views.units.elements.MovieElement;
 
 public class UnitView extends BaseUnit
 {
-static public const _WIDTH:int = 300;
-static public const _HEIGHT:int = 300;
-static public const _SCALE:Number = 0.95;
-static public const _PIVOT_Y:Number = 0.75;
+static public const _WIDTH:int = 512;
+static public const _HEIGHT:int = 512;
+static public const _SCALE:Number = 1;
+static public const _PIVOT_Y:Number = 0.65;
+static public const _SHADOW_SCALE:Number = -0.5;
 
-private var shadowScale:Number;
-private var bodyScale:Number;
 private var __x:Number;
 private var __y:Number;
 private var __yz:Number;
 private var _muted:Boolean = true;
+private var __bodyScale:Number;
 
 public var fireDisplayFactory:Function;
 
 private var deployIcon:CountdownIcon;
-private var baseDisplay:ImageElement;
 private var rangeDisplay:ImageElement;
 private var sizeDisplay:ImageElement;
 private var bodyDisplay:UnitBody;
@@ -56,8 +54,6 @@ private var healthDisplay:HealthBarLeveled;
 private var flameParticle:BattleParticleSystem;
 private var smokeParticle:BattleParticleSystem;
 private var bulletParticle:BattleParticleSystem;
-private var hitFilterBase:ColorMatrixFilter;
-private var hitFilterBody:ColorMatrixFilter;
 
 public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Number)
 {
@@ -67,38 +63,29 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 
 	var appearanceDelay:Number = Math.random() * 0.5;
 	
-	if( appModel.artRules.get(card.type, ArtRules.BASE) != "" )
-	{
-		baseDisplay = new ImageElement(this, appModel.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/base"));
-		baseDisplay.pivotX = baseDisplay.width * 0.5;
-		baseDisplay.pivotY = baseDisplay.height * _PIVOT_Y;
-		baseDisplay.x = __x;
-		baseDisplay.y = __y - 1;
-		baseDisplay.width = _WIDTH;
-		baseDisplay.height = _HEIGHT;
-		baseDisplay.scale *= _SCALE;
-		fieldView.unitsContainer.addChild(baseDisplay);
-	}
-
-	bodyDisplay = new UnitBody(this);
+	bodyDisplay = new UnitBody(this, card, side);
 	bodyDisplay.pivotX = bodyDisplay.width * 0.5;
-	bodyDisplay.pivotY = bodyDisplay.height * _PIVOT_Y;
+	bodyDisplay.pivotY = bodyDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, "y");
 	bodyDisplay.x = __x;
 	bodyDisplay.y = __y;
 	bodyDisplay.width = _WIDTH;
 	bodyDisplay.height = _HEIGHT;
-	bodyScale = bodyDisplay.scale *= _SCALE;
+	__bodyScale = bodyDisplay.scale *= _SCALE;
 	fieldView.unitsContainer.addChild(bodyDisplay);
 
-	shadowDisplay = new UnitMC(card.type + "/", "m_" + (side == battleField.side ? "000_" : "180_"));
-	shadowDisplay.alpha = 0.4;
+	var angle:String = side == battleField.side ? "000_" : "180_";
+  shadowDisplay = new UnitMC(card.type + "/0/", "m_" + angle);
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
-	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y;
+	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, "y");
+	// shadowDisplay.skewX = 10;
 	shadowDisplay.x = __x;
 	shadowDisplay.y = __y;
 	shadowDisplay.width = _WIDTH;
 	shadowDisplay.height = _HEIGHT;
-	shadowScale = shadowDisplay.scale *= _SCALE;
+	shadowDisplay.alpha = 0.3;
+	shadowDisplay.color = 0;
+	shadowDisplay.scaleX = __bodyScale;
+	shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
 	shadowDisplay.currentFrame = bodyDisplay.startFrame;
 	shadowDisplay.pause();
 	Starling.juggler.add(shadowDisplay);
@@ -108,12 +95,12 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	{
 		bodyDisplay.alpha = 0;
 		bodyDisplay.y = __yz - 100;
-		bodyDisplay.scaleY = bodyScale * 4;
-		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,		alpha:0.5, y:__yz,	transition:Transitions.EASE_OUT, onComplete:defaultSummonEffectFactory});
-		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay + 0.1,	scaleY:bodyScale,	transition:Transitions.EASE_OUT_BACK});
-		
-		shadowDisplay.scale = 0.1
-		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.1,scale:shadowScale,	transition:Transitions.EASE_OUT_BACK});
+		bodyDisplay.scaleY = __bodyScale * 4;
+		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,	alpha:0.5, y:__yz,	transition:Transitions.EASE_OUT, onComplete:defaultSummonEffectFactory});
+		Starling.juggler.tween(bodyDisplay, 0.2, {delay:appearanceDelay+ 0.3,	alpha:0, repeatCount:9});
+		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay + 0.1,	scaleY:__bodyScale,	transition:Transitions.EASE_OUT_BACK});
+		shadowDisplay.scale = 0.0
+		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scaleX:__bodyScale,scaleY:__bodyScale*_SHADOW_SCALE,	transition:Transitions.EASE_OUT_BACK});
 	}
 	
 	if( card.summonTime > 0 )
@@ -126,18 +113,17 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		deployIcon.rotateTo(0, 360, card.summonTime / 1000);
 		setTimeout(fieldView.guiImagesContainer.addChild, appearanceDelay * 1000, deployIcon);
 	}
-	
 	if( BattleField.DEBUG_MODE )
 	{
-		sizeDisplay = new ImageElement(this, appModel.assets.getTexture("damage-range"));
+		sizeDisplay = new ImageElement(null, appModel.assets.getTexture("manhole"));
 		sizeDisplay.pivotX = sizeDisplay.width * 0.5;
 		sizeDisplay.pivotY = sizeDisplay.height * 0.5;
 		sizeDisplay.width = card.sizeH * 2;
-		sizeDisplay.height = card.sizeH * 1.42;
+		sizeDisplay.height = card.sizeH * 2 * BattleField.CAMERA_ANGLE;
 		sizeDisplay.color = Color.NAVY;
 		sizeDisplay.x = __x;
 		sizeDisplay.y = __y;
-		fieldView.unitsContainer.addChildAt(sizeDisplay, 0);
+		fieldView.unitsContainer.addChild(sizeDisplay);
 		
 		rangeDisplay = new ImageElement(this, appModel.assets.getTexture("damage-range"));
 		rangeDisplay.pivotX = rangeDisplay.width * 0.5;
@@ -174,10 +160,11 @@ override public function setState(state:int) : Boolean
 		bodyDisplay.x = __x;
 		bodyDisplay.y = __yz;
 		bodyDisplay.alpha = 1;
-		bodyDisplay.scaleY = bodyScale;
+		bodyDisplay.scaleY = __bodyScale;
 		Starling.juggler.removeTweens(bodyDisplay);
 		
-		shadowDisplay.scale = shadowScale;
+		shadowDisplay.scaleX = __bodyScale;
+		shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
 		Starling.juggler.removeTweens(shadowDisplay);
 	}
 	else if( state == GameObject.STATE_3_WAITING )
@@ -289,11 +276,14 @@ private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, o
 	}
 	
 	shadowDisplay.loop = anim == "m_";;
-	//shadowDisplay.scaleX = (flipped ? -shadowDisplay.scaleY : shadowDisplay.scaleY );
+	shadowDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 	shadowDisplay.updateTexture(anim, dir);
 	
+	if( card.type == 101 )
+		trace(anim, bodyDisplay.scaleX, __bodyScale);
+	
 	bodyDisplay.loop = shadowDisplay.loop;
-	bodyDisplay.scaleX = (flipped ? -bodyScale : bodyScale );
+	bodyDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 	bodyDisplay.updateTexture(anim, dir);
 }
 
@@ -308,22 +298,13 @@ override public function setHealth(health:Number) : Number
 	
 	if( bodyDisplay != null && damage > 0.01 )
 	{
-		if( hitFilterBody == null )
-		{
-			hitFilterBody = new ColorMatrixFilter();
-			hitFilterBody.adjustBrightness(0.6);
-			hitFilterBase = new ColorMatrixFilter();
-			hitFilterBase.adjustBrightness(0.6);
-		}
-		bodyDisplay.filter = hitFilterBody;
-		if( baseDisplay != null )
-			baseDisplay.filter = hitFilterBase;
+		bodyDisplay.color = side == 0 ? 0x8888FF : 0xFF8888;
+		bodyDisplay.scaleY = __bodyScale * 0.9; 
 		setTimeout( function() : void
 		{
 			if( bodyDisplay != null && bodyDisplay.parent != null )
-				bodyDisplay.filter = null;
-			if( baseDisplay != null && baseDisplay.parent != null )
-				baseDisplay.filter = null;
+				bodyDisplay.color = 0xFFFFFF;
+				bodyDisplay.scaleY = __bodyScale; 
 		}, 50);
 	}
 
@@ -345,28 +326,16 @@ override public function setHealth(health:Number) : Number
 
 protected function defaultSummonEffectFactory() : void
 {
-	Starling.juggler.tween(bodyDisplay, 0.2, {alpha:0, repeatCount:9});
-
-	var summonParticle:BattleParticleSystem = new BattleParticleSystem(this, "summon-base", "summons/summon-base", 1, false, true);
-	summonParticle.scaleY = BattleField.CAMERA_ANGLE;
+	var summon:String = appModel.artRules.get(card.type, ArtRules.SUMMON);
+	if( summon == "" )
+		return;
+	var summonParticle:MortalParticleSystem = new MortalParticleSystem(appModel.assets.getObject("summon-" + summon), ParticleManager.getTextureByBitmap("fire"), -1, true, false);
+	summonParticle.scaleX = Math.min(0.3, card.sizeH * 0.01);
+	summonParticle.scaleY = summonParticle.scaleX * BattleField.CAMERA_ANGLE;
 	summonParticle.x = getSideX();
 	summonParticle.y = getSideY();
-	summonParticle.alpha = 0.06;
-	summonParticle.start(-1);
-	fieldView.unitsContainer.addChildAt(summonParticle, 0);
-	return;
-	
-	var summonDisplay:MovieElement = new MovieElement(this, appModel.assets.getTextures("summons/explode-"), 35);
-	summonDisplay.pivotX = summonDisplay.width * 0.5;
-	summonDisplay.pivotY = summonDisplay.height * 0.5;
-	summonDisplay.width = ArtRules.getShadowSize(card.type) * 2.00;
-	summonDisplay.height = summonDisplay.width * BattleField.CAMERA_ANGLE;
-	summonDisplay.x = getSideX();
-	summonDisplay.y = getSideY();
-	fieldView.unitsContainer.addChildAt(summonDisplay, 0);
-	summonDisplay.play();
-	Starling.juggler.add(summonDisplay);
-	summonDisplay.addEventListener(Event.COMPLETE, function() : void { Starling.juggler.remove(summonDisplay); summonDisplay.removeFromParent(true); });
+	// summonParticle.alpha = 0.1;
+	fieldView.shadowsContainer.addChild(summonParticle);
 }
 
 public function showWinnerFocus():void 
@@ -457,7 +426,7 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 		if( bodyDisplay != null )
 		{
 			Starling.juggler.removeTweens(bodyDisplay);
-			bodyDisplay.scale = bodyScale;
+			bodyDisplay.scale = __bodyScale;
 			bodyDisplay.alpha = 1;
 			bodyDisplay.pause();
 		}
@@ -465,8 +434,9 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 		if( shadowDisplay != null )
 		{
 			Starling.juggler.removeTweens(shadowDisplay);
-			shadowDisplay.scale = shadowScale;
-			shadowDisplay.alpha = 0.2;
+			shadowDisplay.scaleX = __bodyScale;
+			shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
+			shadowDisplay.alpha = 0.3;
 			shadowDisplay.pause();
 		}
 		return;
@@ -488,8 +458,6 @@ override public function dispose() : void
 	bodyDisplay.removeFromParent(true);
 	if( shadowDisplay != null )
 		shadowDisplay.removeFromParent(true);
-	if( baseDisplay != null )
-		baseDisplay.removeFromParent(true);
 	if( rangeDisplay != null )
 		rangeDisplay.removeFromParent(true);
 	if( deployIcon != null )
@@ -505,7 +473,7 @@ public function set alpha(value:Number):void
 {
 	bodyDisplay.alpha = value;
 	if( shadowDisplay != null )
-		shadowDisplay.alpha = value - 0.6;
+		shadowDisplay.alpha = value - 0.7;
 	if( rangeDisplay != null )
 		rangeDisplay.alpha = value;
 	if( healthDisplay != null )

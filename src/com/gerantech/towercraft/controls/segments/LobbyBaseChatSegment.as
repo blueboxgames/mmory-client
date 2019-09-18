@@ -1,5 +1,7 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.extensions.events.AndroidEvent;
 import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
@@ -13,6 +15,7 @@ import com.gerantech.towercraft.controls.toasts.EmoteToast;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
@@ -52,31 +55,31 @@ override public function init():void
 	
 	super.init();
 	layout = new AnchorLayout();
-
-	var ban:ISFSObject = appModel.loadingManager.serverData.containsKey("ban") ? appModel.loadingManager.serverData.getSFSObject("ban") : null;
-	if( ban != null && ban.getInt("mode") > 1 )// banned user
-	{
-		// backgroundSkin = new Image(appModel.theme.backgroundDisabledSkinTexture);
-		// Image(backgroundSkin).scale9Grid = MainTheme.DEFAULT_BACKGROUND_SCALE9_GRID;
-		// backgroundSkin.alpha = 0.6;
-		
-		var labelDisplay:ShadowLabel = new ShadowLabel(loc("lobby_banned", [StrUtils.toTimeFormat(ban.getLong("until"))]), 1, 0, "center", null, true, null, 0.9);
-		labelDisplay.width = stageWidth - 200;
-		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
-		addChild(labelDisplay);
-		
-		var descDisplay:RTLLabel = new RTLLabel(ban.getUtfString("message"), 0xAABBCC, null, null, true, null, 0.65);
-		descDisplay.width = stageWidth - 200;
-		descDisplay.layoutData = labelDisplay.layoutData;
-		addChild(descDisplay);
-		return;
-	}
-
 	loadData();
 }
 
 protected function loadData():void
 {
+	var imei:String = appModel.platform == AppModel.PLATFORM_ANDROID ? NativeAbilities.instance.deviceInfo.imei : "";
+	if( appModel.platform == AppModel.PLATFORM_ANDROID && imei == "" )
+	{
+		var confirm:ConfirmPopup = new ConfirmPopup(loc("lobby_imei_confirm"));
+		confirm.addEventListener(Event.SELECT, confirm_selectHandler);
+		confirm.addEventListener(Event.CANCEL, confirm_canceltHandler);
+		appModel.navigator.addPopup(confirm);
+		function confirm_selectHandler(event:Event):void{
+			NativeAbilities.instance.addEventListener(AndroidEvent.PERMISSION_REQUEST, nativeAbilities_requestPermissionHandler);
+			NativeAbilities.instance.requestPermission("android.permission.READ_PHONE_STATE", 1312);
+		}
+		function confirm_canceltHandler(event:Event):void{
+			dispatchEventWith(Event.UPDATE, true, null);
+		}
+		return;
+	}
+
+	if( isBan() )
+		return;
+	
 	if( manager == null || !initializeStarted || initializeCompleted || EmoteItemRenderer.factory == null )
 		return;
 	
@@ -85,27 +88,38 @@ protected function loadData():void
 		showElements();
 		return;
 	}
+	
 	manager.addEventListener(Event.READY, manager_readyHandler);
-	manager.joinToPublic();
+	manager.joinToPublic(imei);
+}
+
+private function nativeAbilities_requestPermissionHandler(event:AndroidEvent):void
+{
+	NativeAbilities.instance.removeEventListener(AndroidEvent.PERMISSION_REQUEST , nativeAbilities_requestPermissionHandler);
+	if( String(event.data).search("READ_PHONE_STATE") == -1 )
+		return;
+	loadData();
 }
 
 protected function manager_readyHandler(event:Event) : void
 {
 	manager.removeEventListener(Event.READY, manager_readyHandler);
+	if( isBan() )
+		return;
 	showElements();
 }
 
 override protected function showElements() : void
 {
 	super.showElements();
-	
-    emotesButton = new MMOryButton();
-    emotesButton.width = emotesButton.height = footerSize;
+
+	emotesButton = new MMOryButton();
+	emotesButton.width = emotesButton.height = footerSize;
 	emotesButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
-    emotesButton.iconTexture = Assets.getTexture("socials/icon-emote", "gui");
-    emotesButton.addEventListener(Event.TRIGGERED, emotesButton_triggeredHandler);
-    emotesButton.layoutData = new AnchorLayoutData(NaN, padding * 2 + footerSize, padding, NaN);
-    addChild(emotesButton);
+	emotesButton.iconTexture = Assets.getTexture("socials/icon-emote", "gui");
+	emotesButton.addEventListener(Event.TRIGGERED, emotesButton_triggeredHandler);
+	emotesButton.layoutData = new AnchorLayoutData(NaN, padding * 2 + footerSize, padding, NaN);
+	addChild(emotesButton);
 	
 	chatList.dataProvider = manager.messages;
 	manager.addEventListener(Event.UPDATE, manager_updateHandler);
@@ -273,6 +287,29 @@ override public function dispose():void
 	if( manager != null )
 		manager.removeEventListener(Event.UPDATE, manager_updateHandler);
 	super.dispose();
+}
+
+private function isBan():Boolean
+{
+	var ban:ISFSObject = appModel.loadingManager.serverData.containsKey("ban") ? appModel.loadingManager.serverData.getSFSObject("ban") : null;
+	if( ban != null && ban.getInt("mode") > 1 )// banned user
+	{
+		// backgroundSkin = new Image(appModel.theme.backgroundDisabledSkinTexture);
+		// Image(backgroundSkin).scale9Grid = MainTheme.DEFAULT_BACKGROUND_SCALE9_GRID;
+		// backgroundSkin.alpha = 0.6;
+		
+		var labelDisplay:ShadowLabel = new ShadowLabel(loc("lobby_banned", [StrUtils.toTimeFormat(ban.getLong("until"))]), 1, 0, "center", null, true, null, 0.9);
+		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
+		labelDisplay.width = stageWidth - 200;
+		addChild(labelDisplay);
+		
+		var descDisplay:RTLLabel = new RTLLabel(ban.getUtfString("message"), 0xAABBCC, null, null, true, null, 0.65);
+		descDisplay.layoutData = labelDisplay.layoutData;
+		descDisplay.width = stageWidth - 200;
+		addChild(descDisplay);
+		return true;
+	}
+	return false;
 }
 }
 }

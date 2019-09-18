@@ -2,13 +2,14 @@ package com.gerantech.towercraft.views.units.elements
 {
 import com.gerantech.towercraft.models.AppModel;
 
+import starling.display.MovieClip;
 import starling.textures.Texture;
 
 /**
 * ...
 * @author Mansour Djawadi
 */
-public class UnitMC extends MovieElement
+public class UnitMC extends MovieClip
 {
 private var baseTextureName:String;
 private var animTextureName:String;
@@ -17,7 +18,7 @@ public function UnitMC(baseTextureName:String, animTextureName:String)
 {
 	this.baseTextureName = baseTextureName;
 	this.animTextureName = animTextureName;
-	super(null, AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 15);
+	super(AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 15);
 }
 
 public function updateTexture(anim:String, dir:String):void 

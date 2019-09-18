@@ -1,5 +1,7 @@
 package com.gerantech.towercraft.managers
 {
+import com.gameanalytics.sdk.GAProgressionStatus;
+import com.gameanalytics.sdk.GameAnalytics;
 import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.extensions.iab.Iab;
 import com.gerantech.extensions.iab.Purchase;
@@ -170,6 +172,8 @@ protected function iab_queryInventoryFinishedHandler(event:IabEvent):void
 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_- PURCHASE -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 public function purchase(sku:String):void
 {
+	if(GameAnalytics.isInitialized)
+		GameAnalytics.addProgressionEvent(GAProgressionStatus.START, "purchase", appModel.descriptor.market, sku);
 	if(appModel.descriptor.market == "zarinpal")
 	{
 		var useZarinGate:Boolean = true;
@@ -202,6 +206,8 @@ protected function iab_purchaseFinishedHandler(event:IabEvent):void
 	{
 		explain(event.result.response);
 		dispatchEventWith(FeathersEventType.END_INTERACTION, false, event.result);
+		if( GameAnalytics.isInitialized )
+			GameAnalytics.addProgressionEvent(GAProgressionStatus.FAIL, "purchase", appModel.descriptor.market, event.result.purchase.sku);
 		return;
 	}
 	var purchase:Purchase = Iab.instance.getPurchase(event.result.purchase.sku);
@@ -279,6 +285,8 @@ public function verify(purchase:ISFSObject):void
 		{
 			log("purchase verify=>invalid: " + result.getText("productID"));
 			explain(Iab.IABHELPER_VERIFICATION_FAILED);
+			if( GameAnalytics.isInitialized )
+				GameAnalytics.addProgressionEvent(GAProgressionStatus.FAIL, "purchase", appModel.descriptor.market, result.getText("productID"));
 		}
 	}
 }

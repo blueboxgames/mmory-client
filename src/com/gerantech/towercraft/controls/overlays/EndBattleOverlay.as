@@ -51,7 +51,7 @@ override protected function initialize():void
 	}
 	
 	// axis
-	var name:String = BattleHUD.getAxisName(player.get_battleswins() -1, reward_1.getText("name"));
+	var name:String = BattleHUD.getAxisName(player.get_battleswins() - 1, reward_1.getText("name"));
 	var axisHeader:BattleHeader = new BattleHeader(name, reward_1.getInt("id") == player.id, reward_1.getInt("score"));
 	axisHeader.layoutData = new AnchorLayoutData(padding * 11, 100, NaN, 100);
 	addChild(axisHeader);

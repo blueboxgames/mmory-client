@@ -11,12 +11,14 @@ import flash.utils.Dictionary;
 public class ArtRules 
 {
 static public const BASE:String = "base";
+static public const OVERLAY:String = "overlay";
 static public const BULLET:String = "bullet";
 static public const BULLET_FX:String = "bulletFX";
 static public const FLAME:String = "flame";
 static public const SMOKE:String = "smoke";
 static public const HIT:String = "hit";
 static public const DIE:String = "die";
+static public const SUMMON:String = "summon";
 static public const SUMMON_SFX:String = "summonSFX";
 static public const ATTACK_SFX:String = "attackSFX";
 static public const HIT_SFX:String = "hitSFX";
@@ -34,6 +36,12 @@ public function get(type:int, attribute:String) : String
 	if( rules[type] == null )
 		return "";
 	return rules[type][attribute];
+}
+public function getInt(type:int, attribute:String) : int
+{
+	if( rules[type] == null )
+		return 0;
+	return int(rules[type][attribute]);
 }
 public function getArray(type:int, attribute:String) : Array
 {

@@ -9,7 +9,7 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.towercraft.views.units.elements.ImageElement;
+import com.gerantech.towercraft.views.units.elements.UnitBody;
 
 import starling.core.Starling;
 import starling.display.Image;
@@ -41,6 +41,7 @@ public function CardPlaceHolder()
 	addChild(zoneDisplay);
 	
 	unitsContainer = new Sprite();
+	unitsContainer.x = 
 	unitsContainer.alpha = 0.3;
 	addChild(unitsContainer);
 	
@@ -69,7 +70,7 @@ public function set type(value:int) : void
 
 	if( isSpell || card.speed == 0 )
 	{
-		var w:Number = isSpell ? card.bulletDamageArea : card.focusRange;
+		var w:Number = isSpell ? card.bulletDamageArea : card.bulletRangeMax;
 		zoneDisplay.width = w * 2;
 		zoneDisplay.height = w * 2 * BattleField.CAMERA_ANGLE;
 		zoneDisplay.texture = AppModel.instance.assets.getTexture("damage-range");
@@ -90,12 +91,13 @@ public function set type(value:int) : void
 	var nums:int = AppModel.instance.game.player.cards.get(_type).quantity;
 	for (var i:int = 0; i < card.quantity; i++)
 	{
-		var unitDisplay:ImageElement = new ImageElement(null, AppModel.instance.assets.getTexture(_type + "/0/m_000_001"));
+		var unitDisplay:UnitBody = new UnitBody(null, card, 0);
 		unitDisplay.pivotX = unitDisplay.width * 0.5;
 		unitDisplay.pivotY = unitDisplay.height * UnitView._PIVOT_Y;
 		unitDisplay.width = UnitView._WIDTH;
 		unitDisplay.height = UnitView._HEIGHT;
 		unitDisplay.scale *= UnitView._SCALE;
+
 		unitDisplay.x = CoreUtils.getXPosition(nums, i, 0);
 		unitDisplay.y = CoreUtils.getYPosition(nums, i, 0);
 		unitsContainer.addChild(unitDisplay);
@@ -112,7 +114,7 @@ public function summon() : void
 	titleDisplay.visible = false;
 	levelDisplay.visible = false;
 	var dely:Number = ScriptEngine.getInt(ScriptEngine.T04_SUMMON_TIME, this._type, AppModel.instance.game.player.cards.get(_type).level) * 0.001;
-	Starling.juggler.tween(unitsContainer, 0.2, {alpha:0, delay:dely, onComplete:removeFromParent, onCompleteArgs:[true]});
+	Starling.juggler.tween(unitsContainer, 0.2, {alpha:0, delay:Math.max(0, dely - 0.5), onComplete:removeFromParent, onCompleteArgs:[true]});
 }
 }
 }

@@ -20,12 +20,11 @@ import flash.desktop.NativeApplication;
 import flash.display.Sprite;
 import flash.display.StageAlign;
 import flash.display.StageScaleMode;
-import flash.display3D.Context3DProfile;
-import flash.display3D.Context3DRenderMode;
 import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.InvokeEvent;
 import flash.events.UncaughtErrorEvent;
+import flash.geom.Rectangle;
 import flash.utils.getTimer;
 
 import haxe.Log;
@@ -55,7 +54,7 @@ public function Main()
 		/*.setBuildiOS(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec) */
 		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
 		.setResourceCurrencies(new <String>[ResourceType.getName(ResourceType.R1_XP), ResourceType.getName(ResourceType.R2_POINT), ResourceType.getName(ResourceType.R3_CURRENCY_SOFT), ResourceType.getName(ResourceType.R4_CURRENCY_HARD), ResourceType.getName(ResourceType.R6_TICKET)])
-		.setResourceItemTypes(new <String>[ExchangeType.getName(ExchangeType.C0_HARD), ExchangeType.getName(ExchangeType.C10_SOFT), ExchangeType.getName(ExchangeType.C20_SPECIALS), ExchangeType.getName(ExchangeType.C30_BUNDLES), ExchangeType.getName(ExchangeType.C40_OTHERS), ExchangeType.getName(ExchangeType.BOOKS_50), ExchangeType.getName(ExchangeType.C70_TICKETS), ExchangeType.getName(ExchangeType.C80_EMOTES), ExchangeType.getName(ExchangeType.C100_FREES), ExchangeType.getName(ExchangeType.C110_BATTLES), ExchangeType.getName(ExchangeType.C120_MAGICS)]);
+		.setResourceItemTypes(new <String>["Initial", ExchangeType.getName(ExchangeType.C0_HARD), ExchangeType.getName(ExchangeType.C10_SOFT), ExchangeType.getName(ExchangeType.C20_SPECIALS), ExchangeType.getName(ExchangeType.C30_BUNDLES), ExchangeType.getName(ExchangeType.C40_OTHERS), ExchangeType.getName(ExchangeType.BOOKS_50), ExchangeType.getName(ExchangeType.C70_TICKETS), ExchangeType.getName(ExchangeType.C80_EMOTES), ExchangeType.getName(ExchangeType.C100_FREES), ExchangeType.getName(ExchangeType.C110_BATTLES), ExchangeType.getName(ExchangeType.C120_MAGICS)]);
 	if( GameAnalytics.isSupported )
 	{
 		try {
@@ -117,15 +116,13 @@ private function loaderInfo_completeHandler(event:Event):void
 
 private function starStarling():void
 {
-	//var _ratio:Number = 1080 / stage.fullScreenWidth;
-	//var _height:Number = Math.min(stage.fullScreenWidth * 2, stage.fullScreenHeight);
-	this.starling = new Starling(Game, stage, null, null, Context3DRenderMode.AUTO, Context3DProfile.BASELINE_EXTENDED);
+	this.starling = new Starling(Game, stage, new Rectangle(0,0,stage.stageWidth,stage.stageHeight));
 	this.starling.addEventListener("rootCreated", starling_rootCreatedHandler);
 	this.starling.supportHighResolutions = true;
 	this.starling.skipUnchangedFrames = true;
 	this.starling.start();
 	this.starling.stage.stageWidth  = 1080;
-	this.starling.stage.stageHeight = 1080 * (stage.fullScreenHeight / stage.fullScreenWidth);
+	this.starling.stage.stageHeight = 1080 * (stage.stageHeight / stage.stageWidth);
 	//NativeAbilities.instance.showToast(stage.fullScreenWidth + "," + stage.fullScreenHeight + "," + this.starling.stage.stageWidth + "," + this.starling.stage.stageHeight + "," + this.starling.contentScaleFactor, 2);
 	//this.starling.showStatsAt("right", "top", 1 / this.starling.contentScaleFactor);
 	trace(stage.fullScreenWidth, stage.fullScreenHeight, this.starling.stage.stageWidth, this.starling.stage.stageHeight, this.starling.contentScaleFactor);
