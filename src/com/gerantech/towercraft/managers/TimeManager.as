@@ -1,9 +1,11 @@
 package com.gerantech.towercraft.managers
 {
 import com.gerantech.mmory.core.battle.BattleField;
+
 import flash.utils.clearInterval;
 import flash.utils.getTimer;
 import flash.utils.setInterval;
+
 import starling.events.Event;
 import starling.events.EventDispatcher;
 
@@ -30,7 +32,6 @@ public function get now():uint
 public function setNow(value:uint):void
 {
 	_now = value;
-	_millis = value * 1000
 }
 
 public function get millis():Number
@@ -38,7 +39,17 @@ public function get millis():Number
 	return _millis;
 }
 
+public function set millis(value:Number):void
+{
+	_millis = value;
+}
+
 private function timeCounterCallback():void
+{
+	dispatchEventWith(Event.UPDATE, false, forceUpdate());
+}
+
+public function forceUpdate():int
 {
 	var s:int = getTimer();
 	var diff:int = s - sampler;
@@ -51,7 +62,7 @@ private function timeCounterCallback():void
 		_now ++;
 		dispatchEventWith(Event.CHANGE, false, _now)		
 	}
-	dispatchEventWith(Event.UPDATE, false, diff)		
+	return diff;
 }
 
 public static function get instance():TimeManager
