@@ -19,27 +19,25 @@ import com.gerantech.towercraft.managers.net.ResponseSender;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.views.units.UnitView;
+import com.gerantech.towercraft.views.units.elements.IElement;
+import com.gerantech.towercraft.views.units.elements.ImageElement;
 import com.gerantech.towercraft.views.weapons.BulletView;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import flash.filesystem.File;
+import flash.utils.setTimeout;
 
 import starling.animation.Transitions;
 import starling.core.Starling;
-import starling.display.DisplayObject;
 import starling.display.DisplayObjectContainer;
-import starling.display.Image;
 import starling.display.Quad;
 import starling.display.Sprite;
 import starling.events.Event;
 import starling.textures.Texture;
 
 import starlingbuilder.engine.DefaultAssetMediator;
-import flash.utils.setTimeout;
-import com.gerantech.towercraft.views.units.elements.ImageElement;
-import com.gerantech.towercraft.views.units.elements.IElement;
 
 public class BattleFieldView extends Sprite
 {
@@ -133,6 +131,8 @@ protected function timeManager_updateHandler(e:Event):void
 {
 	battleData.battleField.update(e.data as int);
 	unitsContainer.sortChildren(unitSortMethod);
+	// if(battleData.battleField.units.exists(0))
+	// 	trace("NOW: " + battleData.battleField.now + " X: " + battleData.battleField.units._map.get(0).x + " Y: " + battleData.battleField.units._map.get(0).y);
 }
 
 private function unitSortMethod(left:IElement, right:IElement) : Number
@@ -160,18 +160,42 @@ public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Nu
 		return;
 	}
 
-	var resTime:Number = this.battleData.battleField.now;
-	// trace("summonTime: " + summonTime + " beforeRollback: " + this.battleData.battleField.now + " time diff: " + (summonTime - this.battleData.battleField.now));
-	this.battleData.battleField.update(summonTime - this.battleData.battleField.now);
 	var u:UnitView = new UnitView(card, id, side, x, y, card.z);
 	u.addEventListener("findPath", findPathHandler);
 	if( health >= 0 )
 		u.health = health;
 	battleData.battleField.units.set(id, u as Unit);
-	this.battleData.battleField.update(resTime - this.battleData.battleField.now);
-	// trace("Now: " + this.battleData.battleField.now + " beforeRollback: " + resTime + " time diff: " + (resTime-this.battleData.battleField.now));
 	
 	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
+}
+
+public function summonUnits(units:ISFSArray, summonTime:Number):void
+{
+	trace("BR: " + "STime: " + summonTime + " BFNow: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis );
+	this.battleData.battleField.update(summonTime - this.battleData.battleField.now);
+	trace("AR: " + " BattleField: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis);
+	trace("Now: " + this.battleData.battleField.now + "X: " + x + "Y: " + y);
+	for( var i:int = 0; i < units.size(); i++ )
+	{
+		var unit:ISFSObject = units.getSFSObject(i);
+		this.summonUnit(unit.getInt("i"), unit.getInt("t"), unit.getInt("l"), unit.getInt("s"), unit.getDouble("x"), unit.getDouble("y"), summonTime);
+	}
+	TimeManager.instance.forceUpdate();
+	trace("---Force update Timer");
+	trace("ARTU: " + " BattleField: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis);
+	var diff:Number = TimeManager.instance.millis - this.battleData.battleField.now;
+	while( diff > 0 )
+	{
+		if(diff - BattleField.DELTA_TIME < 0)
+			this.battleData.battleField.update(diff);
+		else
+			this.battleData.battleField.update(25);
+		diff -= BattleField.DELTA_TIME;
+	}
+	TimeManager.instance.forceUpdate();
+	trace("---Force update Timer");
+	trace("ARTUAF: " + " BattleField: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis);
+	trace("Now: " + this.battleData.battleField.now + "X: " + x + "Y: " + y);
 }
 
 private function getCard(side:int, type:int, level:int) : Card
