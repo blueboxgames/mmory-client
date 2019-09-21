@@ -142,35 +142,14 @@ private function unitSortMethod(left:IElement, right:IElement) : Number
 	return left.unit.y - right.unit.y;
 }
 
-public function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, summonTime:Number, health:Number = -1, fixedPosition:Boolean = false) : void
+public function summonUnits(units:ISFSArray, summonTime:Number):void
 {
 	if( mapBuilder == null )
 	{
-		trace("not able to summon id: " + id, "type: " + type, "side: " + side)
+		trace("not able to summon units:\n" + units.getDump(), "\nsummonTime: " + summonTime)
 		return;
 	}
 
-	var card:Card = getCard(side, type, level);
-	if( CardTypes.isSpell(type) )
-	{
-		var offset:Point3 = GraphicMetrics.getSpellStartPoint(card.type);
-		var spell:BulletView = new BulletView(battleData.battleField, id, card, side, x + offset.x, y + offset.y * (side == 0 ? 0.7 : -0.7), offset.z * 0.7, x, y, 0);
-		battleData.battleField.bullets.set(id, spell as Bullet);
-		//trace("summon spell", " side:" + side, " x:" + x, " y:" + y, " offset:" + offset);
-		return;
-	}
-
-	var u:UnitView = new UnitView(card, id, side, x, y, card.z);
-	u.addEventListener("findPath", findPathHandler);
-	if( health >= 0 )
-		u.health = health;
-	battleData.battleField.units.set(id, u as Unit);
-	
-	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
-}
-
-public function summonUnits(units:ISFSArray, summonTime:Number):void
-{
 	trace("BR: " + "STime: " + summonTime + " BFNow: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis );
 	this.battleData.battleField.update(summonTime - this.battleData.battleField.now);
 	trace("AR: " + " BattleField: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis);
@@ -189,13 +168,34 @@ public function summonUnits(units:ISFSArray, summonTime:Number):void
 		if(diff - BattleField.DELTA_TIME < 0)
 			this.battleData.battleField.update(diff);
 		else
-			this.battleData.battleField.update(25);
+			this.battleData.battleField.update(BattleField.DELTA_TIME);
 		diff -= BattleField.DELTA_TIME;
 	}
 	TimeManager.instance.forceUpdate();
 	trace("---Force update Timer");
 	trace("ARTUAF: " + " BattleField: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis);
 	trace("Now: " + this.battleData.battleField.now + "X: " + x + "Y: " + y);
+}
+
+private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, summonTime:Number, health:Number = -1, fixedPosition:Boolean = false) : void
+{
+	var card:Card = getCard(side, type, level);
+	if( CardTypes.isSpell(type) )
+	{
+		var offset:Point3 = GraphicMetrics.getSpellStartPoint(card.type);
+		var spell:BulletView = new BulletView(battleData.battleField, id, card, side, x + offset.x, y + offset.y * (side == 0 ? 0.7 : -0.7), offset.z * 0.7, x, y, 0);
+		battleData.battleField.bullets.set(id, spell as Bullet);
+		//trace("summon spell", " side:" + side, " x:" + x, " y:" + y, " offset:" + offset);
+		return;
+	}
+
+	var u:UnitView = new UnitView(card, id, side, x, y, card.z);
+	u.addEventListener("findPath", findPathHandler);
+	if( health >= 0 )
+		u.health = health;
+	battleData.battleField.units.set(id, u as Unit);
+	
+	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
 }
 
 private function getCard(side:int, type:int, level:int) : Card
