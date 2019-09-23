@@ -280,9 +280,6 @@ private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, o
 	shadowDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 	shadowDisplay.updateTexture(anim, dir);
 	
-	if( card.type == 101 )
-		trace(anim, bodyDisplay.scaleX, __bodyScale);
-	
 	bodyDisplay.loop = shadowDisplay.loop;
 	bodyDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 	bodyDisplay.updateTexture(anim, dir);
