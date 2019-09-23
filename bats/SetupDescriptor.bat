@@ -1,8 +1,8 @@
 set APP_XML_TEMP=files/application-template.xml
 set APP_XML=bin/application.xml
 
-set ANA_KEY_AND=df4b20d8b9a4b0ec2fdf5ac49471d5b2
-set ANA_SEC_AND=972a1c900218b46f42d8a93e2f69710545903307
+set ANA_KEY_AND=000000
+set ANA_SEC_AND=111111
 set ANA_KEY_IOS=000000
 set ANA_SEC_IOS=111111
 if "%PLATFORM%"=="android" (set ANA_KEY=%ANA_KEY_AND%) else (set ANA_KEY=%ANA_KEY_IOS%) 

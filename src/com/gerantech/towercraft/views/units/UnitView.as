@@ -113,20 +113,19 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		deployIcon.rotateTo(0, 360, card.summonTime / 1000);
 		setTimeout(fieldView.guiImagesContainer.addChild, appearanceDelay * 1000, deployIcon);
 	}
-	
-	if( true )
+	if( BattleField.DEBUG_MODE )
 	{
 		sizeDisplay = new ImageElement(null, appModel.assets.getTexture("manhole"));
 		sizeDisplay.pivotX = sizeDisplay.width * 0.5;
 		sizeDisplay.pivotY = sizeDisplay.height * 0.5;
-		sizeDisplay.width = 8//card.sizeH * 2;
-		sizeDisplay.height =8// card.sizeH * 1.42;
+		sizeDisplay.width = card.sizeH * 2;
+		sizeDisplay.height = card.sizeH * 2 * BattleField.CAMERA_ANGLE;
 		sizeDisplay.color = Color.NAVY;
 		sizeDisplay.x = __x;
 		sizeDisplay.y = __y;
 		fieldView.unitsContainer.addChild(sizeDisplay);
 		
-		/* rangeDisplay = new ImageElement(this, appModel.assets.getTexture("damage-range"));
+		rangeDisplay = new ImageElement(this, appModel.assets.getTexture("damage-range"));
 		rangeDisplay.pivotX = rangeDisplay.width * 0.5;
 		rangeDisplay.pivotY = rangeDisplay.height * 0.5;
 		rangeDisplay.width = card.bulletRangeMax * 2;
@@ -134,7 +133,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		rangeDisplay.alpha = 0.1;
 		rangeDisplay.x = __x;
 		rangeDisplay.y = __y;
-		fieldView.unitsContainer.addChildAt(rangeDisplay, 0); */
+		fieldView.unitsContainer.addChildAt(rangeDisplay, 0);
 	}
 	
 	if( fireDisplayFactory == null )
@@ -294,10 +293,10 @@ override public function setHealth(health:Number) : Number
 	if( damage == 0 )
 		return damage;
 	
-	if( bodyDisplay != null && damage > 0.005 )
+	if( bodyDisplay != null && damage > 0.01 )
 	{
 		bodyDisplay.color = side == 0 ? 0x8888FF : 0xFF8888;
-		bodyDisplay.scaleY = __bodyScale * 0.92; 
+		bodyDisplay.scaleY = __bodyScale * 0.9; 
 		setTimeout( function() : void
 		{
 			if( bodyDisplay != null && bodyDisplay.parent != null )

@@ -58,7 +58,6 @@ private var touchPosition:Point = new Point();
 private var selectedCard:BattleDeckCard;
 private var selectedCardPosition:Rectangle;
 private var task:TutorialTask;
-private var numTutors:int;
 private var numRounds:int;
 private var numCovers:int;
 
@@ -119,7 +118,6 @@ override protected function initialize():void
 	addChild(elixirBar);
 	
 	draggableCard = new Draggable();
-	numTutors = ScriptEngine.getInt(ScriptEngine.T61_BATTLE_NUM_TUTORS, battleField.field.mode);
 	numCovers = ScriptEngine.getInt(ScriptEngine.T62_BATTLE_NUM_COVERS, battleField.field.mode, player.get_battleswins());
 	numRounds = ScriptEngine.getInt(ScriptEngine.T63_BATTLE_NUM_ROUND, battleField.field.mode, player.get_battleswins());
 	
@@ -143,7 +141,7 @@ protected function sfsConnection_elixirUpdateHandler(event:SFSEvent):void
 
 public function updateScore(round:int, winnerSide:int, allise:int, axis:int, unitId:int) : void 
 {
-	if( allise != 1 || numTutors < player.get_battleswins() || numRounds < round )
+	if( allise != 1 || appModel.maxTutorBattles <= player.get_battleswins() || numRounds < round )
 		return;
 	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "newround", player.get_battleswins());
 	if( summonData != null )
@@ -160,7 +158,7 @@ private function createDeckItem(cardType:int) : void
 
 public function transitionInCompleteHandler() : void 
 {
-	if( numTutors < player.get_battleswins() )
+	if( appModel.maxTutorBattles <= player.get_battleswins() )
 		return;
 	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "start", player.get_battleswins());
 	if( summonData != null )
@@ -273,7 +271,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 
 private function coverUnitTutorial():void
 {
-	if( numTutors < player.get_battleswins() )
+	if( appModel.maxTutorBattles <= player.get_battleswins() )
 		return;
 	
 	var ptoffset:int = ScriptEngine.getInt(ScriptEngine.T64_BATTLE_PAUSE_TIME, battleField.field.mode, player.get_battleswins(), battleField.numSummonedUnits);

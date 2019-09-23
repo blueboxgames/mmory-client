@@ -88,6 +88,7 @@ if "%M%"=="2" set MARKET=myket
 if "%M%"=="3" set MARKET=ario
 if "%M%"=="4" set MARKET=cando
 if "%M%"=="5" set MARKET=google
+if "%M%"=="5" set OPTIONS=%OPTIONS% -arch armv8
 if "%M%"=="6" set MARKET=zarinpal
 
 
