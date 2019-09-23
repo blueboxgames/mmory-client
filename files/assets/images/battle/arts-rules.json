@@ -25,7 +25,7 @@
 {"id":152, "base":"",       "overlay":"",				"summon":"base",       "y":"-12",	    "bullet":"arrow-hord",  "bulletFX":"",	"smoke":"",		  "flame":"",		  "hit":"arrows-",	"die":"",		    "summonSFX":["152-summon"], "attackSFX":["152-attack"], "hitSFX":[]},
 {"id":153, "base":"",       "overlay":"",				"summon":"base",       "y":"-12",	    "bullet":"",				    "bulletFX":"",	"smoke":"",		  "flame":"",		  "hit":"freeze-",	"die":"",		    "summonSFX":["153-summon"], "attackSFX":["153-attack"], "hitSFX":["grenade"]},
 
-{"id":201, "base":"base",   "overlay":"",				"summon":"base",	     "y":"-12",     "bullet":"black-l",		  "bulletFX":"",	"smoke":"base",	"flame":"base",	"hit":"hit-",		  "die":"blood-",	"summonSFX":[],				      "attackSFX":["201-attack"], "hitSFX":[]},
+{"id":201, "base":"base",   "overlay":"",				"summon":"base",	     "y":"-12",     "bullet":"black-s",		  "bulletFX":"",	"smoke":"base",	"flame":"base",	"hit":"hit-",		  "die":"blood-",	"summonSFX":[],				      "attackSFX":["201-attack"], "hitSFX":[]},
       
 {"id":221, "base":"",       "overlay":"",				"summon":"base",	     "y":"-12",     "bullet":"",				    "bulletFX":"",	"smoke":"",		  "flame":"",		  "hit":"",			    "die":"blood-",	"summonSFX":[],				      "attackSFX":["221-attack"], "hitSFX":[]},
 {"id":222, "base":"",       "overlay":"",				"summon":"base",	     "y":"-5",      "bullet":"black-s",		  "bulletFX":"",	"smoke":"base",	"flame":"base",	"hit":"hit-",		  "die":"blood-",	"summonSFX":[],				      "attackSFX":["222-attack"], "hitSFX":[]},

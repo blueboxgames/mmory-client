@@ -93,8 +93,8 @@ public function createPlaces(battleData:BattleData) : void
 		return;
 
 	mapBuilder.create(battleData.battleField.field.json, false);
-	mapBuilder.mainMap.x = BattleField.WIDTH * 0.5//Starling.current.stage.stageWidth * 0.5;
-	mapBuilder.mainMap.y = BattleField.HEIGHT * 0.5//(Starling.current.stage.stageHeight - 330 * 0.5) * 0.5;
+	mapBuilder.mainMap.x = BattleField.WIDTH * 0.5;
+	mapBuilder.mainMap.y = BattleField.HEIGHT * 0.5;
 	addChild(mapBuilder.mainMap);
 	
 	AppModel.instance.aspectratio = Starling.current.stage.stageWidth / Starling.current.stage.stageHeight;
@@ -131,8 +131,6 @@ protected function timeManager_updateHandler(e:Event):void
 {
 	battleData.battleField.update(e.data as int);
 	unitsContainer.sortChildren(unitSortMethod);
-	// if(battleData.battleField.units.exists(0))
-	// 	trace("NOW: " + battleData.battleField.now + " X: " + battleData.battleField.units._map.get(0).x + " Y: " + battleData.battleField.units._map.get(0).y);
 }
 
 private function unitSortMethod(left:IElement, right:IElement) : Number
@@ -150,31 +148,15 @@ public function summonUnits(units:ISFSArray, summonTime:Number):void
 		return;
 	}
 
-	trace("BR: " + "STime: " + summonTime + " BFNow: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis );
-	this.battleData.battleField.update(summonTime - this.battleData.battleField.now);
-	trace("AR: " + " BattleField: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis);
-	trace("Now: " + this.battleData.battleField.now + "X: " + x + "Y: " + y);
+	TimeManager.instance.forceUpdate();
+	this.battleData.battleField.forceUpdate(summonTime - this.battleData.battleField.now);
 	for( var i:int = 0; i < units.size(); i++ )
 	{
 		var unit:ISFSObject = units.getSFSObject(i);
 		this.summonUnit(unit.getInt("i"), unit.getInt("t"), unit.getInt("l"), unit.getInt("s"), unit.getDouble("x"), unit.getDouble("y"), summonTime);
 	}
-	TimeManager.instance.forceUpdate();
-	trace("---Force update Timer");
-	trace("ARTU: " + " BattleField: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis);
 	var diff:Number = TimeManager.instance.millis - this.battleData.battleField.now;
-	while( diff > 0 )
-	{
-		if(diff - BattleField.DELTA_TIME < 0)
-			this.battleData.battleField.update(diff);
-		else
-			this.battleData.battleField.update(BattleField.DELTA_TIME);
-		diff -= BattleField.DELTA_TIME;
-	}
-	TimeManager.instance.forceUpdate();
-	trace("---Force update Timer");
-	trace("ARTUAF: " + " BattleField: " + this.battleData.battleField.now + " Timer: " + TimeManager.instance.millis);
-	trace("Now: " + this.battleData.battleField.now + "X: " + x + "Y: " + y);
+	this.battleData.battleField.update(diff);
 }
 
 private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, summonTime:Number, health:Number = -1, fixedPosition:Boolean = false) : void
