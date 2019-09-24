@@ -11,7 +11,7 @@ import com.gerantech.towercraft.views.BattleFieldView;
 import com.gerantech.mmory.core.Game;
 import flash.desktop.NativeApplication;
 import flash.system.Capabilities;
-import starling.utils.AssetManager;
+import starling.assets.AssetManager;
 
 public class AppModel
 {

@@ -60,10 +60,10 @@ public function DashboardScreen()
 	if( appModel.assets.getTexture("poster/logo") == null )
 		Assets.loadAtlas("assets/images/", "", biguiLoaded, "bigui");
 	function biguiLoaded() : void {
-		setTimeout(Assets.loadAtlas, 5, "assets/animations/", "_tex", packLoaded, "packs");
+		Assets.loadAtlas("assets/animations/", "_tex", packLoaded, "packs");
 	}
 	function packLoaded() : void {
-		setTimeout(initialize, 5);
+		initialize();
 	}
 }
 
