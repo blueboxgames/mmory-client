@@ -75,7 +75,7 @@ public function Main()
 	loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, loaderInfo_uncaughtErrorHandler);
 	NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, nativeApplication_invokeHandler);
 
-	if (AppModel.instance.platform == AppModel.PLATFORM_ANDROID)
+	if( AppModel.instance.platform == AppModel.PLATFORM_ANDROID )
 	{
 		try
 		{
