@@ -116,10 +116,7 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		break;
 	
 	case SFSCommands.BATTLE_SUMMON_UNIT:
-	
-		var sfs:ISFSArray = data.getSFSArray("units");
-		var summonTime:Number = data.getDouble("time");
-		appModel.battleFieldView.summonUnits(sfs, summonTime);
+		appModel.battleFieldView.summonUnits(data.getSFSArray("units"), data.getDouble("time"));
 		break;
 	
 	case SFSCommands.BATTLE_HIT:

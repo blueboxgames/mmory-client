@@ -111,12 +111,7 @@ public function createPlaces(battleData:BattleData) : void
 	addChild(shadowsContainer);
 	addChild(unitsContainer);
 
-	var dispatchTime:Number = battleData.sfsData.getDouble("dis");
-	for( var i:int = 0; i < battleData.sfsData.getSFSArray("units").size(); i++ )
-	{
-		var u:ISFSObject =  battleData.sfsData.getSFSArray("units").getSFSObject(i);
-		summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), dispatchTime, u.getDouble("h"), true);
-	}
+	summonUnits(battleData.sfsData.getSFSArray("units"), battleData.sfsData.getDouble("now"));
 
 	/*for ( i = 0; i < battleData.battleField.tileMap.width; i ++ )
 		for ( var j:int = 0; j < battleData.battleField.tileMap.height; j ++ )
@@ -152,14 +147,14 @@ public function summonUnits(units:ISFSArray, summonTime:Number):void
 	this.battleData.battleField.forceUpdate(summonTime - this.battleData.battleField.now);
 	for( var i:int = 0; i < units.size(); i++ )
 	{
-		var unit:ISFSObject = units.getSFSObject(i);
-		this.summonUnit(unit.getInt("i"), unit.getInt("t"), unit.getInt("l"), unit.getInt("s"), unit.getDouble("x"), unit.getDouble("y"), summonTime);
+		var u:ISFSObject = units.getSFSObject(i);
+		this.summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), u.containsKey("h") ? u.getDouble("h") : -1);
 	}
 	var diff:Number = TimeManager.instance.millis - this.battleData.battleField.now;
 	this.battleData.battleField.update(diff);
 }
 
-private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, summonTime:Number, health:Number = -1, fixedPosition:Boolean = false) : void
+private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number) : void
 {
 	var card:Card = getCard(side, type, level);
 	if( CardTypes.isSpell(type) )
