@@ -86,7 +86,7 @@ public function BattleData(sfsData:ISFSObject)
 	this.battleField.decks.set(0, BattleField.getDeckCards(this.battleField.games[0], this.battleField.games[0].loginData.deck, this.battleField.friendlyMode));
 	this.battleField.decks.set(1, BattleField.getDeckCards(this.battleField.games[1], this.battleField.games[1].loginData.deck, this.battleField.friendlyMode));
 	TimeManager.instance.setNow(Math.ceil(sfsData.getDouble("now") / 1000));
-	TimeManager.instance.millis = sfsData.getDouble("now");
+	TimeManager.instance.setMillis(sfsData.getDouble("now"));
 }
 
 public function getAlliseDeck():IntCardMap 
