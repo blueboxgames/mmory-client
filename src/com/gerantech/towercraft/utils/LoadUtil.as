@@ -8,50 +8,59 @@ package com.gerantech.towercraft.utils
 
     import starling.events.Event;
     import starling.events.EventDispatcher;
+    import flash.events.IOErrorEvent;
 
-    /**
-     * 
-     */
     public class LoadUtil extends EventDispatcher
     {
         private var checksums:Object;
         private var content:Vector.<LoadAndSaver>;
-        public function LoadUtil(content:Vector.<LoadAndSaver>, checksums:Object)
+        public function LoadUtil(content:Vector.<LoadAndSaver>)
         {
-            this.checksums = checksums;
             this.content = content;
         }
 
+        /**
+         * Loads one file, used by load all and fault system to load a file.
+         */
         private function load(item:LoadAndSaver):void
         {
+            item.addEventListener(IOErrorEvent.IO_ERROR, item_ioErrorHandler);
             item.addEventListener(Event.COMPLETE, item_completeHandler);
             item.start();
         }
 
+        /**
+         * Loads the whole list of given array to it.
+         */
         public function loadAll():void
         {
             for (var item:LoadAndSaver in this.content)
-            {
-                item.addEventListener(Event.COMPLETE, item_completeHandler);
-                item.start();
-            }
+                load(item);
         }
 
         // ---- Event Handlers ----
+        /**
+         * Will dispatch COMPLETE when the whole list of files is loaded.
+         */
         protected function item_completeHandler(e:*):void
         {
             var item:LoadAndSaver = e.target as LoadAndSaver;
-            if ( !md5check( item.byteArray, checksums[itemNameFromPath(item.localPath)] ) )
-            {
-                load(item);
-                return;
-            }
 
             if( allExist() )
                 dispatchEventWith(Event.COMPLETE);
         }
 
+        /**
+         * Redownload a file if it fail.
+         */
+        protected function item_ioErrorHandler(e:*):void
+        {
+            var item:LoadAndSaver = e.target as LoadAndSaver;
+            load(item);
+        }
+
         // ---- Util functions ----
+
         /**
          * Finds a filename from it's path
          */
@@ -64,6 +73,10 @@ package com.gerantech.towercraft.utils
             return relativePath;
         }
 
+        /**
+         * Checks for all content exist in filesystem, their integrity has been checked
+         * by LoadAndSaver.
+         */
         protected function allExist():Boolean
         {
             for each(var item:LoadAndSaver in this.content)
@@ -72,11 +85,6 @@ package com.gerantech.towercraft.utils
                     return false
             }
             return true;
-        }
-
-        protected function md5check(m1:ByteArray, m2:String):Boolean
-        {
-            return (MD5.hashBinary(m1) == m2)
         }
     }
 }

@@ -92,13 +92,13 @@ package com.gerantech.towercraft.managers
             }
             // Start downloading outdated file.
             var outDatedFilesLoaders:Vector.<LoadAndSaver> = new Vector.<LoadAndSaver>;
-            for each(var outDatedFile:String in outDatedFiles)
+            for (var outDatedFile:String in outDatedFiles)
             {
                 var path:String = File.applicationStorageDirectory.resolvePath("ext/" + lastSyncTime + outDatedFile).nativePath;
-                var dataLoader:LoadAndSaver = new LoadAndSaver(path, SERVER_URL + ":8080/" + this.filesAddress[outDatedFile], "NOK");
+                var dataLoader:LoadAndSaver = new LoadAndSaver(path, SERVER_URL + ":8080/" + this.filesAddress[outDatedFile], "NOK", this.filesMD5[outDatedFile]);
                 outDatedFilesLoaders.push(dataLoader);
             }
-            var loadingTool:LoadUtil = new LoadUtil(outDatedFilesLoaders, this.filesMD5);
+            var loadingTool:LoadUtil = new LoadUtil(outDatedFilesLoaders);
             loadingTool.addEventListener(Event.COMPLETE, syncAssetsLoad_completeHandler);
             loadingTool.loadAll();
         }
@@ -111,11 +111,11 @@ package com.gerantech.towercraft.managers
                 if(isInitial(this.filesAddress[file]))
                 {
                     var path:String = File.applicationStorageDirectory.resolvePath("ext/" + INITIAL_DIRECTORY + file).nativePath;
-                    var dataLoader:LoadAndSaver = new LoadAndSaver(path, SERVER_URL + ":8080/" + this.filesAddress[file], "NOK");
+                    var dataLoader:LoadAndSaver = new LoadAndSaver(path, SERVER_URL + ":8080/" + this.filesAddress[file], "NOK", this.filesMD5[file]);
                     initialFilesLoaders.push(dataLoader);
                 }
             }
-            var loadingTool:LoadUtil = new LoadUtil(initialFilesLoaders, this.filesMD5);
+            var loadingTool:LoadUtil = new LoadUtil(initialFilesLoaders);
             loadingTool.addEventListener(Event.COMPLETE, initialDownloadCompleteHandler);
             loadingTool.loadAll();
         }
