@@ -171,6 +171,7 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		TimeManager.instance.dispose();
 	new TimeManager(serverData.getLong("serverTime"));
 	
+	appModel.assets.serverAssetsHash = serverData.getSFSObject("checksum");
 	var noticeVersion:int = serverData.getInt("noticeVersion");
 	var forceVersion:int = serverData.getInt("forceVersion");
 	trace(appModel.descriptor.versionCode, "noticeVersion:" + noticeVersion, "forceVersion:" + forceVersion)

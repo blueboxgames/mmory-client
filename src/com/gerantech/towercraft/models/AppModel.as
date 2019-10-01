@@ -1,6 +1,8 @@
 package com.gerantech.towercraft.models
 {
+import com.gerantech.mmory.core.Game;
 import com.gerantech.towercraft.controls.StackNavigator;
+import com.gerantech.towercraft.managers.AssetManager;
 import com.gerantech.towercraft.managers.NotificationManager;
 import com.gerantech.towercraft.managers.SoundManager;
 import com.gerantech.towercraft.managers.net.LoadingManager;
@@ -8,10 +10,9 @@ import com.gerantech.towercraft.models.vo.Descriptor;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.BattleFieldView;
-import com.gerantech.mmory.core.Game;
+
 import flash.desktop.NativeApplication;
 import flash.system.Capabilities;
-import starling.assets.AssetManager;
 
 public class AppModel
 {
@@ -43,7 +44,7 @@ public var maxTutorBattles:int;
 public function AppModel()
 {
 	descriptor = new Descriptor(NativeApplication.nativeApplication.applicationDescriptor);
-	assets = new AssetManager(1);
+	assets = AssetManager.instance;
 	assets.verbose = false;
 	
 	sounds = new SoundManager();
