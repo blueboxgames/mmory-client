@@ -127,7 +127,7 @@ package com.gerantech.towercraft.managers
          */
         private function initialDownloadCompleteHandler(e:*):void
         {
-            File.applicationStorageDirectory.resolvePath("ext/0").moveTo(File.applicationStorageDirectory.resolvePath("ext/" + this.serverLastModified));
+            this.getAssetDirectoryReference(INITIAL_DIRECTORY).moveTo(this.getAssetDirectoryReference(this.serverLastModified));
         }
         
         /**
@@ -158,7 +158,7 @@ package com.gerantech.towercraft.managers
          */
         private function isInitial(item:String):Boolean
         {
-            if(this.filesAddress[item] == "ext/script-data.cs" || this.filesAddress[item].split("ext/inits").length == 2)
+            if(item == "ext/script-data.cs" || item.split("ext/inits").length == 2)
                 return true;
             return false;
         }
@@ -170,8 +170,11 @@ package com.gerantech.towercraft.managers
         private function getLastSyncTime():Number
         {
             var lastSync:Number = -1;
-            for each(var directory:FileReference in File.applicationStorageDirectory.resolvePath("ext").getDirectoryListing())
-                lastSync = Math.max(lastSync, Number(directory.name));
+            if( File.applicationStorageDirectory.resolvePath("ext").exists )
+            {
+                for( var count:Number in File.applicationStorageDirectory.resolvePath("ext").getDirectoryListing() )
+                    lastSync = Math.max(lastSync, Number(File.applicationStorageDirectory.resolvePath("ext").getDirectoryListing()[count].name));
+            }
             return lastSync;
         }
 
@@ -180,7 +183,7 @@ package com.gerantech.towercraft.managers
          */
         private function outDatedFilesOf(time:Number):Array
         {
-            var outDatedFiles:Array;
+            var outDatedFiles:Array = new Array();
             for( var file:String in this.filesTime )
             {
                 if(Number(this.filesTime[file]) > time)
@@ -191,8 +194,8 @@ package com.gerantech.towercraft.managers
 
         private function outDatedExistingFilesOf(time:Number):Array
         {
-            var outDatedFiles:Array;
-            for( var file:String in outDatedFilesOf(time))
+            var outDatedFiles:Array = new Array();
+            for( var file:String in outDatedFilesOf(time) )
             {
                 if( this.has(file, time) )
                     outDatedFiles.push(file);
