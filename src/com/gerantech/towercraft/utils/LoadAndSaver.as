@@ -14,6 +14,8 @@ import flash.system.LoaderContext;
 import flash.utils.ByteArray;
 import flash.utils.setTimeout;
 
+import com.adobe.crypto.MD5;
+
 [Event(name="cancel", type="flash.events.Event")]
 [Event(name="complete", type="flash.events.Event")]
 [Event(name="complete", type="flash.events.Event")]
@@ -26,9 +28,10 @@ public var fileUTFData:String;
 public var fileLoader:Loader;
 public var loading:Boolean;
 
-private var localPath:String;
+public var localPath:String;
 private var extension:String;
 private var webPath:String;
+private var status:String;
 private var md5:String;
 private var isLoader:Boolean;
 private var sizeCheck:uint;
@@ -38,12 +41,12 @@ private var gtStreamer:GTStreamer;
 private var patternCheck:String;
 public var byteArray:ByteArray;
 
-public function LoadAndSaver(localPath:String, webPath:String, md5:String = null, isLoader:Boolean = false, sizeCheck:uint = 0, patternCheck:String = null) : void
+public function LoadAndSaver(localPath:String, webPath:String, status:String = null, md5:String = null, isLoader:Boolean = false, sizeCheck:uint = 0, patternCheck:String = null) : void
 {
-	//trace(localPath, webPath)
 	this.localPath = localPath;
 	this.webPath = webPath;
 	this.isLoader = isLoader;
+	this.status = (status == (null || "OK")) ? "OK" : "NOK";
 	this.md5 = md5;
 	this.sizeCheck = sizeCheck;
 	this.patternCheck = patternCheck;
@@ -55,10 +58,10 @@ public function start():void
 	this.loading = true;
 	
 	var file:File = new File(localPath);
-	if( file.exists )
+	if( file.exists && this.status != "NOK" )
 	{
-		this.gtStreamer = new GTStreamer(file, loacalFileLoadHandler, null, null, !UTFMode && !isSound && !isBytes);
-	} 
+		this.gtStreamer = new GTStreamer(file, loacalFileLoadHandler);
+	}
 	else
 	{
 		var urlRequest:URLRequest = new URLRequest(this.webPath);
@@ -143,16 +146,16 @@ private function webFileLoadHandler(event:Event) : void
 
 private function checkAndSave(data:*) : void
 {
-	/*if(md5!=null)
+	if(md5!=null)
 	{
-		var _md5:String = UTFMode?MD5.hash(data):MD5.hashBytes(data);
+		var _md5:String = UTFMode? MD5.hash(data):MD5.hashBytes(data);
 		//trace(localPath, md5 ,_md5)
 		if(md5!=_md5)
 		{
 			webFileErrorHandler(new IOErrorEvent(IOErrorEvent.IO_ERROR, false, false, "md5 check failed."));
 			return;
 		}
-	}*/
+	}
 	trace(localPath, sizeCheck, data.length)
 	if( sizeCheck > 0 && sizeCheck != data.length )
 	{
