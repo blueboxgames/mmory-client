@@ -37,8 +37,6 @@ import starling.display.Sprite;
 import starling.events.Event;
 import starling.textures.Texture;
 
-import starlingbuilder.engine.DefaultAssetMediator;
-
 public class BattleFieldView extends Sprite
 {
 public var mapBuilder:MapBuilder;
@@ -50,8 +48,8 @@ public var unitsContainer:DisplayObjectContainer;
 public var guiImagesContainer:DisplayObjectContainer;
 public var guiTextsContainer:DisplayObjectContainer;
 public var effectsContainer:DisplayObjectContainer;
+public var center:Point2;
 private var units:IntUnitMap;
-private var center:Point2;
 
 public function BattleFieldView() { super(); }
 public function initialize () : void 
@@ -78,11 +76,12 @@ public function initialize () : void
 
 private function assetManagerLoaded(ratio:Number):void 
 {
+	trace("assetManagerLoaded" , ratio)
 	if( ratio < 1 )
 		return;
 	if( AppModel.instance.artRules == null )
 		AppModel.instance.artRules = new ArtRules(AppModel.instance.assets.getObject("arts-rules"));
-	mapBuilder = new MapBuilder(new DefaultAssetMediator(AppModel.instance.assets));
+	mapBuilder = new MapBuilder();
 	dispatchEventWith(Event.COMPLETE);
 }
 
@@ -91,19 +90,22 @@ public function createPlaces(battleData:BattleData) : void
 	this.battleData = battleData;
 	if( mapBuilder == null )
 		return;
-
-	mapBuilder.create(battleData.battleField.field.json, false);
-	mapBuilder.mainMap.x = BattleField.WIDTH * 0.5;
-	mapBuilder.mainMap.y = BattleField.HEIGHT * 0.5;
-	addChild(mapBuilder.mainMap);
 	
 	pivotX = BattleField.WIDTH * 0.5;
 	pivotY = BattleField.HEIGHT * 0.5;
-	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5) * 0.5);
+	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5 - 500) * 0.5);
 	x = center.x;
 	y = center.y;
 
+	mapBuilder.init(AppModel.instance.assets.getObject("graphicContent"));
+	mapBuilder.pivotX = mapBuilder.width * 0.5;
+	mapBuilder.pivotY = mapBuilder.height * 0.5;
+	mapBuilder.x = pivotX//width * 0.5;
+	mapBuilder.y = pivotY + 250//height * 0.5;
+	addChild(mapBuilder);
+
 	battleData.battleField.state = BattleField.STATE_2_STARTED;
+
 	responseSender = new ResponseSender(battleData);
 	TimeManager.instance.addEventListener(Event.UPDATE, timeManager_updateHandler);
 	
