@@ -46,11 +46,6 @@ package com.gerantech.towercraft.utils
         {
             if( allExist() )
             {
-                for each(var item:LoadAndSaver in this.content)
-                {
-                    if(item.gtStreamer != null)
-                        item.gtStreamer.close();
-                }
                 dispatchEventWith(Event.COMPLETE);
             }
         }
