@@ -97,7 +97,6 @@ public function createPlaces(battleData:BattleData) : void
 	mapBuilder.mainMap.y = BattleField.HEIGHT * 0.5;
 	addChild(mapBuilder.mainMap);
 	
-	AppModel.instance.aspectratio = Starling.current.stage.stageWidth / Starling.current.stage.stageHeight;
 	pivotX = BattleField.WIDTH * 0.5;
 	pivotY = BattleField.HEIGHT * 0.5;
 	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5) * 0.5);

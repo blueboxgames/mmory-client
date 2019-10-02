@@ -65,7 +65,6 @@ public function Main()
 	t = getTimer();
 	stage.scaleMode = StageScaleMode.NO_SCALE;
 	stage.align = StageAlign.TOP_LEFT;
-	AppModel.instance.aspectratio = this.stage.fullScreenWidth / this.stage.fullScreenHeight;
 
 	this.mouseEnabled = this.mouseChildren = false;
 	splash = new SplashScreen(stage);
