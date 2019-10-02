@@ -132,7 +132,8 @@ package com.gerantech.towercraft.managers
          */
         private function syncAssetsLoad_completeHandler(e:*):void
         {
-            this.getAssetDirectoryReference(getLastSyncTime()).moveToAsync(this.getAssetDirectoryReference(this.serverLastModified));
+            if( getLastSyncTime() < this.serverLastModified )
+                this.getAssetDirectoryReference(getLastSyncTime()).moveToAsync(this.getAssetDirectoryReference(this.serverLastModified));
             this.dispatchEventWith(Event.COMPLETE);
         }
 
