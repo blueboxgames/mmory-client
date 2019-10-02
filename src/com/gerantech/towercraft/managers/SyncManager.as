@@ -80,11 +80,6 @@ package com.gerantech.towercraft.managers
             // Gets the last synchronization time which had happended with server.
             var lastSyncTime:Number = getLastSyncTime();
 
-            // If last synchronization time is higher or equal to server time
-            // we are sync.
-            if( lastSyncTime >= this.serverLastModified )
-                return;
-
             // Find outdated files.
             var outDatedFiles:Array = outDatedExistingFilesOf(lastSyncTime);
             if(outDatedFiles.length == 0)
@@ -94,7 +89,7 @@ package com.gerantech.towercraft.managers
             }
             // Start downloading outdated file.
             var outDatedFilesLoaders:Vector.<LoadAndSaver> = new Vector.<LoadAndSaver>;
-            for (var outDatedFile:String in outDatedFiles)
+            for each (var outDatedFile:String in outDatedFiles)
             {
                 var path:String = File.applicationStorageDirectory.resolvePath("ext/" + lastSyncTime + outDatedFile).nativePath;
                 var dataLoader:LoadAndSaver = new LoadAndSaver(path, SERVER_URL + ":8080/" + this.filesAddress[outDatedFile], "NOK", this.filesMD5[outDatedFile]);
@@ -129,14 +124,7 @@ package com.gerantech.towercraft.managers
          */
         private function initialDownloadCompleteHandler(e:*):void
         {
-            try
-            {
-                this.getAssetDirectoryReference(INITIAL_DIRECTORY).moveToAsync(this.getAssetDirectoryReference(this.serverLastModified));
-            }
-            catch(e:IOErrorEvent)
-            {
-                this.syncAssets();
-            }
+            this.getAssetDirectoryReference(INITIAL_DIRECTORY).moveToAsync(this.getAssetDirectoryReference(this.serverLastModified));
         }
         
         /**
@@ -144,6 +132,7 @@ package com.gerantech.towercraft.managers
          */
         private function syncAssetsLoad_completeHandler(e:*):void
         {
+            this.getAssetDirectoryReference(getLastSyncTime()).moveToAsync(this.getAssetDirectoryReference(this.serverLastModified));
             this.dispatchEventWith(Event.COMPLETE);
         }
 
@@ -204,7 +193,12 @@ package com.gerantech.towercraft.managers
         private function outDatedExistingFilesOf(time:Number):Array
         {
             var outDatedFiles:Array = new Array();
-            for( var file:String in outDatedFilesOf(time) )
+            // If last synchronization time is higher or equal to server time
+            // we are sync.
+            if( time >= this.serverLastModified )
+                return outDatedFiles;
+
+            for each( var file:String in outDatedFilesOf(time) )
             {
                 if( this.has(file, time) )
                     outDatedFiles.push(file);

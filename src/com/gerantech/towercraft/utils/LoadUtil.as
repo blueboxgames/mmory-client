@@ -47,6 +47,7 @@ package com.gerantech.towercraft.utils
             if( allExist() )
             {
                 dispatchEventWith(Event.COMPLETE);
+                this.content = null;
             }
         }
 
@@ -82,7 +83,9 @@ package com.gerantech.towercraft.utils
             for each(var item:LoadAndSaver in this.content)
             {
                 if ( !File.applicationStorageDirectory.resolvePath(item.localPath).exists )
-                    return false
+                    return false;
+                if ( item.loading )
+                    return false;
             }
             return true;
         }
