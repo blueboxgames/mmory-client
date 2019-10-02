@@ -34,7 +34,7 @@ package com.gerantech.towercraft.utils
          */
         public function loadAll():void
         {
-            for (var item:LoadAndSaver in this.content)
+            for each(var item:LoadAndSaver in this.content)
                 load(item);
         }
 
@@ -44,10 +44,15 @@ package com.gerantech.towercraft.utils
          */
         protected function item_completeHandler(e:*):void
         {
-            var item:LoadAndSaver = e.target as LoadAndSaver;
-
             if( allExist() )
+            {
+                for each(var item:LoadAndSaver in this.content)
+                {
+                    if(item.gtStreamer != null)
+                        item.gtStreamer.close();
+                }
                 dispatchEventWith(Event.COMPLETE);
+            }
         }
 
         /**

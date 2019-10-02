@@ -9,8 +9,10 @@ package com.gerantech.towercraft.managers
 
     import starling.assets.AssetManager;
     import starling.events.Event;
+    import flash.events.IOErrorEvent;
+    import starling.events.EventDispatcher;
 
-    public class AssetManager extends starling.assets.AssetManager
+    public class SyncManager extends EventDispatcher
     {
         public static var SERVER_URL:String = null;
         
@@ -54,18 +56,18 @@ package com.gerantech.towercraft.managers
             this.dispatchEventWith(Event.COMPLETE);
         }
 
-        private static var _instance:com.gerantech.towercraft.managers.AssetManager;
+        private static var _instance:SyncManager;
 
-        public function AssetManager(scaleFactor:Number)
+        public function SyncManager()
         {
-            this.addEventListener(Event.READY, assetManager_readyHandler);
-            super(scaleFactor);
+            this.addEventListener(Event.READY, syncManager_readyHandler);
+            super();
         }
 
-        public static function get instance():com.gerantech.towercraft.managers.AssetManager
+        public static function get instance():SyncManager
         {
             if(_instance == null)
-                _instance = new com.gerantech.towercraft.managers.AssetManager(1);
+                _instance = new SyncManager();
             return _instance;
         }
 
@@ -127,7 +129,14 @@ package com.gerantech.towercraft.managers
          */
         private function initialDownloadCompleteHandler(e:*):void
         {
-            this.getAssetDirectoryReference(INITIAL_DIRECTORY).moveTo(this.getAssetDirectoryReference(this.serverLastModified));
+            try
+            {
+                this.getAssetDirectoryReference(INITIAL_DIRECTORY).moveToAsync(this.getAssetDirectoryReference(this.serverLastModified));
+            }
+            catch(e:IOErrorEvent)
+            {
+                this.syncAssets();
+            }
         }
         
         /**
@@ -141,9 +150,9 @@ package com.gerantech.towercraft.managers
         /**
          * After server checksum has reached, asset manager can start working.
          */
-        private function assetManager_readyHandler(e:*):void
+        private function syncManager_readyHandler(e:*):void
         {
-            this.removeEventListener(Event.READY, assetManager_readyHandler);
+            this.removeEventListener(Event.READY, syncManager_readyHandler);
             if( !getAssetDirectoryReference().exists )
             {
                 getAssetDirectoryReference(INITIAL_DIRECTORY).createDirectory();

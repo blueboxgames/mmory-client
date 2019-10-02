@@ -32,6 +32,7 @@ import flash.events.EventDispatcher;
 import flash.system.Capabilities;
 import flash.utils.getTimer;
 import flash.utils.setTimeout;
+import com.gerantech.towercraft.managers.SyncManager;
 
 [Event(name="loaded",				type="com.gerantech.towercraft.events.LoadingEvent")]
 [Event(name="loginError",			type="com.gerantech.towercraft.events.LoadingEvent")]
@@ -54,6 +55,7 @@ public var loadStartAt:int;
 public var serverData:SFSObject;
 
 private var sfsConnection:SFSConnection;
+private var assetsLoaded:Boolean = false;
 
 public function LoadingManager(){}
 public function load():void
@@ -171,7 +173,8 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		TimeManager.instance.dispose();
 	new TimeManager(serverData.getLong("serverTime"));
 	
-	appModel.assets.serverAssetsHash = serverData.getSFSObject("checksum");
+	appModel.assets.addEventListener(Event.COMPLETE, assets_completeHandler);
+	SyncManager.instance.serverAssetsHash = serverData.getSFSObject("checksum");
 	var noticeVersion:int = serverData.getInt("noticeVersion");
 	var forceVersion:int = serverData.getInt("forceVersion");
 	trace(appModel.descriptor.versionCode, "noticeVersion:" + noticeVersion, "forceVersion:" + forceVersion)
@@ -180,15 +183,25 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 	else if( appModel.descriptor.versionCode < serverData.getInt("noticeVersion") )
 		dispatchEvent(new LoadingEvent(LoadingEvent.NOTICE_UPDATE));
 	else
-		loadCore();
+		loadCore(null);
 }
 
-public function loadCore():void
+public function loadCore(e:*):void
 {
-	state = STATE_CORE_LOADING;			
-	var coreLoader:CoreLoader = new CoreLoader(serverData);
-	UserData.instance.prefs.addEventListener(Event.COMPLETE, prefs_completeHandler);
-	UserData.instance.prefs.init();
+	if( e != null )
+		this.assetsLoaded = true;
+	if( !this.assetsLoaded )
+	{
+		appModel.assets.removeEventListener(Event.COMPLETE, assets_completeHandler);
+		appModel.assets.addEventListener(Event.COMPLETE, loadCore);
+	}
+	else
+	{
+		state = STATE_CORE_LOADING;			
+		var coreLoader:CoreLoader = new CoreLoader(serverData);
+		UserData.instance.prefs.addEventListener(Event.COMPLETE, prefs_completeHandler);
+		UserData.instance.prefs.init();
+	}
 }
 
 protected function prefs_completeHandler(e:*):void 
@@ -301,6 +314,12 @@ private function registerFCMPushManager():void
 		pushParams.putText("fcmToken", fcmToken);
 		sfsConnection.sendExtensionRequest(SFSCommands.REGISTER_PUSH, pushParams);
 	}
+}
+
+protected function assets_completeHandler(e:*):void
+{
+	appModel.assets.removeEventListener(Event.COMPLETE, assets_completeHandler);
+	this.assetsLoaded = true;
 }
 
 protected function get appModel():		AppModel		{	return AppModel.instance;			}

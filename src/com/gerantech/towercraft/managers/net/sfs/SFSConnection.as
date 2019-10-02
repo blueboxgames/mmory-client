@@ -3,7 +3,7 @@ package com.gerantech.towercraft.managers.net.sfs
 import com.gerantech.mmory.core.utils.lists.IntList;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.overlays.LowConnectionOverlay;
-import com.gerantech.towercraft.managers.AssetManager;
+import com.gerantech.towercraft.managers.SyncManager;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.LoadAndSaver;
 import com.smartfoxserver.v2.SmartFox;
@@ -83,7 +83,7 @@ public function load() : void
 	cnfLoader.start();
 	function cnfLoader_completeHandler(event:Event) : void
 	{
-		AssetManager.SERVER_URL = "http://" + XML(cnfLoader.fileUTFData).ip;
+		SyncManager.SERVER_URL = "http://" + XML(cnfLoader.fileUTFData).ip;
 		cnfLoader.removeEventListener(Event.COMPLETE,			cnfLoader_completeHandler);
 		cnfLoader.removeEventListener(IOErrorEvent.IO_ERROR,	cnfLoader_ioErrorHandler);
 		cnfLoader.closeLoader(false);
