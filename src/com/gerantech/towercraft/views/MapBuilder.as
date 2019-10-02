@@ -36,6 +36,7 @@ package com.gerantech.towercraft.views
       if( target.name == "summon-hint" )
       {
         summonHint = target as Image;
+        summonHint.color = 0x220000;
         summonHint.visible = false;
       }
       

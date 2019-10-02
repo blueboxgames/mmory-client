@@ -76,7 +76,6 @@ public function initialize () : void
 
 private function assetManagerLoaded(ratio:Number):void 
 {
-	trace("assetManagerLoaded" , ratio)
 	if( ratio < 1 )
 		return;
 	if( AppModel.instance.artRules == null )
@@ -93,15 +92,15 @@ public function createPlaces(battleData:BattleData) : void
 	
 	pivotX = BattleField.WIDTH * 0.5;
 	pivotY = BattleField.HEIGHT * 0.5;
-	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5 - 500) * 0.5);
+	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5 - 250) * 0.5);
 	x = center.x;
-	y = center.y;
+	y = center.y - 100;
 
-	mapBuilder.init(AppModel.instance.assets.getObject("graphicContent"));
+	mapBuilder.init(battleData.battleField.field.json);
 	mapBuilder.pivotX = mapBuilder.width * 0.5;
 	mapBuilder.pivotY = mapBuilder.height * 0.5;
-	mapBuilder.x = pivotX//width * 0.5;
-	mapBuilder.y = pivotY + 250//height * 0.5;
+	mapBuilder.x = pivotX;
+	mapBuilder.y = pivotY + 250;
 	addChild(mapBuilder);
 
 	battleData.battleField.state = BattleField.STATE_2_STARTED;
