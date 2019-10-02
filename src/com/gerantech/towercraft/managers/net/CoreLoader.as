@@ -21,6 +21,7 @@ import com.gerantech.towercraft.models.AppModel;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+import com.gerantech.towercraft.managers.SyncManager;
 
 public class CoreLoader
 {
@@ -32,7 +33,7 @@ public function CoreLoader(serverData:SFSObject)
 {
 	this.serverData = serverData;
 	this.version = this.serverData.getText("coreVersion");
-	ScriptEngine.initialize(serverData.getText("script"), this.serverData.getInt("forceVersion"));
+	ScriptEngine.initialize(SyncManager.instance.scriptData, this.serverData.getInt("forceVersion"));
 
 	initServerData(serverData);
 	

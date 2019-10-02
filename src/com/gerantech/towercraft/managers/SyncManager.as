@@ -5,11 +5,8 @@ package com.gerantech.towercraft.managers
     import com.smartfoxserver.v2.entities.data.ISFSObject;
 
     import flash.filesystem.File;
-    import flash.net.FileReference;
 
-    import starling.assets.AssetManager;
     import starling.events.Event;
-    import flash.events.IOErrorEvent;
     import starling.events.EventDispatcher;
 
     public class SyncManager extends EventDispatcher
@@ -19,7 +16,7 @@ package com.gerantech.towercraft.managers
         private static var INITIAL_DIRECTORY:Number = 0;
         private static var TEMP_DIRECTORY:Number = 10;
 
-        public var scriptData:String = "";
+        public var scriptData:String = null;
         public var serverLastModified:Number = 0;
 
         // Data recieved from server.
@@ -100,6 +97,18 @@ package com.gerantech.towercraft.managers
             loadingTool.loadAll();
         }
 
+        private function loadScript():void
+        {
+            var path:String = File.applicationStorageDirectory.resolvePath("ext/" + this.serverLastModified + "/script-data.cs").nativePath;
+            var dataLoader:LoadAndSaver = new LoadAndSaver(path, SERVER_URL + ":8080/" + this.filesAddress["/script-data.cs"], "OK");
+            dataLoader.addEventListener(Event.COMPLETE, function(e:*):void
+            {
+                SyncManager.instance.scriptData = e.target.byteArray.readUTFBytes(e.target.byteArray.length);
+                SyncManager.instance.dispatchEventWith("scriptLoaded");
+            })
+            dataLoader.start();
+        }
+
         private function loadInitialAssets():void
         {
             var initialFilesLoaders:Vector.<LoadAndSaver> = new Vector.<LoadAndSaver>;
@@ -124,7 +133,8 @@ package com.gerantech.towercraft.managers
          */
         private function initialDownloadCompleteHandler(e:*):void
         {
-            this.getAssetDirectoryReference(INITIAL_DIRECTORY).moveToAsync(this.getAssetDirectoryReference(this.serverLastModified));
+            this.getAssetDirectoryReference(INITIAL_DIRECTORY).moveTo(this.getAssetDirectoryReference(this.serverLastModified));
+            this.syncAssets();
         }
         
         /**
@@ -133,8 +143,12 @@ package com.gerantech.towercraft.managers
         private function syncAssetsLoad_completeHandler(e:*):void
         {
             if( getLastSyncTime() < this.serverLastModified )
-                this.getAssetDirectoryReference(getLastSyncTime()).moveToAsync(this.getAssetDirectoryReference(this.serverLastModified));
-            this.dispatchEventWith(Event.COMPLETE);
+                this.getAssetDirectoryReference(getLastSyncTime()).moveTo(this.getAssetDirectoryReference(this.serverLastModified));
+
+            this.addEventListener("scriptLoaded", function(e:*):void {
+                SyncManager.instance.dispatchEventWith(Event.COMPLETE);
+            });
+            this.loadScript();
         }
 
         /**
@@ -148,7 +162,8 @@ package com.gerantech.towercraft.managers
                 getAssetDirectoryReference(INITIAL_DIRECTORY).createDirectory();
                 this.loadInitialAssets();
             }
-            this.syncAssets();
+            if( !getAssetDirectoryReference(INITIAL_DIRECTORY).exists )
+                this.syncAssets();
         }
 
         // ---- Utility functions ----
@@ -157,7 +172,7 @@ package com.gerantech.towercraft.managers
          */
         private function isInitial(item:String):Boolean
         {
-            if(item == "ext/script-data.cs" || item.split("ext/inits").length == 2)
+            if( item.split("ext/inits").length == 2 )
                 return true;
             return false;
         }

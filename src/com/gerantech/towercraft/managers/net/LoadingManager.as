@@ -172,10 +172,17 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		TimeManager.instance.dispose();
 	new TimeManager(serverData.getLong("serverTime"));
 	
+	SyncManager.instance.addEventListener("scriptLoaded", loadingManager_scriptLoadHandler);
 	SyncManager.instance.serverAssetsHash = serverData.getSFSObject("checksum");
 	var noticeVersion:int = serverData.getInt("noticeVersion");
 	var forceVersion:int = serverData.getInt("forceVersion");
 	trace(appModel.descriptor.versionCode, "noticeVersion:" + noticeVersion, "forceVersion:" + forceVersion)
+
+}
+
+private function loadingManager_scriptLoadHandler():void
+{
+	SyncManager.instance.removeEventListener("scriptLoaded", loadingManager_scriptLoadHandler);
 	if( appModel.descriptor.versionCode < serverData.getInt("forceVersion") )
 		dispatchEvent(new LoadingEvent(LoadingEvent.FORCE_UPDATE));
 	else if( appModel.descriptor.versionCode < serverData.getInt("noticeVersion") )
