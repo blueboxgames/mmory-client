@@ -53,8 +53,8 @@ protected function list_triggeredHandler(event:Event) : void
 		}
 		UserData.instance.prefs.setInt(PrefsTypes.TUTOR, stepIndex * 10 + 201); 
 	}
-
-	UserData.instance.challengeIndex = selectedIndex;
+	if( player.prefs.getAsInt(PrefsTypes.SETTINGS_6_MODE) != selectedIndex )
+		UserData.instance.prefs.setInt(PrefsTypes.SETTINGS_6_MODE, selectedIndex);
 	UserData.instance.save();
 	appModel.navigator.popScreen();
 }

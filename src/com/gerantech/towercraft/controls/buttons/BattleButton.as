@@ -1,12 +1,11 @@
 package com.gerantech.towercraft.controls.buttons 
 {
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.socials.Challenge;
-import com.gerantech.mmory.core.utils.maps.IntIntMap;
 
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
@@ -14,7 +13,6 @@ import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 
 import flash.geom.Rectangle;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 /**
 * ...
@@ -61,7 +59,7 @@ override protected function initialize() : void
 	addChild(backgroundDisplay);
 
 	// cost elements ....
-	var _type:int = ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, UserData.instance.challengeIndex)
+	var _type:int = ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, player.prefs.getAsInt(PrefsTypes.SETTINGS_6_MODE))
 	var _cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, _type));
 	var costType:int = _cost.keys()[0];
 	var costValue:int = _cost.get(costType);

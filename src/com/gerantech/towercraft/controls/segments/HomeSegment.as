@@ -66,7 +66,7 @@ override public function init():void
 	eventsButton.width = 840;
 	eventsButton.height = Math.min(410, stageHeight * 0.23)
 	eventsButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.05);
-	eventsButton.data = UserData.instance.challengeIndex;
+	eventsButton.data = player.prefs.getAsInt(PrefsTypes.SETTINGS_6_MODE) == -1 ? 0 : player.prefs.getAsInt(PrefsTypes.SETTINGS_6_MODE);
 	addButton(eventsButton, "eventsButton");
 	
 	// battle button
@@ -254,7 +254,7 @@ private function mainButtons_triggeredHandler(event:Event):void
 	switch( buttonName )
 	{
 		case "eventsButton":	if( player.get_battleswins() > appModel.maxTutorBattles ) appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
-		case "battleButton":	appModel.navigator.runBattle(UserData.instance.challengeIndex);	return;
+		case "battleButton":	appModel.navigator.runBattle(player.prefs.getAsInt(PrefsTypes.SETTINGS_6_MODE) == -1 ? 0 : player.prefs.getAsInt(PrefsTypes.SETTINGS_6_MODE));	return;
 	}
 	
 	if( league < 0 )
