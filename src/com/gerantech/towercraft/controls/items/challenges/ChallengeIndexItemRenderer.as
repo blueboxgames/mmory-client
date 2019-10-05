@@ -37,7 +37,7 @@ static public var IN_HOME:Boolean;
 static public var IS_FRIENDLY:Boolean;
 static public var SHOW_INFO:Boolean;
 static public const BG_SCALE_GRID:Rectangle = new Rectangle(23, 22, 2, 2);
-static private const COLORS:Array = [0x30e465, 0xffa400, 0xff4200, 0xe720ff];
+static private const COLORS:Array = [0x3065e4, 0xffa400, 0xff4200, 0xe720ff, 0x30e465];
 
 private var state:int;
 private var locked:Boolean;
@@ -91,7 +91,7 @@ private function costFactory() : void
 {
 	if( locked || IS_FRIENDLY )
 		return;
-	challenge.runRequirements = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, challenge.type));
+	challenge.runRequirements = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, challenge.mode));
 	var costType:int = challenge.runRequirements.keys()[0];
 	var costValue:int = challenge.runRequirements.get(costType);
 	if( costValue <= 0 )
@@ -101,8 +101,8 @@ private function costFactory() : void
 	{
 		costIconDisplay = new ImageLoader();
 		costIconDisplay.touchable = false;
-		costIconDisplay.layoutData = new AnchorLayoutData(NaN, appModel.isLTR ? 10 : NaN, 70, appModel.isLTR ? NaN : 56);
-		costIconDisplay.width = costIconDisplay.height = 78;
+		costIconDisplay.layoutData = new AnchorLayoutData(NaN, appModel.isLTR ? 20 : NaN, 70, appModel.isLTR ? NaN : 66);
+		costIconDisplay.width = costIconDisplay.height = 74;
 		addChild(costIconDisplay);
 	}
 	costIconDisplay.source = Assets.getTexture("res-" + costType, "gui");
@@ -112,7 +112,7 @@ private function costFactory() : void
 		costLabelDisplay = new ShadowLabel(null, 1, 0, "center", null, false, null, 1.25);
 		costLabelDisplay.layoutData = new AnchorLayoutData(NaN, appModel.isLTR ? 80 : NaN, 48, appModel.isLTR ? NaN : 24);
 		costLabelDisplay.touchable = false;
-		costLabelDisplay.width = 40;
+		costLabelDisplay.width = 54;
 		addChild(costLabelDisplay);
 	}
 	costLabelDisplay.text = StrUtils.getNumber(costValue);

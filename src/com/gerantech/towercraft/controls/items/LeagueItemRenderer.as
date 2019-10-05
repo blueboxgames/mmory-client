@@ -220,7 +220,6 @@ private function createElements():void
 		addChild(minPointLabel);
 	}
 
-
 	if( league.index == LEAGUE )
 		setTimeout(_owner.dispatchEventWith, 500, Event.OPEN);
 	commited = true;
@@ -256,7 +255,7 @@ private function createRewardItem(r:int) : void
 	item.x = itemX + item.pivotX;
 	item.y = itemY;
 	
-	var itemSkin:Image = new Image(Assets.getTexture(reached ? (collectible ? "events/index-bg-10-up" : "events/index-bg-1-up") : "events/index-bg-4-up", "gui"));
+	var itemSkin:Image = new Image(Assets.getTexture(reached ? (collectible ? "events/index-bg-10-up" : "events/index-bg-1-up") : "events/index-bg-0-up", "gui"));
 	itemSkin.scale9Grid = ChallengeIndexItemRenderer.BG_SCALE_GRID;
 	itemSkin.pixelSnapping = false;
 	item.backgroundSkin = itemSkin;
@@ -375,7 +374,6 @@ protected function rewardItem_triggeredHandler(event:Event) : void
 	if( ResourceType.isBook(reward.key) )
 	{
 		earnOverlay = new OpenBookOverlay(reward.key) as EarnOverlay;
-		
 	}
 	else
 		earnOverlay = new NewCardOverlay(reward.key) as EarnOverlay;
