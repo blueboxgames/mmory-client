@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF - 8"?>
+<TextureAtlas imagePath="202.png" width="1024" height="1024">
+	<SubTexture name="202/0/m_000_001" x="0" y="0" width="80" height="119" frameX="-101" frameY="-90" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/0/m_045_001" x="0" y="0" width="80" height="119" frameX="-101" frameY="-90" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/0/m_090_001" x="0" y="0" width="80" height="119" frameX="-101" frameY="-90" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/0/m_135_001" x="0" y="0" width="80" height="119" frameX="-101" frameY="-90" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/0/m_180_001" x="0" y="0" width="80" height="119" frameX="-101" frameY="-90" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/0/s_000_001" x="0" y="0" width="80" height="119" frameX="-101" frameY="-90" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/0/s_045_001" x="0" y="0" width="80" height="119" frameX="-101" frameY="-90" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/0/s_090_001" x="0" y="0" width="80" height="119" frameX="-101" frameY="-90" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/0/s_135_001" x="0" y="0" width="80" height="119" frameX="-101" frameY="-90" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/0/s_180_001" x="0" y="0" width="80" height="119" frameX="-101" frameY="-90" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/1/m_000_001" x="81" y="0" width="80" height="119" frameX="-101" frameY="-89" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/1/m_045_001" x="81" y="0" width="80" height="119" frameX="-101" frameY="-89" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/1/m_090_001" x="81" y="0" width="80" height="119" frameX="-101" frameY="-89" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/1/m_135_001" x="81" y="0" width="80" height="119" frameX="-101" frameY="-89" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/1/m_180_001" x="81" y="0" width="80" height="119" frameX="-101" frameY="-89" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/1/s_000_001" x="81" y="0" width="80" height="119" frameX="-101" frameY="-89" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/1/s_045_001" x="81" y="0" width="80" height="119" frameX="-101" frameY="-89" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/1/s_090_001" x="81" y="0" width="80" height="119" frameX="-101" frameY="-89" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/1/s_135_001" x="81" y="0" width="80" height="119" frameX="-101" frameY="-89" frameWidth="282" frameHeight="282"/>
+	<SubTexture name="202/1/s_180_001" x="81" y="0" width="80" height="119" frameX="-101" frameY="-89" frameWidth="282" frameHeight="282"/>
+</TextureAtlas>
