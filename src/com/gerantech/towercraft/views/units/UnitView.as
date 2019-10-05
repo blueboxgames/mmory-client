@@ -449,9 +449,9 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 override public function dispose() : void
 {
 	super.dispose();
-	battleField.removeEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
 	if( CardTypes.isHero(card.type) && side != battleField.side )
-		fieldView.mapBuilder.changeSummonArea(id < 4);
+		fieldView.mapBuilder.setSummonAreaEnable(true, battleField.getSummonState(battleField.side == 0 ? 1 : 0));
+	battleField.removeEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
 	bodyDisplay.removeFromParent(true);
 	if( shadowDisplay != null )
 		shadowDisplay.removeFromParent(true);

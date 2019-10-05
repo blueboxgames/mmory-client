@@ -12,17 +12,17 @@ package com.gerantech.towercraft.views
   import starling.display.Image;
   import starling.display.Sprite;
   import starling.events.Event;
+  import com.gerantech.mmory.core.battle.BattleField;
 
   public class MapBuilder extends XDLoader
   {
-    static public const SUMMON_AREA_FIRST:int = 0;
-    static public const SUMMON_AREA_RIGHT:int = 1;
-    static public const SUMMON_AREA_LEFT:int = 2;
-    static public const SUMMON_AREA_BOTH:int = 3;
-
-    public var summonHint:Image;
-    public var tutorHint:Sprite;
-    public var summonAreaMode:int;
+    private var summonImage:Image;
+    private var summonThird:Image;
+    private var summonHalf:Image;
+    private var summonRight:Image;
+    private var summonLeft:Image;
+    private var summonBot:Image;
+    private var tutorHint:Sprite;
 
     public function MapBuilder()
     {
@@ -33,11 +33,23 @@ package com.gerantech.towercraft.views
     private function addedHandler(event:Event):void
     {
       var target:DisplayObject = event.target as DisplayObject;
-      if( target.name == "summon-hint" )
+      if( target.name == null )
+        return;
+      if( target.name.length > 7 && target.name.substring(0, 7) == "summon-" )
       {
-        summonHint = target as Image;
-        summonHint.color = 0x220000;
-        summonHint.visible = false;
+        if( target.name == "summon-third" )
+          summonThird = target as Image;
+        else if( target.name == "summon-half" )
+          summonHalf = target as Image;
+        else if( target.name == "summon-right" )
+          summonRight = target as Image;
+        else if( target.name == "summon-left" )
+          summonLeft = target as Image;
+        else if( target.name == "summon-bot" )
+          summonBot = target as Image;
+        
+        Image(target).color = 0x220000;
+        Image(target).visible = false;
       }
       
       if( target.name == "tutor-hint" )
@@ -47,36 +59,33 @@ package com.gerantech.towercraft.views
       }
     }
 
-    public function setSummonAreaEnable(value:Boolean) : void
+    public function setSummonAreaEnable(value:Boolean, summonState:int) : void
     {
-      if( summonHint == null )
-        return;
-        
-      Starling.juggler.removeTweens(summonHint);
+      if( summonImage != null )
+        summonImage.visible = false;
+      summonImage = getSummonImage(summonState)
+      Starling.juggler.removeTweens(summonImage);
       if( value )
       {
-        summonHint.visible = true;
-        Starling.juggler.tween(summonHint, 0.2, {alpha:0.5});
+        summonImage.visible = true;
+        Starling.juggler.tween(summonImage, 0.2, {alpha:0.5});
       }
       else
       {
-        Starling.juggler.tween(summonHint, 0.2, {alpha:0, onComplete:function () : void { summonHint.visible = false; }});
+        Starling.juggler.tween(summonImage, 0.2, {alpha:0, onComplete:function () : void { summonImage.visible = false; }});
       }
     }
 
-    public function changeSummonArea(isRight:Boolean) : void
+    private function getSummonImage(summonState:int):Image
     {
-      if( summonHint == null )
-        return;
-      if( AppModel.instance.battleFieldView.battleData.allise.getInt("score") > 1 )
+      switch( summonState )
       {
-        summonAreaMode = SUMMON_AREA_BOTH;
-        summonHint.texture = AppModel.instance.assets.getTexture("summon-2");
-        return;
+        case BattleField.SUMMON_AREA_HALF: return summonHalf;
+        case BattleField.SUMMON_AREA_RIGHT: return summonRight;
+        case BattleField.SUMMON_AREA_LEFT: return summonLeft;
+        case BattleField.SUMMON_AREA_BOTH: return summonBot;
       }
-      summonAreaMode = isRight ? SUMMON_AREA_RIGHT : SUMMON_AREA_LEFT;
-      summonHint.texture = AppModel.instance.assets.getTexture("summon-1");
-      summonHint.scaleX = Math.abs(summonHint.scaleX) * (isRight ? -1 : 1);
+      return summonThird;
     }
 
     public function showtutorHint(field:FieldData, battleswins:int):void
