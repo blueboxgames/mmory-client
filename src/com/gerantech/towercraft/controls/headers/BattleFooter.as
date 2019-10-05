@@ -39,7 +39,6 @@ import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
-import com.gerantech.towercraft.managers.TimeManager;
 
 public class BattleFooter extends TowersLayout
 {
@@ -52,6 +51,7 @@ private var preparedCard:CardView;
 private var placeHolder:CardPlaceHolder;
 private var cards:Vector.<BattleDeckCard>;
 private var touchId:int;
+private var draggedInMap:Boolean;
 private var elixirBar:ElixirBar;
 private var cardQueue:Vector.<int>;
 private var touchPosition:Point = new Point();
@@ -220,6 +220,7 @@ protected function stage_touchHandler(event:TouchEvent) : void
 		}
 		else if( touch.phase == TouchPhase.ENDED && selectedCard != null )
 		{
+			draggedInMap = false;
 			appModel.battleFieldView.mapBuilder.setSummonAreaEnable(false);
 			setTouchPosition(touch);
 			touchPosition.x -= (appModel.battleFieldView.x - BattleField.WIDTH * 0.5);
@@ -287,13 +288,11 @@ private function coverUnitTutorial():void
 
 private function validateSummonPosition() : Boolean
 {
-	if( touchPosition.y < 0 || touchPosition.y > BattleField.HEIGHT )
+	if( touchPosition.y < appModel.battleFieldView.y - BattleField.HEIGHT * 0.2 || touchPosition.y > appModel.battleFieldView.y + BattleField.HEIGHT * 0.5 )
 		return false;
 	if( CardTypes.isSpell(selectedCard.type) )
 		return true;
 	return true;
-/*	if( touchPosition.y 
-	touchPosition.y < BattleField.HEIGHT && touchPosition.y > BattleField.HEIGHT * (CardTypes.isSpell(selectedCard.cardType)?0.0:0.5) &&*/
 }
 
 private function setTouchPosition(touch:Touch) : void 
@@ -303,24 +302,31 @@ private function setTouchPosition(touch:Touch) : void
 	if( selectedCard == null )
 		return;
 	
-	var limitY:Number = -0.5;
+	var limitTop:Number = 0.01;
 	if( !CardTypes.isSpell(selectedCard.type) )
 	{
 		if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN )
 		{
-			limitY = 0.15;
+			limitTop = 0.2;
 		}
 		else if( appModel.battleFieldView.mapBuilder != null )
 		{
 			if( appModel.battleFieldView.mapBuilder.summonAreaMode >= MapBuilder.SUMMON_AREA_BOTH )
-				limitY = -0.24;
+				limitTop = -0.2;
 			else if( touch.globalX > stageWidth * 0.5 )
-				limitY = appModel.battleFieldView.mapBuilder.summonAreaMode == MapBuilder.SUMMON_AREA_RIGHT ? -0.24 : 0.01;
+				limitTop = appModel.battleFieldView.mapBuilder.summonAreaMode == MapBuilder.SUMMON_AREA_RIGHT ? -0.2 : 0.01;
 			else
-				limitY = appModel.battleFieldView.mapBuilder.summonAreaMode == MapBuilder.SUMMON_AREA_LEFT ? -0.24 : 0.01;
+				limitTop = appModel.battleFieldView.mapBuilder.summonAreaMode == MapBuilder.SUMMON_AREA_LEFT ? -0.2 : 0.01;
 		}
 	}
-	touchPosition.y = Math.max(BattleField.HEIGHT * limitY + appModel.battleFieldView.y, touch.globalY);
+	touchPosition.y = Math.max(BattleField.HEIGHT * limitTop + appModel.battleFieldView.y, touch.globalY);
+	
+	// limit bottom
+	var bottom:Number = appModel.battleFieldView.y + BattleField.HEIGHT * 0.5;
+	if( !draggedInMap )
+		draggedInMap = touch.globalY < bottom;
+	if( draggedInMap && touchPosition.y > bottom && !draggableCard.visible )
+		touchPosition.y = bottom;
 }
 
 private function pushNewCardToDeck(deckSelected:BattleDeckCard) : void 
