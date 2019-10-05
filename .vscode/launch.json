@@ -9,7 +9,7 @@
 			// "args": "-custom-arg=hello -another",
 			// "extdir": "path/to/unpackaged_anes",
 			"screenDPI": 445,
-			"screensize": "480x940:490x980",
+			"screensize": "480x940:490x950",
 			// "versionPlatform": "AND"
 		},
 		{
