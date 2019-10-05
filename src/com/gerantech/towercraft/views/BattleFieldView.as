@@ -92,7 +92,7 @@ public function createPlaces(battleData:BattleData) : void
 	
 	pivotX = BattleField.WIDTH * 0.5;
 	pivotY = BattleField.HEIGHT * 0.5;
-	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5 - 250) * 0.5);
+	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5 - 100) * 0.5);
 	x = center.x;
 	y = center.y - 100;
 
