@@ -3,7 +3,6 @@ package com.gerantech.towercraft.managers.net.sfs
 import com.gerantech.mmory.core.utils.lists.IntList;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.overlays.LowConnectionOverlay;
-import com.gerantech.towercraft.managers.SyncManager;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.LoadAndSaver;
 import com.smartfoxserver.v2.SmartFox;
@@ -75,15 +74,14 @@ public function load() : void
 {
 	var pattern:String = '<?xml version="1.0" encoding="UTF-8"?>\r\n<SmartFoxConfig>';
 	var cnfFile:File = File.applicationStorageDirectory.resolvePath("config.xml");
-	var url:String = "http://gerantech.com/towers/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&version=" + AppModel.instance.descriptor.versionCode + "&r=" + Math.round(Math.random() * 1000);
-	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, null, false, 0, pattern);
+	var url:String = "http://192.168.10.17"; //"http://gerantech.com/towers/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&version=" + AppModel.instance.descriptor.versionCode + "&r=" + Math.round(Math.random() * 1000);
+	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, false, false, 0, pattern);
 	trace(url);
 	cnfLoader.addEventListener(Event.COMPLETE,			cnfLoader_completeHandler);
 	cnfLoader.addEventListener(IOErrorEvent.IO_ERROR,	cnfLoader_ioErrorHandler);
 	cnfLoader.start();
 	function cnfLoader_completeHandler(event:Event) : void
 	{
-		SyncManager.SERVER_URL = "http://" + XML(cnfLoader.fileUTFData).ip;
 		cnfLoader.removeEventListener(Event.COMPLETE,			cnfLoader_completeHandler);
 		cnfLoader.removeEventListener(IOErrorEvent.IO_ERROR,	cnfLoader_ioErrorHandler);
 		cnfLoader.closeLoader(false);

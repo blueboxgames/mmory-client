@@ -1,14 +1,12 @@
 package com.gerantech.towercraft.utils
 {
-    import com.adobe.crypto.MD5;
     import com.gerantech.towercraft.utils.LoadAndSaver;
 
+    import flash.events.IOErrorEvent;
     import flash.filesystem.File;
-    import flash.utils.ByteArray;
 
     import starling.events.Event;
     import starling.events.EventDispatcher;
-    import flash.events.IOErrorEvent;
 
     public class LoadUtil extends EventDispatcher
     {
@@ -44,6 +42,7 @@ package com.gerantech.towercraft.utils
          */
         protected function item_completeHandler(e:*):void
         {
+            dispatchEventWith(Event.ADDED, false, e);
             if( allExist() )
             {
                 dispatchEventWith(Event.COMPLETE);
@@ -65,12 +64,11 @@ package com.gerantech.towercraft.utils
         /**
          * Finds a filename from it's path
          */
-        protected function itemNameFromPath(path:String):String
+        public static function itemNameFromPath(path:String):String
         {
             var relativePath:String = "";
-            relativePath = path.split(File.applicationStorageDirectory.resolvePath("ext").nativePath)[1];
+            relativePath = path.split(File.applicationStorageDirectory.nativePath)[1].substring(1);
             relativePath = relativePath.replace(/\\/g, "/");
-            relativePath = relativePath.replace(/\/[0-9]+/, "");
             return relativePath;
         }
 

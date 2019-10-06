@@ -11,7 +11,6 @@ import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.BillingManager;
 import com.gerantech.towercraft.managers.InboxService;
-import com.gerantech.towercraft.managers.SyncManager;
 import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.UserPrefs;
 import com.gerantech.towercraft.managers.VideoAdsManager;
@@ -21,6 +20,7 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
+import com.gerantech.towercraft.utils.SyncUtil;
 import com.gerantech.towercraft.utils.Utils;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
@@ -172,8 +172,15 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		TimeManager.instance.dispose();
 	new TimeManager(serverData.getLong("serverTime"));
 	
-	SyncManager.instance.addEventListener("scriptLoaded", loadingManager_scriptLoadHandler);
-	SyncManager.instance.serverAssetsHash = serverData.getSFSObject("checksum");
+	appModel.assetData = serverData.getSFSObject("checksum");
+	var initialAssets:Object = new Object();
+	for ( var key:String in appModel.assetData.toObject() )
+	{
+		if( appModel.assetData.toObject()[key]["first"] == true )
+			initialAssets[key] = appModel.assetData.toObject()[key];
+	}
+	var syncTool:SyncUtil = new SyncUtil("http://192.168.10.17:8080");
+	syncTool.sync(initialAssets);
 	var noticeVersion:int = serverData.getInt("noticeVersion");
 	var forceVersion:int = serverData.getInt("forceVersion");
 	trace(appModel.descriptor.versionCode, "noticeVersion:" + noticeVersion, "forceVersion:" + forceVersion)
@@ -182,7 +189,7 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 
 private function loadingManager_scriptLoadHandler():void
 {
-	SyncManager.instance.removeEventListener("scriptLoaded", loadingManager_scriptLoadHandler);
+	// SyncManager.instance.removeEventListener("scriptLoaded", loadingManager_scriptLoadHandler);
 	if( appModel.descriptor.versionCode < serverData.getInt("forceVersion") )
 		dispatchEvent(new LoadingEvent(LoadingEvent.FORCE_UPDATE));
 	else if( appModel.descriptor.versionCode < serverData.getInt("noticeVersion") )

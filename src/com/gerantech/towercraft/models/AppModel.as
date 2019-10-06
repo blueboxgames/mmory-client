@@ -14,6 +14,7 @@ import flash.desktop.NativeApplication;
 import flash.system.Capabilities;
 
 import starling.assets.AssetManager;
+import com.smartfoxserver.v2.entities.data.ISFSObject;
 
 public class AppModel
 {
@@ -41,6 +42,7 @@ public var notifier:NotificationManager;
 public var invokes:Array;
 public var artRules:ArtRules;
 public var maxTutorBattles:int;
+public var assetData:ISFSObject;
 
 public function AppModel()
 {

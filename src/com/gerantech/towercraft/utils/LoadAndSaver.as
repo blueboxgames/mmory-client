@@ -31,8 +31,8 @@ public var loading:Boolean;
 public var localPath:String;
 private var extension:String;
 private var webPath:String;
-private var status:String;
-private var md5:String;
+public var md5:String;
+private var force:Boolean;
 private var isLoader:Boolean;
 private var sizeCheck:uint;
 private var urlStream:URLStream;
@@ -41,13 +41,13 @@ private var gtStreamer:GTStreamer;
 private var patternCheck:String;
 public var byteArray:ByteArray;
 
-public function LoadAndSaver(localPath:String, webPath:String, status:String = null, md5:String = null, isLoader:Boolean = false, sizeCheck:uint = 0, patternCheck:String = null) : void
+public function LoadAndSaver(localPath:String, webPath:String, md5:String = null, force:Boolean = false, isLoader:Boolean = false, sizeCheck:uint = 0, patternCheck:String = null) : void
 {
 	this.localPath = localPath;
 	this.webPath = webPath;
 	this.isLoader = isLoader;
-	this.status = (status == (null || "OK")) ? "OK" : "NOK";
 	this.md5 = md5;
+	this.force = force;
 	this.sizeCheck = sizeCheck;
 	this.patternCheck = patternCheck;
 	this.extension = localPath.substr(localPath.lastIndexOf(".") + 1);
@@ -58,9 +58,9 @@ public function start():void
 	this.loading = true;
 	
 	var file:File = new File(localPath);
-	if( file.exists && this.status != "NOK" )
+	if( file.exists && !force )
 	{
-		this.gtStreamer = new GTStreamer(file, loacalFileLoadHandler);
+		this.gtStreamer = new GTStreamer(file, loacalFileLoadHandler, null, null, !UTFMode && !isSound && !isBytes);
 	}
 	else
 	{

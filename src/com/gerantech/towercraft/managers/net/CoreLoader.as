@@ -18,36 +18,44 @@ import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.mmory.core.utils.maps.IntShopMap;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.utils.LoadAndSaver;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import com.gerantech.towercraft.managers.SyncManager;
+
+import flash.filesystem.File;
 
 public class CoreLoader
 {
 private var version:String;
 private var serverData:SFSObject;
+private var scriptData:String;
 private var initData:InitData;
 
 public function CoreLoader(serverData:SFSObject)
 {
 	this.serverData = serverData;
 	this.version = this.serverData.getText("coreVersion");
-	ScriptEngine.initialize(SyncManager.instance.scriptData, this.serverData.getInt("forceVersion"));
+	var path:String = File.applicationStorageDirectory.resolvePath("/script-data.cs").nativePath;
+	var dataLoader:LoadAndSaver = new LoadAndSaver(path, null);
+	dataLoader.addEventListener("complete", function(e:*):void
+	{
+		ScriptEngine.initialize(e.target.byteArray.readUTFBytes(e.target.byteArray.length), this.serverData.getInt("forceVersion"));
+		initServerData(serverData);
+		
+		AppModel.instance.game = new Game();
+		AppModel.instance.game.init(initData);
+		AppModel.instance.game.sessionsCount = serverData.getInt("sessionsCount");
+		AppModel.instance.game.player.hasOperations = !serverData.containsKey("hasOperations") || serverData.getBool("hasOperations");
+		AppModel.instance.game.player.tutorialMode = serverData.getInt("tutorialMode");
+		AppModel.instance.game.player.invitationCode = serverData.getText("invitationCode");
+		AppModel.instance.maxTutorBattles = ScriptEngine.getInt(ScriptEngine.T61_BATTLE_NUM_TUTORS, AppModel.instance.game.player.id);
 
-	initServerData(serverData);
-	
-	AppModel.instance.game = new Game();
-	AppModel.instance.game.init(initData);
-	AppModel.instance.game.sessionsCount = serverData.getInt("sessionsCount");
-	AppModel.instance.game.player.hasOperations = !serverData.containsKey("hasOperations") || serverData.getBool("hasOperations");
-	AppModel.instance.game.player.tutorialMode = serverData.getInt("tutorialMode");
-	AppModel.instance.game.player.invitationCode = serverData.getText("invitationCode");
-	AppModel.instance.maxTutorBattles = ScriptEngine.getInt(ScriptEngine.T61_BATTLE_NUM_TUTORS, AppModel.instance.game.player.id);
-
-	loadExchanges(serverData);
-	loadChallenges(serverData, initData.id);
-	loadQuests(serverData);
+		loadExchanges(serverData);
+		loadChallenges(serverData, initData.id);
+		loadQuests(serverData);
+	})
+	dataLoader.start();
 }
 
 private function initServerData(sfsObj:SFSObject):void
