@@ -37,8 +37,6 @@ import starling.display.Sprite;
 import starling.events.Event;
 import starling.textures.Texture;
 
-import starlingbuilder.engine.DefaultAssetMediator;
-
 public class BattleFieldView extends Sprite
 {
 public var mapBuilder:MapBuilder;
@@ -50,8 +48,8 @@ public var unitsContainer:DisplayObjectContainer;
 public var guiImagesContainer:DisplayObjectContainer;
 public var guiTextsContainer:DisplayObjectContainer;
 public var effectsContainer:DisplayObjectContainer;
+public var center:Point2;
 private var units:IntUnitMap;
-private var center:Point2;
 
 public function BattleFieldView() { super(); }
 public function initialize () : void 
@@ -82,7 +80,7 @@ private function assetManagerLoaded(ratio:Number):void
 		return;
 	if( AppModel.instance.artRules == null )
 		AppModel.instance.artRules = new ArtRules(AppModel.instance.assets.getObject("arts-rules"));
-	mapBuilder = new MapBuilder(new DefaultAssetMediator(AppModel.instance.assets));
+	mapBuilder = new MapBuilder();
 	dispatchEventWith(Event.COMPLETE);
 }
 
@@ -91,32 +89,29 @@ public function createPlaces(battleData:BattleData) : void
 	this.battleData = battleData;
 	if( mapBuilder == null )
 		return;
-
-	mapBuilder.create(battleData.battleField.field.json, false);
-	mapBuilder.mainMap.x = BattleField.WIDTH * 0.5;
-	mapBuilder.mainMap.y = BattleField.HEIGHT * 0.5;
-	addChild(mapBuilder.mainMap);
 	
-	AppModel.instance.aspectratio = Starling.current.stage.stageWidth / Starling.current.stage.stageHeight;
 	pivotX = BattleField.WIDTH * 0.5;
 	pivotY = BattleField.HEIGHT * 0.5;
-	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5) * 0.5);
+	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5 - 100) * 0.5);
 	x = center.x;
-	y = center.y;
+	y = center.y - 100;
+
+	mapBuilder.init(battleData.battleField.field.json);
+	mapBuilder.pivotX = mapBuilder.width * 0.5;
+	mapBuilder.pivotY = mapBuilder.height * 0.5;
+	mapBuilder.x = pivotX;
+	mapBuilder.y = pivotY + 250;
+	addChild(mapBuilder);
 
 	battleData.battleField.state = BattleField.STATE_2_STARTED;
+
 	responseSender = new ResponseSender(battleData);
 	TimeManager.instance.addEventListener(Event.UPDATE, timeManager_updateHandler);
 	
 	addChild(shadowsContainer);
 	addChild(unitsContainer);
 
-	var dispatchTime:Number = battleData.sfsData.getDouble("dis");
-	for( var i:int = 0; i < battleData.sfsData.getSFSArray("units").size(); i++ )
-	{
-		var u:ISFSObject =  battleData.sfsData.getSFSArray("units").getSFSObject(i);
-		summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), dispatchTime, u.getDouble("h"), true);
-	}
+	summonUnits(battleData.sfsData.getSFSArray("units"), battleData.sfsData.getDouble("now"));
 
 	/*for ( i = 0; i < battleData.battleField.tileMap.width; i ++ )
 		for ( var j:int = 0; j < battleData.battleField.tileMap.height; j ++ )
@@ -152,14 +147,14 @@ public function summonUnits(units:ISFSArray, summonTime:Number):void
 	this.battleData.battleField.forceUpdate(summonTime - this.battleData.battleField.now);
 	for( var i:int = 0; i < units.size(); i++ )
 	{
-		var unit:ISFSObject = units.getSFSObject(i);
-		this.summonUnit(unit.getInt("i"), unit.getInt("t"), unit.getInt("l"), unit.getInt("s"), unit.getDouble("x"), unit.getDouble("y"), summonTime);
+		var u:ISFSObject = units.getSFSObject(i);
+		this.summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), u.containsKey("h") ? u.getDouble("h") : -1);
 	}
 	var diff:Number = TimeManager.instance.millis - this.battleData.battleField.now;
 	this.battleData.battleField.update(diff);
 }
 
-private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, summonTime:Number, health:Number = -1, fixedPosition:Boolean = false) : void
+private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number) : void
 {
 	var card:Card = getCard(side, type, level);
 	if( CardTypes.isSpell(type) )

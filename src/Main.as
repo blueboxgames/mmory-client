@@ -65,7 +65,6 @@ public function Main()
 	t = getTimer();
 	stage.scaleMode = StageScaleMode.NO_SCALE;
 	stage.align = StageAlign.TOP_LEFT;
-	AppModel.instance.aspectratio = this.stage.fullScreenWidth / this.stage.fullScreenHeight;
 
 	this.mouseEnabled = this.mouseChildren = false;
 	splash = new SplashScreen(stage);
@@ -75,7 +74,7 @@ public function Main()
 	loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, loaderInfo_uncaughtErrorHandler);
 	NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, nativeApplication_invokeHandler);
 
-	if (AppModel.instance.platform == AppModel.PLATFORM_ANDROID)
+	if( AppModel.instance.platform == AppModel.PLATFORM_ANDROID )
 	{
 		try
 		{

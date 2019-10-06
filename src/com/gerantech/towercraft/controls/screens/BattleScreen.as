@@ -116,10 +116,7 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		break;
 	
 	case SFSCommands.BATTLE_SUMMON_UNIT:
-	
-		var sfs:ISFSArray = data.getSFSArray("units");
-		var summonTime:Number = data.getDouble("time");
-		appModel.battleFieldView.summonUnits(sfs, summonTime);
+		appModel.battleFieldView.summonUnits(data.getSFSArray("units"), data.getDouble("time"));
 		break;
 	
 	case SFSCommands.BATTLE_HIT:
@@ -169,7 +166,7 @@ private function showErrorPopup(data:SFSObject):void
 // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- Start Battle _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
 private function startBattle():void
 {
-	if( this.battleData == null)
+	if( this.battleData == null )
 		return;
 
 //	if( appModel.battleFieldView.battleData == null || appModel.battleFieldView.battleData.room == null )
@@ -196,7 +193,7 @@ private function startBattle():void
 	{
 		tutorials.removeAll();
 		waitingOverlay.removeEventListener(Event.CLOSE, waitingOverlay_closeHandler);
-		Starling.juggler.tween(appModel.battleFieldView, 1, {delay:1, scale:1, transition:Transitions.EASE_IN_OUT, onComplete:showTutorials});
+		Starling.juggler.tween(appModel.battleFieldView, 1, {delay:1, y:appModel.battleFieldView.y+100, scale:1, transition:Transitions.EASE_IN_OUT, onComplete:showTutorials});
 		if( !player.inTutorial() )
 			hud.addChildAt(new BattleStartOverlay(battleData.battleField.field.isOperation() ? battleData.battleField.field.mode : -1, battleData ), 0);
 	}
@@ -247,7 +244,7 @@ private function showTutorials() : void
 private function readyBattle() : void 
 {
 	if( player.get_battleswins() < appModel.maxTutorBattles - 1 )
-		appModel.battleFieldView.mapBuilder.showEnemyHint(battleField.field, player.get_battleswins());
+		appModel.battleFieldView.mapBuilder.showtutorHint(battleField.field, player.get_battleswins());
 	
 	touchEnable = true;
 	hud.showDeck();

@@ -39,7 +39,7 @@ public function get millis():Number
 	return _millis;
 }
 
-public function set millis(value:Number):void
+public function setMillis(value:Number):void
 {
 	_millis = value;
 }

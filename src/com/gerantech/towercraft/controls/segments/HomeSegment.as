@@ -253,7 +253,7 @@ private function mainButtons_triggeredHandler(event:Event):void
 	var buttonName:String = DisplayObject(event.currentTarget).name;
 	switch( buttonName )
 	{
-		case "eventsButton":	if( player.get_battleswins() > appModel.maxTutorBattles ) appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
+		case "eventsButton":	if( player.get_battleswins() >= appModel.maxTutorBattles ) appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
 		case "battleButton":	appModel.navigator.runBattle(player.prefs.getAsInt(PrefsTypes.SETTINGS_6_MODE) == -1 ? 0 : player.prefs.getAsInt(PrefsTypes.SETTINGS_6_MODE));	return;
 	}
 	

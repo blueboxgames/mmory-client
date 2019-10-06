@@ -1,142 +1,116 @@
-package com.gerantech.towercraft.views 
+package com.gerantech.towercraft.views
 {
-import com.gerantech.mmory.core.battle.fieldes.FieldData;
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.utils.StrUtils;
+  import com.gerantech.mmory.core.battle.fieldes.FieldData;
+  import com.gerantech.towercraft.controls.texts.ShadowLabel;
+  import com.gerantech.towercraft.models.AppModel;
+  import com.gerantech.towercraft.utils.StrUtils;
+  import com.gerantech.xdloader.XDLoader;
 
-import starling.animation.Transitions;
-import starling.core.Starling;
-import starling.display.DisplayObjectContainer;
-import starling.display.Image;
-import starling.display.MovieClip;
-import starling.display.Sprite;
+  import starling.animation.Transitions;
+  import starling.core.Starling;
+  import starling.display.DisplayObject;
+  import starling.display.Image;
+  import starling.display.Sprite;
+  import starling.events.Event;
+  import com.gerantech.mmory.core.battle.BattleField;
 
-import starlingbuilder.engine.IAssetMediator;
-import starlingbuilder.engine.UIBuilder;
-import starlingbuilder.engine.localization.ILocalization;
-import starlingbuilder.engine.tween.ITweenBuilder;
+  public class MapBuilder extends XDLoader
+  {
+    private var summonImage:Image;
+    private var summonThird:Image;
+    private var summonHalf:Image;
+    private var summonRight:Image;
+    private var summonLeft:Image;
+    private var summonBot:Image;
+    private var tutorHint:Sprite;
 
-/**
-* ...
-* @author Mansour Djawadi
-*/
-public class MapBuilder extends UIBuilder 
-{
-static public const linkers:Array = [MovieClip];
-static public const SUMMON_AREA_FIRST:int = 0;
-static public const SUMMON_AREA_RIGHT:int = 1;
-static public const SUMMON_AREA_LEFT:int = 2;
-static public const SUMMON_AREA_BOTH:int = 3;
+    public function MapBuilder()
+    {
+      super();
+      this.addEventListener(Event.ADDED, this.addedHandler);
+    }
 
-public var mainMap:Sprite;
-public var summonAreaMode:int;
-private var enemyHint:Sprite;
-private var summonHint:Image;
-private var movieClips:Vector.<MovieClip>;
-public function MapBuilder(assetMediator:IAssetMediator, forEditor:Boolean=false, template:Object=null, localization:ILocalization=null, tweenBuilder:ITweenBuilder=null) 
-{
-    movieClips = new Vector.<MovieClip>();
-	super(assetMediator, forEditor, template, localization, tweenBuilder);
-}
+    private function addedHandler(event:Event):void
+    {
+      var target:DisplayObject = event.target as DisplayObject;
+      if( target.name == null )
+        return;
+      if( target.name.length > 7 && target.name.substring(0, 7) == "summon-" )
+      {
+        if( target.name == "summon-third" )
+          summonThird = target as Image;
+        else if( target.name == "summon-half" )
+          summonHalf = target as Image;
+        else if( target.name == "summon-right" )
+          summonRight = target as Image;
+        else if( target.name == "summon-left" )
+          summonLeft = target as Image;
+        else if( target.name == "summon-bot" )
+          summonBot = target as Image;
+        
+        Image(target).color = 0x220000;
+        Image(target).visible = false;
+      }
+      
+      if( target.name == "tutor-hint" )
+      {
+        tutorHint = target as Sprite;
+        tutorHint.visible = false;
+      }
+    }
 
-override public function create(data:Object, trimLeadingSpace:Boolean = true, binder:Object = null) : Object
-{
-	var root:Sprite = super.create(data, trimLeadingSpace, binder) as Sprite;
-	mainMap = root.getChildByName("main") as Sprite;
-	activeMovieClips(mainMap);
-	return root;
-}
+    public function setSummonAreaEnable(value:Boolean, summonState:int) : void
+    {
+      if( summonImage != null )
+        summonImage.visible = false;
+      summonImage = getSummonImage(summonState)
+      Starling.juggler.removeTweens(summonImage);
+      if( value )
+      {
+        summonImage.visible = true;
+        Starling.juggler.tween(summonImage, 0.2, {alpha:0.5});
+      }
+      else
+      {
+        Starling.juggler.tween(summonImage, 0.2, {alpha:0, onComplete:function () : void { summonImage.visible = false; }});
+      }
+    }
 
-private function activeMovieClips(container:DisplayObjectContainer) : void
-{
-	for ( var i:int = 0; i < container.numChildren; i ++ )
-	{
-		if( container.getChildAt(i) is MovieClip )
-		{
-			var m:MovieClip = container.getChildAt(i) as MovieClip;
-			Starling.current.juggler.add(m);
-			m.play();
-			movieClips.push(m);
-		}
-		if( container.getChildAt(i) is DisplayObjectContainer )
-			activeMovieClips(container.getChildAt(i) as DisplayObjectContainer );
-		
-		if( container.getChildAt(i).name == "summon-area" )
-		{
-			summonHint = container.getChildAt(i) as Image;
-			summonHint.visible = false;
-		}
-		
-		if( container.getChildAt(i).name == "focus-rects" )
-		{
-			enemyHint = container.getChildAt(i) as Sprite;
-			enemyHint.visible = false;
-		}
-	}
-}
+    private function getSummonImage(summonState:int):Image
+    {
+      switch( summonState )
+      {
+        case BattleField.SUMMON_AREA_HALF: return summonHalf;
+        case BattleField.SUMMON_AREA_RIGHT: return summonRight;
+        case BattleField.SUMMON_AREA_LEFT: return summonLeft;
+        case BattleField.SUMMON_AREA_BOTH: return summonBot;
+      }
+      return summonThird;
+    }
 
-public function setSummonAreaEnable(value:Boolean) : void
-{
-	if( summonHint == null )
-		return;
-		
-	Starling.juggler.removeTweens(summonHint);
-	if( value )
-	{
-		summonHint.visible = true;
-		Starling.juggler.tween(summonHint, 0.2, {alpha:0.5});
-	}
-	else
-	{
-		Starling.juggler.tween(summonHint, 0.2, {alpha:0, onComplete:function () : void { summonHint.visible = false; }});
-	}
-}
+    public function showtutorHint(field:FieldData, battleswins:int):void
+    {
+      if( tutorHint == null )
+        return;
+      tutorHint.visible = true;
+      Starling.juggler.tween(tutorHint, 1.5, {alpha:0, repeatCount:7, onComplete:hideHint});
+      
+      var tutorHintText:ShadowLabel = new ShadowLabel(StrUtils.loc("tutor_" + field.mode + "_enemy_hint"), field.mode == 0 ? 0xEC3E3E : 0xFFFFFF, 0, "center", null, true, "center", 1.3);
+      tutorHintText.width = Starling.current.stage.width * 0.8;
+      tutorHintText.pivotX = tutorHintText.width * 0.5;
+      tutorHintText.pivotY = tutorHintText.height * 0.5;
+      tutorHintText.x = Starling.current.stage.width * 0.45;
+      tutorHintText.y = Starling.current.stage.height * (field.mode == 0 ? 0.15 : 0.12);
+      tutorHintText.scale = 0;
+      tutorHintText.alpha = 0;
+      AppModel.instance.battleFieldView.guiTextsContainer.addChild(tutorHintText);
+      Starling.juggler.tween(tutorHintText, 0.6, {delay:1, alpha:1, scale:1, transition:Transitions.EASE_OUT_BACK});
 
-public function changeSummonArea(isRight:Boolean) : void
-{
-	if( summonHint == null )
-		return;
-	if( AppModel.instance.battleFieldView.battleData.allise.getInt("score") > 1 )
-	{
-		summonAreaMode = SUMMON_AREA_BOTH;
-		summonHint.texture = AppModel.instance.assets.getTexture("summon-2");
-		return;
-	}
-	summonAreaMode = isRight ? SUMMON_AREA_RIGHT : SUMMON_AREA_LEFT;
-	summonHint.texture = AppModel.instance.assets.getTexture("summon-1");
-	summonHint.scaleX = Math.abs(summonHint.scaleX) * (isRight ? -1 : 1);
-}
-
-public function showEnemyHint(field:FieldData, battleswins:int):void
-{
-	if( enemyHint == null )
-		return;
-	enemyHint.visible = true;
-	Starling.juggler.tween(enemyHint, 1.5, {alpha:0, repeatCount:7, onComplete:hideHint});
-	
-	var enemyHintText:ShadowLabel = new ShadowLabel(StrUtils.loc("tutor_" + field.mode + "_enemy_hint"), field.mode == 0 ? 0xEC3E3E : 0xFFFFFF, 0, "center", null, true, "center", 1.3);
-	enemyHintText.width = Starling.current.stage.width * 0.8;
-	enemyHintText.pivotX = enemyHintText.width * 0.5;
-	enemyHintText.pivotY = enemyHintText.height * 0.5;
-	enemyHintText.x = Starling.current.stage.width * 0.45;
-	enemyHintText.y = Starling.current.stage.height * (field.mode == 0 ? 0.15 : 0.12);
-	enemyHintText.scale = 0;
-	enemyHintText.alpha = 0;
-	AppModel.instance.battleFieldView.guiTextsContainer.addChild(enemyHintText);
-	Starling.juggler.tween(enemyHintText, 0.6, {delay:1, alpha:1, scale:1, transition:Transitions.EASE_OUT_BACK});
-
-	function hideHint() : void
-	{
-		enemyHintText.visible = true;
-		enemyHintText.removeFromParent(true);
-	}
-}
-
-public function dispose() : void 
-{
-	for each( var m:MovieClip in movieClips )
-		Starling.current.juggler.remove(m);
-}
-}
+      function hideHint() : void
+      {
+        tutorHintText.visible = true;
+        tutorHintText.removeFromParent(true);
+      }
+    }
+  }
 }
