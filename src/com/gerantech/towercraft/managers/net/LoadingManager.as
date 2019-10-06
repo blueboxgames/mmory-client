@@ -180,6 +180,7 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 			initialAssets[key] = appModel.assetData.toObject()[key];
 	}
 	var syncTool:SyncUtil = new SyncUtil("http://192.168.10.17:8080");
+	syncTool.addEventListener(Event.COMPLETE, loadingManager_scriptLoadHandler);
 	syncTool.sync(initialAssets);
 	var noticeVersion:int = serverData.getInt("noticeVersion");
 	var forceVersion:int = serverData.getInt("forceVersion");
@@ -189,7 +190,6 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 
 private function loadingManager_scriptLoadHandler():void
 {
-	// SyncManager.instance.removeEventListener("scriptLoaded", loadingManager_scriptLoadHandler);
 	if( appModel.descriptor.versionCode < serverData.getInt("forceVersion") )
 		dispatchEvent(new LoadingEvent(LoadingEvent.FORCE_UPDATE));
 	else if( appModel.descriptor.versionCode < serverData.getInt("noticeVersion") )
@@ -200,7 +200,7 @@ private function loadingManager_scriptLoadHandler():void
 
 public function loadCore():void
 {
-	state = STATE_CORE_LOADING;			
+	state = STATE_CORE_LOADING;
 	var coreLoader:CoreLoader = new CoreLoader(serverData);
 	UserData.instance.prefs.addEventListener(Event.COMPLETE, prefs_completeHandler);
 	UserData.instance.prefs.init();
