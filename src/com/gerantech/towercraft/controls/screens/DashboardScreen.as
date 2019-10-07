@@ -58,9 +58,11 @@ public function DashboardScreen()
 {
 	visible = false;	
 	if( appModel.assets.getTexture("poster/logo") == null )
-		Assets.loadAtlas("assets/images/", "", biguiLoaded, "bigui");
+		setTimeout(Assets.loadAtlas, 5, "assets/images/", "", biguiLoaded, "bigui");
+		//Assets.loadAtlas("assets/images/", "", biguiLoaded, "bigui");
 	function biguiLoaded() : void {
-		Assets.loadAtlas("assets/animations/", "_tex", packLoaded, "packs");
+		setTimeout(Assets.loadAtlas, 5, "assets/animations/", "_tex", packLoaded, "packs");
+		// Assets.loadAtlas("assets/animations/", "_tex", packLoaded, "packs");
 	}
 	function packLoaded() : void {
 		initialize();

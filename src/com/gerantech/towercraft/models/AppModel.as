@@ -9,7 +9,6 @@ import com.gerantech.towercraft.models.vo.Descriptor;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.BattleFieldView;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
 
 import flash.desktop.NativeApplication;
 import flash.system.Capabilities;
@@ -41,7 +40,6 @@ public var notifier:NotificationManager;
 public var invokes:Array;
 public var artRules:ArtRules;
 public var maxTutorBattles:int;
-public var assetData:ISFSObject;
 
 public function AppModel()
 {

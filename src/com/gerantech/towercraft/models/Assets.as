@@ -229,15 +229,13 @@ package com.gerantech.towercraft.models
 			if( needLoading )
 			{
 				loadCallback = callback;
-				AppModel.instance.assets.loadQueue(assets_completeCallback, assets_errorCallback, assets_progressCallback);
+				AppModel.instance.assets.loadQueue(assets_completeCallback);
 			}
 			else
 			{
 				callback();
 			}
 		}
-		private static function assets_progressCallback(ratio:Number) : void {}
-		private static function assets_errorCallback() : void {}
 		private static function assets_completeCallback() : void
 		{
 			if(loadCallback!=null)

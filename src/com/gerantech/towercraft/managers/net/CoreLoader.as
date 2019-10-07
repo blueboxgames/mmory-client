@@ -31,7 +31,6 @@ public class CoreLoader
 {
 private var version:String;
 private var serverData:SFSObject;
-private var scriptData:String;
 private var initData:InitData;
 
 public function CoreLoader(serverData:SFSObject)
