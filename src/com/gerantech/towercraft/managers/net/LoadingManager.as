@@ -172,12 +172,12 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		TimeManager.instance.dispose();
 	new TimeManager(serverData.getLong("serverTime"));
 	
-	appModel.assetData = serverData.getSFSObject("checksum");
+	var checksums:Object = serverData.getSFSObject("checksum").toObject();
 	var initialAssets:Object = new Object();
-	for ( var key:String in appModel.assetData.toObject() )
+	for ( var key:String in checksums )
 	{
-		if( appModel.assetData.toObject()[key]["first"] == true )
-			initialAssets[key] = appModel.assetData.toObject()[key];
+		if( checksums[key]["first"] == true )
+			initialAssets[key] = checksums[key];
 	}
 	
 	SyncManager.instance.addEventListener(Event.COMPLETE, loadingManager_scriptLoadHandler);

@@ -38,13 +38,13 @@ public function CoreLoader(serverData:SFSObject)
 {
 	this.serverData = serverData;
 	this.version = this.serverData.getText("coreVersion");
-	var script:File = File.applicationStorageDirectory.resolvePath("script-data.cs");
-	var fileStream:FileStream = new FileStream(); 
-	fileStream.open(script, FileMode.READ);
-	var bytes:ByteArray = new ByteArray
-	fileStream.readBytes(bytes);
-	ScriptEngine.initialize(bytes.readUTFBytes(bytes.length), this.serverData.getInt("forceVersion"));
-	fileStream.close();
+	var scriptFile:File = File.applicationStorageDirectory.resolvePath("script-data.cs");
+	var scriptFileStream:FileStream = new FileStream(); 
+	scriptFileStream.open(scriptFile, FileMode.READ);
+	var scriptBytes:ByteArray = new ByteArray();
+	scriptFileStream.readBytes(scriptBytes);
+	scriptFileStream.close();
+	ScriptEngine.initialize(scriptBytes.readUTFBytes(scriptBytes.length), this.serverData.getInt("forceVersion"));
 
 	initServerData(serverData);
 	
