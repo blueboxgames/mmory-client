@@ -1,12 +1,13 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.mmory.core.constants.SegmentType;
 import com.gerantech.towercraft.controls.headers.TabsHeader;
 import com.gerantech.towercraft.controls.items.SegmentsItemRenderer;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.mmory.core.constants.SegmentType;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
@@ -48,16 +49,34 @@ override public function init():void
 	if( initializeCompleted )
 		return;
 	super.init();
-	
-	if( player.get_arena(0) < 1 )
+
+	function showLabel(message:String) : void
 	{
-		var labelDisplay:ShadowLabel = new ShadowLabel(loc("availableat_messeage", [loc("tab-3"), loc("arena_text") + " " + loc("num_2")]), 1, 0, "center");
+		var labelDisplay:ShadowLabel = new ShadowLabel(message, 1, 0, "center");
 		labelDisplay.width = width;
 		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, NaN, 0);
 		addChild(labelDisplay);
+	}
+
+	if( player.get_arena(0) < 1 )
+	{
+		showLabel(loc("availableat_messeage", [loc("tab-3"), loc("arena_text") + " " + loc("num_2")]);
 		return;
 	}
 	
+	if( appModel.loadingManager.serverData.containsKey("forbidenApps") )
+	{
+		var filter:Array = appModel.loadingManager.serverData.getText("forbidenApps").split(",");
+		var installed:Array = NativeAbilities.instance.getInstalled();
+		for each(var f:String in filter)
+		for each(var app:String in installed)
+		if( app.search(f) > -1 )
+		{
+			showLabel(loc("lobby_forbiden_app"));
+			return;
+		}
+	}
+
 	var pageLayout:HorizontalLayout = new HorizontalLayout();
 	pageLayout.horizontalAlign = HorizontalAlign.CENTER;
 	pageLayout.verticalAlign = VerticalAlign.JUSTIFY;
