@@ -128,7 +128,7 @@ package com.gerantech.towercraft.managers
             var path:String = getFilePath(name);
             var address:String = data[name]["url"];
             var md5:String = data[name]["md5"];
-            return new LoadAndSaver(path, "http://127.0.0.1:8080" + address, md5, true);
+            return new LoadAndSaver(path, address, md5, true);
         }
         /**
          * Pushes loader into loadingPool.
