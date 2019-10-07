@@ -60,7 +60,7 @@ override public function init():void
 
 	if( player.get_arena(0) < 1 )
 	{
-		showLabel(loc("availableat_messeage", [loc("tab-3"), loc("arena_text") + " " + loc("num_2")]);
+		showLabel(loc("availableat_messeage", [loc("tab-3"), loc("arena_text") + " " + loc("num_2")]));
 		return;
 	}
 	
