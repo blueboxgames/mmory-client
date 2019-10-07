@@ -11,7 +11,6 @@ import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.BillingManager;
 import com.gerantech.towercraft.managers.InboxService;
-import com.gerantech.towercraft.managers.SyncManager;
 import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.UserPrefs;
 import com.gerantech.towercraft.managers.VideoAdsManager;
@@ -21,6 +20,7 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
+import com.gerantech.towercraft.utils.SyncUtil;
 import com.gerantech.towercraft.utils.Utils;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
@@ -172,23 +172,24 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		TimeManager.instance.dispose();
 	new TimeManager(serverData.getLong("serverTime"));
 	
-	appModel.assetData = serverData.getSFSObject("checksum");
-	var initialAssets:Object = new Object();
-	for ( var key:String in appModel.assetData.toObject() )
+	var checksums:Object = serverData.getSFSObject("checksum").toObject();
+	var initialAssets:Array = new Array();
+	for ( var key:String in checksums )
 	{
-		if( appModel.assetData.toObject()[key]["first"] == true )
-			initialAssets[key] = appModel.assetData.toObject()[key];
+		if( checksums[key]["first"] == true )
+			initialAssets.push(key);
 	}
 	
-	SyncManager.instance.addEventListener(Event.COMPLETE, loadingManager_scriptLoadHandler);
-	SyncManager.instance.sync(initialAssets);
+	var syncTool:SyncUtil = new SyncUtil();
+	syncTool.addEventListener(Event.COMPLETE, syncTool_completeHandler);
+	syncTool.sync(initialAssets);
 	var noticeVersion:int = serverData.getInt("noticeVersion");
 	var forceVersion:int = serverData.getInt("forceVersion");
 	trace(appModel.descriptor.versionCode, "noticeVersion:" + noticeVersion, "forceVersion:" + forceVersion)
 
 }
 
-private function loadingManager_scriptLoadHandler():void
+private function syncTool_completeHandler():void
 {
 	if( appModel.descriptor.versionCode < serverData.getInt("forceVersion") )
 		dispatchEvent(new LoadingEvent(LoadingEvent.FORCE_UPDATE));
