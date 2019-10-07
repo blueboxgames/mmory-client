@@ -1,11 +1,10 @@
 package com.gerantech.towercraft.utils
 {
-    import com.gerantech.towercraft.models.AppModel;
-    import com.gerantech.towercraft.utils.LoadAndSaver;
     import com.smartfoxserver.v2.entities.data.ISFSObject;
 
+    import flash.events.IOErrorEvent;
     import flash.filesystem.File;
-    import flash.net.SharedObject;
+    import flash.utils.Dictionary;
 
     import starling.events.Event;
     import starling.events.EventDispatcher;
@@ -13,166 +12,137 @@ package com.gerantech.towercraft.utils
     public class SyncUtil extends EventDispatcher
     {
         private static const DEBUG:Boolean = true;
-        private var content:Vector.<LoadAndSaver>;
+        private var checkedFiles:Dictionary;
         private var checksumData:ISFSObject;
-        public function SyncUtil()
+        public function sync(checksumData:ISFSObject, data:Array):void
         {
-            super();
-            this.checksumData = AppModel.instance.loadingManager.serverData.getSFSObject("checksum");
-        }
-
-        // ---- Core Functions ----
-        /**
-         * Given an object of name and data will load them.
-         */
-        public function sync(data:Array):void
-        {
-            var loader:Vector.<LoadAndSaver> = new Vector.<LoadAndSaver>;
-            
+            this.checksumData = checksumData;
+            checkedFiles = new Dictionary();
             for each(var name:String in data )
+                checkedFiles[name]= false;
+            
+            for each(name in data )
             {
-                var x:ISFSObject = checksumData;
-                if( isLatest(name, this.checksumData.getSFSObject(name).getUtfString("md5") ) )
-                {
-                    if( DEBUG )
-                        trace(name + " | md5: " + checksumData.getSFSObject(name).getUtfString("md5") + " size: " + getFileSize(name));
-                }
-                else
-                {
-                    if( DEBUG )
-                        trace(name + " queued for load.");
-                    this.pushToLoader(name, loader);
-                }
+                var md5Check:MD5Check = new MD5Check();
+                md5Check.addEventListener(Event.COMPLETE, md5Check_completeHandler);
+                md5Check.getHash(name, checksumData.getSFSObject(name).getUtfString("md5"));
             }
-
-            if( loader.length == 0 )
-            {
-                if( DEBUG )
-                    trace("Sync complete.");
-                this.dispatchEventWith(Event.COMPLETE);
-                return;
-            }
-
-            this.loadAll(loader);
-        }
-        private function load(item:LoadAndSaver):void
-        {
-            item.addEventListener(Event.COMPLETE, item_completeHandler);
-            item.start();
         }
 
-        private function loadAll(content:Vector.<LoadAndSaver>):void
-        {
-            this.content = content;
-            for each(var item:LoadAndSaver in this.content)
-                load(item);
-        }
-        // ---- Event Listeners ----
-        /**
-         * Saves asset hash in user data.
-         */
-        private function item_completeHandler(e:*):void
-        {
-            var filename:String = this.itemNameFromPath(e.target.localPath);
-            this.setAssetLocalHash(filename, e.target.md5);
-            if( this.allExist() )
-            {
-                if( DEBUG )
-                    trace("Sync complete.");
-                this.dispatchEventWith(Event.COMPLETE);
-            }
-        }
-        // ---- Utility Function ----
-        /**
-         * Finds a filename from it's path
-         */
-        private function itemNameFromPath(path:String):String
-        {
-            var relativePath:String = "";
-            relativePath = path.split(File.applicationStorageDirectory.nativePath)[1].substring(1);
-            relativePath = relativePath.replace(/\\/g, "/");
-            return relativePath;
-        }
-        /**
-         * Checks for all content exist in filesystem, their integrity has been checked
-         * by LoadAndSaver.
-         */
-        protected function allExist():Boolean
-        {
-            for each(var item:LoadAndSaver in this.content)
-            {
-                if ( !File.applicationStorageDirectory.resolvePath(item.localPath).exists )
-                    return false;
-                if ( item.loading )
-                    return false;
-            }
-            return true;
-        }
         /**
          * A utility function which checks if given asset name checks it's
          * cached md5 returns true if it's hash match else will return false.
          */
-        private function isLatest(name:String, md5:String):Boolean
+        private function md5Check_completeHandler(event:Event):void
         {
-            var hash:String = getAssetLocalHash(name);
-            if( getAssetLocalHash(name) == md5 )
+            var md5Check:MD5Check = event.currentTarget as MD5Check;
+            if( event.data )
             {
-                return true;
+                checkedFiles[md5Check.name] = true;
+                checkAllFiles();
+                return;
             }
-            return false;
+            
+            // Get a new loader for given asset name.
+            var path:String = File.applicationStorageDirectory.resolvePath(md5Check.name).nativePath;
+            var address:String = this.checksumData.getSFSObject(md5Check.name).getUtfString("url");
+            var loader:FileLoader = new FileLoader(md5Check.name, path, address, md5Check.hash);
+            loader.addEventListener(IOErrorEvent.IO_ERROR, loader_ioErrorHandler);
+            loader.addEventListener(Event.COMPLETE, loader_completeHandler);
+            loader.start();
         }
-        /**
-         * Given an assetName returns it's hash, returns null if not available.
-         */
-        private function getAssetLocalHash(assetName:String):String
+
+        private function loader_completeHandler(event:*):void
         {
-            var so:SharedObject = SharedObject.getLocal(AppModel.instance.descriptor.server + "-user-assets");
-            return so.data[assetName] as String;
+            var loader:FileLoader = event.currentTarget as FileLoader;
+            checkedFiles[loader.name] = true;
+            checkAllFiles();
         }
-        /**
-         * Checks hash correctness and save it with asset name in user data.
-         */
-        private function setAssetLocalHash(assetName:String, assetHash:String):Boolean
+
+        private function loader_ioErrorHandler(e:*):void
         {
-            if( assetHash != null && assetHash.length == 32 )
-            {
-                var so:SharedObject = SharedObject.getLocal(AppModel.instance.descriptor.server + "-user-assets");
-                so.data[assetName] = assetHash;
-                so.flush(100000);
-                return true;
-            }
-            return false;
+            this.dispatchEventWith(Event.IO_ERROR);
         }
+
         /**
-         * Get a new loader for given asset name.
+         * Checks for all content exist in filesystem, their integrity has been checked
+         * by LoadAndSaver.
          */
-        private function getLoader(name:String):LoadAndSaver
+        private function checkAllFiles():void
         {
-            var path:String = getFilePath(name);
-            var address:String = this.checksumData.getSFSObject(name).getUtfString("url");
-            var md5:String = this.checksumData.getSFSObject(name).getUtfString("md5");
-            return new LoadAndSaver(path, address, md5, true);
+            for (var key:String in this.checkedFiles )
+                if( !this.checkedFiles[key] )
+                    return;
+
+            dispatchEventWith(Event.COMPLETE);
         }
-        /**
-         * Pushes loader into loadingPool.
-         */
-        private function pushToLoader(name:String, loadPool:Vector.<LoadAndSaver>):void
+    }
+}
+
+import com.gerantech.towercraft.utils.LoadAndSaver;
+class FileLoader extends LoadAndSaver
+{
+    public var name:String;
+    public function FileLoader(name:String, localPath:String, webPath:String, md5:String = null)
+    {
+        this.name = name;
+        super(localPath, webPath, md5, true);
+    }
+}
+
+import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.utils.LoadAndSaver;
+
+import flash.desktop.NativeProcess;
+import flash.desktop.NativeProcessStartupInfo;
+import flash.events.ProgressEvent;
+import flash.filesystem.File;
+
+import starling.events.Event;
+import starling.events.EventDispatcher;
+
+class MD5Check extends EventDispatcher
+{
+    public var name:String;
+    public var hash:String;
+    public function MD5Check(){}
+    public function getHash(name:String, hash:String):void
+    {
+        this.name = name;
+        this.hash = hash;
+        var file:File = File.applicationStorageDirectory.resolvePath(name);
+        if( !file.exists )
         {
-            loadPool.push(getLoader(name));
+            dispatchEventWith(Event.COMPLETE, false, false);
+            return;
         }
-        /**
-         * Given name returns it's path.
-         */
-        private function getFilePath(name:String):String
+        if( AppModel.instance.platform == AppModel.PLATFORM_ANDROID )
         {
-            return File.applicationStorageDirectory.resolvePath(name).nativePath;
+            var _hash:String = NativeAbilities.instance.getMD5(file.nativePath);
+            dispatchEventWith(Event.COMPLETE, false, hash == _hash);
+            return 
         }
-        /**
-         * Given name returns it's file size.
-         */
-        private function getFileSize(name:String):Number
-        {
-            return File.applicationStorageDirectory.resolvePath(name).size;
-        }
+            
+        var nativeProcessStartupInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
+        var exe:File = File.applicationDirectory.resolvePath("MD5.exe");
+        nativeProcessStartupInfo.executable = exe;
+
+        var processArgs:Vector.<String> = new Vector.<String>();
+        processArgs[0] = "-src";
+        processArgs[1] = file.nativePath;
+        nativeProcessStartupInfo.arguments = processArgs;
+
+        var process:NativeProcess = new NativeProcess();
+        process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, process_DataHandler);
+        // now = getTimer();
+        process.start(nativeProcessStartupInfo);
+    }
+
+    private function process_DataHandler(event:ProgressEvent):void
+    {
+        var process:NativeProcess = event.currentTarget as NativeProcess;
+        var equalprocess:Boolean = process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable) == this.hash;
+        dispatchEventWith(Event.COMPLETE, false, equalprocess);
     }
 }

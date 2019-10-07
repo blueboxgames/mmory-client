@@ -182,7 +182,8 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 	
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncTool_completeHandler);
-	syncTool.sync(initialAssets);
+	syncTool.sync(this.serverData.getSFSObject("checksum"), initialAssets)
+	
 	var noticeVersion:int = serverData.getInt("noticeVersion");
 	var forceVersion:int = serverData.getInt("forceVersion");
 	trace(appModel.descriptor.versionCode, "noticeVersion:" + noticeVersion, "forceVersion:" + forceVersion)
