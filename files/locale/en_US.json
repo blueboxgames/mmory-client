@@ -635,6 +635,7 @@
     "lobby_invite_message": "let's come to our hood for chat together.",
     "lobby_invite_url": "http://blueboxgames.ir/BoomLand/invite/lobby-invite.php?id=#&ic=#",
     "lobby_banned": "Your access of socials is blocked. You have to wait until #",
+    "lobby_forbiden_app": "Unfortunatly your device not support social pages!",
     "lobby_no": "No hood",
     "lobby_profile": "Profile",
     "lobby_report": "Report",
