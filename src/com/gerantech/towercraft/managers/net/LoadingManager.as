@@ -11,6 +11,7 @@ import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.BillingManager;
 import com.gerantech.towercraft.managers.InboxService;
+import com.gerantech.towercraft.managers.SyncManager;
 import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.UserPrefs;
 import com.gerantech.towercraft.managers.VideoAdsManager;
@@ -20,7 +21,6 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.towercraft.utils.SyncUtil;
 import com.gerantech.towercraft.utils.Utils;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
@@ -179,9 +179,9 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		if( appModel.assetData.toObject()[key]["first"] == true )
 			initialAssets[key] = appModel.assetData.toObject()[key];
 	}
-	var syncTool:SyncUtil = new SyncUtil("http://192.168.10.17:8080");
-	syncTool.addEventListener(Event.COMPLETE, loadingManager_scriptLoadHandler);
-	syncTool.sync(initialAssets);
+	
+	SyncManager.instance.addEventListener(Event.COMPLETE, loadingManager_scriptLoadHandler);
+	SyncManager.instance.sync(initialAssets);
 	var noticeVersion:int = serverData.getInt("noticeVersion");
 	var forceVersion:int = serverData.getInt("forceVersion");
 	trace(appModel.descriptor.versionCode, "noticeVersion:" + noticeVersion, "forceVersion:" + forceVersion)

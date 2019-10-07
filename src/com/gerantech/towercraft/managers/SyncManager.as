@@ -1,4 +1,4 @@
-package com.gerantech.towercraft.utils
+package com.gerantech.towercraft.managers
 {
     import com.gerantech.towercraft.models.AppModel;
     import com.gerantech.towercraft.utils.LoadAndSaver;
@@ -10,17 +10,25 @@ package com.gerantech.towercraft.utils
     import starling.events.Event;
     import starling.events.EventDispatcher;
 
-    public class SyncUtil extends EventDispatcher
+    public class SyncManager extends EventDispatcher
     {
         private static const DEBUG:Boolean = true;
+        
+        private static var _instance:SyncManager;
+        
+        public static function get instance():SyncManager
+        {
+            if( _instance == null )
+                _instance = new SyncManager();
+            return _instance;
+        }
 
-        private var serverAddress:String;
         private var loadTool:LoadUtil;
 
-        public function SyncUtil(serverAddress:String)
+        public function SyncManager()
         {
             super();
-            this.serverAddress = serverAddress;
+            this.loadTool = new LoadUtil();
         }
 
         // ---- Core Functions ----
@@ -53,10 +61,9 @@ package com.gerantech.towercraft.utils
                 return;
             }
 
-            this.loadTool = new LoadUtil(loader);
             this.loadTool.addEventListener(Event.ADDED, this.item_completeHandler);
             this.loadTool.addEventListener(Event.COMPLETE, this.sync_completeHandler);
-            this.loadTool.loadAll();
+            this.loadTool.loadAll(loader);
         }
         // ---- Event Listeners ----
         /**
@@ -121,7 +128,7 @@ package com.gerantech.towercraft.utils
             var path:String = getFilePath(name);
             var address:String = data[name]["url"];
             var md5:String = data[name]["md5"];
-            return new LoadAndSaver(path, serverAddress + address, md5, true);
+            return new LoadAndSaver(path, "http://127.0.0.1:8080" + address, md5, true);
         }
         /**
          * Pushes loader into loadingPool.

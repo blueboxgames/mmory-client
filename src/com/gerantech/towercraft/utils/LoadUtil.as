@@ -10,13 +10,8 @@ package com.gerantech.towercraft.utils
 
     public class LoadUtil extends EventDispatcher
     {
-        private var checksums:Object;
         private var content:Vector.<LoadAndSaver>;
-        public function LoadUtil(content:Vector.<LoadAndSaver>)
-        {
-            this.content = content;
-        }
-
+        public function LoadUtil(){}
         /**
          * Loads one file, used by load all and fault system to load a file.
          */
@@ -30,8 +25,9 @@ package com.gerantech.towercraft.utils
         /**
          * Loads the whole list of given array to it.
          */
-        public function loadAll():void
+        public function loadAll(content:Vector.<LoadAndSaver>):void
         {
+            this.content = content;
             for each(var item:LoadAndSaver in this.content)
                 load(item);
         }
@@ -45,8 +41,8 @@ package com.gerantech.towercraft.utils
             dispatchEventWith(Event.ADDED, false, e);
             if( allExist() )
             {
-                dispatchEventWith(Event.COMPLETE);
                 this.content = null;
+                dispatchEventWith(Event.COMPLETE);
             }
         }
 
