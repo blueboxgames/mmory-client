@@ -2,7 +2,7 @@
 <application xmlns="http://ns.adobe.com/air/application/32.0">
   <id>__APPID__</id>
   <versionNumber>0.2.500</versionNumber>
-  <supportedProfiles>mobileDevice</supportedProfiles>
+  <supportedProfiles>mobileDevice extendedDesktop</supportedProfiles>
   <filename>BoomLand</filename>
   <name>BoomLand</name>
   <description>__DESCRIPTION__</description>
@@ -16,6 +16,13 @@
     <aspectRatio>portrait</aspectRatio>
     <autoOrients>false</autoOrients>
     <depthAndStencil>true</depthAndStencil>
+    <transparent>false</transparent>
+    <resizable>false</resizable>
+    <x>10</x>
+    <y>10</y>
+    <width>490</width>
+    <height>940</height>
+    <minSize>490 940</minSize>
   </initialWindow>
   <icon>
     <image48x48>icons/icon_48.png</image48x48>

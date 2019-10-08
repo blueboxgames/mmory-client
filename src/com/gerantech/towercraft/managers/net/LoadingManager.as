@@ -155,11 +155,12 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		dispatchEvent(new LoadingEvent(LoadingEvent.LOGIN_USER_EXISTS, serverData));
 		return;
 	}
-    if( serverData.containsKey("ban") && serverData.getSFSObject("ban").getInt("mode") > 2 )// banned user
-    {
-        dispatchEvent(new LoadingEvent(LoadingEvent.LOGIN_USER_BANNED, serverData));
-        return;
-    }
+
+	if( serverData.containsKey("ban") && serverData.getSFSObject("ban").getInt("mode") > 2 )// banned user
+	{
+			dispatchEvent(new LoadingEvent(LoadingEvent.LOGIN_USER_BANNED, serverData));
+			return;
+	}
 
     if( serverData.containsKey("password") )// in registering case
 	{
@@ -172,26 +173,20 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		TimeManager.instance.dispose();
 	new TimeManager(serverData.getLong("serverTime"));
 	
-	var checksums:Object = serverData.getSFSObject("checksum").toObject();
-	var initialAssets:Array = new Array();
-	for ( var key:String in checksums )
-	{
-		if( checksums[key]["first"] == true )
-			initialAssets.push(key);
-	}
+	var assets:Object = serverData.getSFSObject("assets").toObject();
+	var initialAssets:Object = new Object();
+	for ( var key:String in assets )
+		if( assets[key]["initial"] == true )
+			initialAssets[key] = assets[key];
 	
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncTool_completeHandler);
-	syncTool.sync(this.serverData.getSFSObject("checksum"), initialAssets)
-	
-	var noticeVersion:int = serverData.getInt("noticeVersion");
-	var forceVersion:int = serverData.getInt("forceVersion");
-	trace(appModel.descriptor.versionCode, "noticeVersion:" + noticeVersion, "forceVersion:" + forceVersion)
-
+	syncTool.sync(initialAssets)
 }
 
 private function syncTool_completeHandler():void
 {
+	trace(appModel.descriptor.versionCode, "noticeVersion:" + serverData.getInt("noticeVersion"), "forceVersion:" + serverData.getInt("forceVersion"));
 	if( appModel.descriptor.versionCode < serverData.getInt("forceVersion") )
 		dispatchEvent(new LoadingEvent(LoadingEvent.FORCE_UPDATE));
 	else if( appModel.descriptor.versionCode < serverData.getInt("noticeVersion") )
@@ -203,7 +198,14 @@ private function syncTool_completeHandler():void
 public function loadCore():void
 {
 	state = STATE_CORE_LOADING;
-	var coreLoader:CoreLoader = new CoreLoader(serverData);
+	var coreLoader:CoreLoader = new CoreLoader();
+	coreLoader.addEventListener(Event.COMPLETE, coreLoader_completeHandler);
+	coreLoader.load(serverData);
+}
+
+protected function coreLoader_completeHandler(event:Event):void
+{
+	CoreLoader(event.currentTarget).removeEventListener(Event.COMPLETE, coreLoader_completeHandler);
 	UserData.instance.prefs.addEventListener(Event.COMPLETE, prefs_completeHandler);
 	UserData.instance.prefs.init();
 }
@@ -321,5 +323,6 @@ private function registerFCMPushManager():void
 }
 
 protected function get appModel():		AppModel		{	return AppModel.instance;			}
+
 }
 }

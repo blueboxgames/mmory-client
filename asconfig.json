@@ -16,12 +16,12 @@
 		"external-library-path": [
 			"exts"
 		],
-		"output": "bin/release.swf",
+		"output": "bin/release.swf"
 		// "optimize": true
 	},
 	"application": "bin/application.xml",
 	"files": [
-		"src/Main.as",
+		"src/Main.as"
 	],
 	// "copySourcePathAssets": true,
 	"airOptions": {
@@ -47,7 +47,7 @@
 			"output": "dist/app.apk",
 			"signingOptions": {
 				"storetype": "pkcs12",
-				"keystore": "cert/android.p12",
+				"keystore": "cert/android.p12"
 			}
 		},
 		"ios": {

@@ -1,6 +1,5 @@
 package com.gerantech.towercraft.controls.buttons 
 {
-import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.events.CoreEvent;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
@@ -42,7 +41,6 @@ private function checkLeagueRewardAchieved() : void
 		for(var j:int = game.arenas.get(i).rewards.length - 1; j >= 0; j--)
 		{
 			var tr:TrophyReward = game.arenas.get(i).rewards[j] as TrophyReward;
-			trace(i, j, player.get_point(), player.getResource(ResourceType.R25_REWARD_STEP), tr)
 			if( player.getResource(ResourceType.R25_REWARD_STEP) >= tr.step )
 				break;
 			if( player.get_point() >= tr.point && Math.floor(tr.key/10) != 3 )

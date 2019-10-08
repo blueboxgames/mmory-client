@@ -131,7 +131,7 @@
 				if(fileStream)
 				{
 					fileStream.removeEventListener(OutputProgressEvent.OUTPUT_PROGRESS, outputProgressHandler);
-					fileStream.close();
+					close();
 				}
 				if(onLoad!=null)
 					onLoad(this);
@@ -141,9 +141,7 @@
 		public function close():void
 		{
 			if(fileStream!=null)
-			{
 				fileStream.close();
-			}
 			removeListeners();
 			fileStream = null;
 		}

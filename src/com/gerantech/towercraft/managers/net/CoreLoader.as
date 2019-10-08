@@ -22,28 +22,27 @@ import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
+import flash.events.Event;
+import flash.events.EventDispatcher;
 import flash.filesystem.File;
-import flash.filesystem.FileMode;
-import flash.filesystem.FileStream;
-import flash.utils.ByteArray;
 
-public class CoreLoader
+public class CoreLoader extends EventDispatcher
 {
 private var version:String;
 private var serverData:SFSObject;
 private var initData:InitData;
 
-public function CoreLoader(serverData:SFSObject)
+public function load(serverData:SFSObject):void
 {
 	this.serverData = serverData;
 	this.version = this.serverData.getText("coreVersion");
-	var scriptFile:File = File.applicationStorageDirectory.resolvePath("script-data.cs");
-	var scriptFileStream:FileStream = new FileStream(); 
-	scriptFileStream.open(scriptFile, FileMode.READ);
-	var scriptBytes:ByteArray = new ByteArray();
-	scriptFileStream.readBytes(scriptBytes);
-	scriptFileStream.close();
-	ScriptEngine.initialize(scriptBytes.readUTFBytes(scriptBytes.length), this.serverData.getInt("forceVersion"));
+	AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath("assets/script-data.cs").nativePath)
+	AppModel.instance.assets.loadQueue(this.script_loadCoallcack)
+}
+
+private function script_loadCoallcack():void
+{
+	ScriptEngine.initialize(AppModel.instance.assets.getByteArray("script-data").toString(), this.serverData.getInt("forceVersion"));
 
 	initServerData(serverData);
 	
@@ -58,6 +57,7 @@ public function CoreLoader(serverData:SFSObject)
 	loadExchanges(serverData);
 	loadChallenges(serverData, initData.id);
 	loadQuests(serverData);
+	dispatchEvent(new Event(Event.COMPLETE));
 }
 
 private function initServerData(sfsObj:SFSObject):void
