@@ -24,6 +24,7 @@ import flash.events.ErrorEvent;
 import flash.events.Event;
 import flash.events.InvokeEvent;
 import flash.events.UncaughtErrorEvent;
+import flash.filesystem.File;
 import flash.geom.Rectangle;
 import flash.utils.getTimer;
 
@@ -41,6 +42,9 @@ public function Main()
 {
 	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) + "|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
 	var desc:Descriptor = AppModel.instance.descriptor;
+	var localeDir:File = File.applicationStorageDirectory.resolvePath("locale");
+	if( !localeDir.exists )
+		File.applicationDirectory.resolvePath("locale").copyTo(localeDir, true);
 	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(desc.market));
 	/*var str:String = "";
 	var ret:Number = -0.05;

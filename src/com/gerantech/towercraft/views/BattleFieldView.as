@@ -70,7 +70,7 @@ public function initialize () : void
 		Starling.juggler.delayCall(assetManagerLoaded, 0.1, 1);
 		return;
 	}
-	AppModel.instance.assets.enqueue(File.applicationDirectory.resolvePath("assets/images/battle"));
+	AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath("assets/images/battle"));
 	AppModel.instance.assets.loadQueue(assetManagerLoaded);
 }
 

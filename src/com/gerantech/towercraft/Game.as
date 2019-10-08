@@ -4,7 +4,6 @@ import com.gerantech.towercraft.controls.StackNavigator;
 import com.gerantech.towercraft.controls.screens.*;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.utils.Localizations;
 
 import feathers.controls.Drawers;
 import feathers.controls.StackScreenNavigatorItem;

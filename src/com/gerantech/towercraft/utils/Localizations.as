@@ -34,7 +34,7 @@ public class Localizations extends EventDispatcher
 		}
 
         this.locale = locale;
-		new GTStreamer(File.applicationDirectory.resolvePath("locale/" + locale + ".json"), fileLoadedCallback)
+		new GTStreamer(File.applicationStorageDirectory.resolvePath("locale/" + locale + ".json"), fileLoadedCallback)
     }
 
     protected function fileLoadedCallback(streamer:GTStreamer) : void 

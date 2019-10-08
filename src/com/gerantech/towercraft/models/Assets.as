@@ -222,7 +222,7 @@ package com.gerantech.towercraft.models
 			{
 				if( AppModel.instance.assets.getTexture(item + (postFix == null ? "" : postFix)) == null )
 				{
-					AppModel.instance.assets.enqueue(File.applicationDirectory.resolvePath((baseURL == null ? "" : baseURL) + item));
+					AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath((baseURL == null ? "" : baseURL) + item));
 					needLoading = true;
 				}
 			}
