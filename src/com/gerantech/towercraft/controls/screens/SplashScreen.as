@@ -12,7 +12,9 @@ import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.SplashMovie;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.events.FeathersEventType;
+
 import flash.desktop.NativeApplication;
 import flash.display.Stage;
 import flash.events.Event;
@@ -39,10 +41,10 @@ protected function stage_resizeHandler(event:*):void
 {
 	logo.graphics.clear();
 	logo.graphics.beginFill(0);
-	logo.graphics.drawRect(-stage.fullScreenWidth, -stage.fullScreenHeight, stage.fullScreenWidth * 4, stage.fullScreenHeight * 4);
-	logo.scaleY = logo.scaleX = stage.fullScreenWidth / 1080;
+	logo.scaleY = logo.scaleX = stage.stageWidth / 1080;
+	logo.graphics.drawRect(-stage.stageWidth, -stage.stageHeight, stage.stageWidth * 4, stage.stageHeight * 4);
 	//trace(stage.fullScreenWidth, stage.fullScreenHeight, logo.width, logo.height, logo.scaleY, 'sssssssssssssssssss')
-	logo.y = (stage.fullScreenHeight - (2160 * logo.scaleY)) * 0.5;
+	logo.y = (stage.stageHeight - (2160 * logo.scaleY)) * 0.6;
 }
 protected function logo_clearHandler(event:*):void
 {
