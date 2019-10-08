@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF - 8"?>
-<TextureAtlas imagePath="map-1.png" width="2048" height="2048">
-	<SubTexture name="c13c41ed76887338734f5a22a65d7a64" x="0" y="0" width="1054" height="2046" frameX="-1" frameY="-1" frameWidth="1055" frameHeight="2048"/>
-	<SubTexture name="2819ad27457a2c7392d702e90117e9cc" x="1055" y="0" width="110" height="199" frameX="0" frameY="0" frameWidth="110" frameHeight="200"/>
-	<SubTexture name="852329f44813fa51d6c0d3bebd0de024" x="1166" y="0" width="64" height="82" frameX="0" frameY="0" frameWidth="64" frameHeight="83"/>
-</TextureAtlas>
