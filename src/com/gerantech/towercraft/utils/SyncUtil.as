@@ -1,31 +1,24 @@
 package com.gerantech.towercraft.utils
 {
-    import com.smartfoxserver.v2.entities.data.ISFSObject;
-
     import flash.events.IOErrorEvent;
     import flash.filesystem.File;
-    import flash.utils.Dictionary;
 
     import starling.events.Event;
     import starling.events.EventDispatcher;
 
     public class SyncUtil extends EventDispatcher
     {
-        private static const DEBUG:Boolean = true;
-        private var checkedFiles:Dictionary;
-        private var checksumData:ISFSObject;
-        public function sync(checksumData:ISFSObject, data:Array):void
+        // private static const DEBUG:Boolean = true;
+        private var assets:Object;
+        public function sync(assets:Object):void
         {
-            this.checksumData = checksumData;
-            checkedFiles = new Dictionary();
-            for each(var name:String in data )
-                checkedFiles[name]= false;
-            
-            for each(name in data )
+            this.assets = assets;
+            for ( var name:String in assets )
             {
+                assets[name].exists = false;
                 var md5Check:MD5Check = new MD5Check();
                 md5Check.addEventListener(Event.COMPLETE, md5Check_completeHandler);
-                md5Check.getHash(name, checksumData.getSFSObject(name).getUtfString("md5"));
+                md5Check.getHash(name, assets[name].md5);
             }
         }
 
@@ -38,14 +31,14 @@ package com.gerantech.towercraft.utils
             var md5Check:MD5Check = event.currentTarget as MD5Check;
             if( event.data )
             {
-                checkedFiles[md5Check.name] = true;
-                checkAllFiles();
+                this.assets[md5Check.name].exists = true;
+                this.checkAllFiles();
                 return;
             }
             
             // Get a new loader for given asset name.
             var path:String = File.applicationStorageDirectory.resolvePath(md5Check.name).nativePath;
-            var address:String = this.checksumData.getSFSObject(md5Check.name).getUtfString("url");
+            var address:String = this.assets[md5Check.name].url;
             var loader:FileLoader = new FileLoader(md5Check.name, path, address, md5Check.hash);
             loader.addEventListener(IOErrorEvent.IO_ERROR, loader_ioErrorHandler);
             loader.addEventListener(Event.COMPLETE, loader_completeHandler);
@@ -55,8 +48,9 @@ package com.gerantech.towercraft.utils
         private function loader_completeHandler(event:*):void
         {
             var loader:FileLoader = event.currentTarget as FileLoader;
-            checkedFiles[loader.name] = true;
-            checkAllFiles();
+            loader.closeLoader()
+            this.assets[loader.name].exists = true;
+            this.checkAllFiles();
         }
 
         private function loader_ioErrorHandler(e:*):void
@@ -70,11 +64,10 @@ package com.gerantech.towercraft.utils
          */
         private function checkAllFiles():void
         {
-            for (var key:String in this.checkedFiles )
-                if( !this.checkedFiles[key] )
+            for ( var name:String in this.assets )
+                if( !this.assets[name].exists )
                     return;
-
-            dispatchEventWith(Event.COMPLETE);
+            this.dispatchEventWith(Event.COMPLETE);
         }
     }
 }
@@ -85,8 +78,8 @@ class FileLoader extends LoadAndSaver
     public var name:String;
     public function FileLoader(name:String, localPath:String, webPath:String, md5:String = null)
     {
-        this.name = name;
         super(localPath, webPath, md5, true);
+        this.name = name;
     }
 }
 
@@ -106,7 +99,7 @@ class MD5Check extends EventDispatcher
 {
     public var name:String;
     public var hash:String;
-    public function MD5Check(){}
+    public function MD5Check(){ super(); }
     public function getHash(name:String, hash:String):void
     {
         this.name = name;
@@ -119,30 +112,23 @@ class MD5Check extends EventDispatcher
         }
         if( AppModel.instance.platform == AppModel.PLATFORM_ANDROID )
         {
-            var _hash:String = NativeAbilities.instance.getMD5(file.nativePath);
-            dispatchEventWith(Event.COMPLETE, false, hash == _hash);
+            dispatchEventWith(Event.COMPLETE, false, this.hash == NativeAbilities.instance.getMD5(file.nativePath));
             return 
         }
-            
+        
         var nativeProcessStartupInfo:NativeProcessStartupInfo = new NativeProcessStartupInfo();
-        var exe:File = File.applicationDirectory.resolvePath("MD5.exe");
-        nativeProcessStartupInfo.executable = exe;
-
-        var processArgs:Vector.<String> = new Vector.<String>();
-        processArgs[0] = "-src";
-        processArgs[1] = file.nativePath;
-        nativeProcessStartupInfo.arguments = processArgs;
+        nativeProcessStartupInfo.executable = new File("c:/md5.exe");
+        nativeProcessStartupInfo.arguments = new <String>["-src", file.nativePath];
 
         var process:NativeProcess = new NativeProcess();
         process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, process_DataHandler);
-        // now = getTimer();
         process.start(nativeProcessStartupInfo);
     }
 
     private function process_DataHandler(event:ProgressEvent):void
     {
         var process:NativeProcess = event.currentTarget as NativeProcess;
-        var equalprocess:Boolean = process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable) == this.hash;
-        dispatchEventWith(Event.COMPLETE, false, equalprocess);
+        dispatchEventWith(Event.COMPLETE, false, this.hash == process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable));
+        process.exit();
     }
 }
