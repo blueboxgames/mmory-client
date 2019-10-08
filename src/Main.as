@@ -44,7 +44,10 @@ public function Main()
 	var desc:Descriptor = AppModel.instance.descriptor;
 	var localeDir:File = File.applicationStorageDirectory.resolvePath("locale");
 	if( !localeDir.exists )
+	{
+		localeDir.createDirectory();
 		File.applicationDirectory.resolvePath("locale").copyTo(localeDir, true);
+	}
 	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(desc.market));
 	/*var str:String = "";
 	var ret:Number = -0.05;
