@@ -44,7 +44,7 @@ package com.gerantech.towercraft.utils
             }
             
             // Get a new loader for given asset name.
-            var path:String = File.applicationStorageDirectory.resolvePath(md5Check.name).nativePath;
+            var path:String = File.applicationStorageDirectory.resolvePath("assets/" + md5Check.name).nativePath;
             var address:String = this.assets[md5Check.name].url;
             var loader:FileLoader = new FileLoader(md5Check.name, path, address, md5Check.hash);
             loader.addEventListener(IOErrorEvent.IO_ERROR, loader_ioErrorHandler);
@@ -55,8 +55,8 @@ package com.gerantech.towercraft.utils
         private function loader_completeHandler(event:*):void
         {
             var loader:FileLoader = event.currentTarget as FileLoader;
-            loader.closeLoader()
-            AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath(loader.name).nativePath);
+            loader.closeLoader();
+            AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath("assets/" + loader.name).nativePath);
             this.assets[loader.name].exists = true;
             this.checkAllFiles();
         }

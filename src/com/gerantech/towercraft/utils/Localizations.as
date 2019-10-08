@@ -26,22 +26,22 @@ public class Localizations extends EventDispatcher
 
     public function changeLocale(locale:String = "en_US") : void
     {
-		if( this.localeDictionary != null && this.locale == locale )
-		{
-			if( hasEventListener(Event.CHANGE) )
-				dispatchEventWith(Event.CHANGE, false, locale);
-			return;
-		}
+			if( this.localeDictionary != null && this.locale == locale )
+			{
+				if( hasEventListener(Event.CHANGE) )
+					dispatchEventWith(Event.CHANGE, false, locale);
+				return;
+			}
 
-        this.locale = locale;
-		new GTStreamer(File.applicationStorageDirectory.resolvePath("locale/" + locale + ".json"), fileLoadedCallback)
+			this.locale = locale;
+			new GTStreamer(File.applicationStorageDirectory.resolvePath("assets/" + locale + ".json"), fileLoadedCallback)
     }
 
     protected function fileLoadedCallback(streamer:GTStreamer) : void 
     {
-        localeDictionary = JSON.parse(streamer.utfBytes);
-		if( hasEventListener(Event.CHANGE) )
-        	dispatchEventWith(Event.CHANGE, false, locale);
+			localeDictionary = JSON.parse(streamer.utfBytes);
+			if( hasEventListener(Event.CHANGE) )
+				dispatchEventWith(Event.CHANGE, false, locale);
     }
 
     public function get(key:String, parameters:Array = null) : String
