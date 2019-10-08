@@ -1,5 +1,7 @@
 package com.gerantech.towercraft.utils
 {
+    import com.gerantech.towercraft.models.AppModel;
+
     import flash.events.IOErrorEvent;
     import flash.filesystem.File;
 
@@ -13,6 +15,10 @@ package com.gerantech.towercraft.utils
         public function sync(assets:Object):void
         {
             this.assets = assets;
+            var assetsDir:File = File.applicationStorageDirectory.resolvePath("assets");
+            if( !assetsDir.exists )
+                assetsDir.createDirectory()
+
             for ( var name:String in assets )
             {
                 assets[name].exists = false;
@@ -32,6 +38,7 @@ package com.gerantech.towercraft.utils
             if( event.data )
             {
                 this.assets[md5Check.name].exists = true;
+                AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath(md5Check.name).nativePath);
                 this.checkAllFiles();
                 return;
             }
@@ -49,6 +56,7 @@ package com.gerantech.towercraft.utils
         {
             var loader:FileLoader = event.currentTarget as FileLoader;
             loader.closeLoader()
+            AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath(loader.name).nativePath);
             this.assets[loader.name].exists = true;
             this.checkAllFiles();
         }
@@ -67,6 +75,12 @@ package com.gerantech.towercraft.utils
             for ( var name:String in this.assets )
                 if( !this.assets[name].exists )
                     return;
+            
+            AppModel.instance.assets.loadQueue(loadQueue_completeHandler);
+        }
+
+        private function loadQueue_completeHandler(e:*):void
+        {
             this.dispatchEventWith(Event.COMPLETE);
         }
     }

@@ -2,7 +2,6 @@ package com.gerantech.towercraft.controls.overlays
 {
 import com.gerantech.towercraft.controls.tooltips.ConfirmTooltip;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 
 import dragonBones.events.EventObject;
@@ -29,7 +28,7 @@ public function TutorialMessageOverlay(task:TutorialTask):void
 {
 	super(task);
 	side = int(task.data) % 2;
-	Assets.loadAtlas("assets/animations/", "_tex", createFactory, "characters");
+	createFactory();
 }
 
 public static function createFactory():void

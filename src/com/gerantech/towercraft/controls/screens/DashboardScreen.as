@@ -56,34 +56,16 @@ private var segmentsCollection:ListCollection;
 
 public function DashboardScreen()
 {
-	visible = false;	
-	if( appModel.assets.getTexture("poster/logo") == null )
-		setTimeout(Assets.loadAtlas, 5, "assets/images/", "", biguiLoaded, "bigui");
-		//Assets.loadAtlas("assets/images/", "", biguiLoaded, "bigui");
-	function biguiLoaded() : void {
-		setTimeout(Assets.loadAtlas, 5, "assets/animations/", "_tex", packLoaded, "packs");
-		// Assets.loadAtlas("assets/animations/", "_tex", packLoaded, "packs");
-	}
-	function packLoaded() : void {
-		initialize();
-	}
-}
-
-override protected function initialize():void
-{
-	if( appModel.assets.getTexture("poster/logo") == null )
-		return;
-	OpenBookOverlay.createFactory();
-	// =-=-=-=-=-=-=-=-=-=-=-=- background -=-=-=-=-=-=-=-=-=-=-=-=
-	var tileBacground:TileBackground = new TileBackground("home/pistole-tile", 0.3, true);
-	tileBacground.layoutData = new AnchorLayoutData(0, 0, FOOTER_SIZE, 0);
-	backgroundSkin = tileBacground;
-
-	super.initialize();
+	visible = false;
 	if( stage == null )
 		addEventListener(Event.ADDED_TO_STAGE, addedToStageHandler);
 	else
 		addedToStageHandler(null);
+}
+
+override protected function initialize():void
+{
+	super.initialize();
 }
 
 protected function addedToStageHandler(event:Event):void
@@ -102,6 +84,13 @@ protected function addedToStageHandler(event:Event):void
 protected function loadingManager_loadedHandler(event:LoadingEvent):void
 {
 	appModel.loadingManager.removeEventListener(LoadingEvent.LOADED, loadingManager_loadedHandler);
+	
+	OpenBookOverlay.createFactory();
+	// =-=-=-=-=-=-=-=-=-=-=-=- background -=-=-=-=-=-=-=-=-=-=-=-=
+	var tileBacground:TileBackground = new TileBackground("home/pistole-tile", 0.3, true);
+	tileBacground.layoutData = new AnchorLayoutData(0, 0, FOOTER_SIZE, 0);
+	backgroundSkin = tileBacground;
+	
 	UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_000_FIRST_RUN);
 
 	// tutorial mode

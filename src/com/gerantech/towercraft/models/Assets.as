@@ -4,7 +4,6 @@ package com.gerantech.towercraft.models
 
 	import flash.display.Bitmap;
 	import flash.display.BitmapData;
-	import flash.filesystem.File;
 	import flash.filters.ColorMatrixFilter;
 	import flash.geom.Matrix;
 	import flash.geom.Point;
@@ -211,31 +210,31 @@ package com.gerantech.towercraft.models
 		}
 		
 		static private var loadCallback:Function;
-		static public function loadAtlas(baseURL:String, postFix:String, callback:Function, ...args) : void
-		{
-			for each( var item:String in args )
-				checkLoadingAssets(item);
+		// static public function loadAtlas(baseURL:String, postFix:String, callback:Function, ...args) : void
+		// {
+		// 	for each( var item:String in args )
+		// 		checkLoadingAssets(item);
 			
-			//AppModel.instance.assets.verbose = true;
-			var needLoading:Boolean;
-			function checkLoadingAssets(item:String) : void
-			{
-				if( AppModel.instance.assets.getTexture(item + (postFix == null ? "" : postFix)) == null )
-				{
-					AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath((baseURL == null ? "" : baseURL) + item));
-					needLoading = true;
-				}
-			}
-			if( needLoading )
-			{
-				loadCallback = callback;
-				AppModel.instance.assets.loadQueue(assets_completeCallback);
-			}
-			else
-			{
-				callback();
-			}
-		}
+		// 	//AppModel.instance.assets.verbose = true;
+		// 	var needLoading:Boolean;
+		// 	function checkLoadingAssets(item:String) : void
+		// 	{
+		// 		if( AppModel.instance.assets.getTexture(item + (postFix == null ? "" : postFix)) == null )
+		// 		{
+		// 			AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath((baseURL == null ? "" : baseURL) + item));
+		// 			needLoading = true;
+		// 		}
+		// 	}
+		// 	if( needLoading )
+		// 	{
+		// 		loadCallback = callback;
+		// 		AppModel.instance.assets.loadQueue(assets_completeCallback);
+		// 	}
+		// 	else
+		// 	{
+		// 		callback();
+		// 	}
+		// }
 		private static function assets_completeCallback() : void
 		{
 			if(loadCallback!=null)

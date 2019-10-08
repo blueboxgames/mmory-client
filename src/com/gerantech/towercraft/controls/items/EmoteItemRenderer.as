@@ -26,7 +26,7 @@ static private var atlasLoadCalback:Function;
 static public function loadEmotes(loadCallback:Function) : void
 {
 	EmoteItemRenderer.atlasLoadCalback = loadCallback;
-	Assets.loadAtlas("assets/animations/", "_tex", animation_loadCallback, "emotes");
+	animation_loadCallback();
 }
 static private function animation_loadCallback():void 
 {

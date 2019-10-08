@@ -1,18 +1,19 @@
 package com.gerantech.towercraft.controls.overlays
 {
-import com.gerantech.towercraft.controls.CardView;
-import com.gerantech.towercraft.controls.TileBackground;
-import com.gerantech.towercraft.controls.buttons.IndicatorCard;
-import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
-import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.views.effects.UIParticleSystem;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.controls.CardView;
+import com.gerantech.towercraft.controls.TileBackground;
+import com.gerantech.towercraft.controls.buttons.IndicatorCard;
+import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
+import com.gerantech.towercraft.events.LoadingEvent;
+import com.gerantech.towercraft.managers.net.LoadingManager;
+import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.models.Assets;
+import com.gerantech.towercraft.views.effects.UIParticleSystem;
 
 import dragonBones.events.EventObject;
 import dragonBones.objects.DragonBonesData;
@@ -62,11 +63,13 @@ private var collectedItemIndex:int = -1;
 public function OpenBookOverlay(type:int)
 {
 	super(type);
-	createFactory();
+	if( AppModel.instance.loadingManager.state < LoadingManager.STATE_LOADED )
+		AppModel.instance.loadingManager.addEventListener(LoadingEvent.LOADED, createFactory);
 }
 
 public static function createFactory():void
 {
+	AppModel.instance.loadingManager.removeEventListener(LoadingEvent.LOADED, createFactory);
 	if( factory != null )
 		return;
 	factory = new StarlingFactory();

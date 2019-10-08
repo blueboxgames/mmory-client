@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.controls.buttons
 {
 	import com.gerantech.towercraft.models.AppModel;
-	import com.gerantech.towercraft.models.Assets;
 	import com.gerantech.towercraft.themes.MainTheme;
 	import com.gerantech.towercraft.utils.StrUtils;
 
@@ -58,8 +57,6 @@ package com.gerantech.towercraft.controls.buttons
 		static public function loadAtlas(loadCallback:Function) : void
 		{
 			var txt:Texture = AppModel.instance.assets.getTexture("emblem-000");
-			if( txt == null )
-				Assets.loadAtlas("assets/images/", "", loadCallback, "emblems");
 		}
 
 		static public function getTexture(index:int) : Texture
