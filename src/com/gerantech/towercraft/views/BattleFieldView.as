@@ -6,7 +6,9 @@ import com.gerantech.mmory.core.battle.bullets.Bullet;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.events.BattleEvent;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.GraphicMetrics;
 import com.gerantech.mmory.core.utils.Point2;
 import com.gerantech.mmory.core.utils.Point3;
@@ -18,6 +20,7 @@ import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.net.ResponseSender;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.BattleData;
+import com.gerantech.towercraft.utils.SyncUtil;
 import com.gerantech.towercraft.views.units.UnitView;
 import com.gerantech.towercraft.views.units.elements.IElement;
 import com.gerantech.towercraft.views.units.elements.ImageElement;
@@ -26,7 +29,6 @@ import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
-import flash.filesystem.File;
 import flash.utils.setTimeout;
 
 import starling.animation.Transitions;
@@ -36,6 +38,7 @@ import starling.display.Quad;
 import starling.display.Sprite;
 import starling.events.Event;
 import starling.textures.Texture;
+import starling.assets.AssetManager;
 
 public class BattleFieldView extends Sprite
 {
@@ -65,19 +68,42 @@ public function initialize () : void
 	guiImagesContainer = new Sprite();
 	guiTextsContainer = new Sprite();
 	
-	if( AppModel.instance.assets.getObject("arts-rules") != null )
+	var deckKeys:Vector.<int> = AppModel.instance.game.player.decks.get(0).keys();
+	var deck:Vector.<String> = new Vector.<String>;
+	for(var k:int = 0; k < deckKeys.length; k++ )
+		deck.push(AppModel.instance.game.player.decks.get(0).get(deckKeys[k]).toString());
+	var assets:Object = AppModel.instance.loadingManager.serverData.getSFSObject("assets").toObject();
+	var preAssets:Object = new Object();
+	for ( var key:String in assets )
 	{
-		Starling.juggler.delayCall(assetManagerLoaded, 0.1, 1);
-		return;
+		if( assets[key]["pre"] )
+			preAssets[key] = assets[key];
+		else if( !assets[key]["initial"] )
+			fillDeck(deck, assets, preAssets, key);
 	}
-	AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath("assets/images/battle"));
-	AppModel.instance.assets.loadQueue(assetManagerLoaded);
+
+	key = "map-" + ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX));
+	preAssets[key + ".json"] = assets[key + ".json"];
+	preAssets[key + ".atf"] = assets[key + ".atf"];
+	preAssets[key + ".xml"] = assets[key + ".xml"];
+
+	var syncTool:SyncUtil = new SyncUtil();
+	syncTool.addEventListener(Event.COMPLETE, syncToolPre_completeHandler);
+	syncTool.sync(preAssets);
 }
 
-private function assetManagerLoaded(ratio:Number):void 
+private function fillDeck(deck:Vector.<String>, fromAssets:Object, toAssets:Object, key:String):void
 {
-	if( ratio < 1 )
+	for(var i:int=0; i<deck.length; i++)
+	if( key.search(deck[i]) > -1 )
+	{
+		toAssets[key] = fromAssets[key];
 		return;
+	}
+}
+
+protected function syncToolPre_completeHandler(event:Event):void 
+{
 	if( AppModel.instance.artRules == null )
 		AppModel.instance.artRules = new ArtRules(AppModel.instance.assets.getObject("arts-rules"));
 	mapBuilder = new MapBuilder();
@@ -89,7 +115,23 @@ public function createPlaces(battleData:BattleData) : void
 	this.battleData = battleData;
 	if( mapBuilder == null )
 		return;
-	
+	var deckKeys:Vector.<int> = battleData.getAxiseDeck().keys();
+	var deck:Vector.<String> = new Vector.<String>;
+	for(var k:int = 0; k < deckKeys.length; k++ )
+		deck.push(battleData.getAxiseDeck().get(deckKeys[k]).type.toString());
+	var assets:Object = AppModel.instance.loadingManager.serverData.getSFSObject("assets").toObject();
+	var preAssets:Object = new Object();
+	for ( var key:String in assets )
+		if( !assets[key]["initial"] && !assets[key]["pre"] )
+			fillDeck(deck, assets, preAssets, key);
+
+	var syncTool:SyncUtil = new SyncUtil();
+	syncTool.addEventListener(Event.COMPLETE, syncToolPost_completeHandler);
+	syncTool.sync(preAssets);
+}
+
+protected function syncToolPost_completeHandler(event:Event):void
+{
 	pivotX = BattleField.WIDTH * 0.5;
 	pivotY = BattleField.HEIGHT * 0.5;
 	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5 - 100) * 0.5);
@@ -120,6 +162,7 @@ public function createPlaces(battleData:BattleData) : void
 	addChild(effectsContainer);
 	addChild(guiImagesContainer);
 	addChild(guiTextsContainer);
+	dispatchEventWith(Event.TRIGGERED);
 }
 
 protected function timeManager_updateHandler(e:Event):void 
@@ -204,9 +247,10 @@ public function requestKillPioneers(side:int):void
 	{
 		AppModel.instance.sounds.addAndPlay("car-passing-by", null, 1, SoundManager.SINGLE_NONE);
 		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/base");
+		var a:AssetManager = AppModel.instance.assets;
 		var car:ImageElement = new ImageElement(null, txt);
-		car.width = txt.frameWidth * 2.4;
-		car.height = txt.frameHeight * 2.4;
+		car.width = UnitView._WIDTH;
+		car.height = UnitView._HEIGHT;
 		// car.scaleX *= fromX < toX ? 1 : -1;
 		car.x = fromX;
 		car.y = y + BattleField.HEIGHT * 0.5 - car.height * 0.7;

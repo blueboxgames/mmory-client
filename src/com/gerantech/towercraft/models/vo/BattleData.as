@@ -78,7 +78,7 @@ public function BattleData(sfsData:ISFSObject)
 	if( response != MessageTypes.RESPONSE_SUCCEED )
 		trace("battle cost data from server server is invalid!");
 	
-	var f:FieldData = new FieldData(sfsData.getInt("mode"), sfsData.getText("map"), "60,120,180,240");
+	var f:FieldData = new FieldData(sfsData.getInt("mode"), JSON.stringify(AppModel.instance.assets.getObject("map-" + sfsData.getInt("mode"))), "60,120,180,240");
 	this.battleField = new BattleField();
 	this.battleField.initialize(side == 0 ? alliseGame : axisGame, side == 0 ? axisGame : alliseGame, f, side, sfsData.getInt("startAt"), sfsData.getDouble("now"), false, sfsData.getInt("friendlyMode"));
 	this.battleField.state = BattleField.STATE_1_CREATED;
@@ -92,6 +92,10 @@ public function BattleData(sfsData:ISFSObject)
 public function getAlliseDeck():IntCardMap 
 {
 	return battleField.decks.get(this.battleField.side);
+}
+public function getAxiseDeck():IntCardMap 
+{
+	return battleField.decks.get(this.battleField.side == 0 ? 1 : 0);
 }
 public function getAlliseEllixir():Number
 {

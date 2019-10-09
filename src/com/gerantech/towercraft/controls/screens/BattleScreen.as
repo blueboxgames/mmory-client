@@ -185,8 +185,13 @@ private function startBattle():void
 		return;
 	}
 	
+	appModel.battleFieldView.addEventListener(Event.TRIGGERED, battleFieldView_triggeredHAndler);
 	appModel.battleFieldView.createPlaces(this.battleData);
+}
 
+private function battleFieldView_triggeredHAndler(event:Event):void
+{
+	appModel.battleFieldView.removeEventListener(Event.TRIGGERED, battleFieldView_triggeredHAndler);
 	waitingOverlay.disappear();
 	waitingOverlay.addEventListener(Event.CLOSE, waitingOverlay_closeHandler);
 	function waitingOverlay_closeHandler(e:Event):void 
