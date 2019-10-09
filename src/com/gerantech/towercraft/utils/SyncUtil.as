@@ -19,13 +19,20 @@ package com.gerantech.towercraft.utils
             if( !assetsDir.exists )
                 assetsDir.createDirectory()
 
+            var numSyncFiles:int = 0;
             for ( var name:String in assets )
             {
+                if( this.assets[name].exists )
+                    continue;
                 assets[name].exists = false;
                 var md5Check:MD5Check = new MD5Check();
                 md5Check.addEventListener(Event.COMPLETE, md5Check_completeHandler);
                 md5Check.getHash(name, assets[name].md5);
+                numSyncFiles ++;
             }
+
+            if( numSyncFiles == 0 )
+                this.dispatchEventWith(Event.COMPLETE);
         }
 
         /**
@@ -37,16 +44,12 @@ package com.gerantech.towercraft.utils
             var md5Check:MD5Check = event.currentTarget as MD5Check;
             if( event.data )
             {
-                this.assets[md5Check.name].exists = true;
-                AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath(md5Check.name).nativePath);
-                this.checkAllFiles();
+                finalizeLOading(md5Check.file);
                 return;
             }
             
             // Get a new loader for given asset name.
-            var path:String = File.applicationStorageDirectory.resolvePath("assets/" + md5Check.name).nativePath;
-            var address:String = this.assets[md5Check.name].url;
-            var loader:FileLoader = new FileLoader(md5Check.name, path, address, md5Check.hash);
+            var loader:FileLoader = new FileLoader(md5Check.file, this.assets[md5Check.file.name].url, md5Check.hash);
             loader.addEventListener(IOErrorEvent.IO_ERROR, loader_ioErrorHandler);
             loader.addEventListener(Event.COMPLETE, loader_completeHandler);
             loader.start();
@@ -56,14 +59,19 @@ package com.gerantech.towercraft.utils
         {
             var loader:FileLoader = event.currentTarget as FileLoader;
             loader.closeLoader();
-            AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath("assets/" + loader.name).nativePath);
-            this.assets[loader.name].exists = true;
-            this.checkAllFiles();
+            finalizeLOading(loader.file);
         }
-
         private function loader_ioErrorHandler(e:*):void
         {
             this.dispatchEventWith(Event.IO_ERROR);
+        }
+
+        private function finalizeLOading(file:File):void
+        {
+            trace(file.nativePath);
+            AppModel.instance.assets.enqueue(file.nativePath);
+            this.assets[file.name].exists = true;
+            this.checkAllFiles();
         }
 
         /**
@@ -89,11 +97,11 @@ package com.gerantech.towercraft.utils
 import com.gerantech.towercraft.utils.LoadAndSaver;
 class FileLoader extends LoadAndSaver
 {
-    public var name:String;
-    public function FileLoader(name:String, localPath:String, webPath:String, md5:String = null)
+    public var file:File;
+    public function FileLoader(file:File, webPath:String, md5:String = null)
     {
-        super(localPath, webPath, md5, true);
-        this.name = name;
+        super(file.nativePath, webPath, md5, true);
+        this.file = file;
     }
 }
 
@@ -111,14 +119,13 @@ import starling.events.EventDispatcher;
 
 class MD5Check extends EventDispatcher
 {
-    public var name:String;
+    public var file:File;
     public var hash:String;
     public function MD5Check(){ super(); }
     public function getHash(name:String, hash:String):void
     {
-        this.name = name;
         this.hash = hash;
-        var file:File = File.applicationStorageDirectory.resolvePath(name);
+        this.file = File.applicationStorageDirectory.resolvePath("assets/" + name);
         if( !file.exists )
         {
             dispatchEventWith(Event.COMPLETE, false, false);

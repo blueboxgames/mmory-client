@@ -6,15 +6,12 @@ import flash.events.EventDispatcher;
 import flash.events.IOErrorEvent;
 import flash.events.ProgressEvent;
 import flash.filesystem.File;
-import flash.net.URLLoader;
 import flash.net.URLRequest;
 import flash.net.URLStream;
 import flash.system.ApplicationDomain;
 import flash.system.LoaderContext;
 import flash.utils.ByteArray;
 import flash.utils.setTimeout;
-
-import com.adobe.crypto.MD5;
 
 [Event(name="cancel", type="flash.events.Event")]
 [Event(name="complete", type="flash.events.Event")]
@@ -36,7 +33,6 @@ private var force:Boolean;
 private var isLoader:Boolean;
 private var sizeCheck:uint;
 private var urlStream:URLStream;
-private var urlLoader:URLLoader;
 private var gtStreamer:GTStreamer;
 private var patternCheck:String;
 public var byteArray:ByteArray;
@@ -65,29 +61,18 @@ public function start():void
 	else
 	{
 		var urlRequest:URLRequest = new URLRequest(this.webPath);
-		if( UTFMode )
-		{
-			urlLoader = new URLLoader();
-			urlLoader.addEventListener(Event.COMPLETE, webFileLoadHandler);
-			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, webFileErrorHandler);
-			urlLoader.addEventListener(ProgressEvent.PROGRESS, webFileProgressHandler);
-			urlLoader.load(urlRequest);
-		} 
-		else 
-		{
-			urlStream = new URLStream();
-			urlStream.addEventListener(Event.COMPLETE, webFileLoadHandler);
-			urlStream.addEventListener(IOErrorEvent.IO_ERROR, webFileErrorHandler);
-			urlStream.addEventListener(ProgressEvent.PROGRESS, webFileProgressHandler);
-			urlStream.load(urlRequest);
-		}
+		urlStream = new URLStream();
+		urlStream.addEventListener(Event.COMPLETE, webFileLoadHandler);
+		urlStream.addEventListener(IOErrorEvent.IO_ERROR, webFileErrorHandler);
+		urlStream.addEventListener(ProgressEvent.PROGRESS, webFileProgressHandler);
+		urlStream.load(urlRequest);
 	}
 }
 
 private function loacalFileLoadHandler(streamer:GTStreamer) : void
 {
 	UTFMode ? fileUTFData = streamer.utfBytes : fileLoader = streamer.loader;
-	byteArray = UTFMode ? null : streamer.bytes;
+	byteArray = UTFMode ? null : streamer.bytes;trace(localPath + ";;;")
 	finalizeLoad();
 }
 
@@ -108,9 +93,8 @@ private function webFileProgressHandler(event:ProgressEvent) : void
 }
 private function webFileLoadHandler(event:Event) : void
 {
-	gtStreamer = new GTStreamer(localPath, finalizeLoad, null, null, false, false);
 	////if(user.language!=null && verbose)user.dispatchEvent(new UserEvent(UserEvent.PROGRESS, -2, progMessage+" "+user.language.download.@complete));
-	if( UTFMode )
+	/* if( UTFMode )
 	{
 		fileUTFData = event.target.data;
 		urlLoader.close();
@@ -123,12 +107,12 @@ private function webFileLoadHandler(event:Event) : void
 		checkAndSave(fileUTFData);
 	} 
 	else 
-	{
+	{ */
 		byteArray = new ByteArray();
 		urlStream.readBytes(byteArray);
 		urlStream.close();
 		
-		if( (extension == "jbqr" || extension == "jpg") && byteArray.readUTFBytes(3) != "ÿØÿ" )
+		/* if( (extension == "jbqr" || extension == "jpg") && byteArray.readUTFBytes(3) != "ÿØÿ" )
 		{
 			webFileErrorHandler(new IOErrorEvent(IOErrorEvent.IO_ERROR, false, false, "Not jpeg file."));
 			return;
@@ -137,20 +121,20 @@ private function webFileLoadHandler(event:Event) : void
 		{
 			webFileErrorHandler(new IOErrorEvent(IOErrorEvent.IO_ERROR, false, false, "Not mp3 file."));
 			return;
-		}
-		byteArray.position=0;
+		} */
+		byteArray.position = 0;
 		checkAndSave(byteArray);
 		//byteArray.clear();
-	}
+	// }
 }
 
 private function checkAndSave(data:*) : void
 {
-	if(md5!=null)
+/* 	if( md5 != null )
 	{
 		var _md5:String = UTFMode? MD5.hash(data):MD5.hashBytes(data);
 		//trace(localPath, md5 ,_md5)
-		if(md5!=_md5)
+		if( md5!=_md5 )
 		{
 			webFileErrorHandler(new IOErrorEvent(IOErrorEvent.IO_ERROR, false, false, "md5 check failed."));
 			return;
@@ -162,8 +146,9 @@ private function checkAndSave(data:*) : void
 		webFileErrorHandler(new IOErrorEvent(IOErrorEvent.IO_ERROR, false, false, "size check failed."));
 		return;
 	}
+ */
+	gtStreamer = new GTStreamer(localPath, finalizeLoad, null, null, false, false);
 	gtStreamer.save(data);
-	//MD5.hash(fileUTFData);
 }
 
 private function finalizeLoad(s:GTStreamer=null) : void
@@ -188,7 +173,6 @@ private function loadLoaderBytes() : void
 	fileLoader.contentLoaderInfo.addEventListener(Event.COMPLETE, fileLoader_completeHandler);
 	fileLoader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, fileLoader_ioErrorHandler);
 	fileLoader.loadBytes(byteArray, loaderContext);
-
 }
 
 protected function fileLoader_ioErrorHandler(event:IOErrorEvent) : void
@@ -218,22 +202,22 @@ public function closeLoader(hasError:Boolean = true) : void
 	}*/
 	
 	/////if(hasError && user!=null && user.language!=null && verbose)user.dispatchEvent(new UserEvent(UserEvent.PROGRESS, -2, progMessage+" "+user.language.download.@cancel));
-	try 
-	{
-		if( urlLoader != null )
+	// try 
+	// {
+		/* if( urlLoader != null )
 		{
 			urlLoader.removeEventListener(Event.COMPLETE, webFileLoadHandler);
 			urlLoader.removeEventListener(IOErrorEvent.IO_ERROR, webFileErrorHandler);
 			urlLoader.removeEventListener(ProgressEvent.PROGRESS, webFileProgressHandler);
 			urlLoader.close();
 			urlLoader = null;
-		}
+		} */
 		if( urlStream != null )
 		{
 			urlStream.removeEventListener(Event.COMPLETE, webFileLoadHandler);
 			urlStream.removeEventListener(IOErrorEvent.IO_ERROR, webFileErrorHandler);
 			urlStream.removeEventListener(ProgressEvent.PROGRESS, webFileProgressHandler);
-			if(urlStream.connected)
+			if( urlStream.connected )
 				urlStream.close();
 			urlStream = null;
 		}
@@ -242,8 +226,8 @@ public function closeLoader(hasError:Boolean = true) : void
 			gtStreamer.close();
 			gtStreamer = null;
 		}
-	}
-	catch( e:Error ) { trace("LoadAndSaver An error occurred " + e.toString()); }
+	// }
+	// catch( e:Error ) { trace("LoadAndSaver An error occurred " + e.toString()); }
 }
 
 private function get UTFMode() : Boolean

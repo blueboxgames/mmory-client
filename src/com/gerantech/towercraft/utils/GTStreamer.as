@@ -9,6 +9,7 @@
 	import flash.filesystem.FileStream;
 	import flash.system.LoaderContext;
 	import flash.utils.ByteArray;
+	import hscript.Error;
 	
 	public class GTStreamer
 	{
@@ -31,7 +32,10 @@
 			this.isLoader = isLoader;
 			
 			this.file = Boolean(file is File) ? file : new File(file);
+
+			try{
 			fileStream = new FileStream();
+			} catch(e:*) {trace(file.name,  e)}
 			if(isRead)// && this.file.exists
 			{
 				fileStream.addEventListener(Event.COMPLETE, completeHandler);
@@ -140,8 +144,9 @@
 		
 		public function close():void
 		{
-			if(fileStream!=null)
-				fileStream.close();
+			if(fileStream==null)
+				return;
+			fileStream.close();
 			removeListeners();
 			fileStream = null;
 		}
