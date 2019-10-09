@@ -24,6 +24,8 @@ override public function initialize() : void
 	super.initialize();
 	
 	levelDisplay = new Image(AppModel.instance.assets.getTexture("sliders/" + _side + "/level-" + CoreUtils.clamp(level, 1, 13)));
+	levelDisplay.height = 28;
+	levelDisplay.scaleX = levelDisplay.scaleY;
 	levelDisplay.touchable = false;
 	levelDisplay.visible = false;
 	filedView.guiImagesContainer.addChild(levelDisplay);	
