@@ -54,7 +54,7 @@ override public function fireEvent(dispatcherId:int, type:String, data:*) : void
 			hitDisplayFactory();
 			if( BattleField.DEBUG_MODE )
 			{
-				var damageAreaDisplay:Image = new Image(appModel.assets.getTexture("damage-range"));
+				var damageAreaDisplay:Image = new Image(appModel.assets.getTexture("map/damage-range"));
 				damageAreaDisplay.pivotX = damageAreaDisplay.width * 0.5;
 				damageAreaDisplay.pivotY = damageAreaDisplay.height * 0.5;
 				damageAreaDisplay.width = card.bulletDamageArea * 2;
@@ -116,7 +116,7 @@ private function defaultBulletDisplayFactory() : void
 	if( CardTypes.isSpell(card.type) )
 		return;
 	
-	shadowDisplay = new Image(appModel.assets.getTexture("bullets"));
+	shadowDisplay = new Image(appModel.assets.getTexture("bullets/shadow"));
 	shadowDisplay.width = bulletDisplay.width;
 	shadowDisplay.height = bulletDisplay.width * BattleField.CAMERA_ANGLE;
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;

@@ -115,7 +115,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	}
 	if( BattleField.DEBUG_MODE )
 	{
-		sizeDisplay = new ImageElement(null, appModel.assets.getTexture("manhole"));
+		sizeDisplay = new ImageElement(null, appModel.assets.getTexture("map/damage-range"));
 		sizeDisplay.pivotX = sizeDisplay.width * 0.5;
 		sizeDisplay.pivotY = sizeDisplay.height * 0.5;
 		sizeDisplay.width = card.sizeH * 2;
@@ -125,7 +125,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		sizeDisplay.y = __y;
 		fieldView.unitsContainer.addChild(sizeDisplay);
 		
-		rangeDisplay = new ImageElement(this, appModel.assets.getTexture("damage-range"));
+		rangeDisplay = new ImageElement(this, appModel.assets.getTexture("map/damage-range"));
 		rangeDisplay.pivotX = rangeDisplay.width * 0.5;
 		rangeDisplay.pivotY = rangeDisplay.height * 0.5;
 		rangeDisplay.width = card.bulletRangeMax * 2;
@@ -337,7 +337,7 @@ protected function defaultSummonEffectFactory() : void
 
 public function showWinnerFocus():void 
 {
-	var winnerDisplay:ImageElement = new ImageElement(this, appModel.assets.getTexture("damage-range"));
+	var winnerDisplay:ImageElement = new ImageElement(this, appModel.assets.getTexture("map/damage-range"));
 	winnerDisplay.pivotX = winnerDisplay.width * 0.5;
 	winnerDisplay.pivotY = winnerDisplay.height * 0.5;
 	winnerDisplay.width = 500;

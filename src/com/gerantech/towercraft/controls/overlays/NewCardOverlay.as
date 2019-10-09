@@ -104,7 +104,7 @@ override public function set outcomes(value:IntIntMap):void
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= EVENT HANDLERS =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 protected function armature_soundEventHandler(event:StarlingEvent) : void
 {
-	if( event.eventObject.name == "scoreboard-change-0" )
+	if( event.eventObject.name == "scoreboard-0" )
 		showDetails();
 
 	appModel.sounds.addAndPlay(event.eventObject.name);

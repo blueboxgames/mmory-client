@@ -45,7 +45,7 @@ override protected function initialize():void
 	addChild(titleDisplay);
 	
 	// sound
-	appModel.sounds.addAndPlay("scoreboard-change-" + side);
+	appModel.sounds.addAndPlay("scoreboard-" + side);
 
 	var _h:int = transitionIn.destinationBound.height;
 	for ( var i:int = 0; i < 3; i++ )
