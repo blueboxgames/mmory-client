@@ -32,16 +32,16 @@ private var version:String;
 private var serverData:SFSObject;
 private var initData:InitData;
 
-public function load(serverData:SFSObject):void
+public function CoreLoader(serverData:SFSObject)
 {
 	this.serverData = serverData;
 	this.version = this.serverData.getText("coreVersion");
-	AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath("assets/script-data.cs").nativePath)
-	AppModel.instance.assets.loadQueue(this.script_loadCoallcack)
-}
+// 	AppModel.instance.assets.enqueue(File.applicationStorageDirectory.resolvePath("assets/script-data.cs").nativePath)
+// 	AppModel.instance.assets.loadQueue(this.script_loadCoallcack)
+// }
 
-private function script_loadCoallcack():void
-{
+// private function script_loadCoallcack():void
+// {
 	ScriptEngine.initialize(AppModel.instance.assets.getByteArray("script-data").toString(), this.serverData.getInt("forceVersion"));
 
 	initServerData(serverData);

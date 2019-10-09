@@ -198,14 +198,8 @@ private function syncTool_completeHandler():void
 public function loadCore():void
 {
 	state = STATE_CORE_LOADING;
-	var coreLoader:CoreLoader = new CoreLoader();
-	coreLoader.addEventListener(Event.COMPLETE, coreLoader_completeHandler);
-	coreLoader.load(serverData);
-}
-
-protected function coreLoader_completeHandler(event:Event):void
-{
-	CoreLoader(event.currentTarget).removeEventListener(Event.COMPLETE, coreLoader_completeHandler);
+	var coreLoader:CoreLoader = new CoreLoader(serverData);
+	
 	UserData.instance.prefs.addEventListener(Event.COMPLETE, prefs_completeHandler);
 	UserData.instance.prefs.init();
 }
