@@ -84,7 +84,7 @@ package com.gerantech.towercraft.utils
         {
             var saveData:Object = saveQueue.shift();
             var saver:FileStream = new FileStream();
-            saver.open(File.applicationStorageDirectory.resolvePath("assets/" + saveData.name), "update");
+            saver.open(File.applicationStorageDirectory.resolvePath("assets/" + saveData.name), "write");
             saver.writeBytes(saveData.bytes);
             saver.close();
             
