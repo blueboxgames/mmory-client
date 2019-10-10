@@ -40,6 +40,7 @@ public var notifier:NotificationManager;
 public var invokes:Array;
 public var artRules:ArtRules;
 public var maxTutorBattles:int;
+public var syncData:Object;
 
 public function AppModel()
 {

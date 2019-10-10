@@ -72,20 +72,19 @@ public function initialize () : void
 	var deck:Vector.<String> = new Vector.<String>;
 	for(var k:int = 0; k < deckKeys.length; k++ )
 		deck.push(AppModel.instance.game.player.decks.get(0).get(deckKeys[k]).toString());
-	var assets:Object = AppModel.instance.loadingManager.serverData.getSFSObject("assets").toObject();
 	var preAssets:Object = new Object();
-	for ( var key:String in assets )
+	for ( var key:String in AppModel.instance.syncData )
 	{
-		if( assets[key]["pre"] )
-			preAssets[key] = assets[key];
-		else if( !assets[key]["initial"] )
-			fillDeck(deck, assets, preAssets, key);
+		if( AppModel.instance.syncData[key]["pre"] )
+			preAssets[key] = AppModel.instance.syncData[key];
+		else if( !AppModel.instance.syncData[key]["initial"] )
+			fillDeck(deck, AppModel.instance.syncData, preAssets, key);
 	}
 
 	key = "map-" + ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX));
-	preAssets[key + ".json"] = assets[key + ".json"];
-	preAssets[key + ".atf"] = assets[key + ".atf"];
-	preAssets[key + ".xml"] = assets[key + ".xml"];
+	preAssets[key +".json"] = AppModel.instance.syncData[key + ".json"];
+	preAssets[key + ".atf"] = AppModel.instance.syncData[key + ".atf"];
+	preAssets[key + ".xml"] = AppModel.instance.syncData[key + ".xml"];
 
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPre_completeHandler);
@@ -119,11 +118,10 @@ public function createPlaces(battleData:BattleData) : void
 	var deck:Vector.<String> = new Vector.<String>;
 	for(var k:int = 0; k < deckKeys.length; k++ )
 		deck.push(battleData.getAxiseDeck().get(deckKeys[k]).type.toString());
-	var assets:Object = AppModel.instance.loadingManager.serverData.getSFSObject("assets").toObject();
 	var preAssets:Object = new Object();
-	for ( var key:String in assets )
-		if( !assets[key]["initial"] && !assets[key]["pre"] )
-			fillDeck(deck, assets, preAssets, key);
+	for ( var key:String in AppModel.instance.syncData )
+		if( !AppModel.instance.syncData[key]["initial"] && !AppModel.instance.syncData[key]["pre"] )
+			fillDeck(deck, AppModel.instance.syncData, preAssets, key);
 
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPost_completeHandler);

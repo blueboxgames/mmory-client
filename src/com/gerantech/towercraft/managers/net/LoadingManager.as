@@ -173,11 +173,11 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		TimeManager.instance.dispose();
 	new TimeManager(serverData.getLong("serverTime"));
 	
-	var assets:Object = serverData.getSFSObject("assets").toObject();
+	appModel.syncData = serverData.getSFSObject("assets").toObject();
 	var initialAssets:Object = new Object();
-	for ( var key:String in assets )
-		if( assets[key]["initial"] == true )
-			initialAssets[key] = assets[key];
+	for ( var key:String in appModel.syncData )
+		if( appModel.syncData[key]["initial"] == true )
+			initialAssets[key] = appModel.syncData[key];
 	
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncTool_completeHandler);
