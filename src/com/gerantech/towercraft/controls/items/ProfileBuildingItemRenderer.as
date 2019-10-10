@@ -2,7 +2,6 @@ package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 
 import feathers.controls.ImageLoader;
@@ -93,7 +92,7 @@ private function createIcon(type:int, level:int):void
 		iconDisplay.layoutData = new AnchorLayoutData(padding, padding, padding * 1.2, padding);
 		addChild(iconDisplay);			
 	}
-	iconDisplay.source = Assets.getTexture("cards/" + CardTypes.get_category(type), "gui");
+	iconDisplay.source = appModel.assets.getTexture("cards/" + CardTypes.get_category(type));
 	iconDisplay.alpha = level > 0 ? 1 : 0.6;
 	
 	if( improveDisplay == null )
@@ -103,7 +102,7 @@ private function createIcon(type:int, level:int):void
 		improveDisplay.layoutData = new AnchorLayoutData(padding, padding, padding * 1.2, padding);
 		addChild(improveDisplay);
 	}
-	improveDisplay.source = Assets.getTexture("cards/" + type, "gui");
+	improveDisplay.source = appModel.assets.getTexture("cards/" + type);
 	improveDisplay.alpha = level > 0 ? 1 : 0.4;
 }
 }

@@ -12,12 +12,15 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
+import feathers.layout.AnchorLayoutData;
+
 import flash.desktop.Clipboard;
 import flash.desktop.ClipboardFormats;
 import flash.geom.Rectangle;
 import flash.text.ReturnKeyLabel;
 import flash.text.SoftKeyboardType;
-import feathers.layout.AnchorLayoutData;
+
 import starling.animation.Transitions;
 import starling.events.Event;
 

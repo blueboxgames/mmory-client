@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.controls.sliders.battle 
 {
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.views.BattleFieldView;
 
 import feathers.controls.text.BitmapFontTextRenderer;
 import feathers.text.BitmapFontTextFormat;
+import com.gerantech.towercraft.models.AppModel;
 /**
 * ...
 * @author Mansour Djawadi
@@ -24,7 +24,7 @@ override public function initialize() : void
 
 	healthDisplay = new BitmapFontTextRenderer();
 	healthDisplay.pixelSnapping = false;
-	healthDisplay.textFormat = new BitmapFontTextFormat(Assets.getFont(), 28, 0xFFFFFF, "left");
+	healthDisplay.textFormat = new BitmapFontTextFormat(AppModel.instance.assets.getFont(), 28, 0xFFFFFF, "left");
 	healthDisplay.visible = false;
 	filedView.guiTextsContainer.addChild(healthDisplay);
 }

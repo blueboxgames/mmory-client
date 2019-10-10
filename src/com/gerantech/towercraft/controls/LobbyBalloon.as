@@ -1,14 +1,10 @@
 package com.gerantech.towercraft.controls
 {
-	import com.gerantech.towercraft.models.AppModel;
-	import com.gerantech.towercraft.models.Assets;
-	import com.gerantech.towercraft.themes.MainTheme;
-	
 	import starling.display.Image;
 	import starling.display.Sprite;
 	import starling.text.TextField;
-	import starling.text.TextFieldAutoSize;
 	import starling.text.TextFormat;
+	import com.gerantech.towercraft.models.AppModel;
 
 	public class LobbyBalloon extends Sprite
 	{
@@ -22,7 +18,7 @@ package com.gerantech.towercraft.controls
 			pivotX = width * 0.5;
 			pivotY = height;
 			
-			var background:Image = new Image(Assets.getTexture("lobby-balloon"));
+			var background:Image = new Image(AppModel.instance.assets.getTexture("lobby-balloon"));
 			background.pivotX = background.width * 0.5;
 			background.pivotY = background.height;
 			addChild(background);

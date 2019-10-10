@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.controls.sliders.battle 
 {
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 
@@ -48,13 +47,13 @@ override protected function initialize():void
 	addChild(axisBG);	
 	
 	var allisIcon:ImageLoader = new ImageLoader();
-	allisIcon.source = Assets.getTexture("res-17");
+	allisIcon.source = appModel.assets.getTexture("res-17");
 	allisIcon.layoutData = new AnchorLayoutData(NaN, NaN, 100, NaN, -10);
 	allisIcon.height = 70;
 	addChild(allisIcon);
 
 	var axisIcon:ImageLoader = new ImageLoader();
-	axisIcon.source = Assets.getTexture("res-17");
+	axisIcon.source = appModel.assets.getTexture("res-17");
 	axisIcon.layoutData = new AnchorLayoutData(100, NaN, NaN, NaN, -10);
 	axisIcon.height = 70;
 	addChild(axisIcon);

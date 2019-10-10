@@ -1,9 +1,8 @@
 package com.gerantech.towercraft.controls.toasts 
 {
 	import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
-	import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemSegment;
-	import com.gerantech.towercraft.models.Assets;
 	import com.gerantech.towercraft.themes.MainTheme;
+
 	import feathers.controls.List;
 	import feathers.controls.renderers.IListItemRenderer;
 	import feathers.data.ListCollection;
@@ -11,8 +10,8 @@ package com.gerantech.towercraft.controls.toasts
 	import feathers.layout.AnchorLayoutData;
 	import feathers.layout.TiledRowsLayout;
 	import feathers.layout.VerticalAlign;
+
 	import starling.display.Image;
-	import starling.display.Quad;
 	import starling.events.Event;
 /**
 * @author Mansour Djawadi

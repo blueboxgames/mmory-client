@@ -4,7 +4,6 @@ import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 
 import feathers.controls.ButtonState;
@@ -49,7 +48,7 @@ override protected function initialize() : void
 	layout = new AnchorLayout();
 	
 	backgroundDisplay = new ImageLoader();
-	backgroundDisplay.source = Assets.getTexture("home/" + background, "gui");
+	backgroundDisplay.source = appModel.assets.getTexture("home/" + background);
 	if( scale9Grid != null )
 		backgroundDisplay.scale9Grid = scale9Grid;
 	if( shadowRect != null )
@@ -71,7 +70,7 @@ override protected function initialize() : void
 		return;
 	
 	var costBGDisplay:ImageLoader = new ImageLoader();
-	costBGDisplay.source = Assets.getTexture("home/button-battle-footer", "gui");
+	costBGDisplay.source = appModel.assets.getTexture("home/button-battle-footer");
 	costBGDisplay.layoutData = new AnchorLayoutData(NaN, 100, 18, 100);
 	costBGDisplay.scale9Grid = new Rectangle(29, 42, 2, 1);
 	costBGDisplay.height = 80;
@@ -79,7 +78,7 @@ override protected function initialize() : void
 
 	var costIconDisplay:ImageLoader = new ImageLoader();
 	costIconDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 30, 73);
-	costIconDisplay.source = Assets.getTexture("res-" + costType, "gui");
+	costIconDisplay.source = appModel.assets.getTexture("res-" + costType);
 	costIconDisplay.width = costIconDisplay.height = 76;
 	costIconDisplay.touchable = false;
 	addChild(costIconDisplay);

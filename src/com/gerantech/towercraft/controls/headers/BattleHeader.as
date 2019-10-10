@@ -4,7 +4,6 @@ import com.gerantech.towercraft.controls.StarCheck;
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 
 import dragonBones.starling.StarlingArmatureDisplay;
@@ -51,7 +50,7 @@ override protected function initialize():void
 private function creationCompleteHandler():void
 {
 	var ribbon:ImageLoader = new ImageLoader();
-	ribbon.source = Assets.getTexture("ribbon-" + (isAllise?"blue":"red"), "gui");
+	ribbon.source = appModel.assets.getTexture("ribbon-" + (isAllise?"blue":"red"));
 	ribbon.pixelSnapping = false;
 	ribbon.scale9Grid = MainTheme.RIBBON_SCALE9_GRID;
 	ribbon.layoutData = new AnchorLayoutData(0, NaN, 0, NaN, 0);

@@ -8,7 +8,6 @@ import com.gerantech.towercraft.controls.popups.LobbyDetailsPopup;
 import com.gerantech.towercraft.controls.texts.CustomTextInput;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -56,7 +55,7 @@ override protected function initialize():void
 	var searchButton:MMOryButton = new MMOryButton();
 	searchButton.width = buttonH;
 	searchButton.height = buttonH + 16;
-	searchButton.iconTexture = Assets.getTexture("search-icon");
+	searchButton.iconTexture = appModel.assets.getTexture("search-icon");
 	searchButton.layoutData = new AnchorLayoutData( padding, appModel.isLTR?padding:NaN, NaN, appModel.isLTR?NaN:padding );
 	searchButton.addEventListener(Event.TRIGGERED,  searchButton_triggeredHandler);
 	addChild(searchButton);	
@@ -64,7 +63,7 @@ override protected function initialize():void
 /*	var rankButton:CustomButton = new CustomButton();
 	rankButton.style = "neutral";
 	rankButton.iconLayout = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -4);
-	rankButton.icon = Assets.getTexture("rank-icon");
+	rankButton.icon = appModel.assets.getTexture("rank-icon");
 	rankButton.width = buttonH;
 	rankButton.height = buttonH;
 	rankButton.layoutData = new AnchorLayoutData( padding, appModel.isLTR?padding:NaN, NaN, appModel.isLTR?NaN:padding );

@@ -4,7 +4,6 @@ import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.battle.ElixirUpdater;
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 
@@ -49,7 +48,7 @@ override protected function initialize():void
 	fillDisplay = new ImageLoader();
 	fillDisplay.scale9Grid = MainTheme.SLIDER_SCALE9_GRID;
 	fillDisplay.layoutData = new AnchorLayoutData(0, NaN, 0, 0);
-	fillDisplay.source = Assets.getTexture("theme/slider-fill-danger-skin", "gui");
+	fillDisplay.source = appModel.assets.getTexture("theme/slider-fill-danger-skin");
 	addChild(fillDisplay);
 	
 	realtimeDisplay = new ImageLoader();
@@ -57,7 +56,7 @@ override protected function initialize():void
 	//realtimeDisplay.blendMode = BlendMode.ADD;
 	realtimeDisplay.scale9Grid = MainTheme.SLIDER_SCALE9_GRID;
 	realtimeDisplay.layoutData = new AnchorLayoutData(0, NaN, 0, 0);
-	realtimeDisplay.source = Assets.getTexture("theme/slider-fill-danger-skin", "gui");
+	realtimeDisplay.source = appModel.assets.getTexture("theme/slider-fill-danger-skin");
 	addChild(realtimeDisplay);
 	
 	
@@ -81,7 +80,7 @@ override protected function initialize():void
 	elixirIconDisplay.pivotX = elixirIconDisplay.width * 0.5;
 	elixirIconDisplay.pivotY = elixirIconDisplay.height * 0.7;
 	elixirIconDisplay.layout = new AnchorLayout();
-	elixirIconDisplay.backgroundSkin = new Image (Assets.getTexture("cards/elixir", "gui"));
+	elixirIconDisplay.backgroundSkin = new Image (appModel.assets.getTexture("cards/elixir"));
 	addChild(elixirIconDisplay);
 	
 	elixirCountDisplay = new ShadowLabel(null, 1, 0, null, null, false, null, 0.9);

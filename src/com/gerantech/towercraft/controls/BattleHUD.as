@@ -21,7 +21,7 @@ import com.gerantech.towercraft.controls.toasts.BattleTurnToast;
 import com.gerantech.towercraft.controls.toasts.LastSecondsToast;
 import com.gerantech.towercraft.controls.tooltips.StickerBubble;
 import com.gerantech.towercraft.managers.SoundManager;
-import com.gerantech.towercraft.models.Assets;
+import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
@@ -48,7 +48,6 @@ import starling.display.Image;
 import starling.display.Quad;
 import starling.events.Event;
 import starling.utils.Color;
-import com.gerantech.towercraft.models.AppModel;
 
  public class BattleHUD extends TowersLayout
 {
@@ -81,7 +80,7 @@ override protected function initialize():void
 	gradient.alpha = 0.5;
 	gradient.width = 440;
 	gradient.height = 140;
-	gradient.source = Assets.getTexture("theme/gradeint-left");
+	gradient.source = appModel.assets.getTexture("theme/gradeint-left");
 	addChild(gradient);
 	
 	var hasQuit:Boolean = battleData.battleField.field.isOperation() || appModel.battleFieldView.battleData.userType == 1;
@@ -144,7 +143,7 @@ override protected function initialize():void
 		{
 			surrenderButton = new CustomButton();
 			surrenderButton.style = CustomButton.STYLE_DANGER;
-			surrenderButton.icon = Assets.getTexture("surrender");
+			surrenderButton.icon = appModel.assets.getTexture("surrender");
 			surrenderButton.iconLayout = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -4);
 			surrenderButton.width = 140;
 			surrenderButton.layoutData = new AnchorLayoutData(NaN, NaN, padding, padding);
@@ -183,7 +182,7 @@ protected function createCompleteHandler(event:Event):void
 		return;
 	
 	if( battleData.battleField.extraTime > 0 )
-		appModel.navigator.addAnimation(stage.stageWidth * 0.5, stage.stageHeight * 0.5, 240, Assets.getTexture("extra-time"), battleData.battleField.extraTime, BattleTimerSlider(timerSlider).iconDisplay.getBounds(this), 0.5, punchTimer, "+ ");
+		appModel.navigator.addAnimation(stage.stageWidth * 0.5, stage.stageHeight * 0.5, 240, appModel.assets.getTexture("extra-time"), battleData.battleField.extraTime, BattleTimerSlider(timerSlider).iconDisplay.getBounds(this), 0.5, punchTimer, "+ ");
 	function punchTimer():void {
 		var diff:int = 48;
 		timerSlider.y -= diff;
@@ -237,7 +236,7 @@ public function animateShadow(alphaSeed:Number, shadow:Image, color:uint = 0) : 
 {
 	if( shadow == null )
 	{
-		shadow = new Image(Assets.getTexture("radial-gradient-shadow-larg"));
+		shadow = new Image(appModel.assets.getTexture("radial-gradient-shadow-larg"));
 		shadow.scale9Grid = new Rectangle(63, 63, 2, 2);
 		shadow.height = stageHeight;
 		shadow.width = stageWidth;

@@ -3,6 +3,7 @@ package com.gerantech.towercraft.controls.items.lobby
 import com.gerantech.towercraft.controls.items.FeatureItemRenderer;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.layout.AnchorLayoutData;
 
 public class LobbyFeatureItemRenderer extends FeatureItemRenderer

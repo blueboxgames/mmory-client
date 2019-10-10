@@ -2,9 +2,11 @@ package com.gerantech.towercraft.controls.groups
 {
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.controls.ImageLoader;
 import feathers.core.ITextRenderer;
 import feathers.layout.AnchorLayoutData;
+
 import starling.textures.Texture;
 
 public class IconGroup extends ColorGroup

@@ -2,7 +2,6 @@ package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemSegment;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 
 import dragonBones.objects.DragonBonesData;
 import dragonBones.starling.StarlingArmatureDisplay;
@@ -45,7 +44,7 @@ public function EmoteItemRenderer()
 {
 	super();
 	
-	var background:Image = new Image(Assets.getTexture("socials/balloon", "gui"));
+	var background:Image = new Image(appModel.assets.getTexture("socials/balloon"));
 	background.scale9Grid = LobbyChatItemSegment.BALLOON_RECT;
 	backgroundSkin = background;
 	

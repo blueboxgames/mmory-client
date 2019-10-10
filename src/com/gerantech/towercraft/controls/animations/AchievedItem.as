@@ -2,7 +2,9 @@ package com.gerantech.towercraft.controls.animations
 {
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.controls.ImageLoader;
+
 import starling.display.Sprite;
 import starling.textures.Texture;
 

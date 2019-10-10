@@ -11,7 +11,6 @@ import com.gerantech.towercraft.controls.items.exchange.ExDefaultItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.texts.CountdownLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 
@@ -31,6 +30,7 @@ import flash.geom.Rectangle;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
+import com.gerantech.towercraft.models.AppModel;
 
 public class BundleDetailsPopup extends SimplePopup
 {
@@ -65,7 +65,7 @@ override protected function initialize():void
 	var insideLayout:AnchorLayoutData = new AnchorLayoutData(110, 14, 14, 14);
 	var insideSkin:ImageLoader = new ImageLoader();
 	insideSkin.scale9Grid = new Rectangle(1, 1, 6, 5);
-	insideSkin.source = Assets.getTexture("shop/gradient-gold-bg", "gui");
+	insideSkin.source = appModel.assets.getTexture("shop/gradient-gold-bg");
   insideSkin.layoutData = insideLayout;
   this.addChild(insideSkin);
 
@@ -109,13 +109,13 @@ override protected function initialize():void
 			continue;
 		var plusImage:ImageLoader = new ImageLoader();
 		plusImage.width = plusImage.height = gapW;
-		plusImage.source = Assets.getTexture("shop/plus", "gui")
+		plusImage.source = appModel.assets.getTexture("shop/plus")
 		items.addChild(plusImage);
 	}
 
 	this.closeButton = new MMOryButton();
 	this.closeButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
-	this.closeButton.iconTexture = Assets.getTexture("theme/icon-cross", "gui");
+	this.closeButton.iconTexture = appModel.assets.getTexture("theme/icon-cross");
 	this.closeButton.width = 80;
 	this.closeButton.height = 80;
 	this.closeButton.layoutData = new AnchorLayoutData(15, 15);
@@ -156,7 +156,7 @@ static public function createBadge(discount:int):LayoutGroup
 {
 	var discountBadge:LayoutGroup = new LayoutGroup();
 	discountBadge.layout = new AnchorLayout();
-  discountBadge.backgroundSkin = new Image(Assets.getTexture("shop/discount-badge", "gui"));
+  discountBadge.backgroundSkin = new Image(AppModel.instance.assets.getTexture("shop/discount-badge"));
 
 	var badgeTitle:ShadowLabel = new ShadowLabel(StrUtils.getNumber(discount + " %"), 1, 0x440000, null, "ltr", false, null, 1.5);
 	badgeTitle.layoutData = new AnchorLayoutData(50, NaN, NaN, NaN, 0);
@@ -192,7 +192,7 @@ static public function createOutcome(type:int, count:int, colW:int, hasShine:Boo
 	else
 	{
 		itemIcon = new ImageLoader();
-		ImageLoader(itemIcon).source = Assets.getTexture(getTexturURL(type), "gui");
+		ImageLoader(itemIcon).source = AppModel.instance.assets.getTexture(getTexturURL(type));
 		itemIcon.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 
 		if( hasShine )
@@ -202,7 +202,7 @@ static public function createOutcome(type:int, count:int, colW:int, hasShine:Boo
 	
 	if( hasShine )
 	{
-		shineImage.source = Assets.getTexture("shop/shine-under-item", "gui");
+		shineImage.source = AppModel.instance.assets.getTexture("shop/shine-under-item");
 		shineImage.pivotX = shineImage.pivotY = shineImage.width * 0.5;
 		Starling.juggler.tween(shineImage, 14, {rotation:Math.PI * 2, repeatCount:40});
 		shineImage.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);

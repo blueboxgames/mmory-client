@@ -6,7 +6,6 @@ import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.TileBackground;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
 
@@ -76,7 +75,7 @@ override public function set outcomes(value:IntIntMap):void
 	
 	var rarity:int = ScriptEngine.getInt(ScriptEngine.T00_RARITY, type);
 	// change card
-	var texture:Texture = Assets.getTexture("cards/" + type, "gui");
+	var texture:Texture = appModel.assets.getTexture("cards/" + type);
 	var subtexture:SubTexture = new SubTexture(texture, new Rectangle(0, 0, texture.width, texture.height));
 	StarlingTextureData(cardArmature.armature.getSlot("template").skinSlotData.getDisplay("cards/template-card").texture).texture = subtexture;
 	

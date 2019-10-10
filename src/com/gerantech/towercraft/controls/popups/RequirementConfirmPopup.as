@@ -1,12 +1,13 @@
 package com.gerantech.towercraft.controls.popups
 {
-import com.gerantech.towercraft.controls.buttons.MMOryButton;
-import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.utils.StrUtils;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.controls.buttons.MMOryButton;
+import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.events.FeathersEventType;
+
 import starling.events.Event;
 
 public class RequirementConfirmPopup extends ConfirmPopup
@@ -27,7 +28,7 @@ override protected function initialize():void
 	super.initialize();
 	acceptButton.label = StrUtils.getNumber(numHards);
 	acceptButton.iconSize = MMOryButton.DEFAULT_ICON_SIZE;
-	acceptButton.iconTexture = Assets.getTexture("res-" + ResourceType.R4_CURRENCY_HARD, "gui");
+	acceptButton.iconTexture = appModel.assets.getTexture("res-" + ResourceType.R4_CURRENCY_HARD);
 }
 
 override protected function acceptButton_triggeredHandler(event:Event):void

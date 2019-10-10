@@ -6,8 +6,10 @@ import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.events.FeathersEventType;
+
 import starling.events.Event;
 
 public class SearchPlayersScreen extends SearchScreen

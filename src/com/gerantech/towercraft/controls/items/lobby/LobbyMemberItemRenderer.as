@@ -3,14 +3,14 @@ package com.gerantech.towercraft.controls.items.lobby
 import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.controls.ImageLoader;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import flash.geom.Rectangle;
+
 import starling.display.Image;
 import starling.events.Event;
 import starling.events.Touch;
@@ -67,7 +67,7 @@ override protected function initialize():void
 	addChild(pointBackground);
 	
 	var pointIconDisplay:ImageLoader = new ImageLoader();
-	pointIconDisplay.source = Assets.getTexture("res-2", "gui");
+	pointIconDisplay.source = appModel.assets.getTexture("res-2");
 	pointIconDisplay.height = pointIconDisplay.width = 76;
 	pointIconDisplay.layoutData = POINT_BG_LAYOUT;
 	addChild(pointIconDisplay);
@@ -136,8 +136,8 @@ override protected function commitData():void
 	roleDisplay.text = loc("lobby_role_" + _data.permission);
 	pointDisplay.text = StrUtils.getNumber(_data.point);
 	activityDisplay.text = StrUtils.getNumber(_data.activity);
-	leagueBGDisplay.source = Assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-small", "gui");
-	leagueIconDisplay.source = Assets.getTexture("leagues/" + Math.floor(leagueIndex * 0.5), "gui");
+	leagueBGDisplay.source = appModel.assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-small");
+	leagueIconDisplay.source = appModel.assets.getTexture("leagues/" + Math.floor(leagueIndex * 0.5));
 	mySkin.color = _data.id == player.id ? 0xAAFFFF : 0xFFFFFF;
 }
 protected function item_triggeredHandler(event:Event):void

@@ -1,5 +1,6 @@
 package com.gerantech.towercraft.controls.items
 {
+import com.gerantech.mmory.core.constants.SegmentType;
 import com.gerantech.towercraft.controls.segments.BuddiesSegment;
 import com.gerantech.towercraft.controls.segments.CardsSegment;
 import com.gerantech.towercraft.controls.segments.ExchangeSegment;
@@ -13,7 +14,6 @@ import com.gerantech.towercraft.controls.segments.LobbySearchSegment;
 import com.gerantech.towercraft.controls.segments.Segment;
 import com.gerantech.towercraft.controls.segments.SocialSegment;
 import com.gerantech.towercraft.models.vo.TabItemData;
-import com.gerantech.mmory.core.constants.SegmentType;
 
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;

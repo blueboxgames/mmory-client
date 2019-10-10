@@ -5,7 +5,6 @@ import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemBalloonText
 import com.gerantech.towercraft.controls.segments.lobby.LobbyChatItemSegment;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 
 import feathers.controls.AutoSizeMode;
@@ -49,14 +48,14 @@ override protected function initialize():void
 	mySkin.visible = false;
 	mySkin.layoutData = mySkinLayout;
 	mySkin.scale9Grid = LobbyChatItemSegment.BALLOON_RECT;
-	mySkin.source = Assets.getTexture("socials/balloon-me", "gui");
+	mySkin.source = appModel.assets.getTexture("socials/balloon-me");
 	addChild(mySkin);
 	
 	whoSkin = new ImageLoader();
 	whoSkin.visible = false;
 	whoSkin.layoutData = whoSkinLayout;
 	whoSkin.scale9Grid = LobbyChatItemSegment.BALLOON_RECT;
-	whoSkin.source = Assets.getTexture("socials/balloon-who", "gui");
+	whoSkin.source = appModel.assets.getTexture("socials/balloon-who");
 	addChild(whoSkin);
 	
 	statusLayout = new AnchorLayoutData(NaN, NaN, 15);
@@ -96,7 +95,7 @@ override protected function commitData():void
 	if( statusDisplay.visible )
 	{
 		statusLayout.left =	( itsMe ? mySkinLayout.left  : whoSkinLayout.left  ) + 40;
-		statusDisplay.source = Assets.getTexture("socials/check-blue-" + _data.getInt("status"), "gui");
+		statusDisplay.source = appModel.assets.getTexture("socials/check-blue-" + _data.getInt("status"));
 	}
 
 

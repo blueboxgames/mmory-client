@@ -1,20 +1,23 @@
 package com.gerantech.towercraft.controls.overlays
 {
+import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.Spinner;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
-import com.gerantech.mmory.core.utils.maps.IntIntMap;
+
 import dragonBones.starling.StarlingArmatureDisplay;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
 import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
-import starling.events.Event;
 import starling.display.DisplayObject;
+import starling.events.Event;
 
 public class FortuneOverlay extends EarnOverlay
 {
@@ -64,7 +67,7 @@ override protected function initialize():void
 	shadow.touchable = false;
 	shadow.scale9Grid = new Rectangle(2, 2, 12, 12);
 	shadow.layoutData = new AnchorLayoutData(0, 0, 0, 0);
-	shadow.source = Assets.getTexture("radial-gradient-shadow");
+	shadow.source = appModel.assets.getTexture("radial-gradient-shadow");
 	addChild(shadow);
 	animateShadow(0, 1);
 	

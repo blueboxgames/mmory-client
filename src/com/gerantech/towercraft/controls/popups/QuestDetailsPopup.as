@@ -3,7 +3,9 @@ package com.gerantech.towercraft.controls.popups
 import com.gerantech.towercraft.controls.buttons.CustomButton;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.layout.AnchorLayoutData;
+
 import starling.events.Event;
 
 public class QuestDetailsPopup extends SimplePopup

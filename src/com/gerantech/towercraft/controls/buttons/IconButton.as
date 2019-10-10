@@ -4,7 +4,9 @@ import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
+
 import starling.display.Image;
 import starling.textures.Texture;
 

@@ -8,13 +8,15 @@ package com.gerantech.towercraft.controls.popups
 import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
+
 import feathers.layout.AnchorLayoutData;
+
 import flash.desktop.NativeApplication;
 import flash.geom.Rectangle;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
+
 import starling.events.Event;
 
 public class BanPopup extends ConfirmPopup

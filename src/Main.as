@@ -42,6 +42,8 @@ public function Main()
 	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) + "|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
 	var desc:Descriptor = AppModel.instance.descriptor;
 
+	forceCopy("gui.atf", "gui.atf");
+	forceCopy("gui.xml", "gui.xml");
 	forceCopy(Localizations.instance.getLocaleByMarket(desc.market) + ".json", Localizations.instance.getLocaleByMarket(desc.market) + ".json");
 	// change locale based on market
 	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(desc.market));

@@ -13,8 +13,6 @@ import com.gerantech.towercraft.views.BattleFieldView;
 import flash.desktop.NativeApplication;
 import flash.system.Capabilities;
 
-import starling.assets.AssetManager;
-
 public class AppModel
 {
 private static var _instance:AppModel;
@@ -34,7 +32,7 @@ public var align:String = "right";
 public var direction:String = "rtl";
 public var isLTR:Boolean = false;
 public var locale:String = "fa_IR";
-public var assets:AssetManager;
+public var assets:AssetsManager;
 public var sounds:SoundManager;
 public var notifier:NotificationManager;
 public var invokes:Array;
@@ -45,7 +43,7 @@ public var syncData:Object;
 public function AppModel()
 {
 	descriptor = new Descriptor(NativeApplication.nativeApplication.applicationDescriptor);
-	assets = new AssetManager();
+	assets = new AssetsManager();
 	assets.verbose = false;
 	
 	sounds = new SoundManager();

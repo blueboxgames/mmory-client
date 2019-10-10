@@ -1,8 +1,8 @@
 package com.gerantech.towercraft.controls.buttons 
 {
+	import com.gerantech.mmory.core.constants.ResourceType;
 	import com.gerantech.towercraft.controls.texts.ShadowLabel;
 	import com.gerantech.towercraft.utils.StrUtils;
-	import com.gerantech.mmory.core.constants.ResourceType;
 /**
 * ...
 * @author Mansour Djawadi

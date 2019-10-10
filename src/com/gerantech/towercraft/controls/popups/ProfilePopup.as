@@ -20,7 +20,6 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
@@ -140,7 +139,7 @@ private function showProfile():void
 	closeButton.layoutData = new AnchorLayoutData(-20, -20);
 	closeButton.styleName = MainTheme.STYLE_BUTTON_SMALL_DANGER;
 	Starling.juggler.tween(closeButton, 0.2, {delay:0.8, alpha:1});
-	closeButton.iconTexture = Assets.getTexture("theme/icon-cross", "gui");
+	closeButton.iconTexture = appModel.assets.getTexture("theme/icon-cross");
 	closeButton.addEventListener(Event.TRIGGERED, close_triggeredHandler);
 	addChild(closeButton);
 	

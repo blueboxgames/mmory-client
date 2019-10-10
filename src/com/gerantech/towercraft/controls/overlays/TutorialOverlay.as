@@ -2,9 +2,12 @@ package com.gerantech.towercraft.controls.overlays
 {
 import com.gerantech.towercraft.controls.groups.Devider;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.utils.setTimeout;
+
 import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.events.Event;

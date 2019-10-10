@@ -1,12 +1,13 @@
 package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.display.Image;
 
 public class RankItemRenderer extends AbstractTouchableListItemRenderer
@@ -56,7 +57,7 @@ override protected function initialize():void
 	addChild(pointBackground);
 	
 	var pointIconDisplay:ImageLoader = new ImageLoader();
-	pointIconDisplay.source = Assets.getTexture("res-2", "gui");
+	pointIconDisplay.source = appModel.assets.getTexture("res-2");
 	pointIconDisplay.height = pointIconDisplay.width = 76;
 	pointIconDisplay.layoutData = POINT_BG_LAYOUT;
 	addChild(pointIconDisplay);
@@ -103,8 +104,8 @@ override protected function commitData():void
 	pointDisplay.text = StrUtils.getNumber(_data.p);
 	mySkin.color = _data.i == player.id ? 0xAAFFFF : 0xFFFFFF;
 	rankDisplay.text = StrUtils.getNumber(_data.s ? (_data.s + 1) : (index + 1));
-	leagueIconDisplay.source = Assets.getTexture("leagues/" + Math.floor(leagueIndex * 0.5), "gui");
-	leagueBGDisplay.source = Assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-small", "gui");
+	leagueIconDisplay.source = appModel.assets.getTexture("leagues/" + Math.floor(leagueIndex * 0.5));
+	leagueBGDisplay.source = appModel.assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-small");
 }
 
 private function set visibility(value:Boolean):void 

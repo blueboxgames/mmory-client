@@ -1,9 +1,9 @@
 package com.gerantech.towercraft.controls.groups 
 {
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.items.exchange.ExBookSlotItemRenderer;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.exchanges.ExchangeItem;
+
 import feathers.controls.List;
 import feathers.controls.ScrollPolicy;
 import feathers.controls.renderers.IListItemRenderer;
@@ -13,6 +13,7 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
 import feathers.layout.TiledRowsLayout;
 import feathers.layout.VerticalAlign;
+
 import starling.core.Starling;
 import starling.events.Event;
 

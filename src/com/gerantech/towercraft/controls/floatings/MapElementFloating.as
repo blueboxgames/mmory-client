@@ -1,13 +1,12 @@
 package com.gerantech.towercraft.controls.floatings
 {
 	import com.gerantech.towercraft.controls.buttons.CustomButton;
-	import com.gerantech.towercraft.models.Assets;
-	
+
 	import feathers.controls.ButtonState;
 	import feathers.controls.ImageLoader;
 	import feathers.layout.AnchorLayout;
 	import feathers.layout.AnchorLayoutData;
-	
+
 	import starling.display.DisplayObject;
 	import starling.events.Event;
 
@@ -43,7 +42,7 @@ package com.gerantech.towercraft.controls.floatings
 			{
 				var lockDisplay:ImageLoader = new ImageLoader();
 				lockDisplay.width = lockDisplay.height = height*0.6;
-				lockDisplay.source = Assets.getTexture("improve-lock");
+				lockDisplay.source = appModel.assets.getTexture("improve-lock");
 				lockDisplay.layoutData = new AnchorLayoutData(NaN, height*0.10, NaN, NaN, NaN, 0);
 				lockDisplay.touchable = false;
 				addChild(lockDisplay);

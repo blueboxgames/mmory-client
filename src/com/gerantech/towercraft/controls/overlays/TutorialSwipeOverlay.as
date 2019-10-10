@@ -1,9 +1,10 @@
 package com.gerantech.towercraft.controls.overlays
 {
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
+
 import feathers.controls.text.BitmapFontTextRenderer;
 import feathers.text.BitmapFontTextFormat;
+
 import starling.animation.Transitions;
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -37,7 +38,7 @@ override protected function initialize():void
 	super.initialize();
 	finger = new Sprite();
 	finger.touchable = false;
-	var f:Image = new Image(Assets.getTexture("hand"));
+	var f:Image = new Image(appModel.assets.getTexture("hand"));
 	f.pivotX = 0;
 	f.pivotY = f.height * 0.8;
 	finger.addChild(f)
@@ -50,7 +51,7 @@ protected override function transitionInCompleted():void
 	addChild(finger);
 	
 	swipeNumText = new BitmapFontTextRenderer();
-	swipeNumText.textFormat = new BitmapFontTextFormat(Assets.getFont(), appModel.theme.gameFontSize * 1.4, 0xFFFFFF, "center")
+	swipeNumText.textFormat = new BitmapFontTextFormat(appModel.assets.getFont(), appModel.theme.gameFontSize * 1.4, 0xFFFFFF, "center")
 	swipeNumText.pixelSnapping = false;
 	swipeNumText.y = -200;
 	swipeNumText.touchable = false;
@@ -60,7 +61,7 @@ protected override function transitionInCompleted():void
 	swipeNumText.pivotX = swipeNumText.width * 0.5;
 	swipeNumText.pivotY = swipeNumText.height * 0.5;
 	
-	cardFrame = new Image(Assets.getTexture("cards/tutor-frame"));
+	cardFrame = new Image(appModel.assets.getTexture("cards/tutor-frame"));
 	cardFrame.pivotX = cardFrame.width * 0.5;
 	cardFrame.pivotY = cardFrame.height * 0.5;
 	cardFrame.rotation = 0.3;

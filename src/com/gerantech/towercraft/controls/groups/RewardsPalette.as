@@ -1,11 +1,10 @@
 package com.gerantech.towercraft.controls.groups 
 {
-import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.utils.StrUtils;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.controls.texts.RTLLabel;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
+import com.gerantech.towercraft.utils.StrUtils;
 
 import feathers.controls.ImageLoader;
 import feathers.core.ITextRenderer;
@@ -34,7 +33,7 @@ private function addLine(key:int, value:int, index:int):void
 	var iconDisplay:ImageLoader = new ImageLoader();
 	iconDisplay.height = iconDisplay.width = 50;
 	iconDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, -50, 50 * index - 20);
-	iconDisplay.source = Assets.getTexture(getImageSource(key), "gui");
+	iconDisplay.source = appModel.assets.getTexture(getImageSource(key));
 	addChildAt(iconDisplay, 1);
 }
 

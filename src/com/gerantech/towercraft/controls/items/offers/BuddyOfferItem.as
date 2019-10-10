@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.controls.items.offers 
 {
+import com.gerantech.mmory.core.socials.Lobby;
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.groups.OfferView;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.models.Assets;
-import com.gerantech.mmory.core.socials.Lobby;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -28,7 +28,7 @@ public function BuddyOfferItem(data:Object)
 	var iconDisplay:ImageLoader = new ImageLoader();
 	iconDisplay.width = 360;
 	iconDisplay.alignPivot();
-	iconDisplay.source = Assets.getTexture("currency-1");
+	iconDisplay.source = appModel.assets.getTexture("currency-1");
 	iconDisplay.layoutData = new AnchorLayoutData(NaN, NaN, -padding * 2, -padding * 2);
 	addChild(iconDisplay);
 	

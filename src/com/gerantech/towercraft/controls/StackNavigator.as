@@ -28,7 +28,6 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.toasts.SimpleToast;
 	import com.gerantech.towercraft.events.LoadingEvent;
 	import com.gerantech.towercraft.managers.BillingManager;
-	import com.gerantech.towercraft.managers.ExchangeManager;
 	import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 	import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 	import com.gerantech.towercraft.models.AppModel;
@@ -270,7 +269,7 @@ package com.gerantech.towercraft.controls
 		   var bugReportButton:SimpleButton = new SimpleButton();
 		   bugReportButton.isLongPressEnabled = true;
 		   bugReportButton.alpha = AppModel.instance.game.player.inTutorial() ? 0 : 1;
-		   bugReportButton.addChild(new Image(Assets.getTexture("bug-icon")));
+		   bugReportButton.addChild(new Image(appModel.assets.getTexture("bug-icon")));
 		   bugReportButton.addEventListener(Event.TRIGGERED, bugReportButton_triggeredHandler);
 		   bugReportButton.addEventListener(FeathersEventType.LONG_PRESS, bugReportButton_longPressHandler);
 		   bugReportButton.x = 12;

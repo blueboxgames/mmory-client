@@ -1,17 +1,19 @@
 package com.gerantech.towercraft.controls.items.lobby
 {
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
+
 import starling.display.Image;
-import com.gerantech.towercraft.controls.buttons.EmblemButton;
 
 public class LobbyItemRenderer extends AbstractTouchableListItemRenderer
 {

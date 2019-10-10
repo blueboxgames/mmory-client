@@ -2,7 +2,6 @@ package com.gerantech.towercraft.controls.screens
 {
 import com.gerantech.towercraft.controls.segments.InboxChatSegment;
 import com.gerantech.towercraft.managers.InboxService;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.InboxThread;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -39,7 +38,7 @@ override protected function initialize():void
 	addChildAt(backgroundDisplay, 0);
 
 	var headerDisplay:ImageLoader = new ImageLoader();
-	headerDisplay.source = Assets.getTexture("socials/header", "gui");
+	headerDisplay.source = appModel.assets.getTexture("socials/header");
 	headerDisplay.layoutData = new AnchorLayoutData(-10, -10, NaN, -10);
 	headerDisplay.scale9Grid = new Rectangle(1, 1, 1, 1);
 	headerDisplay.height = headerSize;

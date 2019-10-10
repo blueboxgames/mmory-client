@@ -4,7 +4,6 @@ import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 
@@ -67,16 +66,16 @@ protected function iconSourceProvider() : Texture
 {
 	switch( this.category )
 	{
-		case 20: return Assets.getTexture("cards/" + exchange.outcome, "gui");
-		case 120: return Assets.getTexture("books/" + exchange.outcome, "gui");
+		case 20: return appModel.assets.getTexture("cards/" + exchange.outcome);
+		case 120: return appModel.assets.getTexture("books/" + exchange.outcome);
 	}
-	return Assets.getTexture("shop/currency-" + exchange.type, "gui");
+	return appModel.assets.getTexture("shop/currency-" + exchange.type);
 }
 
 private function skinFactory():void
 {
-	this.skin.setTextureForState(STATE_DOWN, Assets.getTexture("shop/item-down", "gui"));
-	this.skin.defaultTexture = Assets.getTexture("shop/item-" + ExCategoryItemRenderer.GET_COLOR(category), "gui");
+	this.skin.setTextureForState(STATE_DOWN, appModel.assets.getTexture("shop/item-down"));
+	this.skin.defaultTexture = appModel.assets.getTexture("shop/item-" + ExCategoryItemRenderer.GET_COLOR(category));
 	this.skin.setTextureForState(STATE_SELECTED, this.skin.defaultTexture);
 	this.skin.setTextureForState(STATE_NORMAL, this.skin.defaultTexture);
 	this.skin.scale9Grid = BACKGROUND_SCALEGRID;

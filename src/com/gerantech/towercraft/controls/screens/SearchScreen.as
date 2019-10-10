@@ -1,15 +1,14 @@
 package com.gerantech.towercraft.controls.screens
 {
 import com.gerantech.towercraft.controls.texts.CustomTextInput;
-import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.smartfoxserver.v2.core.SFSEvent;
-import com.smartfoxserver.v2.entities.data.SFSArray;
-import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.data.ListCollection;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayoutData;
+
 import flash.text.ReturnKeyLabel;
 import flash.text.SoftKeyboardType;
+
 import starling.events.Event;
 
 public class SearchScreen extends ListScreen

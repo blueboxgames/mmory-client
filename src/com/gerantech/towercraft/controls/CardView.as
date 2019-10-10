@@ -1,16 +1,15 @@
 package com.gerantech.towercraft.controls
 {
+	import com.gerantech.mmory.core.constants.CardTypes;
+	import com.gerantech.mmory.core.constants.ResourceType;
+	import com.gerantech.mmory.core.scripts.ScriptEngine;
 	import com.gerantech.towercraft.controls.buttons.Indicator;
 	import com.gerantech.towercraft.controls.buttons.IndicatorCard;
 	import com.gerantech.towercraft.controls.sliders.LabeledProgressBar;
 	import com.gerantech.towercraft.controls.texts.RTLLabel;
 	import com.gerantech.towercraft.controls.texts.ShadowLabel;
-	import com.gerantech.towercraft.models.Assets;
 	import com.gerantech.towercraft.themes.MainTheme;
 	import com.gerantech.towercraft.utils.StrUtils;
-	import com.gerantech.mmory.core.constants.CardTypes;
-	import com.gerantech.mmory.core.constants.ResourceType;
-	import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 	import feathers.controls.ImageLoader;
 	import feathers.layout.AnchorLayout;
@@ -174,13 +173,16 @@ package com.gerantech.towercraft.controls
 				this.iconDisplay.layoutData = new AnchorLayoutData(12, 12, NaN, 12);
 				this.addChildAt(this.iconDisplay as DisplayObject, 0);
 			}
-			this.iconDisplay.source = Assets.getTexture("cards/" + this._type, "gui", availablity != CardTypes.AVAILABLITY_EXISTS);
+			if( availablity != CardTypes.AVAILABLITY_EXISTS )
+				this.iconDisplay.source = appModel.assets.getGrayTexture("cards/" + this._type);
+			else
+				this.iconDisplay.source = appModel.assets.getTexture("cards/" + this._type);
 
 			if( this.frameDisplay == null )
 			{
 				this.frameDisplay = new ImageLoader();
 				this.frameDisplay.scale9Grid = FRAME_SCALEGRID;
-				this.frameDisplay.source = Assets.getTexture("cards/frame", "gui");
+				this.frameDisplay.source = appModel.assets.getTexture("cards/frame");
 				this.frameDisplay.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 				this.addChildAt(this.frameDisplay, 1);
 			}
@@ -253,7 +255,7 @@ package com.gerantech.towercraft.controls
 				this.addChild(this.elixirDisplay as DisplayObject);
 			}
 			this.elixirDisplay.text =  StrUtils.getNumber(this._elixir);
-			this.elixirBackground.source = Assets.getTexture("cards/elixir", "gui");
+			this.elixirBackground.source = appModel.assets.getTexture("cards/elixir");
 		}
 		
 		protected function quantityDisplayFactory():void
@@ -305,7 +307,7 @@ package com.gerantech.towercraft.controls
 		protected function slider_progressbarFactory():LabeledProgressBar
 		{
 			var ret:LabeledProgressBar = new LabeledProgressBar();
-			var bg:Image = new Image(Assets.getTexture("cards/slider-background", "gui"));
+			var bg:Image = new Image(appModel.assets.getTexture("cards/slider-background"));
 			bg.scale9Grid = SLIDER_SCALEGRID;
 			bg.color = RARITY_COLORS[this._rarity];
 			ret.backgroundSkin = bg;

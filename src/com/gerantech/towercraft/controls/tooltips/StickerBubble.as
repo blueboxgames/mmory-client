@@ -2,12 +2,11 @@ package com.gerantech.towercraft.controls.tooltips
 {
 	import com.gerantech.towercraft.controls.TowersLayout;
 	import com.gerantech.towercraft.controls.texts.RTLLabel;
-	import com.gerantech.towercraft.models.Assets;
-	
-	import flash.geom.Rectangle;
-	
+
 	import feathers.layout.HorizontalLayout;
-	
+
+	import flash.geom.Rectangle;
+
 	import starling.display.Image;
 
 	public class StickerBubble extends TowersLayout
@@ -29,7 +28,7 @@ package com.gerantech.towercraft.controls.tooltips
 			super.initialize();
 			touchable = false;
 			
-			var sk:Image = new Image(Assets.getTexture("tooltip-bg-" + (inverse?"top-left":"bot-right"), "gui"));
+			var sk:Image = new Image(appModel.assets.getTexture("tooltip-bg-" + (inverse?"top-left":"bot-right")));
 			sk.scale9Grid = new Rectangle(inverse?38:14, inverse?38:14, 2, 2);
 			backgroundSkin = sk;
 			

@@ -8,7 +8,6 @@ import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
 import com.gerantech.towercraft.controls.texts.CustomTextInput;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
@@ -98,7 +97,7 @@ protected function showElements() : void
     chatEnableButton = new MMOryButton();
 	chatEnableButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
     chatEnableButton.width = chatEnableButton.height = footerSize;
-    chatEnableButton.iconTexture = Assets.getTexture("socials/icon-text", "gui");
+    chatEnableButton.iconTexture = appModel.assets.getTexture("socials/icon-text");
     chatEnableButton.layoutData = new AnchorLayoutData(NaN, padding, padding, NaN);
     chatEnableButton.addEventListener(Event.TRIGGERED, chatButton_triggeredHandler);
     addChild(chatEnableButton);

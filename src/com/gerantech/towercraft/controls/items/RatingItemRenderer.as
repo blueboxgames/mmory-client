@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.items
 {
-import com.gerantech.towercraft.models.Assets;
 import feathers.layout.AnchorLayout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -23,7 +23,7 @@ override protected function commitData():void
 	super.commitData();
 	if( iconDisplay == null )
 	{
-		iconDisplay = new Image(Assets.getTexture("gold-key" + (_data.s ? "" : "-off"), "gui"));
+		iconDisplay = new Image(appModel.assets.getTexture("gold-key" + (_data.s ? "" : "-off")));
 		iconDisplay.x = iconDisplay.y = width * 0.5;
 		iconDisplay.pivotX = iconDisplay.pivotY = iconDisplay.width * 0.5
 		iconDisplay.width = iconDisplay.height = width * 0.8;
@@ -32,7 +32,7 @@ override protected function commitData():void
 	}
 	else
 	{
-		iconDisplay.texture = Assets.getTexture("gold-key" + (_data.s ? "" : "-off"), "gui");
+		iconDisplay.texture = appModel.assets.getTexture("gold-key" + (_data.s ? "" : "-off"));
 	}
 	
 	if( !_data.s )

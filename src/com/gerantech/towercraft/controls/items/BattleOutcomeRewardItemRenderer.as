@@ -1,12 +1,11 @@
 package com.gerantech.towercraft.controls.items
 {
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.models.vo.RewardData;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.ResourceType;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import dragonBones.starling.StarlingArmatureDisplay;
@@ -54,7 +53,7 @@ override protected function commitData():void
 	}
 	else
 	{
-		iconDisplay = new Image(Assets.getTexture("res-" + _data.t, "gui"));
+		iconDisplay = new Image(appModel.assets.getTexture("res-" + _data.t));
 		iconDisplay.x = width * 0.50;
 		iconDisplay.y = height * 0.35;
 		iconDisplay.alignPivot();

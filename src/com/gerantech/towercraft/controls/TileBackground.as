@@ -1,16 +1,16 @@
 package com.gerantech.towercraft.controls 
 {
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.ImageLoader;
-import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
-import starling.events.Event;
-import flash.geom.Point;
+
 import starling.display.Image;
+import starling.events.Event;
 
 /**
 * ...
@@ -33,7 +33,7 @@ public function TileBackground(image:String, movingSpeed:Number = 0.3, hasInnerS
 		backgroundSkin = skin;
 	}
 	
-	tiledBG = new Image(Assets.getTexture(image, "gui"));
+	tiledBG = new Image(appModel.assets.getTexture(image));
 	tiledBG.tileGrid = new Rectangle(0, 0, tiledBG.width, tiledBG.height);
 	tiledBG.alpha = 0.1;
 	tiledBG.pixelSnapping = false;
@@ -45,7 +45,7 @@ public function TileBackground(image:String, movingSpeed:Number = 0.3, hasInnerS
 	if( hasInnerShadow )
 	{
 		var shadowDisplay:ImageLoader = new ImageLoader();
-		shadowDisplay.source = Assets.getTexture("radial-gradient-shadow", "gui");
+		shadowDisplay.source = appModel.assets.getTexture("radial-gradient-shadow");
 		shadowDisplay.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 		shadowDisplay.scale9Grid = new Rectangle(2, 2, 12, 12);
 		shadowDisplay.color = 0x000022;

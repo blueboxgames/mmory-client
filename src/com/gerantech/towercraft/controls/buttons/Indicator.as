@@ -9,7 +9,6 @@ import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.SoundManager;
 import com.gerantech.towercraft.managers.net.LoadingManager;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.RewardData;
 
 import feathers.controls.ImageLoader;
@@ -67,7 +66,7 @@ override protected function initialize():void
 
 	iconDisplay = new ImageLoader();
 	iconDisplay.pivotX = iconDisplay.pivotY = iconDisplay.width * 0.5;
-	iconDisplay.source = Assets.getTexture("res-" + type, "gui");
+	iconDisplay.source = appModel.assets.getTexture("res-" + type);
 	iconDisplay.width = iconDisplay.height = height + 24;
 	iconDisplay.layoutData = new AnchorLayoutData(NaN, direction == "ltr"?NaN: -height, NaN, direction == "ltr"? -height:NaN, NaN, 0);
 	addChild(iconDisplay);
@@ -216,7 +215,7 @@ public function addResourceAnimation(x:Number, y:Number, type:int, count:int, de
 	if( ResourceType.isCard(type) && this.type == ResourceType.R3_CURRENCY_SOFT )
 	{
 		appModel.sounds.addAndPlay("card-r-0",null, SoundManager.CATE_SFX, SoundManager.SINGLE_FORCE_THIS);
-		appModel.navigator.addAnimation(x, y, 130, Assets.getTexture("res-cards", "gui"), count, new Rectangle(320, 1900), delay, null);
+		appModel.navigator.addAnimation(x, y, 130, appModel.assets.getTexture("res-cards"), count, new Rectangle(320, 1900), delay, null);
 		return;
 	}
 	
@@ -234,7 +233,7 @@ public function addResourceAnimation(x:Number, y:Number, type:int, count:int, de
 		
 		appModel.sounds.addAndPlay("res-show-" + type, null, SoundManager.CATE_SFX, SoundManager.SINGLE_FORCE_THIS, 1);
 		trace("typetypetype", type);
-		appModel.navigator.addAnimation(x, y, 130, Assets.getTexture("res-" + type, "gui"), count, rect, 0.02, punch);
+		appModel.navigator.addAnimation(x, y, 130, appModel.assets.getTexture("res-" + type), count, rect, 0.02, punch);
 	}, delay * 1000);
 }
 

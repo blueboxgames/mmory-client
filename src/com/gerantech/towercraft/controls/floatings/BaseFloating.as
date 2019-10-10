@@ -2,9 +2,9 @@ package com.gerantech.towercraft.controls.floatings
 {
 	import com.gerantech.towercraft.controls.overlays.BaseOverlay;
 	import com.gerantech.towercraft.controls.overlays.TransitionData;
-	
+
 	import flash.geom.Point;
-	
+
 	import starling.animation.Transitions;
 	import starling.core.Starling;
 	import starling.events.Touch;

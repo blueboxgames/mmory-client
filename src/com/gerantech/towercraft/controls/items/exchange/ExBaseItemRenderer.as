@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
-import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
 
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;

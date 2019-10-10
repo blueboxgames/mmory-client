@@ -2,7 +2,6 @@ package com.gerantech.towercraft.controls.segments.lobby
 {
 import com.gerantech.towercraft.controls.segments.Segment;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -31,7 +30,7 @@ override public function init():void
 
 protected function backgroundFactory() : void
 {
-	var background:Image = new Image(Assets.getTexture("socials/balloon", "gui"));
+	var background:Image = new Image(appModel.assets.getTexture("socials/balloon"));
 	background.scale9Grid = LobbyChatItemSegment.BALLOON_RECT;
 	backgroundSkin = background;
 }

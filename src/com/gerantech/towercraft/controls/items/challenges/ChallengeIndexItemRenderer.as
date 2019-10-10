@@ -12,7 +12,6 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
 import com.gerantech.towercraft.events.GameEvent;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 
@@ -105,7 +104,7 @@ private function costFactory() : void
 		costIconDisplay.width = costIconDisplay.height = 74;
 		addChild(costIconDisplay);
 	}
-	costIconDisplay.source = Assets.getTexture("res-" + costType, "gui");
+	costIconDisplay.source = appModel.assets.getTexture("res-" + costType);
 	
 	if( costLabelDisplay == null )
 	{
@@ -140,7 +139,7 @@ private function rankingFactory() : void
 {
 	if( challenge.type != Challenge.TYPE_2_RANKING || locked || rankButton != null )
 		return;
-	rankButton = new IconButton(Assets.getTexture("home/ranking"), 0.6, Assets.getTexture("events/badge"));
+	rankButton = new IconButton(appModel.assets.getTexture("home/ranking"), 0.6, appModel.assets.getTexture("events/badge"));
 	rankButton.width = 96;
 	rankButton.height = 103;
 	rankButton.layoutData = new AnchorLayoutData(-24, appModel.isLTR? 100 : NaN, NaN, appModel.isLTR? NaN : 100);
@@ -173,7 +172,7 @@ private function backgroundFactory() : void
 		ImageLoader(backgroundImage.backgroundSkin).scale9Grid = BG_SCALE_GRID;
 		addChild(backgroundImage);
 	}
-	ImageLoader(backgroundImage.backgroundSkin).source = Assets.getTexture("events/index-bg-" + challenge.mode + "-up", "gui");
+	ImageLoader(backgroundImage.backgroundSkin).source = appModel.assets.getTexture("events/index-bg-" + challenge.mode + "-up");
 }
 
 private function iconFactory() : void
@@ -188,9 +187,9 @@ private function iconFactory() : void
 	}
 	
 	if( locked )
-		iconDisplay.source = Assets.getTexture("events/lock", "gui");
+		iconDisplay.source = appModel.assets.getTexture("events/lock");
 	else
-		iconDisplay.source = Assets.getTexture("events/type-" + challenge.mode, "gui");
+		iconDisplay.source = appModel.assets.getTexture("events/type-" + challenge.mode);
 }
 
 private function titleFactory() : void

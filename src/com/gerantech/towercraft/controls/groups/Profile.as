@@ -7,7 +7,6 @@ import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.controls.popups.SettingsPopup;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 
 import feathers.layout.AnchorLayout;
@@ -66,7 +65,7 @@ override protected function initialize() : void
 	// profile button
 	var profileButton:MMOryButton = new MMOryButton();
 	profileButton.styleName = MainTheme.STYLE_BUTTON_SMALL_DARK;
-	profileButton.iconTexture = Assets.getTexture("home/profile", "gui");
+	profileButton.iconTexture = appModel.assets.getTexture("home/profile");
 	profileButton.addEventListener(Event.TRIGGERED, buttons_eventsHandler);
 	profileButton.layoutData = new AnchorLayoutData(NaN, padding * 2 + 100, NaN, NaN, NaN, 2);
 	profileButton.width = profileButton.height = 100;
@@ -76,7 +75,7 @@ override protected function initialize() : void
 	// settings button
 	var settingsButton:MMOryButton = new MMOryButton();
 	settingsButton.styleName = MainTheme.STYLE_BUTTON_SMALL_DARK;
-	settingsButton.iconTexture = Assets.getTexture("home/settings", "gui");
+	settingsButton.iconTexture = appModel.assets.getTexture("home/settings");
 	settingsButton.addEventListener(Event.TRIGGERED, buttons_eventsHandler);
 	settingsButton.layoutData = new AnchorLayoutData(NaN, padding, NaN, NaN, NaN, 2);
 	settingsButton.width = settingsButton.height = 100;

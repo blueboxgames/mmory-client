@@ -1,13 +1,16 @@
 package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.towercraft.controls.items.EmblemItemRenderer;
+
 import feathers.controls.List;
 import feathers.controls.ScrollBarDisplayMode;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.TiledRowsLayout;
+
 import flash.geom.Rectangle;
+
 import starling.events.Event;
 
 public class EmblemsPopup extends SimplePopup

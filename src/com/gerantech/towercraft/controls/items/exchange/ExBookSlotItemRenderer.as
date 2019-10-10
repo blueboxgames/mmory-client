@@ -1,19 +1,18 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
+import com.gerantech.mmory.core.constants.ExchangeType;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.towercraft.controls.groups.GradientHilight;
 import com.gerantech.towercraft.controls.overlays.HandPoint;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.texts.CountdownLabel;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.RewardData;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.ExchangeType;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.exchanges.ExchangeItem;
-import com.gerantech.mmory.core.exchanges.Exchanger;
 
 import dragonBones.events.EventObject;
 import dragonBones.starling.StarlingArmatureDisplay;
@@ -136,7 +135,7 @@ protected function backgroundFactory() : ImageLoader
 		backgroundDisplay.scale9Grid = new Rectangle(39, 43, 6, 34);
 	}
 	addChild(backgroundDisplay);
-	backgroundDisplay.source = Assets.getTexture("home/slot-" + st, "gui");
+	backgroundDisplay.source = appModel.assets.getTexture("home/slot-" + st);
 	
 	if( state != ExchangeItem.CHEST_STATE_BUSY )
 		return backgroundDisplay;
@@ -209,7 +208,7 @@ private function showOpenWarn() : void
 	ribbonImage.width = 180;
 	ribbonImage.pixelSnapping = false;
 	ribbonImage.scale9Grid = new Rectangle(24, 0, 3, 0)
-	ribbonImage.source = Assets.getTexture("home/open-ribbon");
+	ribbonImage.source = appModel.assets.getTexture("home/open-ribbon");
 	ribbonImage.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0);
 	waitGroup.addChild(ribbonImage);
 	
@@ -237,7 +236,7 @@ protected function busyGroupFactory() : LayoutGroup
 		busyGroup.layoutData = new AnchorLayoutData(0, 0, 0, 0);
 		
 		var hardImage:ImageLoader = new ImageLoader();
-		hardImage.source = Assets.getTexture("res-" + ResourceType.R4_CURRENCY_HARD, "gui");
+		hardImage.source = appModel.assets.getTexture("res-" + ResourceType.R4_CURRENCY_HARD);
 		hardImage.width = height * 0.2;
 		hardImage.layoutData = new AnchorLayoutData(80, NaN, NaN, NaN, -36);
 		busyGroup.addChild(hardImage);

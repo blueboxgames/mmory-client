@@ -7,7 +7,6 @@ import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.CoreUtils;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gerantech.towercraft.views.units.elements.UnitBody;
 
@@ -78,7 +77,7 @@ public function set type(value:int) : void
 	else
 	{
 		zoneDisplay.width = zoneDisplay.height = 48;
-		zoneDisplay.texture = Assets.getTexture("theme/radio-selected-disabled-icon");
+		zoneDisplay.texture = AppModel.instance.assets.getTexture("theme/radio-selected-disabled-icon");
 	}
 	
 	

@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.controls.items 
 {
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 
 import feathers.controls.ImageLoader;
@@ -81,7 +80,7 @@ protected function iconDisplayFactory() : ImageLoader
 			iconDisplay.height = _data.iconHeigth;
 		addChild(iconDisplay);
 	}
-	iconDisplay.source = Assets.getTexture(_data.icon, "gui");
+	iconDisplay.source = appModel.assets.getTexture(_data.icon);
 	return iconDisplay;
 }
 }

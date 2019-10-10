@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.controls.overlays 
 {
-import com.gerantech.towercraft.models.Assets;
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
+import com.gerantech.towercraft.models.AppModel;
 
 /**
  * ...
@@ -14,7 +14,7 @@ public class HandPoint extends Image
 {
 public function HandPoint(x:Number, y:Number) 
 {
-	super(Assets.getTexture("hand", "gui"));
+	super(AppModel.instance.assets.getTexture("hand"));
 	this.x = x + 320;
 	this.y = y;
 	this.scale = 1.2;

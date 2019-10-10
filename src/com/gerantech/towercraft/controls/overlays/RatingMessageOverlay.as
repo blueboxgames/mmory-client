@@ -3,16 +3,18 @@ package com.gerantech.towercraft.controls.overlays
 import com.gerantech.towercraft.controls.items.RatingItemRenderer;
 import com.gerantech.towercraft.controls.tooltips.ConfirmTooltip;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
-import dragonBones.events.EventObject;
-import dragonBones.starling.StarlingArmatureDisplay;
+
 import dragonBones.starling.StarlingEvent;
+
 import feathers.controls.List;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalLayout;
+
 import flash.geom.Rectangle;
+
 import starling.events.Event;
 
 public class RatingMessageOverlay extends TutorialMessageOverlay

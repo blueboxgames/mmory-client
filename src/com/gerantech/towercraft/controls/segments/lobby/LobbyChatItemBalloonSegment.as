@@ -2,7 +2,6 @@ package com.gerantech.towercraft.controls.segments.lobby
 {
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
@@ -52,14 +51,14 @@ override public function init():void
 	mySkin.visible = false;
 	mySkin.layoutData = mySkinLayout;
 	mySkin.scale9Grid = LobbyChatItemSegment.BALLOON_RECT;
-	mySkin.source = Assets.getTexture("socials/balloon-me", "gui");
+	mySkin.source = appModel.assets.getTexture("socials/balloon-me");
 	addChild(mySkin);
 	
 	whoSkin = new ImageLoader();
 	whoSkin.scale9Grid = LobbyChatItemSegment.BALLOON_RECT;
 	whoSkin.visible = false;
 	whoSkin.layoutData = whoSkinLayout;
-	whoSkin.source = Assets.getTexture("socials/balloon-who", "gui");
+	whoSkin.source = appModel.assets.getTexture("socials/balloon-who");
 	addChild(whoSkin);
 	
 	senderLayout = new AnchorLayoutData(16);

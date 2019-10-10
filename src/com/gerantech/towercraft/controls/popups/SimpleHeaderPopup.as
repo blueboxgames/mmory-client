@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.popups 
 {
+import com.gerantech.towercraft.controls.ClosableLayout;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 
 import feathers.controls.Button;
@@ -10,7 +10,6 @@ import feathers.layout.AnchorLayoutData;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
-import com.gerantech.towercraft.controls.ClosableLayout;
 /**
 * @author Mansour Djawadi
 */
@@ -36,7 +35,7 @@ override protected function initialize() : void
 		return;
 	closeButton = new Button();
 	closeButton.styleName = MainTheme.STYLE_BUTTON_SMALL_DANGER;
-	closeButton.defaultIcon = new Image(Assets.getTexture("theme/icon-cross", "gui"));
+	closeButton.defaultIcon = new Image(appModel.assets.getTexture("theme/icon-cross"));
 	closeButton.width = 88;
 	closeButton.height = 74;
 	closeButton.layoutData = new AnchorLayoutData(-10, -10);

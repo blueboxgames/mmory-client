@@ -12,7 +12,6 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
 
 import dragonBones.events.EventObject;
@@ -244,7 +243,7 @@ private function pullCard() : void
 	setTimeout(bookArmature.addChildAt, 200, explode, 3);
 	
 	// change card
-	var texture:Texture = Assets.getTexture("cards/" + rewardType, "gui");
+	var texture:Texture = appModel.assets.getTexture("cards/" + rewardType);
 	var subtexture:SubTexture = new SubTexture(texture, new Rectangle(0, 0, texture.width, texture.height));
 	StarlingTextureData(bookArmature.armature.getSlot("template").skinSlotData.getDisplay("cards/template-card").texture).texture = subtexture;
 	

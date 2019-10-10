@@ -2,11 +2,13 @@ package com.gerantech.towercraft.controls.tooltips
 {
 import com.gerantech.towercraft.controls.ClosableLayout;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.models.Assets;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Point;
 import flash.geom.Rectangle;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -43,7 +45,7 @@ override protected function initialize():void
 		halign = position.x < stage.stageWidth * 0.5 ? "left" : "right";
 	if( valign == null )
 		valign = position.y < stage.stageHeight * 0.5 ? "top" : "bot";
-	var skin:Image = new Image(Assets.getTexture("tooltip-bg-" + valign + "-" + halign, "gui"));
+	var skin:Image = new Image(appModel.assets.getTexture("tooltip-bg-" + valign + "-" + halign));
 	skin.scale9Grid = new Rectangle(halign == "left"?38:14, valign == "top"?36:14, 2, 2);
 	backgroundSkin = skin;
 	layout = new AnchorLayout();

@@ -3,10 +3,13 @@ package com.gerantech.towercraft.controls.sliders.battle
 import com.gerantech.towercraft.controls.StarCheck;
 import com.gerantech.towercraft.controls.indicators.CountdownIcon;
 import com.gerantech.towercraft.controls.sliders.LabeledProgressBar;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalAlign;
+
 import flash.utils.clearTimeout;
+
 import starling.core.Starling;
 
 public class BattleTimerSlider extends IBattleSlider

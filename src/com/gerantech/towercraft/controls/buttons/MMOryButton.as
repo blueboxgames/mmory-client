@@ -4,7 +4,6 @@ import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.controls.overlays.HandPoint;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.BillingManager;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 
 import feathers.controls.Button;
@@ -18,6 +17,7 @@ import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
 import starling.textures.Texture;
+import com.gerantech.towercraft.models.AppModel;
 
 /**
 * @author Mansour Djawadi
@@ -37,9 +37,9 @@ private var handPoint:HandPoint;
 static public function getIcon(type:int, count:int) : Texture
 {
 	if( type > 0 && count > 0 )
-		return Assets.getTexture("res-" + type, "gui");
+		return AppModel.instance.assets.getTexture("res-" + type);
 	if( type == -2 )
-		return Assets.getTexture("extra-time", "gui");
+		return AppModel.instance.assets.getTexture("extra-time");
 	return null;
 }
 

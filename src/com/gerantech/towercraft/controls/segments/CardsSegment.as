@@ -7,6 +7,7 @@ import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.ClosableLayout;
 import com.gerantech.towercraft.controls.headers.DeckHeader;
 import com.gerantech.towercraft.controls.items.CardItemRenderer;
+import com.gerantech.towercraft.controls.overlays.BaseOverlay;
 import com.gerantech.towercraft.controls.overlays.CardUpgradeOverlay;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.AbstractPopup;
@@ -41,7 +42,6 @@ import starling.events.Event;
 import starling.events.Touch;
 import starling.events.TouchEvent;
 import starling.events.TouchPhase;
-import com.gerantech.towercraft.controls.overlays.BaseOverlay;
 
 public class CardsSegment extends Segment
 {

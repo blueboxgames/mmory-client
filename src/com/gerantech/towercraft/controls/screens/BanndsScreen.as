@@ -1,17 +1,16 @@
 package com.gerantech.towercraft.controls.screens
 {
 import com.gerantech.towercraft.controls.items.BanMessageItemRenderer;
-import com.gerantech.towercraft.controls.items.InfractionItemRenderer;
-import com.gerantech.towercraft.controls.popups.AdminBanPopup;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.smartfoxserver.v2.core.SFSEvent;
-import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
+
 import starling.events.Event;
 
 public class BanndsScreen extends ListScreen

@@ -16,7 +16,6 @@ import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.SoundManager;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
@@ -128,7 +127,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	addChild(pageList);
 		
 	var shadowBottom:ImageLoader = new ImageLoader();
-	shadowBottom.source = Assets.getTexture("theme/gradeint-bottom", "gui");
+	shadowBottom.source = appModel.assets.getTexture("theme/gradeint-bottom");
 	shadowBottom.layoutData = new AnchorLayoutData(NaN, -20, FOOTER_SIZE - 20, -20);
 	shadowBottom.maintainAspectRatio = false;
 	shadowBottom.touchable = false;
@@ -142,7 +141,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	
 	var footerBG:ImageLoader = new ImageLoader();
 	footerBG.height = FOOTER_SIZE;
-	footerBG.source = Assets.getTexture("home/dash-bg");
+	footerBG.source = appModel.assets.getTexture("home/dash-bg");
 	footerBG.scale9Grid = new Rectangle(13, 10, 5, 66);
 	footerBG.layoutData = new AnchorLayoutData(NaN, 0, -1, 0);
 	footerBG.touchable = false;
@@ -150,7 +149,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	
 	tabSelection = new ImageLoader();
 	tabSelection.touchable = false;
-	tabSelection.source = Assets.getTexture("home/dash-selection");
+	tabSelection.source = appModel.assets.getTexture("home/dash-selection");
 	tabSelection.height = FOOTER_SIZE;
 	tabSelection.width = tabSize * 1.2;
 	tabSelection.scale9Grid = new Rectangle(25, 17, 2, 183);
@@ -180,7 +179,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	addChild(toolbar);
 	
 	var shadowTop:ImageLoader = new ImageLoader();
-	shadowTop.source = Assets.getTexture("theme/gradeint-top", "gui");
+	shadowTop.source = appModel.assets.getTexture("theme/gradeint-top");
 	shadowTop.layoutData = new AnchorLayoutData(-30, -30, NaN, -30);
 	shadowTop.maintainAspectRatio = false;
 	shadowTop.touchable = false;

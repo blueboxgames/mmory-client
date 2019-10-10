@@ -12,7 +12,6 @@ import com.gerantech.towercraft.controls.overlays.TutorialSwipeOverlay;
 import com.gerantech.towercraft.controls.sliders.ElixirBar;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
@@ -102,7 +101,7 @@ override protected function initialize():void
 		stickerButton.height = 110;
 		stickerButton.width = preparedCard.width;
 		stickerButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
-		stickerButton.iconTexture = Assets.getTexture("tooltip-bg-bot-left");
+		stickerButton.iconTexture = appModel.assets.getTexture("tooltip-bg-bot-left");
 		stickerButton.layoutData = new AnchorLayoutData(padding, NaN, NaN, padding);
 		stickerButton.addEventListener(Event.TRIGGERED, stickerButton_triggeredHandler);
 		addChild(stickerButton);
@@ -333,7 +332,6 @@ protected function get battleField() : BattleField { return fieldView.battleData
 }
 
 import com.gerantech.towercraft.controls.CardView;
-import com.gerantech.towercraft.models.Assets;
 
 import feathers.layout.AnchorLayoutData;
 

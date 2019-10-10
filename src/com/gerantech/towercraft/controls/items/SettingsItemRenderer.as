@@ -3,7 +3,6 @@ package com.gerantech.towercraft.controls.items
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.SettingsData;
 import com.gerantech.towercraft.themes.MainTheme;
 
@@ -83,7 +82,7 @@ override protected function commitData():void
 		}
 		else
 		{
-			buttonDisplay.defaultIcon = new Image(Assets.getTexture("settings/" + settingData.key, "gui"));
+			buttonDisplay.defaultIcon = new Image(appModel.assets.getTexture("settings/" + settingData.key));
 			buttonDisplay.styleName = settingData.value ? MainTheme.STYLE_BUTTON_SMALL_NORMAL : MainTheme.STYLE_BUTTON_SMALL_DANGER; 
 		}
 		
@@ -98,7 +97,7 @@ private function addLabelButton(type:int):void
 	var btn:MMOryButton = new MMOryButton();
 	btn.labelFactory = function () : ITextRenderer { return new ShadowLabel(null, 1, 0, "center", null, false, null, 0.7)};
 	btn.addEventListener(Event.TRIGGERED, buttons_triggeredHandler);
-	var txt:Texture = Assets.getTexture("settings/" + type, "gui");
+	var txt:Texture = appModel.assets.getTexture("settings/" + type);
 	btn.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
 	btn.label = loc("setting_label_" + type);
 	btn.layoutData = new HorizontalLayoutData(100, 100);
@@ -112,7 +111,7 @@ private function addIconButton(type:int) : MMOryButton
 {
 	var btn:MMOryButton = new MMOryButton();
 	btn.addEventListener(Event.TRIGGERED, buttons_triggeredHandler);
-	btn.iconTexture = Assets.getTexture("settings/" + type, "gui");
+	btn.iconTexture = appModel.assets.getTexture("settings/" + type);
 	btn.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
 	btn.layoutData = new HorizontalLayoutData(NaN, 100);
 	btn.name = type.toString();

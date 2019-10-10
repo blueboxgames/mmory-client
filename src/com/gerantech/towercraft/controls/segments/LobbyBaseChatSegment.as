@@ -16,7 +16,6 @@ import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
@@ -116,7 +115,7 @@ override protected function showElements() : void
 	emotesButton = new MMOryButton();
 	emotesButton.width = emotesButton.height = footerSize;
 	emotesButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
-	emotesButton.iconTexture = Assets.getTexture("socials/icon-emote", "gui");
+	emotesButton.iconTexture = appModel.assets.getTexture("socials/icon-emote");
 	emotesButton.addEventListener(Event.TRIGGERED, emotesButton_triggeredHandler);
 	emotesButton.layoutData = new AnchorLayoutData(NaN, padding * 2 + footerSize, padding, NaN);
 	addChild(emotesButton);

@@ -1,7 +1,8 @@
 package com.gerantech.towercraft.controls
 {
-import com.gerantech.towercraft.models.Assets;
+import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -11,9 +12,9 @@ public class StarCheck extends Image
 private var actived:Boolean;
 private var size:int = 200;
 private var atlas:String;
-public function StarCheck(actived:Boolean = false, size:int = 200, atlas:String = "gui")
+public function StarCheck(actived:Boolean = false, size:int = 200)
 {
-	super( Assets.getTexture("gold-key" + (actived ? "" : "-off"), atlas));
+	super(AppModel.instance.assets.getTexture("gold-key" + (actived ? "" : "-off")));
     this.touchable = false;
 	this.actived = actived;
 	this.atlas = atlas;
@@ -36,7 +37,7 @@ public function active() : void
 	//pd.x = pd.y = width * 0.5;
 	parent.addChildAt(pd, parent.getChildIndex(this));
 	
-	texture = Assets.getTexture("gold-key", atlas);
+	texture = AppModel.instance.assets.getTexture("gold-key");
 	width = height = size * 2;
 	Starling.juggler.tween(this, 0.6, {width:size, height:size, transition:Transitions.EASE_OUT_BACK});
 	actived = true;
@@ -46,7 +47,7 @@ public function deactive() : void
 	if( !actived )
 		return;
 	
-	texture = Assets.getTexture("gold-key-off", atlas);
+	texture = AppModel.instance.assets.getTexture("gold-key-off");
 	width = height = size * 0.8;
 	Starling.juggler.tween(this, 0.6, {width:size, height:size, transition:Transitions.EASE_OUT_BACK});
 	actived = false;

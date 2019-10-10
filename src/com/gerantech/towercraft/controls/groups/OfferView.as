@@ -1,26 +1,25 @@
 package com.gerantech.towercraft.controls.groups 
 {
 import com.gerantech.towercraft.Game;
-import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
 import com.gerantech.towercraft.controls.items.offers.BuddyOfferItem;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.controls.segments.SocialSegment;
-import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.skins.ImageSkin;
-import flash.geom.Rectangle;
+
 import flash.utils.clearInterval;
 import flash.utils.setInterval;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
-import starling.utils.Color;
 import starling.events.Event;
+import starling.utils.Color;
 
 /**
 * ...
@@ -48,7 +47,7 @@ override protected function initialize() : void
 	if( !hasItem )
 		return;
 
-	var gradient:Image = new ImageSkin( Assets.getTexture("theme/gradeint-right") );
+	var gradient:Image = new ImageSkin( appModel.assets.getTexture("theme/gradeint-right") );
 	gradient.scale9Grid = MainTheme.SHADOW_SIDE_SCALE9_GRID;
     gradient.color = Color.BLACK;
     gradient.alpha = 0.6;

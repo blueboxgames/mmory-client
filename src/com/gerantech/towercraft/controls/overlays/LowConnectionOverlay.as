@@ -1,15 +1,13 @@
 package com.gerantech.towercraft.controls.overlays
 {
-import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
-
-import flash.utils.clearTimeout;
-import flash.utils.setTimeout;
 
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
+import flash.utils.clearTimeout;
+import flash.utils.setTimeout;
 
 import starling.core.Starling;
 
@@ -30,7 +28,7 @@ override protected function initialize():void
 	layout = new AnchorLayout();
 	
 	var imageDisplay:ImageLoader = new ImageLoader();
-	imageDisplay.source = Assets.getTexture("connection-alert");
+	imageDisplay.source = appModel.assets.getTexture("connection-alert");
 	imageDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
 	addChild(imageDisplay);
 	

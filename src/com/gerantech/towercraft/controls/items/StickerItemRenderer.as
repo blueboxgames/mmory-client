@@ -1,10 +1,12 @@
 package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.models.Assets;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
+
 import starling.display.Image;
 
 public class StickerItemRenderer extends AbstractTouchableListItemRenderer
@@ -15,7 +17,7 @@ override protected function initialize():void
 {
 	super.initialize();
 	
-	var sk:Image = new Image(Assets.getTexture("sticker-item"));
+	var sk:Image = new Image(appModel.assets.getTexture("sticker-item"));
 	sk.scale9Grid = new Rectangle(14, 14, 2, 2);
 	backgroundSkin = sk;
 	layout = new AnchorLayout();

@@ -1,14 +1,16 @@
 package com.gerantech.towercraft.controls
 {
+import com.gerantech.mmory.core.Game;
+import com.gerantech.mmory.core.Player;
+import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.towercraft.managers.ExchangeManager;
 import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.TutorialManager;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.Game;
-import com.gerantech.mmory.core.Player;
-import com.gerantech.mmory.core.exchanges.Exchanger;
+
 import feathers.controls.LayoutGroup;
+
 import starling.core.Starling;
 public class TowersLayout extends LayoutGroup
 {

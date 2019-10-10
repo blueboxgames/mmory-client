@@ -1,8 +1,6 @@
 package com.gerantech.towercraft.controls.items
 {
-import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.themes.MainTheme;
 
@@ -63,7 +61,7 @@ private function updateBadge():void
 	}
 	else
 	{
-		badgeDisplay.source = Assets.getTexture(dashboardData.newBadgeNumber>0 ? "theme/badge-notification-new" : "theme/badge-notification")
+		badgeDisplay.source = appModel.assets.getTexture(dashboardData.newBadgeNumber>0 ? "theme/badge-notification-new" : "theme/badge-notification")
 		addChild(badgeDisplay);
 	}
 }

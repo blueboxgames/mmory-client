@@ -1,9 +1,11 @@
 package com.gerantech.towercraft.controls.groups 
 {
 import com.gerantech.towercraft.controls.TowersLayout;
-import com.gerantech.towercraft.models.Assets;
+
 import feathers.layout.RelativePosition;
+
 import flash.geom.Rectangle;
+
 import starling.core.Starling;
 import starling.display.BlendMode;
 import starling.display.MovieClip;
@@ -30,7 +32,7 @@ protected function backroundAnimationFactory() : void
 {
 	if( this.skin == null )
 	{
-		this.skin = new MovieClip(Assets.getTextures(this.direction == RelativePosition.TOP || this.direction == RelativePosition.BOTTOM ? "animations/light-v/" : "animations/light-h/", "gui"), 40);
+		this.skin = new MovieClip(appModel.assets.getTextures(this.direction == RelativePosition.TOP || this.direction == RelativePosition.BOTTOM ? "animations/light-v/" : "animations/light-h/"), 40);
 		this.skin.color = this.color;
 		this.skin.blendMode = BlendMode.ADD;
 		this.skin.scale9Grid = this.direction == RelativePosition.TOP || this.direction == RelativePosition.BOTTOM ? SCALE_GRID_V : SCALE_GRID_H;

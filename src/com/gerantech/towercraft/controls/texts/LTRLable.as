@@ -2,10 +2,10 @@ package com.gerantech.towercraft.controls.texts
 {
 	import com.gerantech.towercraft.models.AppModel;
 	import com.gerantech.towercraft.themes.MainTheme;
-	
-	import flash.text.TextFormat;
-	
+
 	import feathers.controls.text.TextFieldTextRenderer;
+
+	import flash.text.TextFormat;
 	
 	public class LTRLable extends TextFieldTextRenderer
 	{

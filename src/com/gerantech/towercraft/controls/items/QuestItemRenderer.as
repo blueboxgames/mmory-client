@@ -6,7 +6,6 @@ import com.gerantech.towercraft.controls.sliders.LabeledProgressBar;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 
@@ -99,10 +98,10 @@ override protected function commitData():void
 	quest = _data as Quest;
 	passed = quest.passed();
 	
-	backgroundDisplay.source = Assets.getTexture("quest-item-bg-" + (passed ? "hilight" : "neutral"), "gui");
+	backgroundDisplay.source = appModel.assets.getTexture("quest-item-bg-" + (passed ? "hilight" : "neutral"));
 	
 	var iconStr:String = QuestItemRenderer.getIcon(quest.type);
-	iconDisplay.source = Assets.getTexture(iconStr, "gui");
+	iconDisplay.source = appModel.assets.getTexture(iconStr);
 	iconDisplay.height = iconStr.substr(0,9) == "home/dash-tab-" ? 160 : 120;
 	iconDisplay.y = iconStr.substr(0,9) == "home/dash-tab-" ? -PADDING * 2 : 0;
 	

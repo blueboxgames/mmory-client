@@ -1,11 +1,11 @@
 package com.gerantech.towercraft.controls.indicators
 {
 import com.gerantech.towercraft.controls.TowersLayout;
-import com.gerantech.towercraft.models.Assets;
+
 import flash.utils.clearInterval;
 import flash.utils.clearTimeout;
 import flash.utils.setInterval;
-import flash.utils.setTimeout;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -21,12 +21,12 @@ private var timeoutId:uint;
 
 public function CountdownIcon(autoplay:Boolean = true)
 {
-	background =  new Image(Assets.getTexture("timer"));
+	background =  new Image(appModel.assets.getTexture("timer"));
 	background.pivotX = background.width * 0.5;
 	background.pivotY = background.height * 0.5;
 	addChild(background);
 	
-	needle = new Image(Assets.getTexture("timer-needle"));
+	needle = new Image(appModel.assets.getTexture("timer-needle"));
 	needle.pivotX = needle.width * 0.5;
 	needle.pivotY = needle.height * 0.5;
 	needle.rotation = 0.47;

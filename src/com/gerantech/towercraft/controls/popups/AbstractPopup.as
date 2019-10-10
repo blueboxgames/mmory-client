@@ -2,7 +2,9 @@ package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.towercraft.controls.overlays.BaseOverlay;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
+
 import flash.geom.Rectangle;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 

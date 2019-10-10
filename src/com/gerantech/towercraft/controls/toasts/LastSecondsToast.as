@@ -1,11 +1,13 @@
 package com.gerantech.towercraft.controls.toasts
 {
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
+
 import feathers.controls.text.BitmapFontTextRenderer;
 import feathers.text.BitmapFontTextFormat;
+
 import flash.utils.clearInterval;
 import flash.utils.setInterval;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 /**
@@ -26,7 +28,7 @@ public function LastSecondsToast()
 	height = 220;
 	touchable = false;
 	pixelSnapping = false;
-	textFormat = new BitmapFontTextFormat(Assets.getFont(), 200, _COLORS[0], "center");
+	textFormat = new BitmapFontTextFormat(AppModel.instance.assets.getFont(), 200, _COLORS[0], "center");
 	pivotX = width * 0.5;
 	pivotY = height;
 

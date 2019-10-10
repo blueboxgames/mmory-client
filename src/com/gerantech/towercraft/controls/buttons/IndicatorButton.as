@@ -2,9 +2,9 @@ package com.gerantech.towercraft.controls.buttons
 {
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.Button;
 import feathers.core.ITextRenderer;
-import starling.text.TextFormat;
 
 public class IndicatorButton extends Button
 {

@@ -3,8 +3,10 @@ package com.gerantech.towercraft.controls.headers
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.display.Image;
 
 public class ScreenHeader extends TowersLayout

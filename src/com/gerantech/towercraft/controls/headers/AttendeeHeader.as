@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.controls.headers
 {
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.ResourceType;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
@@ -33,7 +33,7 @@ override protected function initialize():void
 	{
 		var pointIcon:ImageLoader = new ImageLoader();
 		pointIcon.width = 70;
-		pointIcon.source = Assets.getTexture("res-" + ResourceType.R2_POINT, "gui");
+		pointIcon.source = appModel.assets.getTexture("res-" + ResourceType.R2_POINT);
 		pointIcon.layoutData = new AnchorLayoutData(80, NaN, NaN, 8);
 		addChild(pointIcon);
 		

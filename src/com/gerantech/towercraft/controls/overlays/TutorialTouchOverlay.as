@@ -1,7 +1,9 @@
 package com.gerantech.towercraft.controls.overlays
 {
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
+
 import flash.geom.Point;
+
 import starling.display.DisplayObjectContainer;
 import starling.display.Image;
 

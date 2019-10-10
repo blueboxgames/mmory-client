@@ -1,28 +1,21 @@
 package com.gerantech.towercraft.controls.items.challenges
 {
-import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
-import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.utils.StrUtils;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.socials.Attendee;
 import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
+import com.gerantech.towercraft.controls.items.AbstractTouchableListItemRenderer;
+import com.gerantech.towercraft.controls.texts.RTLLabel;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
+import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.ImageLoader;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
-import feathers.layout.HorizontalAlign;
-import feathers.layout.TiledRowsLayout;
-import feathers.layout.VerticalLayout;
 import feathers.skins.ImageSkin;
-import flash.text.engine.ElementFormat;
-import haxe.ds.IntMap;
+
 import starling.events.Event;
-import starling.events.Touch;
 
 public class ChallengeAttendeeItemRenderer extends AbstractTouchableListItemRenderer
 {
@@ -82,12 +75,12 @@ override protected function commitData():void
 	var prizeKey:int = m.keys()[0];
 	if( ResourceType.isBook(prizeKey) )
 	{
-		prizeIconDisplay.source = Assets.getTexture("books/" + prizeKey, "gui");
+		prizeIconDisplay.source = appModel.assets.getTexture("books/" + prizeKey);
 		prizeCountDisplay.visible = false;
 	}
 	else
 	{
-		prizeIconDisplay.source = Assets.getTexture("cards/" + prizeKey, "gui");
+		prizeIconDisplay.source = appModel.assets.getTexture("cards/" + prizeKey);
 		prizeCountDisplay.text = prizeKey == -1 ? "---" : ("      x " +  m.get(prizeKey));
 		prizeCountDisplay.visible = true;
 	}

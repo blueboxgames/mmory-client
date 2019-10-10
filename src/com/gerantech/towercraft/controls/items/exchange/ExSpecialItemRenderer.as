@@ -1,13 +1,12 @@
 package com.gerantech.towercraft.controls.items.exchange
 {
-import com.gerantech.towercraft.controls.CardView;
-import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
-import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.exchanges.Exchanger;
+import com.gerantech.towercraft.controls.CardView;
+import com.gerantech.towercraft.controls.texts.RTLLabel;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
+import com.gerantech.towercraft.themes.MainTheme;
 
 import feathers.controls.ImageLoader;
 import feathers.core.ITextRenderer;
@@ -39,7 +38,7 @@ override protected function commitData() : void
 	var outValue:int = exchange.requirements.keys()[0] == ResourceType.R4_CURRENCY_HARD ? Exchanger.toHard(exchange.outcomes) : Exchanger.toSoft(exchange.outcomes);
 	var discount:int = Math.round((1 - (exchange.requirements.values()[0] / outValue)) * 100);
 	var ribbonDisplay:ImageLoader = new ImageLoader();
-	ribbonDisplay.source = Assets.getTexture("cards/empty-badge", "gui");
+	ribbonDisplay.source = appModel.assets.getTexture("cards/empty-badge");
 	ribbonDisplay.layoutData = new AnchorLayoutData(0, NaN, NaN, 0);
 	ribbonDisplay.height = ribbonDisplay.width = width * 0.6;
 	addChild(ribbonDisplay);

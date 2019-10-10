@@ -1,9 +1,12 @@
 package com.gerantech.towercraft.controls
 {
 import com.gerantech.towercraft.controls.overlays.TransitionData;
+
 import feathers.events.FeathersEventType;
+
 import flash.geom.Point;
 import flash.ui.Keyboard;
+
 import starling.core.Starling;
 import starling.events.Event;
 import starling.events.KeyboardEvent;

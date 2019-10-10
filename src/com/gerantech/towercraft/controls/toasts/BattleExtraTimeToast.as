@@ -3,7 +3,6 @@ package com.gerantech.towercraft.controls.toasts
 import com.gerantech.towercraft.controls.BattleHUD;
 import com.gerantech.towercraft.controls.screens.BattleScreen;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
@@ -58,7 +57,7 @@ override protected function initialize():void
 	
 	var extraIcon:ImageLoader = new ImageLoader();
 	extraIcon.width = 120;
-	extraIcon.source = Assets.getTexture("extra-time");
+	extraIcon.source = appModel.assets.getTexture("extra-time");
 	extraIcon.pixelSnapping = false;
 	
 	var extraLabel:ShadowLabel = new ShadowLabel(loc(mode == MODE_ELIXIR_2X ? "battle_remaining" : "battle_extratime"), 1, 0, null, null, false, null, 1.4);
@@ -83,7 +82,7 @@ override protected function initialize():void
 	
 	var elixirIcon:ImageLoader = new ImageLoader();
 	elixirIcon.width = 200;
-	elixirIcon.source = Assets.getTexture("cards/elixir", "gui");
+	elixirIcon.source = appModel.assets.getTexture("cards/elixir");
 	elixirIcon.pixelSnapping = false;
 	
 	var elixirLabel:ShadowLabel = new ShadowLabel("2x", 0x27E0DC, 0, null, null, false, null, 2.2);

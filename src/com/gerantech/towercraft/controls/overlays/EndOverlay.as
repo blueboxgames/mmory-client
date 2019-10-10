@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.controls.overlays
 {
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.controls.groups.Devider;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.gerantech.towercraft.models.vo.RewardData;
 import com.gerantech.towercraft.views.effects.UIParticleSystem;
-import com.gerantech.mmory.core.constants.ResourceType;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 
 import feathers.controls.AutoSizeMode;

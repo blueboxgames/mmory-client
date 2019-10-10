@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.controls.groups
 {
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.LayoutGroup;
-import flash.geom.Rectangle;
+
 import starling.display.Image;
 
 public class Devider extends LayoutGroup

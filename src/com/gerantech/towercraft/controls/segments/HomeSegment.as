@@ -21,7 +21,6 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.managers.oauth.OAuthManager;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;
@@ -162,14 +161,14 @@ override public function init():void
 	questsButton.width = questsButton.height = 140;
 	addButton(questsButton, "questsButton");
 	
-	var rankButton:IconButton = new IconButton(Assets.getTexture("home/ranking"), 0.6, Assets.getTexture("home/button-bg-0"), new Rectangle(22, 38, 4, 4));
+	var rankButton:IconButton = new IconButton(appModel.assets.getTexture("home/ranking"), 0.6, appModel.assets.getTexture("home/button-bg-0"), new Rectangle(22, 38, 4, 4));
 	rankButton.layoutData = new AnchorLayoutData(NaN, paddingH + 32, NaN, NaN, NaN, stageHeight * 0.15);
 	rankButton.width = rankButton.height = 140;
 	addButton(rankButton, "rankButton");
 	
 	if( player.get_battleswins() > 10 && !player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE) )
 	{
-		googleButton = new IconButton(Assets.getTexture("settings/41"), 0.6, Assets.getTexture("home/button-bg-0"), new Rectangle(22, 38, 4, 4));
+		googleButton = new IconButton(appModel.assets.getTexture("settings/41"), 0.6, appModel.assets.getTexture("home/button-bg-0"), new Rectangle(22, 38, 4, 4));
 		googleButton.layoutData = new AnchorLayoutData(330, paddingH + 36 + starsButton.width);
 		googleButton.width = googleButton.height = 140;
 		addButton(googleButton, "googleButton");

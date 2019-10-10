@@ -9,7 +9,6 @@ import com.gerantech.towercraft.controls.popups.FriendlyBattleModePopup;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -54,7 +53,7 @@ override protected function showElements():void
 	battleButton = new MMOryButton();
 	battleButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
 	battleButton.width = battleButton.height = footerSize;
-	battleButton.iconTexture = Assets.getTexture("socials/icon-battle", "gui");
+	battleButton.iconTexture = appModel.assets.getTexture("socials/icon-battle");
 	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, padding, padding);
 	battleButton.addEventListener(Event.TRIGGERED, battleButton_triggeredHandler);
 	addChild(battleButton);

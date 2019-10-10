@@ -2,20 +2,22 @@ package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.entities.Buddy;
+import com.smartfoxserver.v2.entities.variables.BuddyVariable;
 import com.smartfoxserver.v2.entities.variables.SFSBuddyVariable;
+
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
 import feathers.skins.ImageSkin;
+
 import flash.text.engine.ElementFormat;
+
 import starling.events.Event;
 import starling.events.Touch;
-import com.smartfoxserver.v2.entities.variables.BuddyVariable;
 
 public class BuddyItemRenderer extends AbstractTouchableListItemRenderer
 {
@@ -107,7 +109,7 @@ override protected function commitData():void
 	nameShadowDisplay.text = rankIndex + ".  " + buddy.nickName ;
 	var point:int = buddy.containsVariable("$point") ? buddy.getVariable("$point").getIntValue() : 0;
 	pointDisplay.text = point>0 ? ("" + point) : "";
-	pointIconDisplay.source = Assets.getTexture("leagues/" + player.get_arena(point), "gui");
+	pointIconDisplay.source = appModel.assets.getTexture("leagues/" + player.get_arena(point));
 	//trace(_data.i, player.id);
 	var itsMe:Boolean = buddy.nickName == player.nickName;
 	var fs:int = AppModel.instance.theme.gameFontSize * (itsMe?1:0.9);

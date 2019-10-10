@@ -5,7 +5,6 @@ import com.gerantech.towercraft.controls.items.InboxThreadItemRenderer;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.InboxService;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.InboxThread;
 
 import feathers.controls.ImageLoader;
@@ -50,7 +49,7 @@ override public function init():void
 	}
 
 	var headerDisplay:ImageLoader = new ImageLoader();
-	headerDisplay.source = Assets.getTexture("socials/header", "gui");
+	headerDisplay.source = appModel.assets.getTexture("socials/header");
 	headerDisplay.layoutData = new AnchorLayoutData(-10, -10, NaN, -10);
 	headerDisplay.scale9Grid = new Rectangle(1, 1, 1, 1);
 	headerDisplay.height = 180;

@@ -1,16 +1,17 @@
 package com.gerantech.towercraft.controls.items
 {
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.overlays.HandPoint;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
-import com.gerantech.mmory.core.constants.PrefsTypes;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
@@ -68,7 +69,7 @@ protected function iconFactory() : Image
 		return null;
 	}
 
-	iconDisplay = new Image(Assets.getTexture("home/dash-tab-" + dashboardData.index, "gui"));
+	iconDisplay = new Image(appModel.assets.getTexture("home/dash-tab-" + dashboardData.index));
 	iconDisplay.alignPivot();
 	iconDisplay.x = width * 0.5;
 	iconDisplay.y = height * 0.54;

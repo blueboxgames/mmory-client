@@ -1,11 +1,11 @@
 package com.gerantech.towercraft.controls.buttons
 {
 	import com.gerantech.towercraft.controls.texts.RTLLabel;
-	
+
 	import feathers.controls.ButtonState;
 	import feathers.layout.AnchorLayout;
 	import feathers.layout.AnchorLayoutData;
-	
+
 	import starling.display.Quad;
 
 	public class LobbyTabButton extends SimpleLayoutButton

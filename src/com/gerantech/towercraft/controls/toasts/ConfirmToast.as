@@ -3,10 +3,12 @@ package com.gerantech.towercraft.controls.toasts
 import com.gerantech.towercraft.controls.buttons.CustomButton;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.ImageLoader;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.HorizontalLayoutData;
 import feathers.layout.VerticalAlign;
+
 import starling.events.Event;
 
 public class ConfirmToast extends BaseToast

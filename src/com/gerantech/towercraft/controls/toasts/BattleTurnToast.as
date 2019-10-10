@@ -1,13 +1,13 @@
 package com.gerantech.towercraft.controls.toasts 
 {
 import com.gerantech.towercraft.controls.StarCheck;
-import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
+
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.utils.setTimeout;
-import starling.animation.Transitions;
-import starling.core.Starling;
+
 import starling.display.Quad;
 /**
  * ...

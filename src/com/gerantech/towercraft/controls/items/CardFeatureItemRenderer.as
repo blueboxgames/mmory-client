@@ -6,7 +6,6 @@ import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.controls.groups.GradientHilight;
 import com.gerantech.towercraft.controls.texts.LTRLable;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 
@@ -56,7 +55,7 @@ override protected function commitData():void
 	else
 		valueDisplay.text = "<span><br/>" + StrUtils.getNumber(Math.abs(Math.round(oldValue))) + (diff == 0?"":(' <font color="#00FF00"> + ' + StrUtils.getNumber(diff) + ' </font>')) + "</span>";
 	keyDisplay.text = loc("building_feature_" + feature + (oldValue > 0 ? "" : "_1"));
-	iconDisplay.source = Assets.getTexture("cards/features/" + feature + (oldValue > 0 ? "" : "_1"), "gui");
+	iconDisplay.source = appModel.assets.getTexture("cards/features/" + feature + (oldValue > 0 ? "" : "_1"));
 }
 
 protected function iconFactory() : ImageLoader 

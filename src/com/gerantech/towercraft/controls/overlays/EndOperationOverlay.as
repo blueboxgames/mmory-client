@@ -4,7 +4,6 @@ import com.gerantech.towercraft.controls.buttons.CustomButton;
 import com.gerantech.towercraft.controls.headers.BattleHeader;
 import com.gerantech.towercraft.controls.items.BattleOutcomeRewardItemRenderer;
 import com.gerantech.towercraft.managers.VideoAdsManager;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.BattleData;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 
@@ -94,7 +93,7 @@ override protected function initialize():void
 		if( showAdOffer )
 		{
 			retryButton.label = "+   " + loc("retry_button");
-			retryButton.icon = Assets.getTexture("extra-time");
+			retryButton.icon = appModel.assets.getTexture("extra-time");
 		}
 		else
 		{

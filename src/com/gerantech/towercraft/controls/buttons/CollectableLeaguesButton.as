@@ -4,7 +4,6 @@ import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.events.CoreEvent;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.others.TrophyReward;
-import com.gerantech.towercraft.models.Assets;
 
 import feathers.controls.ImageLoader;
 
@@ -96,12 +95,12 @@ override protected function backgroundFactory() : ImageLoader
 {
 	if( backgroundDisplay != null )
 	{
-		backgroundDisplay.source = Assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-" + state, "gui");
+		backgroundDisplay.source = appModel.assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-" + state);
 		return null;
 	}
 
 	backgroundDisplay = new ImageLoader();
-	backgroundDisplay.source = Assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-" + state, "gui");
+	backgroundDisplay.source = appModel.assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-" + state);
 	backgroundDisplay.pixelSnapping = false;
 	backgroundDisplay.height = height;
 	backgroundDisplay.width = width;

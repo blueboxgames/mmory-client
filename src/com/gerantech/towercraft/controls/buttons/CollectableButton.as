@@ -1,13 +1,15 @@
 package com.gerantech.towercraft.controls.buttons 
 {
-import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
+
 import feathers.controls.ButtonState;
 import feathers.controls.ImageLoader;
 import feathers.layout.AnchorLayout;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
+
 import starling.core.Starling;
 
 /**
@@ -37,7 +39,7 @@ protected function backgroundFactory() : ImageLoader
 {
 	if( backgroundDisplay != null )
 	{
-		backgroundDisplay.source = Assets.getTexture("home/button-bg-" + state, "gui");
+		backgroundDisplay.source = appModel.assets.getTexture("home/button-bg-" + state);
 		return null;
 	}
 
@@ -45,7 +47,7 @@ protected function backgroundFactory() : ImageLoader
 	var backgroundLayout:AnchorLayoutData = new AnchorLayoutData(offRect.x, offRect.y, offRect.width, offRect.height);
 	backgroundDisplay = new ImageLoader();
 	backgroundDisplay.pixelSnapping = false;
-	backgroundDisplay.source = Assets.getTexture("home/button-bg-" + state, "gui");
+	backgroundDisplay.source = appModel.assets.getTexture("home/button-bg-" + state);
 	backgroundDisplay.layoutData = backgroundLayout;
 	backgroundDisplay.maintainAspectRatio = false;
 	backgroundDisplay.scale9Grid = new Rectangle(22, 56, 4, 4);
@@ -67,7 +69,7 @@ protected function iconFactory(image:String) : ImageLoader
 		return null;
 	iconDisplay = new ImageLoader();
 	iconDisplay.touchable = false;
-	iconDisplay.source = Assets.getTexture(image, "gui");
+	iconDisplay.source = appModel.assets.getTexture(image);
 	iconDisplay.layoutData = new AnchorLayoutData(8, 8, 8);
 	addChild(iconDisplay);
 	return iconDisplay;

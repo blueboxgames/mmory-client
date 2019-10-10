@@ -3,6 +3,7 @@ package com.gerantech.towercraft.controls.popups
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.Button;
 import feathers.controls.LayoutGroup;
 import feathers.layout.AnchorLayoutData;
@@ -10,6 +11,7 @@ import feathers.layout.HorizontalAlign;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.VerticalAlign;
 import feathers.layout.VerticalLayout;
+
 import starling.events.Event;
 
 public class ConfirmPopup extends SimplePopup

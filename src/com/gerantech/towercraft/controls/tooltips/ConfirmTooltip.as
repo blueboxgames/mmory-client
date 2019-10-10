@@ -1,11 +1,12 @@
 package com.gerantech.towercraft.controls.tooltips
 {
-import com.gerantech.towercraft.controls.buttons.CustomButton;
-import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.themes.MainTheme;
+
 import feathers.controls.Button;
 import feathers.layout.AnchorLayoutData;
+
 import flash.geom.Rectangle;
+
 import starling.events.Event;
 import starling.events.TouchEvent;
 

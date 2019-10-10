@@ -18,7 +18,6 @@ import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.smartfoxserver.v2.core.SFSEvent;
@@ -137,7 +136,7 @@ private function createElements():void
 	{
 		var sliderFill:ImageLoader = new ImageLoader();
 		sliderFill.layoutData = new AnchorLayoutData(0, NaN, 0, NaN, ICON_X);
-		sliderFill.source = Assets.getTexture("leagues/slider-fill", "gui");
+		sliderFill.source = appModel.assets.getTexture("leagues/slider-fill");
 		sliderFill.scale9Grid = MainTheme.SMALL_BACKGROUND_SCALE9_GRID;
 		sliderFill.width = SLIDER_WIDTH;
 		addChildAt(sliderFill, 0);
@@ -158,7 +157,7 @@ private function createElements():void
 			var fillHeight:Number = HEIGHT - stepH * (1 + bottomStep.index + (player.get_point() - bottomStep.point) / (topStep.point - bottomStep.point));
 
 			var pointRect:ImageLoader = new ImageLoader();
-			pointRect.source = Assets.getTexture("leagues/point-rect", "gui");
+			pointRect.source = appModel.assets.getTexture("leagues/point-rect");
 			pointRect.width = 150;
 			pointRect.height = 72;
 			pointRect.scale9Grid = new Rectangle(17, 17, 2, 2);
@@ -175,7 +174,7 @@ private function createElements():void
 			addChildAt(pointLine, 1);
 			
 			var pointIcon:ImageLoader = new ImageLoader();
-			pointIcon.source = Assets.getTexture("res-2", "gui");
+			pointIcon.source = appModel.assets.getTexture("res-2");
 			pointIcon.width = pointIcon.height = 52;
 			pointIcon.layoutData = new AnchorLayoutData(fillHeight - pointIcon.height * 0.5, pointRect.width - 70);
 			addChild(pointIcon);
@@ -187,7 +186,7 @@ private function createElements():void
 	if( LEAGUE <= league.index )
 	{
 		var sliderBackground:ImageLoader = new ImageLoader();
-		sliderBackground.source = Assets.getTexture("leagues/slider-background", "gui");
+		sliderBackground.source = appModel.assets.getTexture("leagues/slider-background");
 		sliderBackground.layoutData = new AnchorLayoutData(0, NaN, 0, NaN, ICON_LAYOUT_DATA.horizontalCenter);
 		sliderBackground.scale9Grid = MainTheme.SMALL_BACKGROUND_SCALE9_GRID;
 		sliderBackground.width = SLIDER_WIDTH;
@@ -197,7 +196,7 @@ private function createElements():void
 	if( league.index > 0 )
 	{
 		var minPointRect:ImageLoader = new ImageLoader();
-		minPointRect.source = Assets.getTexture("leagues/min-point-rect", "gui");
+		minPointRect.source = appModel.assets.getTexture("leagues/min-point-rect");
 		minPointRect.layoutData = MIN_POINT_LAYOUT_DATA;
 		minPointRect.scale9Grid = MIN_POINT_GRID;
 		minPointRect.width = 180;
@@ -255,7 +254,7 @@ private function createRewardItem(r:int) : void
 	item.x = itemX + item.pivotX;
 	item.y = itemY;
 	
-	var itemSkin:Image = new Image(Assets.getTexture(reached ? (collectible ? "events/index-bg-10-up" : "events/index-bg-1-up") : "events/index-bg-0-up", "gui"));
+	var itemSkin:Image = new Image(appModel.assets.getTexture(reached ? (collectible ? "events/index-bg-10-up" : "events/index-bg-1-up") : "events/index-bg-0-up"));
 	itemSkin.scale9Grid = ChallengeIndexItemRenderer.BG_SCALE_GRID;
 	itemSkin.pixelSnapping = false;
 	item.backgroundSkin = itemSkin;
@@ -264,7 +263,7 @@ private function createRewardItem(r:int) : void
 	shineImage.alpha = 0.8;
 	shineImage.color = 0xFFFFCC;
 	shineImage.pixelSnapping = false;
-	shineImage.source = Assets.getTexture("shop/shine-under-item", "gui");
+	shineImage.source = appModel.assets.getTexture("shop/shine-under-item");
 
 	var itemIcon:FeathersControl;
 	if( ResourceType.isCard(reward.key) )
@@ -281,7 +280,7 @@ private function createRewardItem(r:int) : void
 		itemIcon = new ImageLoader();
 		itemIcon.height = colW;
 		itemIcon.width = colW * 0.9;
-		ImageLoader(itemIcon).source = Assets.getTexture(BundleDetailsPopup.getTexturURL(reward.key), "gui");
+		ImageLoader(itemIcon).source = appModel.assets.getTexture(BundleDetailsPopup.getTexturURL(reward.key));
 		shineImage.width = shineImage.height = colW * 0.9;
 	}
 	itemIcon.pivotX = itemIcon.width * 0.5;

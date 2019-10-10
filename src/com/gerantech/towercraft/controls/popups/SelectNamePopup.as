@@ -12,7 +12,6 @@ import com.gerantech.towercraft.controls.texts.CustomTextInput;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.smartfoxserver.v2.core.SFSEvent;
@@ -74,7 +73,7 @@ override protected function initialize():void
 	acceptButton.iconSize = MMOryButton.DEFAULT_ICON_SIZE;
 	acceptButton.width = 360;
 	if( closeOnOverlay && eItem.numExchanges > 0 )
-		acceptButton.iconTexture = Assets.getTexture("res-" + ResourceType.R4_CURRENCY_HARD, "gui");
+		acceptButton.iconTexture = appModel.assets.getTexture("res-" + ResourceType.R4_CURRENCY_HARD);
 	declineButton.removeFromParent();
 	rejustLayoutByTransitionData();
 }

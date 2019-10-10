@@ -1,8 +1,6 @@
 package com.gerantech.towercraft.controls.items
 {
 import com.gerantech.towercraft.controls.CardView;
-import com.gerantech.towercraft.models.Assets;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.ScrollContainer;
@@ -12,7 +10,6 @@ import feathers.layout.AnchorLayoutData;
 import feathers.layout.HorizontalLayout;
 import feathers.layout.TiledRowsLayout;
 
-import starling.core.Starling;
 import starling.events.Event;
 
 public class CardItemRenderer extends AbstractTouchableListItemRenderer
@@ -92,7 +89,7 @@ override protected function commitData():void
 			if( newDisplay == null )
 			{
 				newDisplay = new ImageLoader();
-				newDisplay.source = Assets.getTexture("cards/new-badge");
+				newDisplay.source = appModel.assets.getTexture("cards/new-badge");
 				newDisplay.layoutData = new AnchorLayoutData(0, NaN, NaN, 0);
 				newDisplay.height = newDisplay.width = width * 0.7;
 				addChild(newDisplay);

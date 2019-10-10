@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.controls.texts 
 {
 import com.gerantech.towercraft.controls.TowersLayout;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.utils.StrUtils;
 
 import feathers.controls.ImageLoader;
@@ -39,12 +38,12 @@ override protected function initialize() : void
 	layout = new AnchorLayout();
 		
 	iconDisplay = new ImageLoader();
-	iconDisplay.source = Assets.getTexture("timer");
+	iconDisplay.source = appModel.assets.getTexture("timer");
 	iconDisplay.layoutData = new AnchorLayoutData(0, iconPosition == RelativePosition.LEFT ? NaN : 0, 0, iconPosition == RelativePosition.LEFT ? 0 : NaN);
 	iconDisplay.height = iconDisplay.width = height;
 	addChild(iconDisplay);
 	
-	needleDisplay = new Image(Assets.getTexture("timer-needle"));
+	needleDisplay = new Image(appModel.assets.getTexture("timer-needle"));
 	needleDisplay.pivotX = needleDisplay.width * 0.5;
 	needleDisplay.pivotY = needleDisplay.height * 0.5;
 	needleDisplay.height = height * 0.6;

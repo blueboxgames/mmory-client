@@ -4,6 +4,7 @@ import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.items.SettingsItemRenderer;
+import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.segments.InboxSegment;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
@@ -26,7 +27,6 @@ import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
 import starling.events.Event;
-import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
 
 public class SettingsPopup extends SimpleHeaderPopup
 {

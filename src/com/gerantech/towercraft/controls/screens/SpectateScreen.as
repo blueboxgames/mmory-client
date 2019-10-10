@@ -2,17 +2,18 @@ package com.gerantech.towercraft.controls.screens
 {
 import com.gerantech.towercraft.controls.items.BattleItemRenderer;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.mmory.core.battle.fieldes.FieldData;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Room;
 import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.entities.variables.SFSRoomVariable;
+import com.smartfoxserver.v2.requests.IRequest;
 import com.smartfoxserver.v2.requests.LeaveRoomRequest;
+
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
+
 import starling.events.Event;
-import com.smartfoxserver.v2.requests.IRequest;
 
 public class SpectateScreen extends ListScreen
 {

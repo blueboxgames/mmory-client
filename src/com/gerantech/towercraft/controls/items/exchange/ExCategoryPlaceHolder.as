@@ -7,7 +7,6 @@ import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.texts.CountdownLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.controls.tooltips.BaseTooltip;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.models.vo.ShopLine;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
@@ -67,7 +66,7 @@ public class ExCategoryPlaceHolder extends TowersLayout
   override protected function initialize():void
   {
     super.initialize();
-    this.backgroundSkin = new Image(Assets.getTexture(GET_BG(this.line.category), "gui"));
+    this.backgroundSkin = new Image(appModel.assets.getTexture(GET_BG(this.line.category)));
     Image(this.backgroundSkin).scale9Grid = BACKGROUND_SCALEGRID;
 
     var listLayout:TiledRowsLayout = new TiledRowsLayout();

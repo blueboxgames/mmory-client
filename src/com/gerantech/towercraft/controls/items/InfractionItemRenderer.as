@@ -57,7 +57,7 @@ override protected function initialize():void
 	
 	banButton = new IndicatorButton();
 	//banButton.iconPosition.x = 7;
-	//banButton.icon = Assets.getTexture("settings-5");
+	//banButton.icon = appModel.assets.getTexture("settings-5");
 	banButton.width = banButton.height = 100;
 	banButton.styleName = MainTheme.STYLE_BUTTON_SMALL_DANGER;
 	banButton.layoutData = new AnchorLayoutData(NaN, NaN, 20, padding );
@@ -66,7 +66,7 @@ override protected function initialize():void
 	
 	deleteButton = new IndicatorButton();
 	//deleteButton.iconPosition.x = 7;
-	//deleteButton.icon = Assets.getTexture("improve-1");
+	//deleteButton.icon = appModel.assets.getTexture("improve-1");
 	deleteButton.width = deleteButton.height = 100;
 	deleteButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
 	deleteButton.layoutData = new AnchorLayoutData(NaN, NaN, 20, 96 + padding * 2 );

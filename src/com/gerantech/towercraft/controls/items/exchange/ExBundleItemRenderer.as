@@ -5,7 +5,6 @@ import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.groups.Devider;
 import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
-import com.gerantech.towercraft.models.Assets;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
@@ -29,7 +28,7 @@ override protected function initialize() : void
 	var insideLayout:AnchorLayoutData = new AnchorLayoutData(20, 20, 196, 20);
 	var insideSkin:ImageLoader = new ImageLoader();
 	insideSkin.scale9Grid = new Rectangle(1, 1, 6, 5);
-	insideSkin.source = Assets.getTexture("shop/gradient-gold-bg", "gui");
+	insideSkin.source = appModel.assets.getTexture("shop/gradient-gold-bg");
   insideSkin.layoutData = insideLayout;
   this.addChildAt(insideSkin, 0);
 }
@@ -69,7 +68,7 @@ override protected function commitData() : void
 			continue;
 		var plusImage:ImageLoader = new ImageLoader();
 		plusImage.width = plusImage.height = gapW;
-		plusImage.source = Assets.getTexture("shop/plus", "gui")
+		plusImage.source = appModel.assets.getTexture("shop/plus")
 		items.addChild(plusImage);
 	}
 

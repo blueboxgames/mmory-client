@@ -5,7 +5,6 @@ import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.models.Assets;
 import com.gerantech.towercraft.themes.MainTheme;
 
 import feathers.controls.Button;
@@ -72,23 +71,23 @@ override protected function initialize():void
 	outcomeGroupDisplayLayout.gap = 20;
 
 	var outcomeGroupDisplay:LayoutGroup = new LayoutGroup();
-	var innerSkin:ImageSkin = new ImageSkin( Assets.getTexture("theme/round-medium-skin", "gui") );
+	var innerSkin:ImageSkin = new ImageSkin( appModel.assets.getTexture("theme/round-medium-skin") );
 	innerSkin.scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;
 	outcomeGroupDisplay.backgroundSkin = innerSkin;
 	outcomeGroupDisplay.layout = outcomeGroupDisplayLayout;
   this.container.addChild(outcomeGroupDisplay);
 
 	var videoImage:ImageLoader = new ImageLoader();
-	videoImage.source = Assets.getTexture("shop/video", "gui");
+	videoImage.source = appModel.assets.getTexture("shop/video");
 	outcomeGroupDisplay.addChild(videoImage);
 
 	var playbackImage:ImageLoader = new ImageLoader();
 	playbackImage.paddingLeft = 36;
-	playbackImage.source = Assets.getTexture("shop/playback", "gui");
+	playbackImage.source = appModel.assets.getTexture("shop/playback");
 	outcomeGroupDisplay.addChild(playbackImage);
 
 	var currencyImage:ImageLoader = new ImageLoader();
-	currencyImage.source = Assets.getTexture("shop/currency-71", "gui");
+	currencyImage.source = appModel.assets.getTexture("shop/currency-71");
 	outcomeGroupDisplay.addChild(currencyImage);
 
 	// -=-=-=-=-=-=-=-=-=-=-=-=-=-[Accept Button]-=-=-=-=-=-=-=-=-=-=-=-=-=-
@@ -102,7 +101,7 @@ override protected function initialize():void
 	// -=-=-=-=-=-=-=-=-=-=-=-=-=-[Close Button]-=-=-=-=-=-=-=-=-=-=-=-=-=-
 	this.closeButton = new MMOryButton();
 	this.closeButton.styleName = closeButtonStyle;
-	this.closeButton.iconTexture = Assets.getTexture("theme/icon-cross", "gui");
+	this.closeButton.iconTexture = appModel.assets.getTexture("theme/icon-cross");
 	this.closeButton.width = 70;
 	this.closeButton.height = 70;
 	this.closeButton.layoutData = new AnchorLayoutData(15, 15);
