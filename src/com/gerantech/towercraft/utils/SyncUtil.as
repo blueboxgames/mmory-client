@@ -2,8 +2,9 @@ package com.gerantech.towercraft.utils
 {
     import com.gerantech.towercraft.models.AppModel;
 
-    import flash.events.IOErrorEvent;
+    import flash.events.OutputProgressEvent;
     import flash.filesystem.File;
+    import flash.utils.ByteArray;
 
     import starling.events.Event;
     import starling.events.EventDispatcher;
@@ -12,22 +13,50 @@ package com.gerantech.towercraft.utils
     {
         // private static const DEBUG:Boolean = true;
         private var assets:Object;
+        private var saveQueue:Array;
+        private var assetsDir:File;
         public function sync(assets:Object):void
         {
             this.assets = assets;
-            var assetsDir:File = File.applicationStorageDirectory.resolvePath("assets");
-            if( !assetsDir.exists )
-                assetsDir.createDirectory()
+            assetsDir = File.applicationStorageDirectory.resolvePath("assets");
+            if( assetsDir.exists )
+            {
+                var md5Check:MD5Check = new MD5Check();
+                md5Check.addEventListener(Event.COMPLETE, md5Check_completeHandler);
+                md5Check.getHash(assetsDir);
+            }
+            else
+            {
+                assetsDir.createDirectory();
+                loadAll();
+            }
+        }
 
+        private function md5Check_completeHandler(event:Event):void
+        {
+            loadAll(event.data);
+        }
+        
+        private function loadAll(md5s:* = null):void
+        {
+            if( md5s == null )
+                md5s = new Object();
+            saveQueue = new Array();
             var numSyncFiles:int = 0;
-            for ( var name:String in assets )
+            for ( var name:String in this.assets )
             {
                 if( this.assets[name].exists )
                     continue;
-                assets[name].exists = false;
-                var md5Check:MD5Check = new MD5Check();
-                md5Check.addEventListener(Event.COMPLETE, md5Check_completeHandler);
-                md5Check.getHash(name, assets[name].md5);
+                
+                this.assets[name].hash = md5s[name];
+                if( this.assets[name].hash == this.assets[name].md5 )
+                {
+                    this.assets[name].exists = true;
+                    continue;
+                }
+                this.assets[name].name = name;
+                var loader:FileLoader = new FileLoader(this.assets[name]);
+                loader.addEventListener(Event.COMPLETE, loader_completeHandler);
                 numSyncFiles ++;
             }
 
@@ -35,42 +64,47 @@ package com.gerantech.towercraft.utils
                 this.dispatchEventWith(Event.COMPLETE);
         }
 
-        /**
-         * A utility function which checks if given asset name checks it's
-         * cached md5 returns true if it's hash match else will return false.
-         */
-        private function md5Check_completeHandler(event:Event):void
-        {
-            var md5Check:MD5Check = event.currentTarget as MD5Check;
-            if( event.data )
-            {
-                finalizeLOading(md5Check.file);
-                return;
-            }
-            
-            // Get a new loader for given asset name.
-            var loader:FileLoader = new FileLoader(md5Check.file, this.assets[md5Check.file.name].url, md5Check.hash);
-            loader.addEventListener(IOErrorEvent.IO_ERROR, loader_ioErrorHandler);
-            loader.addEventListener(Event.COMPLETE, loader_completeHandler);
-            loader.start();
-        }
-
         private function loader_completeHandler(event:*):void
         {
+            var byteArray:ByteArray = new ByteArray();
             var loader:FileLoader = event.currentTarget as FileLoader;
-            loader.closeLoader();
-            finalizeLOading(loader.file);
+            loader.removeEventListener(Event.COMPLETE, loader_completeHandler);
+		    loader.readBytes(byteArray);
+            loader.close();
+           
+            var saveData:* = new Object();
+            saveData.bytes = byteArray;
+            saveData.name = loader.asset.name;
+            saveQueue.push(saveData);
+            if( saveQueue.length == 1 )
+                save();
         }
-        private function loader_ioErrorHandler(e:*):void
+        
+        private function save():void
         {
-            this.dispatchEventWith(Event.IO_ERROR);
+            var saveData:* = saveQueue.shift();
+            var saver:FileSaver = new FileSaver(saveData.name, saveData.bytes);
+            saver.addEventListener(OutputProgressEvent.OUTPUT_PROGRESS, this.stream_outputProgressHandler);
         }
 
-        private function finalizeLOading(file:File):void
+        private function stream_outputProgressHandler(event:OutputProgressEvent):void
         {
-            trace(file.nativePath);
-            AppModel.instance.assets.enqueue(file.nativePath);
-            this.assets[file.name].exists = true;
+            if( event.bytesPending > 0 )
+                return;
+            var saver:FileSaver = event.currentTarget as FileSaver;
+            saver.removeEventListener(OutputProgressEvent.OUTPUT_PROGRESS, this.stream_outputProgressHandler);
+            saver.close();
+            
+            trace(saver.name + " saved.");
+            finalizeLoading(saver.name)
+            if( saveQueue.length > 0 )
+                save();
+        }
+
+        private function finalizeLoading(name:String):void
+        {
+            AppModel.instance.assets.enqueue(assetsDir.nativePath + "/" + name);
+            this.assets[name].exists = true;
             this.checkAllFiles();
         }
 
@@ -80,10 +114,9 @@ package com.gerantech.towercraft.utils
          */
         private function checkAllFiles():void
         {
-            for ( var name:String in this.assets )
+            for( var name:String in this.assets )
                 if( !this.assets[name].exists )
                     return;
-            
             AppModel.instance.assets.loadQueue(loadQueue_completeHandler);
         }
 
@@ -94,14 +127,31 @@ package com.gerantech.towercraft.utils
     }
 }
 
-import com.gerantech.towercraft.utils.LoadAndSaver;
-class FileLoader extends LoadAndSaver
+class FileLoader extends URLStream
 {
-    public var file:File;
-    public function FileLoader(file:File, webPath:String, md5:String = null)
+    public var asset:Object;
+    public function FileLoader(asset:Object)
     {
-        super(file.nativePath, webPath, md5, true);
-        this.file = file;
+        super();
+        this.asset = asset;
+        this.addEventListener(IOErrorEvent.IO_ERROR, this.stream_ioerrorHandler);
+        this.load(new URLRequest(asset.url));
+    }
+    private function stream_ioerrorHandler(event:IOErrorEvent):void
+    {
+        trace(event.toString());
+    }
+}
+
+class FileSaver extends FileStream
+{
+    public var name:String;
+    public function FileSaver(name:String, bytes:*)
+    {
+        super();
+        this.name = name;
+        this.openAsync(File.applicationStorageDirectory.resolvePath(this.name), "write");
+        bytes is String ? this.writeUTFBytes(bytes):this.writeBytes(bytes);
     }
 }
 
