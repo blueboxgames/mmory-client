@@ -2,12 +2,12 @@ package com.gerantech.towercraft.utils
 {
     import com.gerantech.towercraft.models.AppModel;
 
-    import flash.events.OutputProgressEvent;
     import flash.filesystem.File;
     import flash.utils.ByteArray;
 
     import starling.events.Event;
     import starling.events.EventDispatcher;
+    import flash.filesystem.FileStream;
 
     public class SyncUtil extends EventDispatcher
     {
@@ -52,10 +52,11 @@ package com.gerantech.towercraft.utils
                 this.assets[name].hash = md5s[name];
                 if( this.assets[name].hash == this.assets[name].md5 )
                 {
-                    finalizeLoading(name);
+                    finalize(name);
                     continue;
                 }
                 this.assets[name].name = name;
+                this.assets[name].exists = false;
                 var loader:FileLoader = new FileLoader(this.assets[name]);
                 loader.addEventListener(Event.COMPLETE, loader_completeHandler);
             }
@@ -81,26 +82,19 @@ package com.gerantech.towercraft.utils
         
         private function save():void
         {
-            var saveData:* = saveQueue.shift();
-            var saver:FileSaver = new FileSaver(saveData.name, saveData.bytes);
-            saver.addEventListener(OutputProgressEvent.OUTPUT_PROGRESS, this.stream_outputProgressHandler);
-        }
-
-        private function stream_outputProgressHandler(event:OutputProgressEvent):void
-        {
-            if( event.bytesPending > 0 )
-                return;
-            var saver:FileSaver = event.currentTarget as FileSaver;
-            saver.removeEventListener(OutputProgressEvent.OUTPUT_PROGRESS, this.stream_outputProgressHandler);
+            var saveData:Object = saveQueue.shift();
+            var saver:FileStream = new FileStream();
+            saver.open(File.applicationStorageDirectory.resolvePath("assets/" + saveData.name), "update");
+            saver.writeBytes(saveData.bytes);
             saver.close();
             
-            trace(saver.name + " saved.");
-            finalizeLoading(saver.name)
+            // trace(saver.name + " saved. " + saveQueue.length);
+            finalize(saveData.name)
             if( saveQueue.length > 0 )
                 save();
         }
 
-        private function finalizeLoading(name:String):void
+        private function finalize(name:String):void
         {
             AppModel.instance.assets.enqueue(assetsDir.resolvePath(name).nativePath);
             this.assets[name].exists = true;
@@ -142,18 +136,8 @@ class FileLoader extends URLStream
     }
 }
 
-class FileSaver extends FileStream
-{
-    public var name:String;
-    public function FileSaver(name:String, bytes:*)
-    {
-        super();
-        this.name = name;
-        this.openAsync(File.applicationStorageDirectory.resolvePath("assets/" + this.name), "write");
-        bytes is String ? this.writeUTFBytes(bytes):this.writeBytes(bytes);
-    }
-}
 
+import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.towercraft.models.AppModel;
 
 import flash.desktop.NativeProcess;
@@ -161,14 +145,12 @@ import flash.desktop.NativeProcessStartupInfo;
 import flash.events.IOErrorEvent;
 import flash.events.ProgressEvent;
 import flash.filesystem.File;
-import flash.filesystem.FileStream;
 import flash.net.URLRequest;
 import flash.net.URLStream;
 import flash.utils.ByteArray;
 
 import starling.events.Event;
 import starling.events.EventDispatcher;
-import com.gerantech.extensions.NativeAbilities;
 
 class MD5Check extends EventDispatcher
 {
@@ -221,7 +203,6 @@ class MD5Check extends EventDispatcher
             var h:Array = array[i].split(":");
             this.md5s[h[0]] = h[1];
         }
-
         this.dispatchEventWith(Event.COMPLETE, false, this.md5s);
     }
 }
