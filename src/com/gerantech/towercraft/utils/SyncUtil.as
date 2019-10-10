@@ -105,35 +105,36 @@ class FileLoader extends LoadAndSaver
     }
 }
 
-import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.utils.LoadAndSaver;
 
 import flash.desktop.NativeProcess;
 import flash.desktop.NativeProcessStartupInfo;
+import flash.events.IOErrorEvent;
 import flash.events.ProgressEvent;
 import flash.filesystem.File;
+import flash.filesystem.FileStream;
+import flash.net.URLRequest;
+import flash.net.URLStream;
+import flash.utils.ByteArray;
 
 import starling.events.Event;
 import starling.events.EventDispatcher;
 
 class MD5Check extends EventDispatcher
 {
-    public var file:File;
-    public var hash:String;
+    private var md5:String = "";
+    private var md5s:Object;
     public function MD5Check(){ super(); }
-    public function getHash(name:String, hash:String):void
+    public function getHash(file:File):void
     {
-        this.hash = hash;
-        this.file = File.applicationStorageDirectory.resolvePath("assets/" + name);
         if( !file.exists )
         {
-            dispatchEventWith(Event.COMPLETE, false, false);
+            dispatchEventWith(Event.COMPLETE, false, null);
             return;
         }
         if( AppModel.instance.platform == AppModel.PLATFORM_ANDROID )
         {
-            dispatchEventWith(Event.COMPLETE, false, this.hash == NativeAbilities.instance.getMD5(file.nativePath));
+            // dispatchEventWith(Event.COMPLETE, false, this.hash == NativeAbilities.instance.getMD5(file.nativePath));
             return 
         }
         
@@ -149,7 +150,27 @@ class MD5Check extends EventDispatcher
     private function process_DataHandler(event:ProgressEvent):void
     {
         var process:NativeProcess = event.currentTarget as NativeProcess;
-        dispatchEventWith(Event.COMPLETE, false, this.hash == process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable));
-        process.exit();
+        this.md5 += process.standardOutput.readUTFBytes(process.standardOutput.bytesAvailable);
+        if( this.md5.indexOf("&*^") < 0 )
+            return;
+
+        this.md5 = this.md5.substring(0, md5.length - 3);
+        this.parse();
+        process.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, process_DataHandler);
+        process.exit(true);
+    }
+
+    private function parse():void
+    {
+        this.md5s = new Object();
+        var array:Array = md5.split(",");
+        var len:int = array.length;
+        for(var i:int = 0; i < len; i++)
+        {
+            var h:Array = array[i].split(":");
+            this.md5s[h[0]] = h[1];
+        }
+
+        dispatchEventWith(Event.COMPLETE, false, md5s);
     }
 }
