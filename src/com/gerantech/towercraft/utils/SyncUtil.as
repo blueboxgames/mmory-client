@@ -48,18 +48,17 @@ package com.gerantech.towercraft.utils
                 if( this.assets[name].exists )
                     continue;
                 
+                numSyncFiles ++;
                 this.assets[name].hash = md5s[name];
                 if( this.assets[name].hash == this.assets[name].md5 )
                 {
-                    this.assets[name].exists = true;
+                    finalizeLoading(name);
                     continue;
                 }
                 this.assets[name].name = name;
                 var loader:FileLoader = new FileLoader(this.assets[name]);
                 loader.addEventListener(Event.COMPLETE, loader_completeHandler);
-                numSyncFiles ++;
             }
-
             if( numSyncFiles == 0 )
                 this.dispatchEventWith(Event.COMPLETE);
         }
@@ -103,7 +102,7 @@ package com.gerantech.towercraft.utils
 
         private function finalizeLoading(name:String):void
         {
-            AppModel.instance.assets.enqueue(assetsDir.nativePath + "/" + name);
+            AppModel.instance.assets.enqueue(assetsDir.resolvePath(name).nativePath);
             this.assets[name].exists = true;
             this.checkAllFiles();
         }
@@ -150,7 +149,7 @@ class FileSaver extends FileStream
     {
         super();
         this.name = name;
-        this.openAsync(File.applicationStorageDirectory.resolvePath(this.name), "write");
+        this.openAsync(File.applicationStorageDirectory.resolvePath("assets/" + this.name), "write");
         bytes is String ? this.writeUTFBytes(bytes):this.writeBytes(bytes);
     }
 }
