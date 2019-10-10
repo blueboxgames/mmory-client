@@ -402,11 +402,8 @@ private function showDieAnimation():void
 
 	var dieDisplay:MovieClip = new MovieClip(appModel.assets.getTextures("die/" + die), 30);
 	dieDisplay.pivotX = dieDisplay.width * 0.5;
-	dieDisplay.pivotY = dieDisplay.height * 0.5;
-	dieDisplay.width = (card.sizeH * 0.7) + 130;
-	dieDisplay.scaleY = dieDisplay.scaleX;
-	dieDisplay.scaleX *= Math.random() > 0.5 ? -1 : 1;
-	dieDisplay.color = 0xFF0000 + Math.random() * 5000;
+	dieDisplay.pivotY = dieDisplay.height * _PIVOT_Y;
+	dieDisplay.width = dieDisplay.height = _WIDTH;
 	dieDisplay.x = getSideX();
 	dieDisplay.y = getSideY();
 	fieldView.shadowsContainer.addChild(dieDisplay);
