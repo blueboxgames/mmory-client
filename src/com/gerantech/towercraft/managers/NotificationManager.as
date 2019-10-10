@@ -1,14 +1,13 @@
 package com.gerantech.towercraft.managers
 {
 import com.gerantech.extensions.NativeAbilities;
-import com.gerantech.towercraft.managers.net.LoadingManager;
-import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.utils.LoadAndSaver;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.exchanges.Exchanger;
-import flash.events.Event;
+import com.gerantech.towercraft.managers.net.LoadingManager;
+import com.gerantech.towercraft.models.AppModel;
+
 import flash.filesystem.File;
 
 public class NotificationManager extends BaseManager
@@ -18,25 +17,13 @@ private var soundFile:File;
 public function NotificationManager(){}
 public function init():void
 {
-	soundFile = File.applicationStorageDirectory.resolvePath("sounds/whoosh.mp3");
-	var soundLoader:LoadAndSaver = new LoadAndSaver(soundFile.nativePath, File.applicationDirectory.resolvePath("assets/sounds/whoosh.mp3").url);
-	soundLoader.addEventListener(Event.COMPLETE, sound_completeHandler);
-	soundLoader.start();
-	function sound_completeHandler(event:Event):void
-	{
-		soundLoader.removeEventListener(Event.COMPLETE, sound_completeHandler);
-		soundLoader.closeLoader(false);
-	}
+	soundFile = File.applicationStorageDirectory.resolvePath("assets/whoosh.mp3");
+	if( !soundFile.exists )
+		File.applicationDirectory.resolvePath("assets/whoosh.mp3").copyTo(soundFile, true);
 
-	iconFile = File.applicationStorageDirectory.resolvePath("images/icon/ic_notifications.png");
-	var iconLoader:LoadAndSaver = new LoadAndSaver(iconFile.nativePath, File.applicationDirectory.resolvePath("assets/images/ic_notifications.png").url);
-	iconLoader.addEventListener(Event.COMPLETE, icon_completeHandler);
-	iconLoader.start();
-	function icon_completeHandler(event:Event):void
-	{
-		iconLoader.removeEventListener(Event.COMPLETE, icon_completeHandler);
-		iconLoader.closeLoader(false);
-	}
+	iconFile = File.applicationStorageDirectory.resolvePath("assets/ic_notifications.png");
+	if( !iconFile.exists )
+		File.applicationDirectory.resolvePath("assets/ic_notifications.png").copyTo(iconFile, true);
 }
 
 public function reset():void
