@@ -34,10 +34,6 @@
 				"path": "icons"
 			},
 			{
-				"file": "files/locale",
-				"path": "locale"
-			},
-			{
 				"file": "files/assets",
 				"path": "assets"
 			}
