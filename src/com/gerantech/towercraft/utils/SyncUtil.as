@@ -168,6 +168,7 @@ import flash.utils.ByteArray;
 
 import starling.events.Event;
 import starling.events.EventDispatcher;
+import com.gerantech.extensions.NativeAbilities;
 
 class MD5Check extends EventDispatcher
 {
@@ -178,12 +179,13 @@ class MD5Check extends EventDispatcher
     {
         if( !file.exists )
         {
-            dispatchEventWith(Event.COMPLETE, false, null);
+            this.dispatchEventWith(Event.COMPLETE, false, null);
             return;
         }
         if( AppModel.instance.platform == AppModel.PLATFORM_ANDROID )
         {
-            // dispatchEventWith(Event.COMPLETE, false, this.hash == NativeAbilities.instance.getMD5(file.nativePath));
+            this.md5 = NativeAbilities.instance.getMD5(file.nativePath);
+            this.parse();
             return 
         }
         
@@ -192,7 +194,7 @@ class MD5Check extends EventDispatcher
         nativeProcessStartupInfo.arguments = new <String>["-src", file.nativePath];
 
         var process:NativeProcess = new NativeProcess();
-        process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, process_DataHandler);
+        process.addEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, this.process_DataHandler);
         process.start(nativeProcessStartupInfo);
     }
 
@@ -205,7 +207,7 @@ class MD5Check extends EventDispatcher
 
         this.md5 = this.md5.substring(0, md5.length - 3);
         this.parse();
-        process.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, process_DataHandler);
+        process.removeEventListener(ProgressEvent.STANDARD_OUTPUT_DATA, this.process_DataHandler);
         process.exit(true);
     }
 
@@ -220,6 +222,6 @@ class MD5Check extends EventDispatcher
             this.md5s[h[0]] = h[1];
         }
 
-        dispatchEventWith(Event.COMPLETE, false, md5s);
+        this.dispatchEventWith(Event.COMPLETE, false, this.md5s);
     }
 }
