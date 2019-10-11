@@ -59,8 +59,9 @@ override protected function initialize():void
 
 	var centerImage:Image = new Image(appModel.assets.getTexture("poster/center"));
 	centerImage.pivotY = centerImage.height *  0.5;
-	centerImage.y = stageHeight * 0.5;
 	centerImage.width = stageWidth;
+	centerImage.scaleY = centerImage.scaleX;
+	centerImage.y = stageHeight * 0.5;
 	this.addChild(centerImage);
 
 	var logoImage:Image = new Image(appModel.assets.getTexture("poster/logo"));
@@ -69,7 +70,7 @@ override protected function initialize():void
 	logoImage.x = stageWidth * 0.5;
 	logoImage.y = stageHeight * 0.13;
 	logoImage.scale = 0;
-	Starling.juggler.tween(logoImage, 0.5, {scale:1, transition:Transitions.EASE_OUT_BACK});
+	Starling.juggler.tween(logoImage, 0.5, {scale:1.2, transition:Transitions.EASE_OUT_BACK});
 	this.addChild(logoImage);
 
 	if( cancelable )
