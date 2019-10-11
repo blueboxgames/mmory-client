@@ -2,9 +2,6 @@ package com.gerantech.towercraft.controls.overlays
 {
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 
-import feathers.controls.text.BitmapFontTextRenderer;
-import feathers.text.BitmapFontTextFormat;
-
 import starling.animation.Transitions;
 import starling.animation.Tween;
 import starling.core.Starling;
@@ -19,7 +16,7 @@ private var doubleCount:int = 0;
 
 private var finger:Sprite;
 private var cardFrame:Image;
-private var swipeNumText:BitmapFontTextRenderer;
+// private var swipeNumText:BitmapFontTextRenderer;
 
 public function TutorialSwipeOverlay(task:TutorialTask)
 {
@@ -50,7 +47,7 @@ protected override function transitionInCompleted():void
 	//doubleSwipe = this.task.points[0).tutorIndex >= 10;
 	addChild(finger);
 	
-	swipeNumText = new BitmapFontTextRenderer();
+	/* swipeNumText = new BitmapFontTextRenderer();
 	swipeNumText.textFormat = new BitmapFontTextFormat(appModel.assets.getFont(), appModel.theme.gameFontSize * 1.4, 0xFFFFFF, "center")
 	swipeNumText.pixelSnapping = false;
 	swipeNumText.y = -200;
@@ -59,7 +56,7 @@ protected override function transitionInCompleted():void
 	swipeNumText.visible = false;
 	finger.addChild(swipeNumText);
 	swipeNumText.pivotX = swipeNumText.width * 0.5;
-	swipeNumText.pivotY = swipeNumText.height * 0.5;
+	swipeNumText.pivotY = swipeNumText.height * 0.5; */
 	
 	cardFrame = new Image(appModel.assets.getTexture("cards/tutor-frame"));
 	cardFrame.pivotX = cardFrame.width * 0.5;
@@ -160,7 +157,7 @@ private function animate(name:String, startX:Number, startY:Number, endX:Number,
 	tween.onCompleteArgs = [name];
 	Starling.juggler.add(tween);
 	
-	if( swipeIndex > -1 )
+	/* if( swipeIndex > -1 )
 	{
 		swipeNumText.text = String(swipeIndex + 1);
 		swipeNumText.scale = 1.3;
@@ -170,7 +167,7 @@ private function animate(name:String, startX:Number, startY:Number, endX:Number,
 	{
 		swipeNumText.text = "";
 	}
-	swipeNumText.visible = swipeIndex > -1;
+	swipeNumText.visible = swipeIndex > -1; */
 	
 	if( startRotation == 0 && endRotation != 0 )
 		Starling.juggler.tween(cardFrame, 0.4, {delay:0.8, alpha:1, scale:1, transition:Transitions.EASE_OUT});

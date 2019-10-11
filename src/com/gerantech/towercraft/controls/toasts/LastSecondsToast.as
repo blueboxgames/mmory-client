@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.controls.toasts
 {
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.utils.StrUtils;
 
-import feathers.controls.text.BitmapFontTextRenderer;
-import feathers.text.BitmapFontTextFormat;
-
+import flash.text.engine.ElementFormat;
 import flash.utils.clearInterval;
 import flash.utils.setInterval;
 
@@ -14,21 +14,19 @@ import starling.core.Starling;
 * ...
 * @author Mansour Djawadi
 */
-public class LastSecondsToast extends BitmapFontTextRenderer
+public class LastSecondsToast extends ShadowLabel
 {
 private static const _COLORS:Array = [0xFFFFFF, 0xFFDDDDD, 0xFFCCCC, 0xFFBBBB, 0xFFAAAA, 0xFF8888, 0xFF6666, 0xFF4444, 0xFF2222, 0xFF0000];
 private var intervalId:uint;
 private var second:uint = 11;
-private var soundlabelDisplay:BitmapFontTextRenderer;
 public function LastSecondsToast() 
 {
-	super();
+	super(StrUtils.getNumber(10), 1, 0, "center", "ltr", false, null, 3.8);
 
 	width = 220;
 	height = 220;
 	touchable = false;
 	pixelSnapping = false;
-	textFormat = new BitmapFontTextFormat(AppModel.instance.assets.getFont(), 200, _COLORS[0], "center");
 	pivotX = width * 0.5;
 	pivotY = height;
 
@@ -51,9 +49,8 @@ private function showScondsTexts() : void
 		removeFromParent(true);
 		return;
 	}
-	
-	textFormat.color = _COLORS[10 - second];
-	text = second.toString();
+	elementFormat = new ElementFormat(this.fontDescription, this.fontSize, _COLORS[10 - second]);
+	text = StrUtils.getNumber(second);
 	scaleY = 0;
 	Starling.juggler.tween(this, 0.5, {scaleY:1, transition:Transitions.EASE_OUT_BACK});
 }

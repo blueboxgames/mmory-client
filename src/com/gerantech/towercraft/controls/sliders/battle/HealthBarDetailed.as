@@ -1,17 +1,14 @@
 package com.gerantech.towercraft.controls.sliders.battle 
 {
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.views.BattleFieldView;
-
-import feathers.controls.text.BitmapFontTextRenderer;
-import feathers.text.BitmapFontTextFormat;
-import com.gerantech.towercraft.models.AppModel;
 /**
 * ...
 * @author Mansour Djawadi
 */
 public class HealthBarDetailed extends HealthBarLeveled 
 {
-private var healthDisplay:BitmapFontTextRenderer;
+private var healthDisplay:ShadowLabel;
 public function HealthBarDetailed(filedView:BattleFieldView, side:int, level:int = 1, maximum:Number = 1)
 {
 	super(filedView, side, level, maximum);
@@ -22,9 +19,8 @@ override public function initialize() : void
 {
 	super.initialize();
 
-	healthDisplay = new BitmapFontTextRenderer();
+	healthDisplay = new ShadowLabel(null, 1, 0, "left", "ltr", false, null, 0.45);//28
 	healthDisplay.pixelSnapping = false;
-	healthDisplay.textFormat = new BitmapFontTextFormat(AppModel.instance.assets.getFont(), 28, 0xFFFFFF, "left");
 	healthDisplay.visible = false;
 	filedView.guiTextsContainer.addChild(healthDisplay);
 }
@@ -34,8 +30,8 @@ override public function setPosition(x:Number, y:Number) : void
 	super.setPosition(x, y);
 	if( healthDisplay != null && healthDisplay.visible )
 	{
-		healthDisplay.x = x - width * 0.5 + 2;
-		healthDisplay.y = y + (_side == 0 ? -4 : -32);
+		healthDisplay.x = x - width * 0.5 + 6;
+		healthDisplay.y = y + (_side == 0 ? 8 : -24);
 	}
 }
 
