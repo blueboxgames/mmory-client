@@ -11,6 +11,7 @@ import flash.media.SoundTransform;
 import flash.utils.Dictionary;
 
 import starling.core.Starling;
+import flash.filesystem.File;
 
 public class SoundManager 
 {
@@ -54,7 +55,7 @@ public function addSound(id:String, sound:Sound = null, callback:Function = null
 	if( sound == null )
 	{
 		loadings[id] = true;
-		AppModel.instance.assets.enqueue("assets/sounds/" + id + ".mp3");
+		AppModel.instance.assets.enqueue(File.applicationStorageDirectory.nativePath + "/assets/" + id + ".mp3");
 		AppModel.instance.assets.loadQueue(assets_loadCallback);
 		return;
 	}
