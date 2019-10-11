@@ -30,6 +30,7 @@ import flash.utils.getTimer;
 import haxe.Log;
 
 import starling.core.Starling;
+import starling.assets.AssetManager;
 
 public class Main extends Sprite
 {
@@ -42,12 +43,13 @@ public function Main()
 	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) + "|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
 	var desc:Descriptor = AppModel.instance.descriptor;
 
-	forceCopy("gui.atf", "gui.atf");
-	forceCopy("gui.xml", "gui.xml");
+	AppModel.instance.assets.verbose = true;
+	forceCopy("gui-0.atf", "gui-0.atf");
+	forceCopy("gui-0.xml", "gui-0.xml");
 	forceCopy(Localizations.instance.getLocaleByMarket(desc.market) + ".json", Localizations.instance.getLocaleByMarket(desc.market) + ".json");
 	// change locale based on market
 	Localizations.instance.changeLocale(Localizations.instance.getLocaleByMarket(desc.market));
-
+	
 	// GameAnalytic Configurations
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
 		.setBuildAndroid(desc.versionNumber).setGameKeyAndroid(desc.analyticskey).setGameSecretAndroid(desc.analyticssec)
@@ -99,6 +101,7 @@ private function forceCopy(src:String, dst:String):void
 	var file:File = File.applicationStorageDirectory.resolvePath("assets/" + dst);
 	if( !file.exists )
 		File.applicationDirectory.resolvePath("assets/" + src).copyTo(file, true);
+	AppModel.instance.assets.enqueueSingle(file.nativePath);
 }
 
 private function starStarling():void
@@ -117,6 +120,7 @@ private function starStarling():void
 
 private function starling_rootCreatedHandler(event:Object):void
 {
+	AppModel.instance.assets.loadQueue(null);
 	this.stage.addEventListener(Event.DEACTIVATE, stage_deactivateHandler, false, 0, true);
 }
 
