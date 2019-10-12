@@ -14,7 +14,10 @@ import com.gerantech.mmory.core.utils.maps.IntIntCardMap;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.utils.SyncUtil;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
+
+import starling.events.Event;
 
 public class BattleData
 {
@@ -32,6 +35,19 @@ public var userType:int;
 public function BattleData(sfsData:ISFSObject)
 {
 	this.sfsData = sfsData;
+	var preAssets:Object = new Object();
+	var key:String = "map-" + sfsData.getInt("mode");
+	preAssets[key +".json"] = AppModel.instance.syncData[key + ".json"];
+	preAssets[key + ".atf"] = AppModel.instance.syncData[key + ".atf"];
+	preAssets[key + ".xml"] = AppModel.instance.syncData[key + ".xml"];
+
+	var syncTool:SyncUtil = new SyncUtil();
+	syncTool.addEventListener(Event.COMPLETE, assets_loadCompleteHandler);
+	syncTool.sync(preAssets);
+}
+
+private function assets_loadCompleteHandler(e:*):void
+{
 	var side:int = sfsData.getInt("side");
 	this.roomId = sfsData.getInt("roomId");
 	this.userType = sfsData.getInt("userType");

@@ -123,6 +123,7 @@ package com.gerantech.towercraft.utils
 class FileLoader extends URLStream
 {
     public var asset:Object;
+    private var reloadCount:int = 0;
     public function FileLoader(asset:Object)
     {
         super();
@@ -132,13 +133,19 @@ class FileLoader extends URLStream
     }
     private function stream_ioerrorHandler(event:IOErrorEvent):void
     {
-        trace(event.toString());
+        this.reloadCount += 1;
+        if( reloadCount < 3 )
+            this.load(new URLRequest(asset.url));
+        else
+            SFSConnection.instance.dispatchEvent(new SFSEvent(SFSEvent.CONNECTION_LOST, { reason: "network "+ event.type + " " + event.text }));
     }
 }
 
 
 import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
+import com.smartfoxserver.v2.core.SFSEvent;
 
 import flash.desktop.NativeProcess;
 import flash.desktop.NativeProcessStartupInfo;
