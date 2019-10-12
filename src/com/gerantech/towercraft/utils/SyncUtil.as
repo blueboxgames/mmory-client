@@ -3,11 +3,11 @@ package com.gerantech.towercraft.utils
     import com.gerantech.towercraft.models.AppModel;
 
     import flash.filesystem.File;
+    import flash.filesystem.FileStream;
     import flash.utils.ByteArray;
 
     import starling.events.Event;
     import starling.events.EventDispatcher;
-    import flash.filesystem.FileStream;
 
     public class SyncUtil extends EventDispatcher
     {
@@ -96,7 +96,7 @@ package com.gerantech.towercraft.utils
 
         private function finalize(name:String):void
         {
-            AppModel.instance.assets.enqueue(assetsDir.resolvePath(name).nativePath);
+            AppModel.instance.assets.enqueue("app-storage:/assets/" + name);
             this.assets[name].exists = true;
             this.checkAllFiles();
         }

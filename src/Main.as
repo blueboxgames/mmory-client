@@ -30,7 +30,6 @@ import flash.utils.getTimer;
 import haxe.Log;
 
 import starling.core.Starling;
-import starling.assets.AssetManager;
 
 public class Main extends Sprite
 {
@@ -101,7 +100,7 @@ private function forceCopy(src:String, dst:String):void
 	var file:File = File.applicationStorageDirectory.resolvePath("assets/" + dst);
 	if( !file.exists )
 		File.applicationDirectory.resolvePath("assets/" + src).copyTo(file, true);
-	AppModel.instance.assets.enqueueSingle(file.nativePath);
+	AppModel.instance.assets.enqueueSingle("app-storage:/assets/" + dst);
 }
 
 private function starStarling():void
