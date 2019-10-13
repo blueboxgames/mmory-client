@@ -140,7 +140,7 @@ protected function defaultHitDisplayFactory() : void
 		return;
 	}*/
 	
-	if( hit == "explode-" )
+	if( CardTypes.isSpell(card.type) && appModel.artRules.getBool(card.type, ArtRules.DIE_SHAKE) )
 		fieldView.shake();
 	
 	var hitDisplay:MovieClip = new MovieClip(appModel.assets.getTextures("hits/" + hit), 45);

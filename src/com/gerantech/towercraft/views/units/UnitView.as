@@ -12,11 +12,9 @@ import com.gerantech.mmory.core.utils.Point3;
 import com.gerantech.towercraft.controls.indicators.CountdownIcon;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
-import com.gerantech.towercraft.managers.ParticleManager;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.UnitMC;
 import com.gerantech.towercraft.views.effects.BattleParticleSystem;
-import com.gerantech.towercraft.views.effects.MortalParticleSystem;
 import com.gerantech.towercraft.views.units.elements.ImageElement;
 import com.gerantech.towercraft.views.units.elements.UnitBody;
 import com.gerantech.towercraft.views.weapons.BulletView;
@@ -418,7 +416,17 @@ private function showDieAnimation():void
 	fieldView.shadowsContainer.addChild(dieDisplay);
 	dieDisplay.play();
 	Starling.juggler.add(dieDisplay);
-	dieDisplay.addEventListener(Event.COMPLETE, function() : void { Starling.juggler.remove(dieDisplay); dieDisplay.removeFromParent(true); });
+	dieDisplay.addEventListener(Event.COMPLETE, die_completeHandler);
+	function die_completeHandler():void
+	{
+		Starling.juggler.remove(dieDisplay);
+		dieDisplay.currentFrame = dieDisplay.numFrames - 1;
+		if( die.substring(0, 2) != "u-" )
+			dieDisplay.removeFromParent(true);
+	}
+
+	if( appModel.artRules.getBool(card.type, ArtRules.DIE_SHAKE) )
+		fieldView.shake();
 }
 
 protected function battleField_pauseHandler(event:BattleEvent) : void
