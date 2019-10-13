@@ -7,7 +7,7 @@ package com.gerantech.towercraft.events
 		public static const LOADED:String = "loaded";
 		public static const LOGIN_ERROR:String = "loginError";
 		public static const LOGIN_USER_EXISTS:String = "loginUserExists";
-        public static const LOGIN_USER_BANNED:String = "loginUserBanned";
+		public static const LOGIN_USER_BANNED:String = "loginUserBanned";
 		public static const UNDER_MAINTENANCE:String = "underMaintenance";
 		public static const NOTICE_UPDATE:String = "noticeUpdate";
 		public static const FORCE_UPDATE:String = "forceUpdate";
@@ -15,6 +15,7 @@ package com.gerantech.towercraft.events
 		public static const CORE_LOADING_ERROR:String = "coreLoadingError";
 		public static const CONNECTION_LOST:String = "connectionLost";
 		public static const FORCE_RELOAD:String = "forceReload";
+		public static const PROGRESS:String = "progress";
 		
 		public var data:Object;
 		

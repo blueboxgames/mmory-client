@@ -1,10 +1,12 @@
 package com.gerantech.towercraft.utils
 {
+    import com.gerantech.towercraft.events.LoadingEvent;
     import com.gerantech.towercraft.models.AppModel;
 
     import flash.filesystem.File;
     import flash.filesystem.FileStream;
     import flash.utils.ByteArray;
+    import flash.utils.setTimeout;
 
     import starling.events.Event;
     import starling.events.EventDispatcher;
@@ -15,6 +17,7 @@ package com.gerantech.towercraft.utils
         private var assets:Object;
         private var saveQueue:Array;
         private var assetsDir:File;
+        private var numAssets:int;
         public function sync(assets:Object):void
         {
             this.assets = assets;
@@ -43,8 +46,10 @@ package com.gerantech.towercraft.utils
                 md5s = new Object();
             saveQueue = new Array();
             var numSyncFiles:int = 0;
+            numAssets = 0;
             for ( var name:String in this.assets )
             {
+                numAssets ++;
                 if( this.assets[name].exists )
                     continue;
                 
@@ -52,7 +57,7 @@ package com.gerantech.towercraft.utils
                 this.assets[name].hash = md5s[name];
                 if( this.assets[name].hash == this.assets[name].md5 )
                 {
-                    finalize(name);
+                    setTimeout(finalize, 1, name);
                     continue;
                 }
                 this.assets[name].name = name;
@@ -107,9 +112,17 @@ package com.gerantech.towercraft.utils
          */
         private function checkAllFiles():void
         {
+            var i:int = 0;
             for( var name:String in this.assets )
+            {
+                i ++;
                 if( !this.assets[name].exists )
+                {
+                	AppModel.instance.loadingManager.dispatchEvent(new LoadingEvent(LoadingEvent.PROGRESS, i / numAssets));
                     return;
+                }
+            }
+            AppModel.instance.loadingManager.dispatchEvent(new LoadingEvent(LoadingEvent.PROGRESS, 1));
             AppModel.instance.assets.loadQueue(loadQueue_completeHandler);
         }
 

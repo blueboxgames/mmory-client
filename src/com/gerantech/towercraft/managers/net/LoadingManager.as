@@ -184,7 +184,8 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 	syncTool.sync(initialAssets)
 }
 
-private function syncTool_completeHandler():void
+
+private function syncTool_completeHandler(event:*):void
 {
 	trace(appModel.descriptor.versionCode, "noticeVersion:" + serverData.getInt("noticeVersion"), "forceVersion:" + serverData.getInt("forceVersion"));
 	if( appModel.descriptor.versionCode < serverData.getInt("forceVersion") )

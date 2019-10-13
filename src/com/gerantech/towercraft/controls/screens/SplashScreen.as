@@ -16,6 +16,7 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 import feathers.events.FeathersEventType;
 
 import flash.desktop.NativeApplication;
+import flash.display.Sprite;
 import flash.display.Stage;
 import flash.events.Event;
 import flash.events.EventDispatcher;
@@ -27,6 +28,7 @@ public class SplashScreen extends EventDispatcher
 {
 private var stage:Stage;
 private var logo:SplashMovie;
+private var progressBar:Sprite;
 public var transitionInCompleted:Boolean;
 public function SplashScreen(stage:Stage)
 {
@@ -36,6 +38,11 @@ public function SplashScreen(stage:Stage)
 	logo = new SplashMovie();
 	logo.addEventListener("clear", logo_clearHandler);
 	this.stage.addChild(logo);
+
+	this.progressBar = new Sprite();
+	this.progressBar.graphics.beginFill(0x71a0ff);
+	this.progressBar.graphics.drawRect(0 ,0, 8, this.stage.stageHeight * 0.008);
+	this.stage.addChild(this.progressBar);
 }
 protected function stage_resizeHandler(event:*):void
 {
@@ -45,6 +52,8 @@ protected function stage_resizeHandler(event:*):void
 	logo.graphics.drawRect(-stage.stageWidth, -stage.stageHeight, stage.stageWidth * 4, stage.stageHeight * 4);
 	//trace(stage.fullScreenWidth, stage.fullScreenHeight, logo.width, logo.height, logo.scaleY, 'sssssssssssssssssss')
 	logo.y = (stage.stageHeight - (2160 * logo.scaleY)) * 0.6;
+
+	progressBar.y = stage.stageHeight - progressBar.height;
 }
 protected function logo_clearHandler(event:*):void
 {
@@ -65,7 +74,13 @@ protected function logo_clearHandler(event:*):void
 	AppModel.instance.loadingManager.addEventListener(LoadingEvent.LOADED,				loadingManager_eventsHandler);
 	AppModel.instance.loadingManager.addEventListener(LoadingEvent.CONNECTION_LOST,		loadingManager_eventsHandler);
 	AppModel.instance.loadingManager.addEventListener(LoadingEvent.FORCE_RELOAD,		loadingManager_eventsHandler);
+	AppModel.instance.loadingManager.addEventListener(LoadingEvent.PROGRESS,		loadingManager_progressHandler);
 	AppModel.instance.loadingManager.load();
+}
+
+protected function loadingManager_progressHandler(event:LoadingEvent):void
+{
+	this.progressBar.width = Number(event.data) * stage.stageWidth;
 }
 
 protected function loadingManager_eventsHandler(event:LoadingEvent):void
@@ -231,7 +246,8 @@ private function removeLogo():void
 	logo.removeEventListener("cancel", logo_cancelHandler);
 	if( logo.parent == stage )
 		stage.removeChild(logo);
-
+	if( progressBar != null )
+		stage.removeChild(progressBar);
 }
 
 protected function loc(resourceName:String, parameters:Array=null, locale:String=null):String
