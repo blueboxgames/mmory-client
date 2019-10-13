@@ -142,7 +142,7 @@ class FileLoader extends URLStream
         super();
         this.asset = asset;
         this.addEventListener(IOErrorEvent.IO_ERROR, this.stream_ioerrorHandler);
-        this.load(new URLRequest(asset.url));
+        this.load(new URLRequest(asset.url + "?r=" + Math.random()));
     }
     private function stream_ioerrorHandler(event:IOErrorEvent):void
     {

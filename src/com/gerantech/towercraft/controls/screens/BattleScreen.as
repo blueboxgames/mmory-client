@@ -265,6 +265,7 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	touchEnable = false;
 	appModel.sounds.stopAll();
 	hud.stopTimers();
+	Starling.juggler.tween(appModel.battleFieldView, 5, {y:appModel.battleFieldView.center.y-100, scale:0.95, transition:Transitions.EASE_OUT});
 
 	tutorials.removeAll();
 	
@@ -328,7 +329,7 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	else
 		endOverlay = new EndBattleOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);
 	endOverlay.addEventListener(Event.CLOSE, endOverlay_closeHandler);
-	setTimeout(hud.end, 1000, endOverlay);// delay for noobs
+	setTimeout(hud.end, 2000, endOverlay);// delay for noobs
 }
 
 private function endOverlay_closeHandler(event:Event):void
