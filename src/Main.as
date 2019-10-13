@@ -42,7 +42,6 @@ public function Main()
 	Log.trace = function(v : * , p : * = null) : void {trace(p.fileName.substr(0,p.fileName.length-3) + "|" + p.methodName+":" + p.lineNumber + " =>  " + v); }
 	var desc:Descriptor = AppModel.instance.descriptor;
 
-	AppModel.instance.assets.verbose = true;
 	forceCopy("gui-0.atf", "gui-0.atf");
 	forceCopy("gui-0.xml", "gui-0.xml");
 	forceCopy(Localizations.instance.getLocaleByMarket(desc.market) + ".json", Localizations.instance.getLocaleByMarket(desc.market) + ".json");

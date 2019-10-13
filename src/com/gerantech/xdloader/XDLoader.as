@@ -117,7 +117,7 @@ package com.gerantech.xdloader
       root.transformationMatrix = new Matrix(t.a, t.b, t.c, t.d, t.tx, t.ty);
     }
 
-		static public function drawRoundRectangle(canvas:Canvas, x:Number, y:Number, width:Number, height:Number, r0:Number, r1, r2, r3):void
+		static public function drawRoundRectangle(canvas:Canvas, x:Number, y:Number, width:Number, height:Number, r0:Number, r1:Number, r2:Number, r3:Number):void
 		{
 			canvas.drawPolygon(Polygon.createCircle(x + r0, y + r0, r0));
 			canvas.drawPolygon(Polygon.createCircle(x + width - r1, y + r1, r1));
