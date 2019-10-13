@@ -22,6 +22,7 @@ static public const SUMMON:String = "summon";
 static public const SUMMON_SFX:String = "summonSFX";
 static public const ATTACK_SFX:String = "attackSFX";
 static public const HIT_SFX:String = "hitSFX";
+static public const DIE_SHAKE:String = "dieShake";
 
 private var rules:Dictionary;
 public function ArtRules(data:Object)
@@ -42,6 +43,12 @@ public function getInt(type:int, attribute:String) : int
 	if( rules[type] == null )
 		return 0;
 	return int(rules[type][attribute]);
+}
+public function getBool(type:int, attribute:String) : Boolean
+{
+	if( rules[type] == null )
+		return false;
+	return Boolean(rules[type][attribute]);
 }
 public function getArray(type:int, attribute:String) : Array
 {
