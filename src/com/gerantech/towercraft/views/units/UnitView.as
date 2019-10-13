@@ -326,13 +326,22 @@ protected function defaultSummonEffectFactory() : void
 	var summon:String = appModel.artRules.get(card.type, ArtRules.SUMMON);
 	if( summon == "" )
 		return;
-	var summonParticle:MortalParticleSystem = new MortalParticleSystem(appModel.assets.getObject("summon-" + summon), ParticleManager.getTextureByBitmap("fire"), -1, true, false);
-	summonParticle.scaleX = Math.min(0.3, card.sizeH * 0.01);
-	summonParticle.scaleY = summonParticle.scaleX * BattleField.CAMERA_ANGLE;
-	summonParticle.x = getSideX();
-	summonParticle.y = getSideY();
-	// summonParticle.alpha = 0.1;
-	fieldView.shadowsContainer.addChild(summonParticle);
+
+	var summonDisplay:MovieClip = new MovieClip(appModel.assets.getTextures("summons/" + summon), 30);
+	summonDisplay.pivotX = summonDisplay.width * 0.5;
+	summonDisplay.pivotY = summonDisplay.height * _PIVOT_Y;
+	summonDisplay.width = summonDisplay.height = _WIDTH;
+	summonDisplay.x = getSideX();
+	summonDisplay.y = getSideY();
+	fieldView.shadowsContainer.addChild(summonDisplay);
+	summonDisplay.play();
+	Starling.juggler.add(summonDisplay);
+	summonDisplay.addEventListener(Event.COMPLETE, die_completeHandler);
+	function die_completeHandler():void
+	{
+		Starling.juggler.remove(summonDisplay);
+		summonDisplay.removeFromParent(true);
+	}
 }
 
 public function showWinnerFocus():void 
