@@ -6,7 +6,10 @@ import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.Game;
+import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
+import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
+import com.gerantech.towercraft.controls.overlays.TutorialMessageOverlay;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.BillingManager;
@@ -72,6 +75,9 @@ public function load():void
 		appModel.navigator.popAll();
 		appModel.navigator.removeAllPopups();
 		appModel.navigator.rootScreenID = Game.DASHBOARD_SCREEN;
+		OpenBookOverlay.factory = null;
+		EmoteItemRenderer.factory = null;
+		TutorialMessageOverlay.factory = null;
 		ExCategoryItemRenderer.placeholders = null;
 	}
 	if( UserData.instance.prefs == null )
