@@ -41,8 +41,7 @@ public function SplashScreen(stage:Stage)
 
 	this.progressBar = new Sprite();
 	this.progressBar.graphics.beginFill(0x71a0ff);
-	this.progressBar.graphics.drawRect(0 ,0, 8, this.stage.stageHeight * 0.008);
-	this.stage.addChild(this.progressBar);
+	this.progressBar.graphics.drawRect(0 ,0, 8, this.stage.stageHeight * 0.005);
 }
 protected function stage_resizeHandler(event:*):void
 {
@@ -232,10 +231,12 @@ private function reload():void
 	AppModel.instance.loadingManager.removeEventListener(LoadingEvent.CONNECTION_LOST,	loadingManager_eventsHandler);
 	AppModel.instance.loadingManager.removeEventListener(LoadingEvent.FORCE_RELOAD,		loadingManager_eventsHandler);
 
-	this.stage.addChild(logo);
-	logo.gotoAndPlay(1);
-	logo.addEventListener("clear", logo_clearHandler);
-	logo.removeEventListener("cancel", logo_cancelHandler);
+	this.stage.addChild(this.logo);
+	this.logo.gotoAndPlay(1);
+	this.logo.addEventListener("clear", this.logo_clearHandler);
+	this.logo.removeEventListener("cancel", this.logo_cancelHandler);
+
+	this.stage.addChild(this.progressBar);
 }
 protected function logo_cancelHandler(event:*):void
 {
@@ -246,7 +247,7 @@ private function removeLogo():void
 	logo.removeEventListener("cancel", logo_cancelHandler);
 	if( logo.parent == stage )
 		stage.removeChild(logo);
-	if( progressBar != null )
+	if( progressBar.parent == stage )
 		stage.removeChild(progressBar);
 }
 
