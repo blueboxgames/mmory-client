@@ -42,6 +42,7 @@ public function SplashScreen(stage:Stage)
 	this.progressBar = new Sprite();
 	this.progressBar.graphics.beginFill(0x71a0ff);
 	this.progressBar.graphics.drawRect(0 ,0, 8, this.stage.stageHeight * 0.005);
+	this.stage.addChild(this.progressBar);
 }
 protected function stage_resizeHandler(event:*):void
 {
