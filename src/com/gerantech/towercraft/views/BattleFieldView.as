@@ -134,7 +134,7 @@ protected function syncToolPost_completeHandler(event:Event):void
 	pivotY = BattleField.HEIGHT * 0.5;
 	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5 - 100) * 0.5);
 	x = center.x;
-	y = center.y - 100;
+	y = center.y - 50;
 
 	mapBuilder.init(battleData.battleField.field.json);
 	mapBuilder.pivotX = mapBuilder.width * 0.5;

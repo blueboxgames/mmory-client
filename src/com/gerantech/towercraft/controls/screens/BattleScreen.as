@@ -265,7 +265,7 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 	touchEnable = false;
 	appModel.sounds.stopAll();
 	hud.stopTimers();
-	Starling.juggler.tween(appModel.battleFieldView, 5, {y:appModel.battleFieldView.center.y-100, scale:0.95, transition:Transitions.EASE_OUT});
+	Starling.juggler.tween(appModel.battleFieldView, 5, {delay:0.7, scale:0.95, transition:Transitions.EASE_OUT});
 
 	tutorials.removeAll();
 	
