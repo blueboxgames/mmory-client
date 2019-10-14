@@ -95,7 +95,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		bodyDisplay.y = __yz - 100;
 		bodyDisplay.scaleY = __bodyScale * 4;
 		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,	alpha:0.5, y:__yz,	transition:Transitions.EASE_OUT, onComplete:defaultSummonEffectFactory});
-		Starling.juggler.tween(bodyDisplay, 0.2, {delay:appearanceDelay+ 0.3,	alpha:0, repeatCount:9});
+		Starling.juggler.tween(bodyDisplay, 0.1, {delay:appearanceDelay+ 0.1,	alpha:0, repeatCount:20});
 		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay + 0.1,	scaleY:__bodyScale,	transition:Transitions.EASE_OUT_BACK});
 		shadowDisplay.scale = 0.0
 		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scaleX:__bodyScale,scaleY:__bodyScale*_SHADOW_SCALE,	transition:Transitions.EASE_OUT_BACK});
