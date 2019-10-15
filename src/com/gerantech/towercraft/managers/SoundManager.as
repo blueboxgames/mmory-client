@@ -5,13 +5,14 @@ import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.models.AppModel;
 
 import flash.events.Event;
+import flash.filesystem.File;
 import flash.media.Sound;
 import flash.media.SoundChannel;
 import flash.media.SoundTransform;
 import flash.utils.Dictionary;
 
+import starling.assets.AssetType;
 import starling.core.Starling;
-import flash.filesystem.File;
 
 public class SoundManager 
 {
@@ -55,8 +56,11 @@ public function addSound(id:String, sound:Sound = null, callback:Function = null
 	if( sound == null )
 	{
 		loadings[id] = true;
-		AppModel.instance.assets.enqueue(File.applicationStorageDirectory.nativePath + "/assets/" + id + ".mp3");
-		AppModel.instance.assets.loadQueue(assets_loadCallback);
+		if( AppModel.instance.assets.getAsset(AssetType.SOUND, id) == null )
+		{
+			AppModel.instance.assets.enqueue(File.applicationStorageDirectory.nativePath + "/assets/" + id + ".mp3");
+			AppModel.instance.assets.loadQueue(assets_loadCallback);
+		}
 		return;
 	}
 	loadeds[id] = {s:sound, c:category};
