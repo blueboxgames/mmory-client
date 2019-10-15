@@ -61,6 +61,8 @@ public function addSound(id:String, sound:Sound = null, callback:Function = null
 			AppModel.instance.assets.enqueue(File.applicationStorageDirectory.nativePath + "/assets/" + id + ".mp3");
 			AppModel.instance.assets.loadQueue(assets_loadCallback);
 		}
+		else
+			assets_loadCallback(1);
 		return;
 	}
 	loadeds[id] = {s:sound, c:category};
