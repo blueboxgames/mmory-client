@@ -237,25 +237,26 @@ private function findPathHandler(e:BattleEvent):void
 public function requestKillPioneers(side:int):void 
 {
 	var color:int = side == battleData.battleField.side ? 1 : 0;
-	function crazyDriving(fromX:int, toX:int, y:int, color:int) : void
+	function carPassing(fromX:int, toX:int, y:int, color:int) : void
 	{
 		AppModel.instance.sounds.addAndPlay("car-passing-by", null, 1, SoundManager.SINGLE_NONE);
 		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/base");
 		var a:AssetManager = AppModel.instance.assets;
 		var car:ImageElement = new ImageElement(null, txt);
+		car.pivotX = car.width * 0.5;
+		car.pivotY = car.height * UnitView._PIVOT_Y + AppModel.instance.artRules.getInt(201, "y");
 		car.width = UnitView._WIDTH;
 		car.height = UnitView._HEIGHT;
-		// car.scaleX *= fromX < toX ? 1 : -1;
 		car.x = fromX;
-		car.y = y + BattleField.HEIGHT * 0.5 - car.height * 0.7;
+		car.y = y + BattleField.HEIGHT * 0.5;
 		unitsContainer.addChild(car);
 		Starling.juggler.tween(car, 1, {x:toX, onComplete:car.removeFromParent, onCompleteArgs:[true]});
 	}
 
  	battleData.battleField.requestKillPioneers(side);
 	var time:int = battleData.battleField.resetTime - battleData.battleField.now - 500;
-	setTimeout(crazyDriving, time, color == 0 ? -600 : 1160, color == 0 ? 1160 : -600, color == 1 ? -140 : 140, color);
-	setTimeout(crazyDriving, time, color == 0 ? -400 : 1360, color == 0 ? 1360 : -400, color == 1 ? -420 : 420, color);
+	setTimeout(carPassing, time, color == 0 ? -600 : 1100, color == 0 ? 1100 : -600, color == 1 ? -200 : 200, color);
+	setTimeout(carPassing, time, color == 0 ? -400 : 1300, color == 0 ? 1300 : -400, color == 1 ? -480 : 420, color);
 }
 
 public function hitUnits(buletId:int, targets:ISFSArray) : void
