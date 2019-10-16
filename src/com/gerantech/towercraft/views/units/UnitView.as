@@ -427,6 +427,9 @@ private function showDieAnimation():void
 
 	// shake camera
 	fieldView.shake(appModel.artRules.getNumber(card.type, ArtRules.DIE_SHAKE));
+
+	// play die sfx randomly
+	appModel.sounds.addAndPlayRandom(appModel.artRules.getArray(card.type, ArtRules.DIE_SFX));
 }
 
 protected function battleField_pauseHandler(event:BattleEvent) : void
