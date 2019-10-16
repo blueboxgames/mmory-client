@@ -16,13 +16,17 @@ static public const BULLET:String = "bullet";
 static public const BULLET_FX:String = "bulletFX";
 static public const FLAME:String = "flame";
 static public const SMOKE:String = "smoke";
+static public const SUMMON:String = "summon";
 static public const HIT:String = "hit";
 static public const DIE:String = "die";
-static public const SUMMON:String = "summon";
+
 static public const SUMMON_SFX:String = "summonSFX";
 static public const ATTACK_SFX:String = "attackSFX";
 static public const HIT_SFX:String = "hitSFX";
+static public const DIE_SFX:String = "dieSFX";
+
 static public const DIE_SHAKE:String = "dieShake";
+static public const HIT_SHAKE:String = "hitShake";
 
 private var rules:Dictionary;
 public function ArtRules(data:Object)
@@ -49,6 +53,12 @@ public function getBool(type:int, attribute:String) : Boolean
 	if( rules[type] == null )
 		return false;
 	return Boolean(rules[type][attribute]);
+}
+public function getNumber(type:int, attribute:String) : Number
+{
+	if( rules[type] == null )
+		return 0;
+	return Number(rules[type][attribute]);
 }
 public function getArray(type:int, attribute:String) : Array
 {

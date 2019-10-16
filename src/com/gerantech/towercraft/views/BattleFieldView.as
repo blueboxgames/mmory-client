@@ -326,11 +326,16 @@ override public function dispose() : void
 }
 
 static private var SHAKE_POINTS:Array = [[-3.875 ,-8.75],[5.875 ,7.75],[-8.25 ,-3.875],[-2.875 ,-8.75],[-4 ,7.375],[7.25 ,4.125],[-7.125 ,3.25],[9.125 ,-1.875],[-5.25 ,-0.375],[-7.75 ,-1.5],[7.5 ,-1.625],[6.375 ,3.625],[-6.25 ,2.375],[4 ,-4.125],[-5.625 ,-2],[-4.5 ,-1.125],[2.5 ,-4.5],[0.875 ,5.75],[-3.875 ,-2.5],[2.625 ,-4.375],[-2.25 ,-3.125],[-3.375 ,-1.375],[2.625 ,-3.625],[0.25 ,3.75],[0.25 ,3],[3.875 ,0.5],[-1.875 ,2.25],[-2.25 ,0.125],[-1.875 ,1.5],[-1.375 ,0.25],[1.25 ,2.75],[2.5 ,0.125],[-1 ,1.25],[0.375 ,-0.5],[0.375 ,-0.5],[1.5 ,0.5],[0 ,0]];
-private var shakeSpeed:Number = 0.6;
-private var shakeIndex:int;
-public function shake() : void
+private var shakeSpeed:Number;
+private var shakePower:Number;
+private var shakeIndex:Number;
+public function shake(power:Number = 1, speed:Number=0.7) : void
 {
+	if( power == 0 )
+		return;
 	this.shakeIndex = 0;
+	this.shakePower = power;
+	this.shakeSpeed = speed;
 	this.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 }
 private function enterFrameHandler(event:EnterFrameEvent):void
@@ -340,10 +345,10 @@ private function enterFrameHandler(event:EnterFrameEvent):void
 		this.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 		return;
 	}
-	var index:int = Math.floor(shakeIndex * shakeSpeed);
-	x = center.x + SHAKE_POINTS[index][0];
-	y = center.y + SHAKE_POINTS[index][1];
-	shakeIndex ++;
+	var index:int = Math.floor(shakeIndex);
+	x = center.x + SHAKE_POINTS[index][0] * this.shakePower;
+	y = center.y + SHAKE_POINTS[index][1] * this.shakePower;
+	shakeIndex += this.shakeSpeed;
 }
 
 private function drawTile(x:Number, y:Number, color:int, width:int, height:int, alpha:Number = 0.1):void

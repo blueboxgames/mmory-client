@@ -140,8 +140,7 @@ protected function defaultHitDisplayFactory() : void
 		return;
 	}*/
 	
-	if( CardTypes.isSpell(card.type) && appModel.artRules.getBool(card.type, ArtRules.DIE_SHAKE) )
-		fieldView.shake();
+	fieldView.shake(appModel.artRules.getNumber(card.type, ArtRules.HIT_SHAKE));
 	
 	var hitDisplay:MovieClip = new MovieClip(appModel.assets.getTextures("hits/" + hit), 45);
 	hitDisplay.pivotX = hitDisplay.width * 0.5;
