@@ -60,7 +60,6 @@ public function initialize () : void
 	units = new IntUnitMap();
 	touchGroup = true;
 	alignPivot();
-	scale = 0.8;
 
 	shadowsContainer = new Sprite();
 	unitsContainer = new Sprite();
@@ -137,10 +136,6 @@ protected function syncToolPost_completeHandler(event:Event):void
 	y = center.y - 50;
 
 	mapBuilder.init(battleData.battleField.field.json);
-	mapBuilder.pivotX = mapBuilder.width * 0.5;
-	mapBuilder.pivotY = mapBuilder.height * 0.5;
-	mapBuilder.x = pivotX;
-	mapBuilder.y = pivotY + 250;
 	addChild(mapBuilder);
 
 	battleData.battleField.state = BattleField.STATE_2_STARTED;
@@ -152,6 +147,7 @@ protected function syncToolPost_completeHandler(event:Event):void
 	addChild(unitsContainer);
 
 	summonUnits(battleData.sfsData.getSFSArray("units"), battleData.sfsData.getDouble("now"));
+	scale = 0.8;
 
 	/*for ( i = 0; i < battleData.battleField.tileMap.width; i ++ )
 		for ( var j:int = 0; j < battleData.battleField.tileMap.height; j ++ )
@@ -163,7 +159,7 @@ protected function syncToolPost_completeHandler(event:Event):void
 	dispatchEventWith(Event.TRIGGERED);
 }
 
-protected function timeManager_updateHandler(e:Event):void 
+protected function timeManager_updateHandler(e:Event):void
 {
 	battleData.battleField.update(e.data as int);
 	unitsContainer.sortChildren(unitSortMethod);
