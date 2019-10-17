@@ -14,12 +14,14 @@ package com.gerantech.towercraft.utils
     public class SyncUtil extends EventDispatcher
     {
         // private static const DEBUG:Boolean = true;
+        public static var SYNCYING:Boolean;
         private var assets:Object;
         private var saveQueue:Array;
         private var assetsDir:File;
         private var numAssets:int;
         public function sync(assets:Object):void
         {
+            SYNCYING = true;
             this.assets = assets;
             assetsDir = File.applicationStorageDirectory.resolvePath("assets");
             if( assetsDir.exists )
@@ -66,7 +68,10 @@ package com.gerantech.towercraft.utils
                 loader.addEventListener(Event.COMPLETE, loader_completeHandler);
             }
             if( numSyncFiles == 0 )
+            {
+                SYNCYING = false;
                 this.dispatchEventWith(Event.COMPLETE);
+            }
         }
 
         private function loader_completeHandler(event:*):void
@@ -128,6 +133,7 @@ package com.gerantech.towercraft.utils
 
         private function loadQueue_completeHandler(e:*):void
         {
+            SYNCYING = false;
             this.dispatchEventWith(Event.COMPLETE);
         }
     }

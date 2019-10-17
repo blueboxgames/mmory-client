@@ -10,6 +10,7 @@ import com.gerantech.towercraft.controls.screens.SplashScreen;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.Descriptor;
 import com.gerantech.towercraft.utils.Localizations;
+import com.gerantech.towercraft.utils.SyncUtil;
 import com.tuarua.FirebaseANE;
 import com.tuarua.fre.ANEError;
 
@@ -124,7 +125,7 @@ private function starling_rootCreatedHandler(event:Object):void
 
 protected function stage_deactivateHandler(event:Event):void
 {
-	if( !BattleScreen.IN_BATTLE )
+	if( !BattleScreen.IN_BATTLE && !SyncUtil.SYNCYING )
 	{
 		this.starling.stop(true);
 		this.stage.frameRate = 0;
