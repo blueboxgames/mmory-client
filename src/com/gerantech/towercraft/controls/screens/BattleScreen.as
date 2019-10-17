@@ -198,7 +198,7 @@ private function battleFieldView_triggeredHAndler(event:Event):void
 	{
 		tutorials.removeAll();
 		waitingOverlay.removeEventListener(Event.CLOSE, waitingOverlay_closeHandler);
-		Starling.juggler.tween(appModel.battleFieldView, 1, {delay:1, y:appModel.battleFieldView.y+100, scale:1, transition:Transitions.EASE_IN_OUT, onComplete:showTutorials});
+		Starling.juggler.tween(appModel.battleFieldView, 1, {delay:1, y:appModel.battleFieldView.y + 50, scale:1, transition:Transitions.EASE_IN_OUT, onComplete:showTutorials});
 		if( !player.inTutorial() )
 			hud.addChildAt(new BattleStartOverlay(battleData.battleField.field.isOperation() ? battleData.battleField.field.mode : -1, battleData ), 0);
 	}

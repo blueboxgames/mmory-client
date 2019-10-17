@@ -22,6 +22,8 @@ import starling.utils.MathUtil;
 */
 public class BulletView extends Bullet 
 {
+static public const _WIDTH:int = 512;
+static public const _HEIGHT:int = 512;
 public var bulletDisplayFactory:Function;
 public var hitDisplayFactory:Function;
 private var bulletDisplay:MovieClip;
@@ -104,6 +106,8 @@ private function defaultBulletDisplayFactory() : void
 	bulletDisplay = new MovieClip(appModel.assets.getTextures("bullets/" + bullet + "/"));
 	bulletDisplay.pivotX = bulletDisplay.width * 0.5;
 	bulletDisplay.pivotY = bulletDisplay.height * 0.5;
+	bulletDisplay.width = _WIDTH;
+	bulletDisplay.height = _HEIGHT;
 	bulletDisplay.rotation = rotation;
 	fieldView.effectsContainer.addChild(bulletDisplay);
 	if( bulletDisplay.numFrames > 1 )
@@ -117,11 +121,11 @@ private function defaultBulletDisplayFactory() : void
 		return;
 	
 	shadowDisplay = new Image(appModel.assets.getTexture("bullets/shadow"));
+	shadowDisplay.pivotY = shadowDisplay.height * 0.5;
+	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.width = bulletDisplay.width;
 	shadowDisplay.height = bulletDisplay.width * BattleField.CAMERA_ANGLE;
-	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
-	shadowDisplay.pivotY = shadowDisplay.height * 0.5;
-	shadowDisplay.alpha = 0.3;
+	shadowDisplay.alpha = 0.2;
 	fieldView.shadowsContainer.addChild(shadowDisplay);
 }
 
@@ -140,8 +144,7 @@ protected function defaultHitDisplayFactory() : void
 		return;
 	}*/
 	
-	if( CardTypes.isSpell(card.type) && appModel.artRules.getBool(card.type, ArtRules.DIE_SHAKE) )
-		fieldView.shake();
+	fieldView.shake(appModel.artRules.getNumber(card.type, ArtRules.HIT_SHAKE));
 	
 	var hitDisplay:MovieClip = new MovieClip(appModel.assets.getTextures("hits/" + hit), 45);
 	hitDisplay.pivotX = hitDisplay.width * 0.5;
