@@ -72,7 +72,7 @@ public function BattleData(sfsData:ISFSObject)
 
 	// reduce battle cost
 	var game:Game = AppModel.instance.game;
-	var cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, sfsData.getInt("type")));
+	var cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, sfsData.getInt("mode")));
 	var exItem:ExchangeItem = Challenge.getExchangeItem(sfsData.getInt("mode"), cost, game.player.get_arena(0));
 	var response:int = game.exchanger.exchange(exItem, sfsData.getInt("startAt"), 0);
 	if( response != MessageTypes.RESPONSE_SUCCEED )
