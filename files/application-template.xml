@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <application xmlns="http://ns.adobe.com/air/application/32.0">
   <id>__APPID__</id>
-  <versionNumber>0.2.500</versionNumber>
+  <versionNumber>0.2.510</versionNumber>
   <supportedProfiles>mobileDevice extendedDesktop</supportedProfiles>
   <filename>BoomLand</filename>
   <name>BoomLand</name>
@@ -18,10 +18,6 @@
     <depthAndStencil>true</depthAndStencil>
     <transparent>false</transparent>
     <resizable>false</resizable>
-    <x>10</x>
-    <y>10</y>
-    <width>490</width>
-    <height>940</height>
     <minSize>490 940</minSize>
   </initialWindow>
   <icon>
