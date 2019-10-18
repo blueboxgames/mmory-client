@@ -220,6 +220,8 @@ protected function stage_touchHandler(event:TouchEvent) : void
 		else if( touch.phase == TouchPhase.ENDED && selectedCard != null )
 		{
 			draggedInMap = false;
+			draggableCard.scale = Math.min(1.2, (100 + touch.globalY - y) / 200 * 1.2);
+			draggableCard.visible = draggableCard.scale >= 0.6;
 			setTouchPosition();
 			fieldView.mapBuilder.setSummonAreaEnable(false, summonState);
 			if( battleField.validateSummonPosition(summonPoint) && fieldView.battleData.getAlliseEllixir() >= draggableCard.elixir )
@@ -289,13 +291,7 @@ private function setTouchPosition() : void
 	if( selectedCard == null || draggableCard.visible )
 		return;
 	battleField.fixSummonPosition(summonPoint, selectedCard.type, summonState);
-	
-	// // limit bottom
-	// var bottom:Number = fieldView.y + BattleField.HEIGHT * 0.5;
-	// if( !draggedInMap )
-	// 	draggedInMap = summonPoint.y < BattleField.HEIGHT;
-	// else if( summonPoint.y > BattleField.HEIGHT )
-	// 	summonPoint.y = BattleField.HEIGHT;
+
 }
 
 private function pushNewCardToDeck(deckSelected:BattleDeckCard) : void 
