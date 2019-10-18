@@ -80,7 +80,8 @@ public function initialize () : void
 			fillDeck(deck, AppModel.instance.syncData, preAssets, key);
 	}
 
-	key = "map-" + ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX));
+	
+	key = "field-" + ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX));
 	preAssets[key +".json"] = AppModel.instance.syncData[key + ".json"];
 	preAssets[key + ".atf"] = AppModel.instance.syncData[key + ".atf"];
 	preAssets[key + ".xml"] = AppModel.instance.syncData[key + ".xml"];
