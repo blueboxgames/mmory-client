@@ -425,8 +425,11 @@ private function showDieAnimation():void
 			dieDisplay.removeFromParent(true);
 	}
 
-	if( appModel.artRules.getBool(card.type, ArtRules.DIE_SHAKE) )
-		fieldView.shake();
+	// shake camera
+	fieldView.shake(appModel.artRules.getNumber(card.type, ArtRules.DIE_SHAKE));
+
+	// play die sfx randomly
+	appModel.sounds.addAndPlayRandom(appModel.artRules.getArray(card.type, ArtRules.DIE_SFX));
 }
 
 protected function battleField_pauseHandler(event:BattleEvent) : void

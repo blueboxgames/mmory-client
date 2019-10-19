@@ -55,6 +55,7 @@ package com.gerantech.towercraft.controls
 	import starling.core.Starling;
 	import starling.events.Event;
 	import starling.textures.Texture;
+	import com.gerantech.towercraft.controls.screens.BattleScreen;
 	
 	public class StackNavigator extends StackScreenNavigator
 	{
@@ -123,14 +124,13 @@ package com.gerantech.towercraft.controls
 				addLog(loc("log_not_enough", [loc("resource_title_" + ResourceType.R6_TICKET)]));
 				return;
 			}
-			var item:StackScreenNavigatorItem = getScreen(Game.BATTLE_SCREEN);
 			var arena:int =  AppModel.instance.game.player.get_arena(0);
-			item.properties.waitingOverlay = new BattleWaitingOverlay(cancelable && arena > 0, spectatedUser != null, arena > 0);
-			item.properties.spectatedUser = spectatedUser;
-			item.properties.friendlyMode = friendlyMode;
-			item.properties.index = index;
+			BattleScreen.WAITING = new BattleWaitingOverlay(cancelable && arena > 0, spectatedUser != null, arena > 0);
+			BattleScreen.SPECTATED_USER = spectatedUser;
+			BattleScreen.FRIENDLY_MODE = friendlyMode;
+			BattleScreen.INDEX = index;
 			pushScreen(Game.BATTLE_SCREEN);
-			addOverlay(item.properties.waitingOverlay);
+			addOverlay(BattleScreen.WAITING);
 		}
 		
 		// -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-  POPUPS  -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_

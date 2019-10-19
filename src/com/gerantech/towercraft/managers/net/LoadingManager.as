@@ -69,7 +69,7 @@ public function load():void
 	sfsConnection.addEventListener(SFSConnection.FAILURE, sfsConnection_connectionHandler);
 	state = STATE_CONNECT;
 	
-    DashboardScreen.TAB_INDEX = 2;
+	DashboardScreen.TAB_INDEX = 2;
 	if( appModel.navigator != null )
 	{
 		appModel.navigator.popAll();

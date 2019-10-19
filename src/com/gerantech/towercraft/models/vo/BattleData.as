@@ -72,13 +72,14 @@ public function BattleData(sfsData:ISFSObject)
 
 	// reduce battle cost
 	var game:Game = AppModel.instance.game;
-	var cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, sfsData.getInt("type")));
+	var cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, sfsData.getInt("mode")));
 	var exItem:ExchangeItem = Challenge.getExchangeItem(sfsData.getInt("mode"), cost, game.player.get_arena(0));
 	var response:int = game.exchanger.exchange(exItem, sfsData.getInt("startAt"), 0);
 	if( response != MessageTypes.RESPONSE_SUCCEED )
 		trace("battle cost data from server server is invalid!");
 	
-	var f:FieldData = new FieldData(sfsData.getInt("mode"), JSON.stringify(AppModel.instance.assets.getObject("map-" + sfsData.getInt("mode"))), "60,120,180,240");
+	var map:Object = AppModel.instance.assets.getObject("field-" + sfsData.getInt("mode"));
+	var f:FieldData = new FieldData(sfsData.getInt("mode"), JSON.stringify(map), AppModel.instance.descriptor.versionCode);
 	this.battleField = new BattleField();
 	this.battleField.initialize(side == 0 ? alliseGame : axisGame, side == 0 ? axisGame : alliseGame, f, side, sfsData.getInt("startAt"), sfsData.getDouble("now"), false, sfsData.getInt("friendlyMode"));
 	this.battleField.state = BattleField.STATE_1_CREATED;

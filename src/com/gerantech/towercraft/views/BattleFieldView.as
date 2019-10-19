@@ -60,7 +60,6 @@ public function initialize () : void
 	units = new IntUnitMap();
 	touchGroup = true;
 	alignPivot();
-	scale = 0.8;
 
 	shadowsContainer = new Sprite();
 	unitsContainer = new Sprite();
@@ -81,7 +80,8 @@ public function initialize () : void
 			fillDeck(deck, AppModel.instance.syncData, preAssets, key);
 	}
 
-	key = "map-" + ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX));
+	
+	key = "field-" + ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX));
 	preAssets[key +".json"] = AppModel.instance.syncData[key + ".json"];
 	preAssets[key + ".atf"] = AppModel.instance.syncData[key + ".atf"];
 	preAssets[key + ".xml"] = AppModel.instance.syncData[key + ".xml"];
@@ -137,10 +137,6 @@ protected function syncToolPost_completeHandler(event:Event):void
 	y = center.y - 50;
 
 	mapBuilder.init(battleData.battleField.field.json);
-	mapBuilder.pivotX = mapBuilder.width * 0.5;
-	mapBuilder.pivotY = mapBuilder.height * 0.5;
-	mapBuilder.x = pivotX;
-	mapBuilder.y = pivotY + 250;
 	addChild(mapBuilder);
 
 	battleData.battleField.state = BattleField.STATE_2_STARTED;
@@ -152,6 +148,7 @@ protected function syncToolPost_completeHandler(event:Event):void
 	addChild(unitsContainer);
 
 	summonUnits(battleData.sfsData.getSFSArray("units"), battleData.sfsData.getDouble("now"));
+	scale = 0.8;
 
 	/*for ( i = 0; i < battleData.battleField.tileMap.width; i ++ )
 		for ( var j:int = 0; j < battleData.battleField.tileMap.height; j ++ )
@@ -163,7 +160,7 @@ protected function syncToolPost_completeHandler(event:Event):void
 	dispatchEventWith(Event.TRIGGERED);
 }
 
-protected function timeManager_updateHandler(e:Event):void 
+protected function timeManager_updateHandler(e:Event):void
 {
 	battleData.battleField.update(e.data as int);
 	unitsContainer.sortChildren(unitSortMethod);
@@ -241,25 +238,26 @@ private function findPathHandler(e:BattleEvent):void
 public function requestKillPioneers(side:int):void 
 {
 	var color:int = side == battleData.battleField.side ? 1 : 0;
-	function crazyDriving(fromX:int, toX:int, y:int, color:int) : void
+	function carPassing(fromX:int, toX:int, y:int, color:int) : void
 	{
 		AppModel.instance.sounds.addAndPlay("car-passing-by", null, 1, SoundManager.SINGLE_NONE);
 		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/base");
 		var a:AssetManager = AppModel.instance.assets;
 		var car:ImageElement = new ImageElement(null, txt);
+		car.pivotX = car.width * 0.5;
+		car.pivotY = car.height * UnitView._PIVOT_Y + AppModel.instance.artRules.getInt(201, "y");
 		car.width = UnitView._WIDTH;
 		car.height = UnitView._HEIGHT;
-		// car.scaleX *= fromX < toX ? 1 : -1;
 		car.x = fromX;
-		car.y = y + BattleField.HEIGHT * 0.5 - car.height * 0.7;
+		car.y = y + BattleField.HEIGHT * 0.5;
 		unitsContainer.addChild(car);
 		Starling.juggler.tween(car, 1, {x:toX, onComplete:car.removeFromParent, onCompleteArgs:[true]});
 	}
 
  	battleData.battleField.requestKillPioneers(side);
 	var time:int = battleData.battleField.resetTime - battleData.battleField.now - 500;
-	setTimeout(crazyDriving, time, color == 0 ? -600 : 1160, color == 0 ? 1160 : -600, color == 1 ? -140 : 140, color);
-	setTimeout(crazyDriving, time, color == 0 ? -400 : 1360, color == 0 ? 1360 : -400, color == 1 ? -420 : 420, color);
+	setTimeout(carPassing, time, color == 0 ? -600 : 1100, color == 0 ? 1100 : -600, color == 1 ? -200 : 200, color);
+	setTimeout(carPassing, time, color == 0 ? -400 : 1300, color == 0 ? 1300 : -400, color == 1 ? -480 : 420, color);
 }
 
 public function hitUnits(buletId:int, targets:ISFSArray) : void
@@ -326,11 +324,16 @@ override public function dispose() : void
 }
 
 static private var SHAKE_POINTS:Array = [[-3.875 ,-8.75],[5.875 ,7.75],[-8.25 ,-3.875],[-2.875 ,-8.75],[-4 ,7.375],[7.25 ,4.125],[-7.125 ,3.25],[9.125 ,-1.875],[-5.25 ,-0.375],[-7.75 ,-1.5],[7.5 ,-1.625],[6.375 ,3.625],[-6.25 ,2.375],[4 ,-4.125],[-5.625 ,-2],[-4.5 ,-1.125],[2.5 ,-4.5],[0.875 ,5.75],[-3.875 ,-2.5],[2.625 ,-4.375],[-2.25 ,-3.125],[-3.375 ,-1.375],[2.625 ,-3.625],[0.25 ,3.75],[0.25 ,3],[3.875 ,0.5],[-1.875 ,2.25],[-2.25 ,0.125],[-1.875 ,1.5],[-1.375 ,0.25],[1.25 ,2.75],[2.5 ,0.125],[-1 ,1.25],[0.375 ,-0.5],[0.375 ,-0.5],[1.5 ,0.5],[0 ,0]];
-private var shakeSpeed:Number = 0.6;
-private var shakeIndex:int;
-public function shake() : void
+private var shakeSpeed:Number;
+private var shakePower:Number;
+private var shakeIndex:Number;
+public function shake(power:Number = 1, speed:Number=0.7) : void
 {
+	if( power == 0 )
+		return;
 	this.shakeIndex = 0;
+	this.shakePower = power;
+	this.shakeSpeed = speed;
 	this.addEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 }
 private function enterFrameHandler(event:EnterFrameEvent):void
@@ -340,10 +343,10 @@ private function enterFrameHandler(event:EnterFrameEvent):void
 		this.removeEventListener(Event.ENTER_FRAME, this.enterFrameHandler);
 		return;
 	}
-	var index:int = Math.floor(shakeIndex * shakeSpeed);
-	x = center.x + SHAKE_POINTS[index][0];
-	y = center.y + SHAKE_POINTS[index][1];
-	shakeIndex ++;
+	var index:int = Math.floor(shakeIndex);
+	x = center.x + SHAKE_POINTS[index][0] * this.shakePower;
+	y = center.y + SHAKE_POINTS[index][1] * this.shakePower;
+	shakeIndex += this.shakeSpeed;
 }
 
 private function drawTile(x:Number, y:Number, color:int, width:int, height:int, alpha:Number = 0.1):void

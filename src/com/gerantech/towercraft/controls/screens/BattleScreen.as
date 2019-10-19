@@ -40,12 +40,12 @@ import starling.events.Event;
 
 public class BattleScreen extends BaseCustomScreen
 {
-public static var IN_BATTLE:Boolean;
-public var index:int;
-public var friendlyMode:int;
-public var spectatedUser:String;
+static public var IN_BATTLE:Boolean;
+static public var INDEX:int;
+static public var FRIENDLY_MODE:int;
+static public var SPECTATED_USER:String;
+static public var WAITING:BattleWaitingOverlay;
 public var hud:BattleHUD;
-public var waitingOverlay:BattleWaitingOverlay;
 private var touchEnable:Boolean;
 private var battleData:BattleData;
 
@@ -69,13 +69,14 @@ protected function battleFieldView_completeHandler(e:Event):void
 	layout = new AnchorLayout();
 	
 	var params:SFSObject = new SFSObject();
-	params.putInt("index", index);
-	params.putInt("friendlyMode", friendlyMode);
-	if( spectatedUser != null && spectatedUser != "" )
-		params.putText("spectatedUser", spectatedUser);
+	params.putInt("index", INDEX);
+	params.putInt("friendlyMode", FRIENDLY_MODE);
+	if( SPECTATED_USER != null && SPECTATED_USER != "" )
+		params.putText("spectatedUser", SPECTATED_USER);
 
 	SFSConnection.instance.addEventListener(SFSEvent.CONNECTION_LOST,	sfsConnection_connectionLostHandler);
-	if( friendlyMode == 0 )
+	if( FRIENDLY_MODE
+	 == 0 )
 		SFSConnection.instance.sendExtensionRequest(SFSCommands.BATTLE_START, params);
 	
 	startBattle();
@@ -147,9 +148,9 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 
 private function showErrorPopup(data:SFSObject):void
 {
-	if( !waitingOverlay.ready )
+	if( !WAITING.ready )
 	{
-		waitingOverlay.addEventListener(Event.READY, waitingOverlay_readyHandler);
+		WAITING.addEventListener(Event.READY, waitingOverlay_readyHandler);
 		function waitingOverlay_readyHandler():void {
 			showErrorPopup(data);
 		}
@@ -159,7 +160,7 @@ private function showErrorPopup(data:SFSObject):void
 		appModel.navigator.addPopup(new UnderMaintenancePopup(data.getInt("umt"), false));
 	else if( data.containsKey("response") )
 		appModel.navigator.addLog(loc("error_" + data.getInt("response")));
-	waitingOverlay.disappear();
+	WAITING.disappear();
 	dispatchEventWith(Event.COMPLETE);
 }
 
@@ -174,12 +175,12 @@ private function startBattle():void
 	
 	IN_BATTLE = true;
 	tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_STARTED, tutorials_tasksStartHandler);
-	if( !waitingOverlay.ready )
+	if( !WAITING.ready )
 	{
-		waitingOverlay.addEventListener(Event.READY, waitingOverlay_readyHandler);
+		WAITING.addEventListener(Event.READY, waitingOverlay_readyHandler);
 		function waitingOverlay_readyHandler():void
 		{
-			waitingOverlay.removeEventListener(Event.READY, waitingOverlay_readyHandler);
+			WAITING.removeEventListener(Event.READY, waitingOverlay_readyHandler);
 			startBattle();
 		}
 		return;
@@ -192,13 +193,13 @@ private function startBattle():void
 private function battleFieldView_triggeredHAndler(event:Event):void
 {
 	appModel.battleFieldView.removeEventListener(Event.TRIGGERED, battleFieldView_triggeredHAndler);
-	waitingOverlay.disappear();
-	waitingOverlay.addEventListener(Event.CLOSE, waitingOverlay_closeHandler);
+	WAITING.disappear();
+	WAITING.addEventListener(Event.CLOSE, waitingOverlay_closeHandler);
 	function waitingOverlay_closeHandler(e:Event):void 
 	{
 		tutorials.removeAll();
-		waitingOverlay.removeEventListener(Event.CLOSE, waitingOverlay_closeHandler);
-		Starling.juggler.tween(appModel.battleFieldView, 1, {delay:1, y:appModel.battleFieldView.y+100, scale:1, transition:Transitions.EASE_IN_OUT, onComplete:showTutorials});
+		WAITING.removeEventListener(Event.CLOSE, waitingOverlay_closeHandler);
+		Starling.juggler.tween(appModel.battleFieldView, 1, {delay:1, y:appModel.battleFieldView.y + 50, scale:1, transition:Transitions.EASE_IN_OUT, onComplete:showTutorials});
 		if( !player.inTutorial() )
 			hud.addChildAt(new BattleStartOverlay(battleData.battleField.field.isOperation() ? battleData.battleField.field.mode : -1, battleData ), 0);
 	}
