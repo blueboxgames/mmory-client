@@ -17,7 +17,6 @@ package com.gerantech.towercraft.models
       var ret:Texture = super.getTexture("__gray_" + name);
       if( ret == null )
       {
-        trace("__gray_" + name);
         ret = this.gray(super.getTexture(name));
         this.addAsset("__gray_" + name, ret, AssetType.TEXTURE);
       }
