@@ -22,7 +22,7 @@ public class ResponseSender
 		params.putDouble("x", x);
 		params.putDouble("y", y);
 		params.putDouble("time", time);
-		send(SFSCommands.BATTLE_SUMMON_UNIT, params);
+		send(SFSCommands.BATTLE_SUMMON, params);
 	}
 
 	public function leave(retryMode:Boolean=false):void

@@ -1,7 +1,6 @@
 package com.gerantech.towercraft.views
 {
 import com.gerantech.mmory.core.battle.BattleField;
-import com.gerantech.mmory.core.battle.GameObject;
 import com.gerantech.mmory.core.battle.bullets.Bullet;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
@@ -12,7 +11,6 @@ import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.GraphicMetrics;
 import com.gerantech.mmory.core.utils.Point2;
 import com.gerantech.mmory.core.utils.Point3;
-import com.gerantech.mmory.core.utils.maps.IntUnitMap;
 import com.gerantech.towercraft.controls.headers.BattleFooter;
 import com.gerantech.towercraft.managers.DropTargets;
 import com.gerantech.towercraft.managers.SoundManager;
@@ -30,6 +28,8 @@ import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import flash.utils.setTimeout;
+
+import haxe.ds._IntMap.IntMapKeysIterator;
 
 import starling.assets.AssetManager;
 import starling.core.Starling;
@@ -52,12 +52,12 @@ public var guiImagesContainer:DisplayObjectContainer;
 public var guiTextsContainer:DisplayObjectContainer;
 public var effectsContainer:DisplayObjectContainer;
 public var center:Point2;
-private var units:IntUnitMap;
+// private var units:IntUnitMap;
 
 public function BattleFieldView() { super(); }
 public function initialize () : void 
 {
-	units = new IntUnitMap();
+	// units = new IntUnitMap();
 	touchGroup = true;
 	alignPivot();
 
@@ -260,29 +260,32 @@ public function requestKillPioneers(side:int):void
 	setTimeout(carPassing, time, color == 0 ? -400 : 1300, color == 0 ? 1300 : -400, color == 1 ? -480 : 420, color);
 }
 
-public function hitUnits(buletId:int, targets:ISFSArray) : void
+/* public function hitUnits(buletId:int, targets:ISFSArray) : void
 {
+	return;
 	for ( var i:int = 0; i < targets.size(); i ++ )
 	{
 		var id:int = targets.getSFSObject(i).getInt("i");
-		if( battleData.battleField.units.exists(id) )
+		if( battleData.battleField.units.get(id) != null )
 			battleData.battleField.units.get(id).setHealth(targets.getSFSObject(i).getDouble("h"));
 		else
 			trace("unit " + id + " not found.");
 	}
-}
+}*/
 
 public function updateUnits(unitData:SFSObject) : void
 {
 	var serverUnitIds:Array = unitData.getIntArray("keys");
-	var clientUnitIds:Vector.<int> = battleData.battleField.units.keys();
-	
+	var iterator:IntMapKeysIterator = battleData.battleField.units.keys() as IntMapKeysIterator;
 	// force remove units from server
-	for( var i:int = 0; i < clientUnitIds.length; i++ )
-		if( serverUnitIds.indexOf(clientUnitIds[i]) == -1 )
-			battleData.battleField.units.get(clientUnitIds[i]).hit(100);
+	while( iterator.hasNext() )
+	{
+		var k:int = iterator.next();
+		if( serverUnitIds.indexOf(k) == -1 )
+			battleData.battleField.units.get(k).hit(100);
+	}
 	
-	if( !unitData.containsKey("testData") )
+/* 	if( !unitData.containsKey("testData") )
 		return;
 	
 	var serverUnitTests:Array = unitData.getUtfStringArray("testData");
@@ -310,7 +313,7 @@ public function updateUnits(unitData:SFSObject) : void
 			units.get(clientUnitIds[i]).dispose();
 			units.remove(clientUnitIds[i]);
 		}
-	}
+	} */
 }
 
 override public function dispose() : void
