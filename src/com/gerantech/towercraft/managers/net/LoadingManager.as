@@ -168,7 +168,7 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 			return;
 	}
 
-    if( serverData.containsKey("password") )// in registering case
+	if( serverData.containsKey("password") )// in registering case
 	{
 		UserData.instance.id = serverData.getLong("id");
 		UserData.instance.password = serverData.getText("password");
@@ -179,27 +179,29 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		TimeManager.instance.dispose();
 	new TimeManager(serverData.getLong("serverTime"));
 	
-	appModel.syncData = serverData.getSFSObject("assets").toObject();
-	var initialAssets:Object = new Object();
-	for ( var key:String in appModel.syncData )
-		if( appModel.syncData[key]["initial"] == true )
-			initialAssets[key] = appModel.syncData[key];
-	
-	var syncTool:SyncUtil = new SyncUtil();
-	syncTool.addEventListener(Event.COMPLETE, syncTool_completeHandler);
-	syncTool.sync(initialAssets)
-}
-
-
-private function syncTool_completeHandler(event:*):void
-{
 	trace(appModel.descriptor.versionCode, "noticeVersion:" + serverData.getInt("noticeVersion"), "forceVersion:" + serverData.getInt("forceVersion"));
 	if( appModel.descriptor.versionCode < serverData.getInt("forceVersion") )
 		dispatchEvent(new LoadingEvent(LoadingEvent.FORCE_UPDATE));
 	else if( appModel.descriptor.versionCode < serverData.getInt("noticeVersion") )
 		dispatchEvent(new LoadingEvent(LoadingEvent.NOTICE_UPDATE));
 	else
-		loadCore();
+	{
+		appModel.syncData = serverData.getSFSObject("assets").toObject();
+		var initialAssets:Object = new Object();
+		for ( var key:String in appModel.syncData )
+			if( appModel.syncData[key]["initial"] == true )
+				initialAssets[key] = appModel.syncData[key];
+		
+		var syncTool:SyncUtil = new SyncUtil();
+		syncTool.addEventListener(Event.COMPLETE, syncTool_completeHandler);
+		syncTool.sync(initialAssets);
+	}
+}
+
+
+private function syncTool_completeHandler(event:*):void
+{
+	loadCore();
 }
 
 public function loadCore():void
