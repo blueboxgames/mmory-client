@@ -11,6 +11,8 @@ import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.Localizations;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
+import java.util.TimeZone;
+
 import starling.events.Event;
 import starling.events.EventDispatcher;
 
@@ -26,7 +28,7 @@ public function init() : void
 	// select language with market index
 	var loc:String = AppModel.instance.game.player.prefs.exists(PrefsTypes.SETTINGS_4_LOCALE) ? AppModel.instance.game.player.prefs.get(PrefsTypes.SETTINGS_4_LOCALE) : "0";
 	if( loc == "0" )
-		loc = Localizations.instance.getLocaleByMarket(AppModel.instance.descriptor.market);
+		loc = Localizations.instance.getLocaleByTimezone(TimeZone.instance.getID());
 	changeLocale(loc, true);
 }
 
