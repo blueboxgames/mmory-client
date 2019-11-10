@@ -205,7 +205,8 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 	}
 
 	var u:UnitView = new UnitView(card, id, side, x, y, card.z);
-	u.addEventListener("findPath", findPathHandler);
+	battleData.battleField.field.physics.add(u);
+	
 	if( health >= 0 )
 		u.health = health;
 	battleData.battleField.units.set(id, u as Unit);
@@ -222,17 +223,6 @@ private function getCard(side:int, type:int, level:int) : Card
 		ret = new Card(battleData.battleField.games[side], type, level);
 	}
 	return ret;
-}
-
-private function findPathHandler(e:BattleEvent):void 
-{
-	guiTextsContainer.removeChildren();
-	var u:UnitView = e.currentTarget as UnitView;
-	if( u.path == null )
-		return;
-	var c:uint = Math.random() * 0xFFFFFF;
-	for (var i:int = 0; i < u.path.length; i ++)
-		drawTile(u.path[i].x, u.path[i].y, c, battleData.battleField.field.tileMap.tileWidth, battleData.battleField.field.tileMap.tileHeight, 0.3);
 }
 
 public function requestKillPioneers(side:int):void 
