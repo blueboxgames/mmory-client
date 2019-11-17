@@ -232,7 +232,6 @@ public function addResourceAnimation(x:Number, y:Number, type:int, count:int, de
 			rect = iconDisplay.getBounds(stage);
 		
 		appModel.sounds.addAndPlay("res-show-" + type, null, SoundManager.CATE_SFX, SoundManager.SINGLE_FORCE_THIS, 1);
-		trace("typetypetype", type);
 		appModel.navigator.addAnimation(x, y, 130, appModel.assets.getTexture("res-" + type), count, rect, 0.02, punch);
 	}, delay * 1000);
 }

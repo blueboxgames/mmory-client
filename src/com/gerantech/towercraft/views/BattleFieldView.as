@@ -79,7 +79,7 @@ public function initialize () : void
 		else if( !AppModel.instance.syncData[key]["initial"] )
 			fillDeck(deck, AppModel.instance.syncData, preAssets, key);
 	}
-
+	
 	
 	key = "field-" + ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX));
 	preAssets[key +".json"] = AppModel.instance.syncData[key + ".json"];
@@ -111,7 +111,7 @@ protected function syncToolPre_completeHandler(event:Event):void
 
 public function createPlaces(battleData:BattleData) : void
 {
-	this.battleData = battleData;
+	this.battleData = battleData	;
 	if( mapBuilder == null )
 		return;
 	var deckKeys:Vector.<int> = battleData.getAxiseDeck().keys();
