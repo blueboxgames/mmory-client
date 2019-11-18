@@ -58,7 +58,7 @@ public function BattleData(sfsData:ISFSObject)
 		initData.cardsLevel = new IntIntMap(					gameSFS.getText("deck"));
 		game.init(initData);
 		
-		var cards:Array = gameSFS.getText("deck").split(",");trace(cards)
+		var cards:Array = gameSFS.getText("deck").split(",");
 		game.loginData.deck = new Array();
 		var deck:Array = new Array();
 		i = 0;

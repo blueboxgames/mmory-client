@@ -291,7 +291,6 @@ private function setTouchPosition() : void
 	if( selectedCard == null || draggableCard.visible )
 		return;
 	battleField.fixSummonPosition(summonPoint, selectedCard.type, summonState);
-
 }
 
 private function pushNewCardToDeck(deckSelected:BattleDeckCard) : void 
