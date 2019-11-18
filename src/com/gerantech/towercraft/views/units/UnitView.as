@@ -188,23 +188,19 @@ override public function setState(state:int) : Boolean
 	return true;
 }
 
-override public function fireEvent(dispatcherId:int, type:String, data:*) : void
+override public function attack(enemy:Unit) : void
 {
-	if( type == BattleEvent.ATTACK )
-	{
-		var enemy:Unit = data as Unit;
-		var rad:Number = Math.atan2(__x - getSide_X(enemy.x), getSide_Y(y) - getSide_Y(enemy.y));
-		var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, rad);
-		fireDisplayFactory(__x + fireOffset.x, __y + fireOffset.y, rad);
-		
-		fireOffset = ArtRules.getFlamePosition(card.type, Math.atan2(x - enemy.x, y - enemy.y));
-		var b:BulletView = new BulletView(battleField, enemy.bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, enemy.x, enemy.y, 0);
-		b.targetId = enemy.id;
-		battleField.bullets.set(enemy.bulletId, b as Bullet);
-		enemy.bulletId ++;
-		switchAnimation("s_", battleField.units.get(enemy.id).getSideX(), __x, battleField.units.get(enemy.id).getSideY(), __y);
-	}
-	super.fireEvent(dispatcherId, type, data);
+	super.attack(enemy);
+	var rad:Number = Math.atan2(__x - getSide_X(enemy.x), getSide_Y(y) - getSide_Y(enemy.y));
+	var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, rad);
+	fireDisplayFactory(__x + fireOffset.x, __y + fireOffset.y, rad);
+	
+	fireOffset = ArtRules.getFlamePosition(card.type, Math.atan2(x - enemy.x, y - enemy.y));
+	var b:BulletView = new BulletView(battleField, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, enemy.x, enemy.y, 0);
+	b.targetId = enemy.id;
+	battleField.bullets.set(bulletId, b as Bullet);
+	bulletId ++;
+	turn("s_", CoreUtils.getRadString(Math.atan2(__x - battleField.units.get(enemy.id).getSideX(), __y - battleField.units.get(enemy.id).getSideY())));
 }
 
 override public function setPosition(x:Number, y:Number, z:Number, forced:Boolean = false) : Boolean
