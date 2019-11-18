@@ -220,7 +220,6 @@ override public function setPosition(x:Number, y:Number, z:Number, forced:Boolea
 	__x = getSideX();
 	__y = getSideY();
 	__yz = __y + this.z * BattleField.CAMERA_ANGLE;
-	switchAnimation("m_", __x, _x, __y, _y);
 	
 	if( bodyDisplay != null )
 	{
@@ -251,17 +250,12 @@ override public function setPosition(x:Number, y:Number, z:Number, forced:Boolea
 	return true;
 }
 
-private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, oldY:Number):void
+private function turn(anim:String, dir:String):void
 {
 	if( bodyDisplay == null )
 		return;
-	if( x == GameObject.NaN )
-		x = this.x;
-	if( y == GameObject.NaN )
-		y = this.y;
 
 	var flipped:Boolean = false;
-	var dir:String = CoreUtils.getRadString(Math.atan2(oldX - x, oldY - y));
 	if( dir == "-45" || dir == "-90" || dir == "-35" )
 	{
 		if( dir == "-45" )
@@ -272,14 +266,19 @@ private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, o
 			dir = dir.replace("-35", "135");
 		flipped = true;
 	}
-	
-	shadowDisplay.loop = anim == "m_";;
+	shadowDisplay.loop = anim == "m_";
 	shadowDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 	shadowDisplay.updateTexture(anim, dir);
 	
 	bodyDisplay.loop = shadowDisplay.loop;
 	bodyDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 	bodyDisplay.updateTexture(anim, dir);
+}
+
+override public function estimateAngle(x:Number, y:Number):Number
+{
+	turn("m_", CoreUtils.getRadString(Math.atan2(this.getSideX() - this.getSide_X(x), this.getSideY() - this.getSide_Y(y))));
+	return super.estimateAngle(x, y);
 }
 
 override public function setHealth(health:Number) : Number
