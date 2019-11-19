@@ -6,7 +6,6 @@ import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.events.BattleEvent;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.GraphicMetrics;
 import com.gerantech.mmory.core.utils.Point2;
@@ -39,7 +38,6 @@ import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
 import starling.events.Event;
 import starling.textures.Texture;
-
 public class BattleFieldView extends Sprite
 {
 public var mapBuilder:MapBuilder;
@@ -204,8 +202,10 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 	}
 
 	var u:UnitView = new UnitView(card, id, side, x, y, card.z);
-	battleData.battleField.field.physics.add(u);
-	
+	if( card.z < 0 )
+		battleData.battleField.field.air.add(u);
+	else
+		battleData.battleField.field.ground.add(u);
 	if( health >= 0 )
 		u.health = health;
 	battleData.battleField.units.set(id, u as Unit);
