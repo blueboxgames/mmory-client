@@ -70,6 +70,7 @@ public class Localizations extends EventDispatcher
 	{
 		switch( timezone )
 		{
+			case "Asia/Kabul":
 			case "Asia/Tehran":
 			case "Asia/Dushanbe":
 				return getLocal("fa");
