@@ -20,7 +20,7 @@ public class TileBackground extends TowersLayout
 {
 private var tiledBG:Image;
 private var movingSpeed:Number;
-public function TileBackground(image:String, movingSpeed:Number = 0.3, hasInnerShadow:Boolean = true, backgroundColor:int = -1) 
+public function TileBackground(image:String, movingSpeed:Number = 0, hasInnerShadow:Boolean = true, backgroundColor:int = -1) 
 {
 	layout = new AnchorLayout();
 	this.movingSpeed = movingSpeed;
@@ -39,8 +39,7 @@ public function TileBackground(image:String, movingSpeed:Number = 0.3, hasInnerS
 	tiledBG.pixelSnapping = false;
 	addChild(tiledBG);
 	
-	if( movingSpeed != 0 )
-		addEventListener(FeathersEventType.CREATION_COMPLETE, creationCompleteHandler);
+	addEventListener(FeathersEventType.CREATION_COMPLETE, creationCompleteHandler);
 	
 	if( hasInnerShadow )
 	{
@@ -61,7 +60,8 @@ protected function creationCompleteHandler(e:Event):void
 	tiledBG.y = 0;
 	tiledBG.width = width + tiledBG.tileGrid.width;
 	tiledBG.height = height + tiledBG.tileGrid.height;
-	addEventListener(Event.ENTER_FRAME, enterFrameHandler);
+	// if( movingSpeed != 0 )
+	// 	addEventListener(Event.ENTER_FRAME, enterFrameHandler);
 }
 
 protected function enterFrameHandler(e:Event):void 
