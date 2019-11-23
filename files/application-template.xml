@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <application xmlns="http://ns.adobe.com/air/application/32.0">
   <id>__APPID__</id>
-  <versionNumber>0.2.550</versionNumber>
+  <versionNumber>0.2.700</versionNumber>
   <supportedProfiles>mobileDevice extendedDesktop</supportedProfiles>
   <filename>BoomLand</filename>
   <name>BoomLand</name>
@@ -182,33 +182,15 @@
     <requestedDisplayResolution>high</requestedDisplayResolution>
   </iPhone>
   <extensions>
-		<extensionID>com.marpies.ane.gameServices</extensionID>
-		<extensionID>com.marpies.ane.googleplayservices.ads</extensionID>
-		<extensionID>com.marpies.ane.googleplayservices.games</extensionID>
-		<extensionID>com.marpies.ane.googleplayservices.location</extensionID>
+		<extensionID>com.gerantech.dependency</extensionID>
 		<extensionID>com.gerantech.extensions.nativeabilities</extensionID>
 		<extensionID>com.gerantech.extensions.iabilling</extensionID>
-		<extensionID>ir.tapsell.sdk.air</extensionID> 
-
-		<!-- Dependencies -->
-		<extensionID>com.android.support</extensionID>
-		<extensionID>com.google.android.gms.play-services-base</extensionID>
-		<extensionID>android.arch.lifecycle.runtime</extensionID>
-		<extensionID>org.greenrobot.eventbus</extensionID>
-		<extensionID>com.squareup.okhttp.okhttp</extensionID>
-
-		<extensionID>com.tuarua.frekotlin</extensionID>
 		<extensionID>com.tuarua.firebase.FirebaseANE</extensionID>
-    <extensionID>com.tuarua.firebase.AnalyticsANE</extensionID>
+		<extensionID>com.tuarua.firebase.AnalyticsANE</extensionID>
 		<extensionID>com.tuarua.firebase.MessagingANE</extensionID>
-    <extensionID>com.google.firebase.firebase-analytics</extensionID>
-    <extensionID>com.google.firebase.firebase-iid</extensionID>
-    <extensionID>com.google.firebase.firebase-messaging</extensionID>
-
-		<!-- Game Analytics -->
 		<extensionID>com.gameanalytics.sdk</extensionID>
-
-		<!-- Chartboost -->
 		<extensionID>com.chartboost.plugin.air</extensionID>
+		<extensionID>com.marpies.ane.gameServices</extensionID>
+		<extensionID>ir.tapsell.sdk.air</extensionID>
   </extensions>
 </application>

@@ -116,12 +116,8 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 		hud.showBubble(data.getInt("t"), false);
 		break;
 	
-	case SFSCommands.BATTLE_SUMMON_UNIT:
+	case SFSCommands.BATTLE_SUMMON:
 		appModel.battleFieldView.summonUnits(data.getSFSArray("units"), data.getDouble("time"));
-		break;
-	
-	case SFSCommands.BATTLE_HIT:
-		appModel.battleFieldView.hitUnits(data.getInt("b"), data.getSFSArray("t"));
 		break;
 	
 	case SFSCommands.BATTLE_NEW_ROUND:

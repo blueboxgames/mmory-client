@@ -9,8 +9,7 @@ public static const BATTLE_END:String = "battleEnd";
 public static const BATTLE_SEND_STICKER:String = "ss";
 public static const BATTLE_ELIXIR_UPDATE:String = "x";
 public static const BATTLE_NEW_ROUND:String = "battleNewRound";
-public static const BATTLE_SUMMON_UNIT:String = "s";
-public static const BATTLE_HIT:String = "h";
+public static const BATTLE_SUMMON:String = "s";
 public static const BATTLE_UNIT_CHANGE:String = "u";
 
 public static const RANK:String = "rank";
@@ -77,7 +76,7 @@ public static function getDeadline(command:String):int
             return 14000;
 		case BATTLE_CANCEL:
 		case BATTLE_LEAVE:
-		case BATTLE_SUMMON_UNIT:
+		case BATTLE_SUMMON:
 		case BATTLE_SEND_STICKER:
 		case INBOX_OPEN:
 		case INBOX_CONFIRM:

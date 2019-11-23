@@ -65,6 +65,18 @@ public class Localizations extends EventDispatcher
         
         return loc;
     }
+
+	public function getLocaleByTimezone(timezone:String = null) : String
+	{
+		switch( timezone )
+		{
+			case "Asia/Kabul":
+			case "Asia/Tehran":
+			case "Asia/Dushanbe":
+				return getLocal("fa");
+		}
+		return getLocal("en");
+	}
 	
 	public function getLocaleByMarket(market:String = null) : String
 	{
