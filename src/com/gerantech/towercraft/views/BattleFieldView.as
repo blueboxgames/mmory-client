@@ -6,7 +6,6 @@ import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.PrefsTypes;
-import com.gerantech.mmory.core.events.BattleEvent;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.GraphicMetrics;
 import com.gerantech.mmory.core.utils.Point2;
@@ -39,7 +38,6 @@ import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
 import starling.events.Event;
 import starling.textures.Texture;
-
 public class BattleFieldView extends Sprite
 {
 public var mapBuilder:MapBuilder;
@@ -79,9 +77,8 @@ public function initialize () : void
 		else if( !AppModel.instance.syncData[key]["initial"] )
 			fillDeck(deck, AppModel.instance.syncData, preAssets, key);
 	}
-
 	
-	key = "field-" + ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX));
+	key = "map-" + ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX));
 	preAssets[key +".json"] = AppModel.instance.syncData[key + ".json"];
 	preAssets[key + ".atf"] = AppModel.instance.syncData[key + ".atf"];
 	preAssets[key + ".xml"] = AppModel.instance.syncData[key + ".xml"];
@@ -111,7 +108,7 @@ protected function syncToolPre_completeHandler(event:Event):void
 
 public function createPlaces(battleData:BattleData) : void
 {
-	this.battleData = battleData;
+	this.battleData = battleData	;
 	if( mapBuilder == null )
 		return;
 	var deckKeys:Vector.<int> = battleData.getAxiseDeck().keys();
@@ -205,7 +202,10 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 	}
 
 	var u:UnitView = new UnitView(card, id, side, x, y, card.z);
-	u.addEventListener("findPath", findPathHandler);
+	if( card.z < 0 )
+		battleData.battleField.field.air.add(u);
+	else
+		battleData.battleField.field.ground.add(u);
 	if( health >= 0 )
 		u.health = health;
 	battleData.battleField.units.set(id, u as Unit);
@@ -222,17 +222,6 @@ private function getCard(side:int, type:int, level:int) : Card
 		ret = new Card(battleData.battleField.games[side], type, level);
 	}
 	return ret;
-}
-
-private function findPathHandler(e:BattleEvent):void 
-{
-	guiTextsContainer.removeChildren();
-	var u:UnitView = e.currentTarget as UnitView;
-	if( u.path == null )
-		return;
-	var c:uint = Math.random() * 0xFFFFFF;
-	for (var i:int = 0; i < u.path.length; i ++)
-		drawTile(u.path[i].x, u.path[i].y, c, battleData.battleField.field.tileMap.tileWidth, battleData.battleField.field.tileMap.tileHeight, 0.3);
 }
 
 public function requestKillPioneers(side:int):void 

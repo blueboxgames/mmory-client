@@ -58,7 +58,7 @@ public function BattleData(sfsData:ISFSObject)
 		initData.cardsLevel = new IntIntMap(					gameSFS.getText("deck"));
 		game.init(initData);
 		
-		var cards:Array = gameSFS.getText("deck").split(",");trace(cards)
+		var cards:Array = gameSFS.getText("deck").split(",");
 		game.loginData.deck = new Array();
 		var deck:Array = new Array();
 		i = 0;
@@ -78,7 +78,7 @@ public function BattleData(sfsData:ISFSObject)
 	if( response != MessageTypes.RESPONSE_SUCCEED )
 		trace("battle cost data from server server is invalid!");
 	
-	var map:Object = AppModel.instance.assets.getObject("field-" + sfsData.getInt("mode"));
+	var map:Object = AppModel.instance.assets.getObject("map-" + sfsData.getInt("mode"));
 	var f:FieldData = new FieldData(sfsData.getInt("mode"), JSON.stringify(map), AppModel.instance.descriptor.versionCode);
 	this.battleField = new BattleField();
 	this.battleField.initialize(side == 0 ? alliseGame : axisGame, side == 0 ? axisGame : alliseGame, f, side, sfsData.getInt("startAt"), sfsData.getDouble("now"), false, sfsData.getInt("friendlyMode"));

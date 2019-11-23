@@ -1,8 +1,6 @@
 package com.gerantech.towercraft.models.vo
 {
 	import com.gerantech.towercraft.utils.Utils;
-	import com.gerantech.extensions.NativeAbilities;
-	import com.gerantech.towercraft.managers.BillingManager;
 
 	public class Descriptor
 	{

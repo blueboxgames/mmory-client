@@ -7,7 +7,7 @@
 		// "advanced-telemetry": true,
 		// "strict": true,
 		// "warnings": true,
-		"default-frame-rate": 60,
+		"default-frame-rate": 40,
 		"default-background-color": "0x000000",
 		"library-path": [
 			"libs",
@@ -16,8 +16,8 @@
 		"external-library-path": [
 			"exts"
 		],
-		"output": "bin/release.swf"
-		// "optimize": true
+		"output": "bin/release.swf",
+		"optimize": true
 	},
 	"application": "bin/application.xml",
 	"files": [

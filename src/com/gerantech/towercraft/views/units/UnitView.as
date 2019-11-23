@@ -188,23 +188,19 @@ override public function setState(state:int) : Boolean
 	return true;
 }
 
-override public function fireEvent(dispatcherId:int, type:String, data:*) : void
+override public function attack(enemy:Unit) : void
 {
-	if( type == BattleEvent.ATTACK )
-	{
-		var enemy:Unit = data as Unit;
-		var rad:Number = Math.atan2(__x - getSide_X(enemy.x), getSide_Y(y) - getSide_Y(enemy.y));
-		var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, rad);
-		fireDisplayFactory(__x + fireOffset.x, __y + fireOffset.y, rad);
-		
-		fireOffset = ArtRules.getFlamePosition(card.type, Math.atan2(x - enemy.x, y - enemy.y));
-		var b:BulletView = new BulletView(battleField, enemy.bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, enemy.x, enemy.y, 0);
-		b.targetId = enemy.id;
-		battleField.bullets.set(enemy.bulletId, b as Bullet);
-		enemy.bulletId ++;
-		switchAnimation("s_", battleField.units.get(enemy.id).getSideX(), __x, battleField.units.get(enemy.id).getSideY(), __y);
-	}
-	super.fireEvent(dispatcherId, type, data);
+	super.attack(enemy);
+	var rad:Number = Math.atan2(__x - getSide_X(enemy.x), getSide_Y(y) - getSide_Y(enemy.y));
+	var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, rad);
+	fireDisplayFactory(__x + fireOffset.x, __y + fireOffset.y, rad);
+	
+	fireOffset = ArtRules.getFlamePosition(card.type, Math.atan2(x - enemy.x, y - enemy.y));
+	var b:BulletView = new BulletView(battleField, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, enemy.x, enemy.y, 0);
+	b.targetId = enemy.id;
+	battleField.bullets.set(bulletId, b as Bullet);
+	bulletId ++;
+	turn("s_", CoreUtils.getRadString(Math.atan2(__x - battleField.units.get(enemy.id).getSideX(), __y - battleField.units.get(enemy.id).getSideY())));
 }
 
 override public function setPosition(x:Number, y:Number, z:Number, forced:Boolean = false) : Boolean
@@ -220,7 +216,6 @@ override public function setPosition(x:Number, y:Number, z:Number, forced:Boolea
 	__x = getSideX();
 	__y = getSideY();
 	__yz = __y + this.z * BattleField.CAMERA_ANGLE;
-	switchAnimation("m_", __x, _x, __y, _y);
 	
 	if( bodyDisplay != null )
 	{
@@ -251,17 +246,12 @@ override public function setPosition(x:Number, y:Number, z:Number, forced:Boolea
 	return true;
 }
 
-private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, oldY:Number):void
+private function turn(anim:String, dir:String):void
 {
 	if( bodyDisplay == null )
 		return;
-	if( x == GameObject.NaN )
-		x = this.x;
-	if( y == GameObject.NaN )
-		y = this.y;
 
 	var flipped:Boolean = false;
-	var dir:String = CoreUtils.getRadString(Math.atan2(oldX - x, oldY - y));
 	if( dir == "-45" || dir == "-90" || dir == "-35" )
 	{
 		if( dir == "-45" )
@@ -272,14 +262,19 @@ private function switchAnimation(anim:String, x:Number, oldX:Number, y:Number, o
 			dir = dir.replace("-35", "135");
 		flipped = true;
 	}
-	
-	shadowDisplay.loop = anim == "m_";;
+	shadowDisplay.loop = anim == "m_";
 	shadowDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 	shadowDisplay.updateTexture(anim, dir);
 	
 	bodyDisplay.loop = shadowDisplay.loop;
 	bodyDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 	bodyDisplay.updateTexture(anim, dir);
+}
+
+override public function estimateAngle(x:Number, y:Number):Number
+{
+	turn("m_", CoreUtils.getRadString(Math.atan2(this.getSideX() - this.getSide_X(x), this.getSideY() - this.getSide_Y(y))));
+	return super.estimateAngle(x, y);
 }
 
 override public function setHealth(health:Number) : Number

@@ -138,7 +138,7 @@ protected function stage_deactivateHandler(event:Event):void
 protected function stage_activateHandler(event:Event):void
 {
 	this.stage.removeEventListener(Event.ACTIVATE, stage_activateHandler);
-	this.stage.frameRate = 60;
+	this.stage.frameRate = 40;
 	this.starling.start();
 	AppModel.instance.sounds.muteAll(false);
 	AppModel.instance.notifier.clear();
