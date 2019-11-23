@@ -2,6 +2,7 @@ package com.gerantech.towercraft.managers
 {
 import com.gameanalytics.sdk.GAResourceFlowType;
 import com.gameanalytics.sdk.GameAnalytics;
+import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
@@ -10,8 +11,6 @@ import com.gerantech.towercraft.managers.oauth.OAuthManager;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.Localizations;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-
-import java.util.TimeZone;
 
 import starling.events.Event;
 import starling.events.EventDispatcher;
@@ -28,7 +27,7 @@ public function init() : void
 	// select language with market index
 	var loc:String = AppModel.instance.game.player.prefs.exists(PrefsTypes.SETTINGS_4_LOCALE) ? AppModel.instance.game.player.prefs.get(PrefsTypes.SETTINGS_4_LOCALE) : "0";
 	if( loc == "0" )
-		loc = Localizations.instance.getLocaleByTimezone(TimeZone.instance.getID());
+		loc = Localizations.instance.getLocaleByTimezone(NativeAbilities.instance.getTimezone());
 	changeLocale(loc, true);
 }
 

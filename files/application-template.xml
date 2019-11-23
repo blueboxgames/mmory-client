@@ -192,6 +192,5 @@
 		<extensionID>com.chartboost.plugin.air</extensionID>
 		<extensionID>com.marpies.ane.gameServices</extensionID>
 		<extensionID>ir.tapsell.sdk.air</extensionID>
-		<extensionID>ane.java.util</extensionID>
   </extensions>
 </application>

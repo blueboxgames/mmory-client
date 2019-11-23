@@ -2,6 +2,7 @@ package
 {
 import com.gameanalytics.sdk.GAErrorSeverity;
 import com.gameanalytics.sdk.GameAnalytics;
+import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.Game;
@@ -30,8 +31,6 @@ import flash.utils.getTimer;
 
 import haxe.Log;
 
-import java.util.TimeZone;
-
 import starling.core.Starling;
 
 public class Main extends Sprite
@@ -47,9 +46,9 @@ public function Main()
 
 	forceCopy("gui-0.atf", "gui-0.atf");
 	forceCopy("gui-0.xml", "gui-0.xml");
-	forceCopy(Localizations.instance.getLocaleByTimezone(TimeZone.instance.getID()) + ".json", Localizations.instance.getLocaleByTimezone(TimeZone.instance.getID()) + ".json");
+	forceCopy(Localizations.instance.getLocaleByTimezone(NativeAbilities.instance.getTimezone()) + ".json", Localizations.instance.getLocaleByTimezone(NativeAbilities.instance.getTimezone()) + ".json");
 	// change locale based on market
-	Localizations.instance.changeLocale(Localizations.instance.getLocaleByTimezone(TimeZone.instance.getID()));
+	Localizations.instance.changeLocale(Localizations.instance.getLocaleByTimezone(NativeAbilities.instance.getTimezone()));
 	
 	// GameAnalytic Configurations
 	GameAnalytics.config/*.setUserId("test_id").setResourceCurrencies(new <String>["gems", "coins"]).setResourceItemTypes(new <String>["boost", "lives"]).setCustomDimensions01(new <String>["ninja", "samurai"])*/
