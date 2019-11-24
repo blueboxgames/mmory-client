@@ -214,7 +214,10 @@ public function exchange( item:ExchangeItem, params:SFSObject ) : int
 	else
 		bookType = item.category == ExchangeType.BOOKS_50 ? item.type : item.outcome; // reserved because outcome changed after exchange
 
-	var response:int = exchanger.exchange(item, timeManager.now, params.containsKey("hards") ? params.getInt("hards") : 0);
+	var response:int = MessageTypes.RESPONSE_NOT_ENOUGH_REQS;
+	try {
+	response = exchanger.exchange(item, timeManager.now, params.containsKey("hards") ? params.getInt("hards") : 0);
+	} catch(e:*) { trace(e); }
 	if( response == MessageTypes.RESPONSE_SUCCEED )
 	{
 		if( ( item.isBook() && ( item.getState(timeManager.now) != ExchangeItem.CHEST_STATE_BUSY || item.category == ExchangeType.C100_FREES ) ) || ( item.category == ExchangeType.C30_BUNDLES && ExchangeType.getCategory(bookType) == ExchangeType.BOOKS_50 ) )
@@ -239,6 +242,7 @@ public function exchange( item:ExchangeItem, params:SFSObject ) : int
 			DashboardScreen.TAB_INDEX = 0;
 			appModel.navigator.popScreen();
 		}
+		return response;
 	}
 	
 	if( !item.requirements.exists(ResourceType.R5_CURRENCY_REAL) )
