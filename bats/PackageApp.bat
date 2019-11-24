@@ -21,6 +21,7 @@ if "%S%"=="1" set SERVER=iran
 if "%S%"=="2" set SERVER=local
 if "%S%"=="3" set SERVER=yoga
 if "%S%"=="4" set SERVER=fudo
+if "%S%"=="5" set SERVER=surface
 
 
 :menu
