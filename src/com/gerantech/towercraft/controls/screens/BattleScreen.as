@@ -37,6 +37,8 @@ import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.Image;
 import starling.events.Event;
+import haxe.ds._IntMap.IntMapKeysIterator;
+import com.gerantech.towercraft.views.units.UnitView;
 
 public class BattleScreen extends BaseCustomScreen
 {
@@ -274,6 +276,23 @@ private function endBattle(data:SFSObject, skipCelebration:Boolean = false):void
 		{
 			playerIndex = i;
 			break;
+		}
+	}
+
+	// kill all units of loser
+	var loserSide:int = -1;
+	if( rewards.getSFSObject(0).getInt("score") > rewards.getSFSObject(1).getInt("score") )
+		loserSide = 1;
+	else if( rewards.getSFSObject(0).getInt("score") < rewards.getSFSObject(1).getInt("score") )
+		loserSide = 0;
+	if( loserSide > -1 )
+	{
+		var iterator:IntMapKeysIterator = battleData.battleField.units.keys() as IntMapKeysIterator;
+		while( iterator.hasNext() )
+		{
+			var u:UnitView = battleData.battleField.units.get(iterator.next()) as UnitView;
+			if( u.side == loserSide )
+				u.hit(100);
 		}
 	}
 	
