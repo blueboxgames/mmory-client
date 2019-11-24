@@ -9,8 +9,9 @@ echo Select server
 echo.
 echo  [1] iran
 echo  [2] local
-echo  [3] yoga
+echo  [3] yoga5
 echo  [4] fudo
+echo  [4] surface
 
 :choice
 set /P S=[Choice]: 
