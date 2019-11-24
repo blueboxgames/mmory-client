@@ -70,7 +70,7 @@ set APP_DIR=bin
 
 :: Output packages
 set DIST_PATH=dist
-set DIST_NAME=k2k-%APP_VER%.%DATE%-%SERVER%-%MARKET%
+set DIST_NAME=boomland-%APP_VER%.%DATE%-%SERVER%-%MARKET%%TARGET%
 
 if not exist "%CERT_FILE%" goto certificate
 :: Output file
@@ -82,8 +82,10 @@ echo f | xcopy /f /y bin\release.swf %BINF%\release.swf
 echo d | xcopy /s /y files\assets %BINF%\assets
 set FILE_OR_DIR=-C %BINF% . -C %ICONS% .
 
+if not "%OPTIONS%"=="" set DIST_NAME=%DIST_NAME%-%OPTIONS:~6%
+
 if not exist "%DIST_PATH%" md "%DIST_PATH%"
-set OUTPUT=%DIST_PATH%\%DIST_NAME%%TARGET%.%DIST_EXT%
+set OUTPUT=%DIST_PATH%\%DIST_NAME%.%DIST_EXT%
 :: Package
 echo Packaging: %OUTPUT%
 echo using certificate: %CERT_FILE%...

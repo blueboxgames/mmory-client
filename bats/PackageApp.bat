@@ -9,7 +9,7 @@ echo Select server
 echo.
 echo  [1] iran
 echo  [2] local
-echo  [3] yoga5
+echo  [3] yoga
 echo  [4] fudo
 echo  [5] surface
 
@@ -90,9 +90,20 @@ if "%M%"=="2" set MARKET=myket
 if "%M%"=="3" set MARKET=ario
 if "%M%"=="4" set MARKET=cando
 if "%M%"=="5" set MARKET=google
-if "%M%"=="5" set OPTIONS=%OPTIONS% -arch armv8
 if "%M%"=="6" set MARKET=zarinpal
 
+
+:menu
+echo.
+echo Select for CPU arc
+echo.
+echo  [1] armv7
+echo  [2] armv8
+
+:choice
+set /P A=[Choice]: 
+echo.
+if "%A%"=="2" set OPTIONS=%OPTIONS%-arch armv8
 
 set PAUSE_ERRORS=1
 call bats/SetupDescriptor.bat
