@@ -27,6 +27,7 @@ import feathers.events.FeathersEventType;
 
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
+import com.gerantech.towercraft.utils.Localizations;
 
 public class BillingManager extends BaseManager
 {
@@ -68,7 +69,9 @@ public function init():void
 		else if( ExchangeType.getCategory(k) == ExchangeType.C30_BUNDLES )
 			items.push("k2k.bundle_" + k);
 
-	var base64Key:String, bindURL:String;
+	var base64Key:String, bindURL:String, market:String = appModel.descriptor.market;
+	if( market == "google" && Localizations.instance.locale == "fa_IR" )
+		market = "zarinpal";
 	switch( appModel.descriptor.market )
 	{
 		case "google":
