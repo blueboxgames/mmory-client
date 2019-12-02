@@ -178,15 +178,21 @@ public function summonUnits(units:ISFSArray, summonTime:Number):void
 		return;
 	}
 
-	TimeManager.instance.forceUpdate();
-	this.battleData.battleField.forceUpdate(summonTime - this.battleData.battleField.now);
+	if(summonTime < this.battleData.battleField.now)
+	{
+		TimeManager.instance.forceUpdate();
+		this.battleData.battleField.forceUpdate(summonTime - this.battleData.battleField.now);
+	}
 	for( var i:int = 0; i < units.size(); i++ )
 	{
 		var u:ISFSObject = units.getSFSObject(i);
 		this.summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), u.containsKey("h") ? u.getDouble("h") : -1);
 	}
-	var diff:Number = TimeManager.instance.millis - this.battleData.battleField.now;
-	this.battleData.battleField.update(diff);
+	if(summonTime < this.battleData.battleField.now)
+	{
+		var diff:Number = TimeManager.instance.millis - this.battleData.battleField.now;
+		this.battleData.battleField.update(diff);
+	}
 }
 
 private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number) : void
