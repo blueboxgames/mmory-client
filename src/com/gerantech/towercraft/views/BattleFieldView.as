@@ -186,7 +186,7 @@ public function summonUnits(units:ISFSArray, summonTime:Number):void
 		this.summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), u.containsKey("h") ? u.getDouble("h") : -1);
 	}
 	var diff:Number = TimeManager.instance.millis - this.battleData.battleField.now;
-	this.battleData.battleField.update(diff);
+	this.battleData.battleField.forceUpdate(diff);
 }
 
 private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number) : void
