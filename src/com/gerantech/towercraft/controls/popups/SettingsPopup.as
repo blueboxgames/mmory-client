@@ -148,7 +148,7 @@ protected function prefs_completeHandler(event:Event) : void
 protected function socialManager_eventsHandler(event:Event):void
 {
 	OAuthManager.instance.removeEventListener(OAuthManager.AUTHENTICATE, socialManager_eventsHandler);
-	list.dataProvider.updateItemAt(3);
+	list.dataProvider.updateItemAt(4);
 }
 
 private function navigateTo(key:int):void

@@ -15,6 +15,7 @@ import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.net.LoadingManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.utils.Localizations;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -27,7 +28,9 @@ import feathers.events.FeathersEventType;
 
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
-import com.gerantech.towercraft.utils.Localizations;
+
+import ir.metrix.sdk.Metrix;
+import ir.metrix.sdk.MetrixCurrency;
 
 public class BillingManager extends BaseManager
 {
@@ -250,14 +253,14 @@ public function verify(purchase:ISFSObject):void
 		var result:SFSObject = event.params.params;
 		if( result.getBool("success") )
 		{
+			var productID:String = result.getText("productID");
+			var productIDInt:int = int( productID.split("_")[1] );
+			var item:ExchangeItem = exchanger.items.get(productIDInt);
 			if ( appModel.descriptor.market == "zarinpal" )
 			{
 				/**
 				 * No consume method for zarinpal.
 				 */
-				var productID:int = int( result.getText("productID").split("_")[1] );
-				var item:ExchangeItem = exchanger.items.get(productID);
-
 				var params:SFSObject = new SFSObject();
 				params.putInt("type", item.type)
 				params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
@@ -282,6 +285,17 @@ public function verify(purchase:ISFSObject):void
 			{
 				if(  result.getInt("consumptionState") == 0 )
 					consume(result.getText("productID"));
+			}
+
+			if( Metrix.instance.isSupported )
+			{
+				var outs:Vector.<int> = item.outcomes.keys();
+				var amount:int = int(item.requirements.get(outs[0]));
+				// has_purchase event
+				Metrix.instance.newEvent("sytpw").send();
+				// purchase event
+				// amount is in Toman, converted to IRR.
+				Metrix.instance.newRevenue("qrsgl", amount * 10, MetrixCurrency.IRR);
 			}
 		}
 		else

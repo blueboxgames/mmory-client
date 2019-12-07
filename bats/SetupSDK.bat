@@ -6,7 +6,7 @@ cd %~dp0 & cd ..
 :: Static path to Flex SDK
 set FLEX_SDK=C:\_projects\AIRSDK_32.0.0.116
 IF [%MARKET%]==[] set MARKET=cafebazaar
-if [%MARKET%]==[google] set FLEX_SDK=C:\_projects\AIRSDK_Win_33.0.2.315
+if [%MARKET%]==[google] set FLEX_SDK=C:\_projects\AIRSDK_Win_33.0.2.330
 
 :: Use FD supplied SDK path if executed from FD
 if exist "%FD_CUR_SDK%" set FLEX_SDK=%FD_CUR_SDK%
