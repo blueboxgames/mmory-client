@@ -180,12 +180,12 @@ public function summonUnits(units:ISFSArray, summonTime:Number):void
 		return;
 	}
 
-	var diff:Number = summonTime - this.battleData.battleField.now;
+	var diff:Number = summonTime - TimeManager.instance.millis;
 	if( DEBUG )
 	{
 		log += "Start rollback\n";
 		log += "stime: " + summonTime + "\n";
-		log += "ctime: " + this.battleData.battleField.now + "\n";
+		log += "ctime: " + TimeManager.instance.millis + "\n";
 		log += "amount: " + diff + "\n";
 		log += "---------------------------\n";
 	}
@@ -201,7 +201,7 @@ public function summonUnits(units:ISFSArray, summonTime:Number):void
 	if( DEBUG )
 	{
 		log += "End rollback\n";
-		log += "ctime: " + this.battleData.battleField.now + "\n";
+		log += "ctime: " + TimeManager.instance.millis + "\n";
 		log += "---------------------------\n";
 		trace(log);
 	}
