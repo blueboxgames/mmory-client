@@ -145,7 +145,7 @@ protected function syncToolPost_completeHandler(event:Event):void
 	addChild(shadowsContainer);
 	addChild(unitsContainer);
 
-	summonUnits(battleData.sfsData.getSFSArray("units"), battleData.sfsData.getDouble("now"));
+	summonUnits(battleData.sfsData.getSFSArray("units"), battleData.sfsData.getDouble("now"), true);
 	scale = 0.8;
 
 	/*for ( i = 0; i < battleData.battleField.tileMap.width; i ++ )
@@ -171,7 +171,7 @@ private function unitSortMethod(left:IElement, right:IElement) : Number
 	return left.unit.y - right.unit.y;
 }
 
-public function summonUnits(units:ISFSArray, summonTime:Number):void
+public function summonUnits(units:ISFSArray, summonTime:Number, noSummonTime:Boolean=false):void
 {
 	var log:String = "";
 	if( mapBuilder == null )
@@ -194,7 +194,7 @@ public function summonUnits(units:ISFSArray, summonTime:Number):void
 	for( var i:int = 0; i < units.size(); i++ )
 	{
 		var u:ISFSObject = units.getSFSObject(i);
-		this.summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), u.containsKey("h") ? u.getDouble("h") : -1);
+		this.summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), u.containsKey("h") ? u.getDouble("h") : -1, noSummonTime);
 	}
 	if( diff < 0 )
 		this.battleData.battleField.forceUpdate(diff*-1);
@@ -207,9 +207,11 @@ public function summonUnits(units:ISFSArray, summonTime:Number):void
 	}
 }
 
-private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number) : void
+private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number, noSummonTime:Boolean=false) : void
 {
 	var card:Card = getCard(side, type, level);
+	if( noSummonTime )
+		card.summonTime = 0;
 	if( CardTypes.isSpell(type) )
 	{
 		var offset:Point3 = GraphicMetrics.getSpellStartPoint(card.type);
