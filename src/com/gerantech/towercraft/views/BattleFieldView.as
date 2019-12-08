@@ -40,6 +40,7 @@ import starling.events.Event;
 import starling.textures.Texture;
 public class BattleFieldView extends Sprite
 {
+private const DEBUG:Boolean = true;
 public var mapBuilder:MapBuilder;
 public var battleData:BattleData;
 public var responseSender:ResponseSender;
@@ -172,21 +173,38 @@ private function unitSortMethod(left:IElement, right:IElement) : Number
 
 public function summonUnits(units:ISFSArray, summonTime:Number):void
 {
+	var log:String = "";
 	if( mapBuilder == null )
 	{
 		trace("not able to summon units:\n" + units.getDump(), "\nsummonTime: " + summonTime)
 		return;
 	}
 
-	TimeManager.instance.forceUpdate();
-	this.battleData.battleField.forceUpdate(summonTime - this.battleData.battleField.now);
+	var diff:Number = summonTime - this.battleData.battleField.now;
+	if( DEBUG )
+	{
+		log += "Start rollback\n";
+		log += "stime: " + summonTime + "\n";
+		log += "ctime: " + this.battleData.battleField.now + "\n";
+		log += "amount: " + diff + "\n";
+		log += "---------------------------\n";
+	}
+	if( diff < 0 )
+		this.battleData.battleField.forceUpdate(diff);
 	for( var i:int = 0; i < units.size(); i++ )
 	{
 		var u:ISFSObject = units.getSFSObject(i);
 		this.summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), u.containsKey("h") ? u.getDouble("h") : -1);
 	}
-	var diff:Number = TimeManager.instance.millis - this.battleData.battleField.now;
-	this.battleData.battleField.forceUpdate(diff);
+	if( diff < 0 )
+		this.battleData.battleField.forceUpdate(diff*-1);
+	if( DEBUG )
+	{
+		log += "End rollback\n";
+		log += "ctime: " + this.battleData.battleField.now + "\n";
+		log += "---------------------------\n";
+		trace(log);
+	}
 }
 
 private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number) : void
