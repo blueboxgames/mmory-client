@@ -40,7 +40,7 @@ import starling.events.Event;
 import starling.textures.Texture;
 public class BattleFieldView extends Sprite
 {
-private const DEBUG:Boolean = true;
+private const DEBUG:Boolean = false;
 public var mapBuilder:MapBuilder;
 public var battleData:BattleData;
 public var responseSender:ResponseSender;
