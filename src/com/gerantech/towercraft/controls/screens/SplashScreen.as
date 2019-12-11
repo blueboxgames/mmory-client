@@ -29,6 +29,8 @@ public class SplashScreen extends EventDispatcher
 private var stage:Stage;
 private var logo:SplashMovie;
 private var progressBar:Sprite;
+private var connectionProgress:Number = 0;
+private var assetsProgress:Number = 0;
 public var transitionInCompleted:Boolean;
 public function SplashScreen(stage:Stage)
 {
@@ -41,7 +43,8 @@ public function SplashScreen(stage:Stage)
 
 	this.progressBar = new Sprite();
 	this.progressBar.graphics.beginFill(0x71a0ff);
-	this.progressBar.graphics.drawRect(0 ,0, 8, this.stage.stageHeight * 0.005);
+	this.progressBar.graphics.drawRect(0, 0, this.stage.stageWidth, this.stage.stageHeight * 0.02);
+	this.progressBar.scaleX = 0.2;
 	this.stage.addChild(this.progressBar);
 }
 protected function stage_resizeHandler(event:*):void
@@ -80,7 +83,7 @@ protected function logo_clearHandler(event:*):void
 
 protected function loadingManager_progressHandler(event:LoadingEvent):void
 {
-	this.progressBar.width = Number(event.data) * stage.stageWidth;
+	this.progressBar.scaleX = Number(event.data);
 }
 
 protected function loadingManager_eventsHandler(event:LoadingEvent):void
