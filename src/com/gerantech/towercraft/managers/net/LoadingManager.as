@@ -103,9 +103,11 @@ protected function sfsConnection_connectionHandler(event:SFSEvent):void
 private function login():void 
 {
 	state = STATE_LOGIN;
+	dispatchEvent(new LoadingEvent(LoadingEvent.PROGRESS, 0.3));
 	UserData.instance.load();
 	sfsConnection.addEventListener(SFSEvent.LOGIN,			sfsConnection_loginHandler);
 	sfsConnection.addEventListener(SFSEvent.LOGIN_ERROR,	sfsConnection_loginErrorHandler);
+	sfsConnection.addEventListener(SFSEvent.CONFIG_LOAD_SUCCESS,	sfsConnection_configLoadHandler);
 	
 	var loginParams:ISFSObject = new SFSObject();
 	loginParams.putInt("id", UserData.instance.id);
@@ -133,10 +135,16 @@ private function login():void
 	sfsConnection.login(__id.toString(), UserData.instance.password, "", loginParams);
 }		
 
+protected function sfsConnection_configLoadHandler(event:SFSEvent):void
+{
+	dispatchEvent(new LoadingEvent(LoadingEvent.PROGRESS, 0.4));
+}		
+
 protected function sfsConnection_loginErrorHandler(event:SFSEvent):void
 {
 	sfsConnection.removeEventListener(SFSEvent.LOGIN,		sfsConnection_loginHandler);
 	sfsConnection.removeEventListener(SFSEvent.LOGIN_ERROR,	sfsConnection_loginErrorHandler);
+	sfsConnection.removeEventListener(SFSEvent.CONFIG_LOAD_SUCCESS,	sfsConnection_configLoadHandler);
 	
 	if( event.params.errorCode == 110 )
 		dispatchEvent(new LoadingEvent(LoadingEvent.FORCE_UPDATE));
@@ -145,8 +153,10 @@ protected function sfsConnection_loginErrorHandler(event:SFSEvent):void
 }
 protected function sfsConnection_loginHandler(event:SFSEvent):void
 {
+	dispatchEvent(new LoadingEvent(LoadingEvent.PROGRESS, 0.4));
 	sfsConnection.removeEventListener(SFSEvent.LOGIN,		sfsConnection_loginHandler);
 	sfsConnection.removeEventListener(SFSEvent.LOGIN_ERROR, sfsConnection_loginErrorHandler);
+	sfsConnection.removeEventListener(SFSEvent.CONFIG_LOAD_SUCCESS,	sfsConnection_configLoadHandler);
 	
 	sfsConnection.addEventListener(SFSEvent.CONNECTION_LOST, sfsConnection_connectionLostHandler);
 	serverData = event.params.data;

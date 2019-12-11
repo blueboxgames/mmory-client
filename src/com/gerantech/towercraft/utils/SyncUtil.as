@@ -123,7 +123,7 @@ package com.gerantech.towercraft.utils
                 i ++;
                 if( !this.assets[name].exists )
                 {
-                	AppModel.instance.loadingManager.dispatchEvent(new LoadingEvent(LoadingEvent.PROGRESS, i / numAssets));
+                	AppModel.instance.loadingManager.dispatchEvent(new LoadingEvent(LoadingEvent.PROGRESS, 0.5 + i / numAssets * 0.5));
                     return;
                 }
             }
