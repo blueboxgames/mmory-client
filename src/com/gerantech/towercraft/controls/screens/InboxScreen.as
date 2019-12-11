@@ -1,5 +1,7 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.towercraft.controls.buttons.IndicatorButton;
+import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.controls.segments.InboxChatSegment;
 import com.gerantech.towercraft.managers.InboxService;
 import com.gerantech.towercraft.models.vo.InboxThread;
@@ -44,6 +46,13 @@ override protected function initialize():void
 	headerDisplay.height = headerSize;
 	addChildAt(headerDisplay, 1);
 
+	var profileButton:IndicatorButton = new IndicatorButton();
+	profileButton.layoutData = new AnchorLayoutData(headerSize*0.2, appModel.direction=="ltr"?headerSize*0.2:NaN, NaN, appModel.direction=="ltr"?NaN:headerSize*0.2); 
+	profileButton.addEventListener(Event.TRIGGERED, profileButton_triggerHandler);
+	profileButton.width = profileButton.height = headerSize * 0.5;
+	profileButton.label = "i";
+	addChild(profileButton);
+
 	chatBox = new InboxChatSegment(myId);
 	chatBox.layoutData = new AnchorLayoutData(headerSize, 0, 0, 0);
 	chatBox.addEventListener(FeathersEventType.FOCUS_IN, chatBox_focusHandler);
@@ -54,6 +63,11 @@ override protected function initialize():void
 	closeButton.height = 126;
 	closeButton.layoutData = new AnchorLayoutData(NaN, NaN, 8, 16);
 	addChild(closeButton);
+}
+
+protected function profileButton_triggerHandler(event:Event):void
+{
+	appModel.navigator.addPopup(new ProfilePopup({name:thread.owner, id:thread.ownerId}));
 }
 
 protected function chatBox_focusHandler(event:Event) : void 
