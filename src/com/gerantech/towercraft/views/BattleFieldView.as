@@ -210,6 +210,7 @@ public function summonUnits(units:ISFSArray, summonTime:Number, noSummonTime:Boo
 private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number, noSummonTime:Boolean=false) : void
 {
 	var card:Card = getCard(side, type, level);
+	var cardSummonTime:int = card.summonTime;
 	if( noSummonTime )
 		card.summonTime = 0;
 	if( CardTypes.isSpell(type) )
@@ -218,6 +219,7 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 		var spell:BulletView = new BulletView(battleData.battleField, id, card, side, x + offset.x, y + offset.y * (side == 0 ? 0.7 : -0.7), offset.z * 0.7, x, y, 0);
 		battleData.battleField.bullets.set(id, spell as Bullet);
 		//trace("summon spell", " side:" + side, " x:" + x, " y:" + y, " offset:" + offset);
+		card.summonTime = cardSummonTime;
 		return;
 	}
 
@@ -229,7 +231,8 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 	if( health >= 0 )
 		u.health = health;
 	battleData.battleField.units.set(id, u as Unit);
-	
+	card.summonTime = cardSummonTime;
+
 	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
 }
 
