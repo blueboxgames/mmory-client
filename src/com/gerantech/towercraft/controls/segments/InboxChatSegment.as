@@ -90,19 +90,22 @@ private function sfsInstance_extensionResponseHandler(event:SFSEvent) : void
 
 private function checkVerbos() : Boolean 
 {
+	if( player.admin )
+		return false;
+	var ret:Boolean;
 	var myMessages:int = 0;
-	for( var i:int = threadCollection.length - 1; i >= 0; i-- )
+	for( var i:int = 0; i < threadCollection.length; i++ )
 	{
 		if( threadCollection.getItemAt(i).getInt("senderId") != myId )
 		{
 			myMessages = 0;
+			ret = false;
 			continue;
 		}
 		myMessages ++;
-		if ( myMessages >= 3 )
-			return true;
+		ret = myMessages >= 3;
 	}
-	return false;
+	return ret;
 }
 }
 }
