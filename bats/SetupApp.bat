@@ -2,8 +2,8 @@
 cd %~dp0 & cd ..
 
 :: Application descriptor
-cd bin
-set APP_XML=application.xml
+cd files
+set APP_XML=application-template.xml
 
 :: Your application ID (must match <id> of Application descriptor) and remove spaces
 for /f "tokens=3 delims=<>" %%a in ('findstr /R /C:"^[ 	]*<id>" %APP_XML%') do set APP_ID=%%a
@@ -33,4 +33,5 @@ echo   does NOT match Application descriptor '%APP_XML%' (id)
 echo.
 
 :end
+set APP_XML=application.xml
 cd ..

@@ -25,8 +25,9 @@ if %MARKET%==cando		set PERMISSION_FINE=com.ada.market.BILLING
 
 if NOT %SERVER%==iran set APPID_FINE=com.grantech.k2k.%SERVER%
 
-echo %DESC_FINE%
+::echo %DESC_FINE%
 ::echo %APP_ID%... %MARKET%...%PLATFORM%...%PERMISSION_FINE%
+if not exist "bin" mkdir "bin"
 
 (for /f "delims=" %%i in (%APP_XML_TEMP%) do (
     set "line=%%i"
