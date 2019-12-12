@@ -106,9 +106,9 @@ echo.
 if "%A%"=="2" set OPTIONS=%OPTIONS%-arch armv8
 
 set PAUSE_ERRORS=1
+call bats/SetupApp.bat
 call bats/SetupDescriptor.bat
 call bats/SetupSDK.bat
-call bats/SetupApp.bat
 call bats/Packager.bat
 if "%PLATFORM%"=="android" goto android-package
 

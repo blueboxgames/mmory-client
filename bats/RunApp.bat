@@ -6,7 +6,6 @@ set APP_DIR=bin
 
 set PAUSE_ERRORS=1
 call bats/SetupSDK.bat
-call bats/SetupApp.bat
 
 :target
 goto desktop
@@ -29,8 +28,8 @@ echo Starting AIR Debug Launcher with screen size '%SCREEN_SIZE%'
 echo.
 echo (hint: edit 'Run.bat' to test on device or change screen size)
 echo.
-::adl -screensize %SCREEN_SIZE% "bin/%APP_XML%" "%APP_DIR%" -extdir bin/.as3mxml-unpackaged-anes/
-adl -profile extendedDesktop "bin/%APP_XML%" "%APP_DIR%" -extdir bin/.as3mxml-unpackaged-anes/
+::adl -screensize %SCREEN_SIZE% bin/application.xml %APP_DIR% -extdir bin/.as3mxml-unpackaged-anes/
+adl -profile extendedDesktop bin/application.xml "%APP_DIR%" -extdir bin/.as3mxml-unpackaged-anes/
 if errorlevel 1 goto end
 goto endNoPause
 

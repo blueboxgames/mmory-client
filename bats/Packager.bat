@@ -70,7 +70,7 @@ set APP_DIR=bin
 
 :: Output packages
 set DIST_PATH=dist
-set DIST_NAME=boomland-%APP_VER%.%DATE%-%SERVER%-%MARKET%%TARGET%
+set DIST_NAME=boomland-%VER_LABEL%-%SERVER%-%MARKET%%TARGET%
 
 if not exist "%CERT_FILE%" goto certificate
 :: Output file
@@ -91,8 +91,8 @@ echo Packaging: %OUTPUT%
 echo using certificate: %CERT_FILE%...
 echo.
 
-echo adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" bin/"%APP_XML%" %FILE_OR_DIR% -extdir exts
-call adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" bin/"%APP_XML%" %FILE_OR_DIR% -extdir exts 
+echo adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" "%APP_XML%" %FILE_OR_DIR% -extdir exts
+call adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" "%APP_XML%" %FILE_OR_DIR% -extdir exts 
 echo.
 if errorlevel 1 goto failed
 goto end

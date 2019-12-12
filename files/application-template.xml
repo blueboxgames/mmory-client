@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <application xmlns="http://ns.adobe.com/air/application/32.0">
   <id>__APPID__</id>
-  <versionNumber>0.2.850</versionNumber>
+  <versionNumber>__VERID__</versionNumber>
+  <versionLabel>__VERLABEL__</versionLabel>
   <supportedProfiles>mobileDevice extendedDesktop</supportedProfiles>
   <filename>BoomLand</filename>
   <name>BoomLand</name>
@@ -36,7 +37,7 @@
     <manifestAdditions><![CDATA[<manifest android:installLocation="auto">
 
 	<!-- In APP Billing permissions -->
-	<uses-permission android:name="com.domain.market.BILLING" />
+	<uses-permission android:name="__BILLING__" />
 	
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.VIBRATE" />
