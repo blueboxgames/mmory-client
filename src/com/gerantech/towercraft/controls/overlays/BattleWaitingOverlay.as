@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.controls.overlays
 {
-import com.gerantech.towercraft.controls.texts.RTLLabel;
+import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.themes.MainTheme;
@@ -25,7 +25,7 @@ public var cancelable:Boolean;
 public var spactateMode:Boolean;
 
 private var cancelButton:Button;
-private var waitingLabel:RTLLabel;
+private var waitingLabel:ShadowLabel;
 
 public function BattleWaitingOverlay(cancelable:Boolean, spactateMode:Boolean, showTips:Boolean)
 {
@@ -92,7 +92,7 @@ override protected function initialize():void
 	
 	var arena:int = player.get_arena(0);
 	
-	waitingLabel = new RTLLabel(loc(arena > 0 && !spactateMode && cancelable ? "tip_over" : "tip_over_tutor"), 1, "center", null, false, null, 1.2);
+	waitingLabel = new ShadowLabel(loc(arena > 0 && !spactateMode && cancelable ? "tip_over" : "tip_over_tutor"), 1, 0,"center", null, false, null, 1.2);
 	waitingLabel.alpha = 0;
 	waitingLabel.x = 48;
 	waitingLabel.y = stageHeight * 0.85;
@@ -103,7 +103,7 @@ override protected function initialize():void
 	
 	if( showTips )
 	{
-		var tipDisplay:RTLLabel = new RTLLabel(loc("tip_" + Math.min(arena - 1, 2) + "_" + Math.floor(Math.random() * 10)), 1, "justify", null, true, "center", 0.8);
+		var tipDisplay:ShadowLabel = new ShadowLabel(loc("tip_" + Math.min(arena - 1, 2) + "_" + Math.floor(Math.random() * 10)), 1, 0, "justify", null, true, "center", 0.8);
 		tipDisplay.x = 48;
 		tipDisplay.y = stage.stageHeight - 140;
 		tipDisplay.width = stage.stageWidth - 86;

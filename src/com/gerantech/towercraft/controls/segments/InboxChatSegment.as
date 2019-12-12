@@ -68,6 +68,7 @@ override protected function sendButton_triggeredHandler(event:Event):void
 	var params:SFSObject = new SFSObject();
 	params.putInt("type", 0);
 	params.putInt("senderId", myId);
+	params.putBool("isPush", true);
 	params.putUtfString("text", preText + StrUtils.getSimpleString(chatTextInput.text));
 	params.putIntArray("receiverIds", [thread.ownerId]);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsInstance_extensionResponseHandler);
@@ -90,19 +91,22 @@ private function sfsInstance_extensionResponseHandler(event:SFSEvent) : void
 
 private function checkVerbos() : Boolean 
 {
+	if( player.admin )
+		return false;
+	var ret:Boolean;
 	var myMessages:int = 0;
-	for( var i:int = threadCollection.length - 1; i >= 0; i-- )
+	for( var i:int = 0; i < threadCollection.length; i++ )
 	{
 		if( threadCollection.getItemAt(i).getInt("senderId") != myId )
 		{
 			myMessages = 0;
+			ret = false;
 			continue;
 		}
 		myMessages ++;
-		if ( myMessages >= 3 )
-			return true;
+		ret = myMessages >= 3;
 	}
-	return false;
+	return ret;
 }
 }
 }

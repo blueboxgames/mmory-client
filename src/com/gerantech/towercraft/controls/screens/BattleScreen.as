@@ -40,6 +40,7 @@ package com.gerantech.towercraft.controls.screens
   import starling.core.Starling;
   import starling.display.Image;
   import starling.events.Event;
+  import com.gerantech.towercraft.managers.TimeManager;
 
   public class BattleScreen extends BaseCustomScreen
   {
@@ -178,6 +179,7 @@ package com.gerantech.towercraft.controls.screens
         return;
 
       IN_BATTLE = true;
+      TimeManager.instance.forceUpdate();
       tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_STARTED, tutorials_tasksStartHandler);
       if( !WAITING.ready )
       {

@@ -10,6 +10,7 @@ import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.overlays.TutorialSwipeOverlay;
 import com.gerantech.towercraft.controls.sliders.ElixirBar;
+import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
@@ -249,7 +250,8 @@ protected function stage_touchHandler(event:TouchEvent) : void
 					
 				summonPoint.x = battleField.side == 0 ? summonPoint.x : BattleField.WIDTH - summonPoint.x;
 				summonPoint.y = battleField.side == 0 ? summonPoint.y : BattleField.HEIGHT - summonPoint.y;
-				fieldView.responseSender.summonUnit(draggableCard.type, summonPoint.x, summonPoint.y, this.battleField.now);
+				TimeManager.instance.forceUpdate();
+				fieldView.responseSender.summonUnit(draggableCard.type, summonPoint.x, summonPoint.y, TimeManager.instance.millis);
 				
 				task = null;
 				UserData.instance.prefs.setInt(PrefsTypes.TUTOR, fieldView.battleData.getBattleStep() + 2);
