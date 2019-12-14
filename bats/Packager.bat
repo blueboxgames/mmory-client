@@ -70,7 +70,7 @@ set APP_DIR=bin
 
 :: Output packages
 set DIST_PATH=dist
-set DIST_NAME=boomland-%VER_LABEL%-%SERVER%-%MARKET%%TARGET%
+set DIST_NAME=%CODE_NAME%-%VER_LABEL%-%SERVER%-%MARKET%%TARGET%
 
 if not exist "%CERT_FILE%" goto certificate
 :: Output file

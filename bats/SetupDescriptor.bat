@@ -22,6 +22,7 @@ if not exist "bin" mkdir "bin"
     set "line=%%i"
     setlocal enabledelayedexpansion
     set "line=!line:__APPID__=%APP_ID%!"
+    set "line=!line:__APPNAME__=%APP_NAME%!"
     set "line=!line:__VERID__=%VER_ID%!"
     set "line=!line:__VERLABEL__=%VER_LABEL%!"
     set "line=!line:__DESCRIPTION__=%DESC_FINE%!"

@@ -11,6 +11,8 @@ for %%a in (%DATE: =0%) do set DATE=%%a
 set VER_ID=0.2.860
 set VER_LABEL=%VER_ID%.%DATE%
 set APP_ID=com.grantech.k2k
+set APP_NAME=Boomland
+set CODE_NAME=boomland
 
 :: Game Analytics
 set GA_KEY_AND=df4b20d8b9a4b0ec2fdf5ac49471d5b2
