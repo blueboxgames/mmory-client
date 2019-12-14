@@ -20,6 +20,7 @@ set GA_SEC_IOS=GA_SEC_IOS
 
 if [%SERVER%]==[] set SERVER=iran
 if [%MARKET%]==[] set MARKET=cafebazaar
+if NOT %SERVER%==iran set APP_ID=%APP_ID%.%SERVER%
 
 :: Debugging using a custom IP
 set DEBUG_IP=

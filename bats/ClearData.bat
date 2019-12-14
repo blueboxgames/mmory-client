@@ -1,7 +1,5 @@
 @echo off
 
-call bats/SetupApp.bat
-
 :menu
 echo.
 echo Change server after deletion?
@@ -20,6 +18,8 @@ if "%S%"=="1" set SERVER=iran
 if "%S%"=="2" set SERVER=local
 if "%S%"=="3" set SERVER=yoga
 if "%S%"=="4" set SERVER=fudo
+
+call bats/SetupDescriptor.bat
 
 cd %AppData%\%APP_ID%\Local Store\
 del /F /Q #SharedObjects\release.swf\%server%-user-data.sol
