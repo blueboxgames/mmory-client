@@ -1,38 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <application xmlns="http://ns.adobe.com/air/application/32.0">
-  <id>__APPID__</id>
-  <versionNumber>__VERID__</versionNumber>
-  <versionLabel>__VERLABEL__</versionLabel>
+	<id>__APPID__</id>
+	<name>__APPNAME__</name>
+	<filename>__APPNAME__</filename>
+	<versionNumber>__VERID__</versionNumber>
+	<versionLabel>__VERLABEL__</versionLabel>
   <supportedProfiles>mobileDevice extendedDesktop</supportedProfiles>
-  <filename>BoomLand</filename>
-  <name>BoomLand</name>
-  <description>__DESCRIPTION__</description>
+	<description>__DESCRIPTION__</description>
   <initialWindow>
-    <title>BoomLand</title>
-    <content>release.swf</content>
     <visible>true</visible>
+    <title>__APPNAME__</title>
+    <content>release.swf</content>
     <fullScreen>true</fullScreen>
     <renderMode>direct</renderMode>
     <systemChrome>standard</systemChrome>
     <aspectRatio>portrait</aspectRatio>
     <autoOrients>false</autoOrients>
     <depthAndStencil>true</depthAndStencil>
-    <transparent>false</transparent>
     <resizable>false</resizable>
     <minSize>490 940</minSize>
   </initialWindow>
-  <icon>
-    <image48x48>icons/icon_48.png</image48x48>
-    <!--<image57x57>icons/icon_57.png</image57x57>-->
-    <image72x72>icons/icon_72.png</image72x72>
-    <!--<image76x76>icons/icon_76.png</image76x76>-->
-    <image96x96>icons/icon_96.png</image96x96>
-		<!--<image114x114>icons/icon_114.png</image114x114>-->
-		<!--<image120x120>icons/icon_120.png</image120x120>-->
-    <image144x144>icons/icon_144.png</image144x144>
-    <!--<image152x152>icons/icon_152.png</image152x152>-->
-    <!--<image512x512>icons/icon_512.png</image512x512>-->
-  </icon>
+	<icon>__ICONS__</icon>
   <android>
     <manifestAdditions><![CDATA[<manifest android:installLocation="auto">
 
@@ -43,7 +31,6 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-	<!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />-->
 	
 	<!-- FCM -->
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -85,7 +72,7 @@
 				<action android:name="android.intent.action.VIEW"/>
 				<category android:name="android.intent.category.BROWSABLE"/>
 				<category android:name="android.intent.category.DEFAULT"/>
-				<data android:scheme="k2k"/>
+				<data android:scheme="__APPCODE__"/>
 		  </intent-filter>
 		</activity>    			
 		<activity android:name="ir.tapsell.sdk.TapsellAdActivity" android:configChanges="keyboardHidden|orientation|screenSize" />

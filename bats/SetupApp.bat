@@ -12,8 +12,8 @@ set VER_ID=0.2.860
 set VER_LABEL=%VER_ID%.%DATE%
 set APP_ID=com.grantech.k2k
 set APP_NAME=Boomland
-set CODE_NAME=boomland
-
+set CODE_NAME=k2k
+echo %VER_LABEL%
 :: Game Analytics
 set GA_KEY_AND=df4b20d8b9a4b0ec2fdf5ac49471d5b2
 set GA_SEC_AND=972a1c900218b46f42d8a93e2f69710545903307
@@ -22,6 +22,7 @@ set GA_SEC_IOS=GA_SEC_IOS
 
 if [%SERVER%]==[] set SERVER=iran
 if [%MARKET%]==[] set MARKET=cafebazaar
+if [%PLATFORM%]==[] set PLATFORM=android
 if NOT %SERVER%==iran set APP_ID=%APP_ID%.%SERVER%
 
 :: Debugging using a custom IP
