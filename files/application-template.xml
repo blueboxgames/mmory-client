@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <application xmlns="http://ns.adobe.com/air/application/32.0">
 	<id>__APPID__</id>
 	<name>__APPNAME__</name>
@@ -46,6 +46,7 @@
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
 	<application android:enabled="true" >
+		<meta-data android:name="android.max_aspect" android:value="2.0" />
 		
 		<!-- Google Play -->
 		<meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ 123068560070" />
