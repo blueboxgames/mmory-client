@@ -129,7 +129,7 @@ static public function loadChallenges(params:ISFSObject, playerId:int) : void
 	var challenges:IntChallengeMap = new IntChallengeMap();
 	challenges.set(0, new Challenge(AppModel.instance.game, 0, ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 0, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 0, playerId)));
 	challenges.set(1, new Challenge(AppModel.instance.game, 1, ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 1, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 1, playerId)));
-	challenges.set(2, new Challenge(AppModel.instance.game, 2, Challenge.TYPE_1_REWARD, 2));
+	challenges.set(2, new Challenge(AppModel.instance.game, 2, ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 2, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 2, playerId)));
 	challenges.set(3, new Challenge(AppModel.instance.game, 3, Challenge.TYPE_2_RANKING, 3));
 	if( params.containsKey("challenges") )
 	for( var i:int = 0; i < params.getSFSArray("challenges").size(); i++ )
