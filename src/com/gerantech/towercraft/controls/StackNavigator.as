@@ -116,8 +116,8 @@ package com.gerantech.towercraft.controls
 		
 		public function runBattle(index:int, cancelable:Boolean = true, spectatedUser:String = null, friendlyMode:int = 0) : void
 		{
-			var _type:int = ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, index)
-			var _cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, _type));
+			// var _type:int = ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, index)
+			var _cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, index));
 			if( spectatedUser == null && friendlyMode == 0 && !AppModel.instance.game.player.has(_cost) )
 			{
 				gotoShop(ResourceType.R6_TICKET);

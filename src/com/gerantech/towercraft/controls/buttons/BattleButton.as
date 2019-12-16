@@ -58,8 +58,7 @@ override protected function initialize() : void
 	addChild(backgroundDisplay);
 
 	// cost elements ....
-	var _mode:int = ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX))
-	var _cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, _mode));
+	var _cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX)));
 	var costType:int = _cost.keys()[0];
 	var costValue:int = _cost.get(costType);
 

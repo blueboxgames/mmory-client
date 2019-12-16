@@ -90,7 +90,7 @@ private function costFactory() : void
 {
 	if( locked || IS_FRIENDLY )
 		return;
-	challenge.runRequirements = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, challenge.mode));
+	challenge.runRequirements = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, challenge.index));
 	var costType:int = challenge.runRequirements.keys()[0];
 	var costValue:int = challenge.runRequirements.get(costType);
 	if( costValue <= 0 )
