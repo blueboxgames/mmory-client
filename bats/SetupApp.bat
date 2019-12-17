@@ -1,37 +1,29 @@
+@echo off
 :: Set working dir
 cd %~dp0 & cd ..
 
-:: Application descriptor
-cd files
-set APP_XML=application-template.xml
-
-:: Your application ID (must match <id> of Application descriptor) and remove spaces
-for /f "tokens=3 delims=<>" %%a in ('findstr /R /C:"^[ 	]*<id>" %APP_XML%') do set APP_ID=%%a
-set APP_ID=%APP_ID: =%
-
-:: Your versionNumber (must match <versionNumber> of Application descriptor) and remove spaces
-for /f "tokens=3 delims=<>" %%a in ('findstr /R /C:"^[ 	]*<versionNumber>" %APP_XML%') do set APP_VER=%%a
-
 :: Get date with this template =>mouth day hours minutes seconds
-set DATE=%date:~-10,2%%date:~-7,2%%time:~-11,2%%time:~-8,2%%time:~-5,2%
+set DATE=%date:~-10,2%%date:~-7,2%%time:~-11,2%%time:~-8,2%
 :: Replace space with 0
 for %%a in (%DATE: =0%) do set DATE=%%a
 
+:: Application descriptor
+set VER_ID=0.2.860
+set VER_LABEL=%VER_ID%.%DATE%
+set APP_ID=com.grantech.k2k
+set APP_NAME=Boomland
+set CODE_NAME=k2k
+echo %VER_LABEL%
+:: Game Analytics
+set GA_KEY_AND=df4b20d8b9a4b0ec2fdf5ac49471d5b2
+set GA_SEC_AND=972a1c900218b46f42d8a93e2f69710545903307
+set GA_KEY_IOS=GA_KEY_IOS
+set GA_SEC_IOS=GA_SEC_IOS
+
+if [%SERVER%]==[] set SERVER=iran
+if [%MARKET%]==[] set MARKET=cafebazaar
+if [%PLATFORM%]==[] set PLATFORM=android
+if NOT %SERVER%==iran set APP_ID=%APP_ID%.%SERVER%
+
 :: Debugging using a custom IP
 set DEBUG_IP=
-
-:validation
-findstr /C:"<id>%APP_ID%</id>" "%APP_XML%" > NUL
-if errorlevel 1 goto badid
-goto end
-
-:badid
-echo.
-echo ERROR: 
-echo   Application ID in 'bats\SetupApp.bat' (APP_ID) 
-echo   does NOT match Application descriptor '%APP_XML%' (id)
-echo.
-
-:end
-set APP_XML=application.xml
-cd ..

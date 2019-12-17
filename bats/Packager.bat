@@ -27,7 +27,7 @@ set IOS_DIST_CERT_FILE=cert/TOD-Distribution-Certificate.p12
 set IOS_DEV_CERT_FILE=cert/TOD-Distribution-Certificate.p12
 set IOS_DEV_CERT_PASS=pppppp
 set IOS_PROVISION=cert/Bluebox_K2K_Adhoc_Profile.mobileprovision
-set IOS_ICONS=files/icons/android
+set IOS_ICONS=files/icons/ios
 
 set IOS_DEV_SIGNING_OPTIONS=-storetype pkcs12 -keystore "%IOS_DEV_CERT_FILE%" -storepass %IOS_DEV_CERT_PASS% -provisioning-profile %IOS_PROVISION%
 set IOS_DIST_SIGNING_OPTIONS=-storetype pkcs12 -keystore "%IOS_DIST_CERT_FILE%" -storepass %IOS_DEV_CERT_PASS% -provisioning-profile %IOS_PROVISION%
@@ -70,7 +70,7 @@ set APP_DIR=bin
 
 :: Output packages
 set DIST_PATH=dist
-set DIST_NAME=boomland-%APP_VER%.%DATE%-%SERVER%-%MARKET%%TARGET%
+set DIST_NAME=%CODE_NAME%-%VER_LABEL%-%SERVER%-%MARKET%%TARGET%
 
 if not exist "%CERT_FILE%" goto certificate
 :: Output file
@@ -91,8 +91,8 @@ echo Packaging: %OUTPUT%
 echo using certificate: %CERT_FILE%...
 echo.
 
-echo adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" bin/"%APP_XML%" %FILE_OR_DIR% -extdir exts
-call adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" bin/"%APP_XML%" %FILE_OR_DIR% -extdir exts 
+echo adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" "%APP_XML%" %FILE_OR_DIR% -extdir exts
+call adt -package -target %TYPE%%TARGET% %OPTIONS% %SIGNING_OPTIONS% "%OUTPUT%" "%APP_XML%" %FILE_OR_DIR% -extdir exts 
 echo.
 if errorlevel 1 goto failed
 goto end
