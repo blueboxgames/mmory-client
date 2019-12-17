@@ -31,8 +31,6 @@ import flash.utils.getTimer;
 
 import haxe.Log;
 
-import ir.metrix.sdk.Metrix;
-
 import starling.core.Starling;
 
 public class Main extends Sprite
@@ -85,12 +83,6 @@ public function Main()
 			if( FirebaseANE.options )
 				trace("apiKey", FirebaseANE.options.apiKey, "googleAppId", FirebaseANE.options.googleAppId);
 		} catch (e:ANEError) { trace(e.errorID, e.message, e.getStackTrace(), e.source); }
-	}
-
-	if( Metrix.instance.isSupported )
-	{
-		Metrix.instance.appID = "obhyxcamxhvigen";
-		Metrix.instance.initialize();
 	}
 }
 
