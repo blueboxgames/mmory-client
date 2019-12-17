@@ -24,7 +24,6 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import flash.events.Event;
 import flash.events.EventDispatcher;
-import flash.filesystem.File;
 
 public class CoreLoader extends EventDispatcher
 {
@@ -126,16 +125,22 @@ static private function loadExchanges(serverData:SFSObject) : void
 
 static public function loadChallenges(params:ISFSObject, playerId:int) : void 
 {
+	var ch:Challenge;
 	var challenges:IntChallengeMap = new IntChallengeMap();
-	challenges.set(0, new Challenge(AppModel.instance.game, 0, ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 0, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 0, playerId)));
-	challenges.set(1, new Challenge(AppModel.instance.game, 1, ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, 1, playerId), ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, 1, playerId)));
-	challenges.set(2, new Challenge(AppModel.instance.game, 2, Challenge.TYPE_1_REWARD, 2));
-	challenges.set(3, new Challenge(AppModel.instance.game, 3, Challenge.TYPE_2_RANKING, 3));
+	for(var index:int = 0; index < 4; index++)
+	{
+		var mode:int = ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, index, playerId);
+		var type:int = ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, index, playerId);
+		ch = new Challenge(AppModel.instance.game, index, type, mode);
+		ch.runRequirements = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, index));
+		challenges.set(index, ch);
+	}
+	
 	if( params.containsKey("challenges") )
 	for( var i:int = 0; i < params.getSFSArray("challenges").size(); i++ )
 	{
 		var c:ISFSObject = params.getSFSArray("challenges").getSFSObject(i);
-		var ch:Challenge = new Challenge(AppModel.instance.game, 2 + i, c.getInt("type"), c.getInt("mode"));
+		ch = new Challenge(AppModel.instance.game, 2 + i, c.getInt("type"), c.getInt("mode"));
 		ch.id = c.getInt("id");
 		ch.startAt = c.getInt("start_at");
 		ch.unlockAt = c.getInt("unlock_at");

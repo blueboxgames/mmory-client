@@ -40,17 +40,17 @@ static private const COLORS:Array = [0x3065e4, 0xffa400, 0xff4200, 0xe720ff, 0x3
 
 private var state:int;
 private var locked:Boolean;
-private var backgroundImage:SimpleLayoutButton;
-private var backgroundLayoutData:AnchorLayoutData;
-private var iconDisplay:ImageLoader;
 private var challenge:Challenge;
+private var rankButton:IconButton;
 private var titleDisplay:RTLLabel;
 private var messageDisplay:RTLLabel;
+private var iconDisplay:ImageLoader;
 private var bannerDisplay:ImageLoader;
 private var infoButton:IndicatorButton;
-private var rankButton:IconButton;
 private var costIconDisplay:ImageLoader;
 private var costLabelDisplay:ShadowLabel;
+private var backgroundImage:SimpleLayoutButton;
+private var backgroundLayoutData:AnchorLayoutData;
 public function ChallengeIndexItemRenderer()
 {
 	super();
@@ -69,7 +69,6 @@ override protected function commitData() : void
 		height = VerticalLayout(_owner.layout).typicalItemHeight;
 
 	challenge = player.challenges.get(_data as int);
-	challenge.index = _data as int;
 	state = challenge.getState(timeManager.now);
 	locked = Challenge.getUnlockAt(game, challenge.index) > player.getResource(ResourceType.R7_MAX_POINT);
 	
@@ -83,14 +82,13 @@ override protected function commitData() : void
 	costFactory();
 	
 	alpha = 0;
-	Starling.juggler.tween(this, 0.25, {delay:Math.log(challenge.index + 1) * 0.2, alpha:1});
+	Starling.juggler.tween(this, 0.25, {delay:Math.log(challenge.index + 1) * 0.1, alpha:1});
 }
 
 private function costFactory() : void 
 {
 	if( locked || IS_FRIENDLY )
 		return;
-	challenge.runRequirements = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, challenge.mode));
 	var costType:int = challenge.runRequirements.keys()[0];
 	var costValue:int = challenge.runRequirements.get(costType);
 	if( costValue <= 0 )
