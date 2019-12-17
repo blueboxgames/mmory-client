@@ -301,7 +301,7 @@ package com.gerantech.towercraft.controls.screens
         while( iterator.hasNext() )
         {
           var u:UnitView = battleData.battleField.units.get(iterator.next()) as UnitView;
-          if( u.side == loserSide && u.card.type != 201 && u.card.type != 222 )
+          if( u.side == loserSide && u.card.speed > 0 )
             u.hit(100);
         }
       }
