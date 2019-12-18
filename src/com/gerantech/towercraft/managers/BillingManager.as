@@ -29,6 +29,9 @@ import feathers.events.FeathersEventType;
 import flash.net.URLRequest;
 import flash.net.navigateToURL;
 
+import ir.metrix.sdk.Metrix;
+import ir.metrix.sdk.MetrixCurrency;
+
 public class BillingManager extends BaseManager
 {
 private var items:Array;
@@ -284,6 +287,16 @@ public function verify(purchase:ISFSObject):void
 					consume(result.getText("productID"));
 			}
 
+			if( Metrix.instance.isSupported )
+			{
+				var outs:Vector.<int> = item.outcomes.keys();
+				var amount:int = int(item.requirements.get(outs[0]));
+				// has_purchase event
+				Metrix.instance.newEvent("sytpw").send();
+				// purchase event
+				// amount is in Toman, converted to IRR.
+				Metrix.instance.newRevenue("qrsgl", amount * 10, MetrixCurrency.IRR);
+			}
 		}
 		else
 		{
