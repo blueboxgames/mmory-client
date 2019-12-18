@@ -146,7 +146,7 @@ protected function syncToolPost_completeHandler(event:Event):void
 	addChild(unitsContainer);
 
 	summonUnits(battleData.sfsData.getSFSArray("units"), battleData.sfsData.getDouble("now"), true);
-	scale = 0.8;
+	scale = 0.85;
 
 	/*for ( i = 0; i < battleData.battleField.tileMap.width; i ++ )
 		for ( var j:int = 0; j < battleData.battleField.tileMap.height; j ++ )
