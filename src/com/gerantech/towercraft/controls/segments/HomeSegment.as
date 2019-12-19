@@ -38,6 +38,7 @@ import flash.geom.Rectangle;
 import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.events.Event;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 public class HomeSegment extends Segment
 {
@@ -118,7 +119,7 @@ override public function init():void
 		}
 	}
 	showTutorial();
-	if( league < 1 )
+	if( player.get_battleswins() < appModel.maxTutorBattles )
 	{
 		var tutorProgressLayout:AnchorLayoutData = new AnchorLayoutData(stageHeight * 0.21, NaN, NaN, NaN, 10); 
 		var tutorialProgress:Indicator = new Indicator("ltr", 60, true, false, false);
@@ -224,7 +225,7 @@ private function showTutorial():void
 		return;
 	}
 	
-	if( league > 0 && player.nickName == "guest" )
+	if( player.get_battleswins() >= appModel.maxTutorBattles && player.nickName == "guest" )
 	{
 		var confirm:SelectNamePopup = new SelectNamePopup();
 		confirm.addEventListener(Event.COMPLETE, confirm_eventsHandler);
