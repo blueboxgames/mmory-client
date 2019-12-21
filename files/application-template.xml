@@ -5,30 +5,34 @@
 	<filename>__APPNAME__</filename>
 	<versionNumber>__VERID__</versionNumber>
 	<versionLabel>__VERLABEL__</versionLabel>
-  <supportedProfiles>mobileDevice extendedDesktop</supportedProfiles>
 	<description>__DESCRIPTION__</description>
   <initialWindow>
-    <visible>true</visible>
-    <title>__APPNAME__</title>
+		<fullScreen>true</fullScreen>
     <content>release.swf</content>
-    <fullScreen>true</fullScreen>
     <renderMode>direct</renderMode>
-    <systemChrome>standard</systemChrome>
-    <aspectRatio>portrait</aspectRatio>
     <autoOrients>false</autoOrients>
+    <aspectRatio>portrait</aspectRatio>
     <depthAndStencil>true</depthAndStencil>
+    <systemChrome>standard</systemChrome>
     <resizable>false</resizable>
+    <title>__APPNAME__</title>
     <minSize>490 940</minSize>
+    <visible>true</visible>
   </initialWindow>
+	<supportedProfiles>mobileDevice extendedDesktop</supportedProfiles>
+	<!--<copyright></copyright>-->
+	<!--<publisherID></publisherID>-->
+	<!--<supportedLanguages>en da de cs es fr it iw ja ko nb nl pl pt ru sv tr zh</supportedLanguages>-->
 	<icon>__ICONS__</icon>
+
   <android>
-    <manifestAdditions><![CDATA[<manifest android:installLocation="auto">
+		<manifestAdditions><![CDATA[
+			<manifest android:installLocation="auto">
 
 	<!-- In APP Billing permissions -->
 	<uses-permission android:name="__BILLING__" />
 	
 	<uses-permission android:name="android.permission.INTERNET" />
-	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	
@@ -47,10 +51,6 @@
 
 	<application android:enabled="true" >
 		<meta-data android:name="android.max_aspect" android:value="2.0" />
-		
-		<!-- Google Play -->
-		<meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ 123068560070" />
-		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
 		<!-- Chartboost -->
 		<meta-data android:name="__ChartboostAir__AppID" android:value="5d5a9cc80c7ec60cc5b67c06" />
@@ -82,11 +82,11 @@
 		<receiver android:name="com.gerantech.extensions.recievers.LocalNotificationReceiver"/>
 	<!--<receiver android:name="com.gerantech.extensions.recievers.InvokeAppReceiver"/> -->
 
-		<!-- Analytics -->
-		<meta-data
-				android:name="com.google.android.gms.version"
-				android:value="@integer/google_play_services_version" />
-		
+	<!-- Google Play -->
+	<meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ 123068560070" />
+	<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+	
+	<!-- Analytics -->
 		<service android:name="com.google.firebase.components.ComponentDiscoveryService" >
 				<meta-data
 						android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
@@ -114,7 +114,7 @@
 				android:exported="true"
 				android:permission="android.permission.INSTALL_PACKAGES" >
 				<intent-filter>
-						<action android:name="com.android.vending.INSTALL_REFERRER" />
+					<action android:name="com.android.vending.INSTALL_REFERRER" />
 				</intent-filter>
 		</receiver> 
 		
@@ -135,7 +135,6 @@
 				android:permission="com.google.android.c2dm.permission.SEND" >
 				<intent-filter>
 						<action android:name="com.google.android.c2dm.intent.RECEIVE" />
-		
 						<category android:name="air.__APPID__" />
 				</intent-filter>
 		</receiver>
@@ -155,31 +154,43 @@
 		</service>
 	</application>
 	
-</manifest>]]></manifestAdditions>
-  </android>
+</manifest>
+]]> </manifestAdditions>
+	</android>
+	
   <iPhone>
-    <InfoAdditions><![CDATA[<key>UIStatusBarStyle</key>
-<string>UIStatusBarStyleBlackOpaque</string>
-<key>UIRequiresPersistentWiFi</key>
-<string>NO</string>
-<key>UIApplicationExitsOnSuspend</key>
-<true />
-<key>UIDeviceFamily</key>
-<array>
-	<string>1</string>
-</array>]]></InfoAdditions>
-    <requestedDisplayResolution>high</requestedDisplayResolution>
+		<InfoAdditions><![CDATA[
+			<key>UIDeviceFamily</key>
+			<array>
+				<!-- iPhone and iPod touch devices -->
+				<string>1</string>
+				<!-- iPad devices -->
+				<string>2</string>
+			</array>
+			<!--<key>UIStatusBarStyle</key>-->
+			<!--<string>UIStatusBarStyleBlackOpaque</string>-->
+			<!--<key>UIRequiresPersistentWiFi</key>-->
+			<!--<string>YES</string>-->
+			<!--<key>UIApplicationExitsOnSuspend</key>-->
+			<!--<true />-->
+		]]></InfoAdditions>
+		<Entitlements><![CDATA[
+			<key>get-task-allow</key><false/>
+			<key>aps-environment</key><string>production</string>
+			<key>beta-reports-active</key><true/>
+		]]></Entitlements>
+	<requestedDisplayResolution>high</requestedDisplayResolution>
   </iPhone>
   <extensions>
+		<extensionID>com.gameanalytics.sdk</extensionID>
 		<extensionID>com.gerantech.dependency</extensionID>
-		<extensionID>com.gerantech.extensions.nativeabilities</extensionID>
 		<extensionID>com.gerantech.extensions.iabilling</extensionID>
-		<extensionID>com.tuarua.firebase.FirebaseANE</extensionID>
+		<extensionID>com.gerantech.extensions.nativeabilities</extensionID>
 		<extensionID>com.tuarua.firebase.AnalyticsANE</extensionID>
 		<extensionID>com.tuarua.firebase.MessagingANE</extensionID>
-		<extensionID>com.gameanalytics.sdk</extensionID>
-		<extensionID>com.chartboost.plugin.air</extensionID>
+		<extensionID>com.tuarua.firebase.FirebaseANE</extensionID>
 		<extensionID>com.marpies.ane.gameServices</extensionID>
+		<extensionID>com.chartboost.plugin.air</extensionID>
 		<extensionID>ir.tapsell.sdk.air</extensionID>
 		<extensionID>ir.metrix.ane</extensionID>
   </extensions>
