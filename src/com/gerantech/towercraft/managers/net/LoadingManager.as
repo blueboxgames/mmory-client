@@ -298,15 +298,11 @@ private function registerOneSignalPushManager():void
 private function registerFCMPushManager():void
 {
 	if (AppModel.instance.platform != AppModel.PLATFORM_ANDROID)
-	{
 		return;
-	}
-	var messaging:MessagingANE;
+	var messaging:MessagingANE = MessagingANE.messaging;
 	var fcmToken:String;
 	var pushParams:ISFSObject = new SFSObject();
 	
-	
-	messaging = MessagingANE.messaging;
 	/* messaging.addEventListener(MessagingEvent.ON_MESSAGE_RECEIVED, onMessageReceived); */
 	messaging.addEventListener(MessagingEvent.ON_TOKEN_REFRESHED, onTokenRefreshed);
 
