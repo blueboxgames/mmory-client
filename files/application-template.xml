@@ -43,8 +43,8 @@
 	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 	<uses-permission android:name="com.google.android.providers.gsf.permission.WRITE_GSERVICES" />
 	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-	<permission android:name="air.__APPID__.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-	<uses-permission android:name="air.__APPID__.permission.C2D_MESSAGE" />
+	<permission android:name="__APPID__.permission.C2D_MESSAGE" android:protectionLevel="signature" />
+	<uses-permission android:name="__APPID__.permission.C2D_MESSAGE" />
 	
 	<!-- Chartboost addition -->
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
@@ -97,7 +97,7 @@
 		</service>
 	
 		<provider
-				android:authorities="air.__APPID__.firebaseinitprovider"
+				android:authorities="__APPID__.firebaseinitprovider"
 				android:name="com.google.firebase.provider.FirebaseInitProvider"
 				android:exported="false"
 				android:initOrder="100" />
@@ -135,7 +135,7 @@
 				android:permission="com.google.android.c2dm.permission.SEND" >
 				<intent-filter>
 						<action android:name="com.google.android.c2dm.intent.RECEIVE" />
-						<category android:name="air.__APPID__" />
+						<category android:name="__APPID__" />
 				</intent-filter>
 		</receiver>
 		<service
