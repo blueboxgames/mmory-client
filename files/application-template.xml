@@ -26,131 +26,87 @@
 	<icon>__ICONS__</icon>
 
   <android>
-		<manifestAdditions><![CDATA[
-			<manifest android:installLocation="auto">
+	<manifestAdditions><![CDATA[
+	<manifest android:installLocation="auto">
 
-	<!-- In APP Billing permissions -->
-	<uses-permission android:name="__BILLING__" />
-	
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="__BILLING__" />
 	
 	<!-- FCM -->
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-	<uses-permission android:name="android.permission.WAKE_LOCK"/>
+	<uses-permission android:name="__APPID__.permission.C2D_MESSAGE" />
+	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 	<uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
 	<uses-permission android:name="com.google.android.providers.gsf.permission.WRITE_GSERVICES" />
-	<uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 	<permission android:name="__APPID__.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-	<uses-permission android:name="__APPID__.permission.C2D_MESSAGE" />
 	
 	<!-- Chartboost addition -->
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-
 	<application android:enabled="true" >
 		<meta-data android:name="android.max_aspect" android:value="2.0" />
-
 		<!-- Chartboost -->
 		<meta-data android:name="__ChartboostAir__AppID" android:value="5d5a9cc80c7ec60cc5b67c06" />
 		<meta-data android:name="__ChartboostAir__AppSignature" android:value="fc3d771153452cbc1fd0e83891b30d8aa096e50a" />
-		
-		<activity android:name="com.chartboost.sdk.CBImpressionActivity"
-							android:excludeFromRecents="true"
-							android:hardwareAccelerated="true"
-							android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+		<activity android:name="com.chartboost.sdk.CBImpressionActivity"	android:excludeFromRecents="true"	android:hardwareAccelerated="true"	android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
 							android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" />
-
-
 		<activity android:excludeFromRecents="false">
 		  <intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
+				<action		android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 				<category android:name="tv.ouya.intent.category.GAME" />
 		  </intent-filter>
 		  <intent-filter>
-				<action android:name="android.intent.action.VIEW"/>
+				<action		android:name="android.intent.action.VIEW"/>
 				<category android:name="android.intent.category.BROWSABLE"/>
 				<category android:name="android.intent.category.DEFAULT"/>
-				<data android:scheme="__APPCODE__"/>
+				<data			android:scheme="k2k"/>
 		  </intent-filter>
 		</activity>    			
 		<activity android:name="ir.tapsell.sdk.TapsellAdActivity" android:configChanges="keyboardHidden|orientation|screenSize" />
 		<activity android:name="com.gerantech.extensions.IabActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateHidden|adjustResize" />
 		<activity android:name="com.gerantech.extensions.activities.PermissionsActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen" android:windowSoftInputMode="stateHidden|adjustResize" />
 		<receiver android:name="com.gerantech.extensions.recievers.LocalNotificationReceiver"/>
-	<!--<receiver android:name="com.gerantech.extensions.recievers.InvokeAppReceiver"/> -->
-
-	<!-- Google Play -->
-	<meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ 123068560070" />
-	<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
-	
-	<!-- Analytics -->
-		<service android:name="com.google.firebase.components.ComponentDiscoveryService" >
-				<meta-data
-						android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
-						android:value="com.google.firebase.components.ComponentRegistrar" />
-				<meta-data
-						android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"
-						android:value="com.google.firebase.components.ComponentRegistrar" />
+		<!-- Google Play -->
+		<meta-data android:name="com.google.android.gms.games.APP_ID" android:value="\ 123068560070" />
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+		
+		<!-- Analytics -->
+		<service 			android:name="com.google.firebase.components.ComponentDiscoveryService" >
+			<meta-data	android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"	android:value="com.google.firebase.components.ComponentRegistrar" />
+			<meta-data	android:name="com.google.firebase.components:com.google.firebase.iid.Registrar"	android:value="com.google.firebase.components.ComponentRegistrar" />
 		</service>
 	
-		<provider
-				android:authorities="__APPID__.firebaseinitprovider"
-				android:name="com.google.firebase.provider.FirebaseInitProvider"
-				android:exported="false"
-				android:initOrder="100" />
-		
-		<receiver
-				android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
-				android:enabled="true"
-				android:exported="false" >
-		</receiver>
-		
-		<receiver
-				android:name="com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver"
-				android:enabled="true"
-				android:exported="true"
-				android:permission="android.permission.INSTALL_PACKAGES" >
-				<intent-filter>
-					<action android:name="com.android.vending.INSTALL_REFERRER" />
-				</intent-filter>
+		<provider	android:authorities="__APPID__.firebaseinitprovider"	android:name="com.google.firebase.provider.FirebaseInitProvider"	android:exported="false"	android:initOrder="100" />
+		<receiver	android:name="com.google.android.gms.measurement.AppMeasurementReceiver"	android:enabled="true"	android:exported="false" />
+		<receiver	android:name="com.google.android.gms.measurement.AppMeasurementInstallReferrerReceiver"	android:enabled="true"	android:exported="true"	android:permission="android.permission.INSTALL_PACKAGES" >
+			<intent-filter>
+				<action android:name="com.android.vending.INSTALL_REFERRER" />
+			</intent-filter>
 		</receiver> 
 		
-		<service
-				android:name="com.google.android.gms.measurement.AppMeasurementService"
-				android:enabled="true"
-				android:exported="false" />
-		<service
-				android:name="com.google.android.gms.measurement.AppMeasurementJobService"
-				android:enabled="true"
-				android:exported="false"
-				android:permission="android.permission.BIND_JOB_SERVICE" />
-
+		<service	android:name="com.google.android.gms.measurement.AppMeasurementService"			android:enabled="true"	android:exported="false" />
+		<service	android:name="com.google.android.gms.measurement.AppMeasurementJobService"	android:enabled="true"	android:exported="false"	android:permission="android.permission.BIND_JOB_SERVICE" />
 		<!-- iid -->
-		<receiver
-				android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
-				android:exported="true"
-				android:permission="com.google.android.c2dm.permission.SEND" >
-				<intent-filter>
-						<action android:name="com.google.android.c2dm.intent.RECEIVE" />
-						<category android:name="__APPID__" />
-				</intent-filter>
+		<receiver	android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"	android:exported="true"	android:permission="com.google.android.c2dm.permission.SEND" >
+			<intent-filter>
+				<action android:name="com.google.android.c2dm.intent.RECEIVE" />
+				<category android:name="__APPID__" />
+			</intent-filter>
 		</receiver>
-		<service
-				android:name="com.google.firebase.iid.FirebaseInstanceIdService"
-				android:exported="true" >
-				<intent-filter android:priority="-500" >
-						<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-				</intent-filter>
+		<service	android:name="com.google.firebase.iid.FirebaseInstanceIdService"	android:exported="true" >
+			<intent-filter android:priority="-500" >
+				<action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+			</intent-filter>
 		</service>
-
 		<!-- FCM -->
 		<service android:name="com.tuarua.firebase.messaging.MessagingService">
-				<intent-filter>
-						<action android:name="com.google.firebase.MESSAGING_EVENT"/>
-				</intent-filter>
+			<intent-filter>
+				<action android:name="com.google.firebase.MESSAGING_EVENT"/>
+			</intent-filter>
 		</service>
 	</application>
 	
