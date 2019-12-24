@@ -367,19 +367,19 @@ public function rate():void
 	switch(appModel.descriptor.market )
 	{
 		case "google":
-			navigateToURL(new URLRequest("https://play.google.com/store/apps/details?id=air." + appModel.descriptor.id));
+			navigateToURL(new URLRequest("https://play.google.com/store/apps/details?id=" + appModel.descriptor.id));
 			break;
 		
 		case "cafebazaar":
-			NativeAbilities.instance.runIntent("android.intent.action.EDIT", "bazaar://details?id=air." + appModel.descriptor.id);
+			NativeAbilities.instance.runIntent("android.intent.action.EDIT", "bazaar://details?id=" + appModel.descriptor.id);
 			break;
 		
 		case "myket":
-			navigateToURL(new URLRequest("http://myket.ir/App/air." + appModel.descriptor.id));
+			navigateToURL(new URLRequest("http://myket.ir/App/" + appModel.descriptor.id));
 			break;
 		
 		case "cando":
-			navigateToURL(new URLRequest("cando://leave-review?id=air." + appModel.descriptor.id));
+			navigateToURL(new URLRequest("cando://leave-review?id=" + appModel.descriptor.id));
 			break;
 	}			
 }
@@ -389,10 +389,10 @@ public function getDownloadURL():String
 {
 	switch( appModel.descriptor.market )
 	{
-		case "google":			return 'https://play.google.com/store/apps/details?id=air.' + appModel.descriptor.id;			
-		case "cafebazaar":	return 'https://cafebazaar.ir/app/air.' + appModel.descriptor.id;			
-		case "myket":				return 'http://myket.ir/App/air.' + appModel.descriptor.id;
-		case "cando":				return 'cando://details?id=air.' + appModel.descriptor.id;			
+		case "google":			return 'https://play.google.com/store/apps/details?id=' + appModel.descriptor.id;			
+		case "cafebazaar":	return 'https://cafebazaar.ir/app/' + appModel.descriptor.id;			
+		case "myket":				return 'http://myket.ir/App/' + appModel.descriptor.id;
+		case "cando":				return 'cando://details?id=' + appModel.descriptor.id;			
 	}
 	return "http://towers.grantech.ir/get/towerstory.apk";
 }
