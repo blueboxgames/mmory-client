@@ -60,7 +60,7 @@ public function init():void
 	// missing market fixing
 	if( !NativeAbilities.instance.checkInstalled(BillingManager.instance.packageURL) )
 		appModel.descriptor.market = "zarinpal";
-	else if( (appModel.descriptor.market =="google" || appModel.descriptor.market =="appstore") && appModel.descriptor.server == "iran" )
+	else if( (appModel.descriptor.market =="google" || appModel.descriptor.market =="appstore") && NativeAbilities.instance.getTimezone() == "Asia/Tehran" )
 		appModel.descriptor.market = "zarinpal";
 
 	// provide all sku items
