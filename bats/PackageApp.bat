@@ -135,7 +135,7 @@ echo.
 %ANDROID_SDK%\adb -d install -r "%OUTPUT%"
 if errorlevel 1 goto installfail
 echo Running %OUTPUT% on the device...
-%ANDROID_SDK%\adb shell am start -n air.%APP_ID%/.AppEntry
+%ANDROID_SDK%\adb shell am start -n %APP_ID%/.AppEntry
 goto end
 
 :installfail

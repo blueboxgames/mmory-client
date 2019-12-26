@@ -60,7 +60,7 @@ public function init():void
 	// missing market fixing
 	if( !NativeAbilities.instance.checkInstalled(BillingManager.instance.packageURL) )
 		appModel.descriptor.market = "zarinpal";
-	else if( (appModel.descriptor.market =="google" || appModel.descriptor.market =="appstore") && appModel.descriptor.server == "iran" )
+	else if( (appModel.descriptor.market =="google" || appModel.descriptor.market =="appstore") && NativeAbilities.instance.getTimezone() == "Asia/Tehran" )
 		appModel.descriptor.market = "zarinpal";
 
 	// provide all sku items
@@ -78,7 +78,7 @@ public function init():void
 	switch( appModel.descriptor.market )
 	{
 		case "google":
-			base64Key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1FccxhKFO5uuTqOy+KG/q3dddZ69FQ9a/XIrJ6rGjrAf8lG4wBzbgropt6T2+NEQOsN8lsqpvLEp/JprowBS8ANsM9E3D6nGGnsT649kceEKktImiilbEMfqmFjXqgGMbdfGV9VFuk40Vi/yPoHAV3SWP0P7XjtXFyi1rX8xV9IaUMvO+bOjLH4fuNJWhQbH7IxATA3OgCaBnGJ2FhjR0puv3401mlpkCpYxTeKYZ2TWE204QxalkTdY1BL+bFoxn8K9dCo8eNBmWDqizA3TDXHRvVCEOSURqoxB11q2LbL66bTgmwj6y46xEukLkeOFdCHLUS5EHMQYkyjk4RdBXwIDAQAB";
+			base64Key = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsU5cLcbcFwSzhxoCUtt1yIvLQiOhesP5qzHtVgbvNfvS5LmM8/Yi2TdhtubbGitNAKPUna36oytkawlUVcySvP5twXLrYHaVVrDhT7GGCWYwEXlX5rvy67YY/gIsIG84IqL13UTVc9o6lpwzwYHUwB7GLIBUiQOhyoulV6WZc52IpktWyJ6MktjYD1SBGtHlrE2EU3Byadnhwv2wYVHcZzv/zeWBryS8iDUlFEFdyw5cG8g6K4RfPx0OH4MhHYPJMR5k0k9ahWK4Hry3XW3Stq9LLXXUp0eLfP5S/OrMAenHpx21tfVm0LaZrlTB6Dn5EdRYMGvDmTN0L5I8TdSK2wIDAQAB";
 			bindURL = "com.android.vending.billing.InAppBillingService.BIND";
 			break;
 		
@@ -103,7 +103,7 @@ public function init():void
 			break;
 		
 		default://cafebazaar
-			base64Key = "MIHNMA0GCSqGSIb3DQEBAQUAA4G7ADCBtwKBrwCoKU7EhXq5BhXRVJPe1JvmuPyJhHpsg6Ei9XM6dF0T1a4B4Czca8awJAzaSgx8/NEVYX8pBoP36/GqZ6XRi7yBORtoMHnVzL6qbGtPrGvLww1RwlPRnwVqkIxWhCFqa1U4J/WnskeL/K7SBjHoJlIoc2Mb1xeOWOZZQM1bU10LpkblO6lzSdMnTw9Jgs+UptXC6lLy/+sdfwcUjBfgBfJplPxS2Gtvk5yHkCacfkUCAwEAAQ==";
+			base64Key = "MIHNMA0GCSqGSIb3DQEBAQUAA4G7ADCBtwKBrwC+2VuG8FzAjr7pfh/EgnjJ4ZFTVWQYVkstQ3zfHWhY7KJtfTyntMqDYl+EJj5R5Vtn3z97AbpMASnTNBUuVOrjSZ3/N4txQHAiOPz2Wy73iprbZYoUN1/B0aP43Uk06kz6ylAKy3VVttOpuyafwxPUk6XX08qgMofBXnRwdf36omiyPV9WZIegh/LKap3FX7LHOozmA+H5mv+UyOVt4lGqoziYc2XFjDt5v2uh/VUCAwEAAQ==";
 			bindURL = "ir.cafebazaar.pardakht.InAppBillingService.BIND";
 			break;
 	}
@@ -367,19 +367,19 @@ public function rate():void
 	switch(appModel.descriptor.market )
 	{
 		case "google":
-			navigateToURL(new URLRequest("https://play.google.com/store/apps/details?id=air." + appModel.descriptor.id));
+			navigateToURL(new URLRequest("https://play.google.com/store/apps/details?id=" + appModel.descriptor.id));
 			break;
 		
 		case "cafebazaar":
-			NativeAbilities.instance.runIntent("android.intent.action.EDIT", "bazaar://details?id=air." + appModel.descriptor.id);
+			NativeAbilities.instance.runIntent("android.intent.action.EDIT", "bazaar://details?id=" + appModel.descriptor.id);
 			break;
 		
 		case "myket":
-			navigateToURL(new URLRequest("http://myket.ir/App/air." + appModel.descriptor.id));
+			navigateToURL(new URLRequest("http://myket.ir/App/" + appModel.descriptor.id));
 			break;
 		
 		case "cando":
-			navigateToURL(new URLRequest("cando://leave-review?id=air." + appModel.descriptor.id));
+			navigateToURL(new URLRequest("cando://leave-review?id=" + appModel.descriptor.id));
 			break;
 	}			
 }
@@ -389,10 +389,10 @@ public function getDownloadURL():String
 {
 	switch( appModel.descriptor.market )
 	{
-		case "google":			return 'https://play.google.com/store/apps/details?id=air.' + appModel.descriptor.id;			
-		case "cafebazaar":	return 'https://cafebazaar.ir/app/air.' + appModel.descriptor.id;			
-		case "myket":				return 'http://myket.ir/App/air.' + appModel.descriptor.id;
-		case "cando":				return 'cando://details?id=air.' + appModel.descriptor.id;			
+		case "google":			return 'https://play.google.com/store/apps/details?id=' + appModel.descriptor.id;			
+		case "cafebazaar":	return 'https://cafebazaar.ir/app/' + appModel.descriptor.id;			
+		case "myket":				return 'http://myket.ir/App/' + appModel.descriptor.id;
+		case "cando":				return 'cando://details?id=' + appModel.descriptor.id;			
 	}
 	return "http://towers.grantech.ir/get/towerstory.apk";
 }
