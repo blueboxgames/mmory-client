@@ -191,10 +191,6 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 	}
 
 	var u:UnitView = new UnitView(card, id, side, x, y, card.z, t);
-	if( card.z < 0 )
-		battleData.battleField.field.air.add(u);
-	else
-		battleData.battleField.field.ground.add(u);
 	if( health >= 0 )
 		u.health = health;
 	battleData.battleField.units.set(id, u as Unit);
