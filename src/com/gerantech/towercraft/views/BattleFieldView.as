@@ -160,7 +160,6 @@ protected function syncToolPost_completeHandler(event:Event):void
 
 protected function timeManager_updateHandler(e:Event):void
 {
-	battleData.battleField.update(e.data as int);
 	unitsContainer.sortChildren(unitSortMethod);
 }
 
