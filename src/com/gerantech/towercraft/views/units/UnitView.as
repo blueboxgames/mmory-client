@@ -53,9 +53,9 @@ private var flameParticle:BattleParticleSystem;
 private var smokeParticle:BattleParticleSystem;
 private var bulletParticle:BattleParticleSystem;
 
-public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Number)
+public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Number, t:Number)
 {
-	super(card, id, side, x, y, z);
+	super(card, id, side, x, y, z, t);
 	__x = getSideX();
 	__y = getSideY();
 
