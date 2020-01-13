@@ -15,7 +15,6 @@ package com.gerantech.towercraft.controls.screens
   import com.gerantech.towercraft.controls.popups.UnderMaintenancePopup;
   import com.gerantech.towercraft.events.GameEvent;
   import com.gerantech.towercraft.managers.SoundManager;
-  import com.gerantech.towercraft.managers.TimeManager;
   import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
   import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
   import com.gerantech.towercraft.models.tutorials.TutorialData;
@@ -179,7 +178,6 @@ package com.gerantech.towercraft.controls.screens
         return;
 
       IN_BATTLE = true;
-      TimeManager.instance.forceUpdate();
       tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_STARTED, tutorials_tasksStartHandler);
       if( !WAITING.ready )
       {
