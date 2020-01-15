@@ -52,7 +52,7 @@ override protected function transitionInCompleted():void
 	characterArmature.touchable = false;
 	characterArmature.x = side == 0 ? 220 : stageWidth - 220;
 	characterArmature.y = stageHeight;
-	characterArmature.scale = 1 / 0.7;
+	characterArmature.scale = 1 / 0.5;
 	characterArmature.addEventListener(EventObject.COMPLETE, characterArmature_completeHandler);
 	characterArmature.animation.gotoAndPlayByTime("appear", 0, 1);
 	addChild(characterArmature as DisplayObject);
