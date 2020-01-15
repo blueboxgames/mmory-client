@@ -53,6 +53,7 @@ private var user:Object;
 private var adminMode:Boolean;
 private var playerData:ISFSObject;
 private var resourcesData:ISFSArray;
+private var supportData:ISFSArray;
 
 public function ProfilePopup(user:Object, getFullPlayerData:Boolean = false)
 {
@@ -97,6 +98,10 @@ protected function sfsConnection_responceHandler(event:SFSEvent):void
 	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_responceHandler);
 	playerData = event.params.params as SFSObject;
 	resourcesData = playerData.getSFSArray("resources");
+	if( playerData.containsKey("supData") )
+		supportData = playerData.getSFSArray("supData");
+	if( supportData != null )
+		trace(supportData.getDump());
 	
 	if( playerData.containsKey("ln") )
 		user.ln = playerData.getText("ln");
@@ -127,10 +132,24 @@ private function showProfile():void
 	var tagDisplay:RTLLabel = new RTLLabel("#" + playerData.getText("tag") + (adminMode?(" => " + user.id) : ""), 0xAABBBB, null, "ltr", true, null, 0.58);
 	tagDisplay.layoutData = new AnchorLayoutData(padding * 2.5, appModel.isLTR?NaN:padding * 5, NaN, appModel.isLTR?padding * 7:NaN);
 	addChild(tagDisplay);
+
 	
 	var lobbyNameDisplay:RTLLabel = new RTLLabel(user.ln, 0xAABBBB, null, "ltr", true, null, 0.6);
 	lobbyNameDisplay.layoutData = new AnchorLayoutData(padding * 3.3, appModel.isLTR?NaN:padding * 5, NaN, appModel.isLTR?padding * 7:NaN);
 	addChild(lobbyNameDisplay);
+	
+	if( this.supportData != null && adminMode )
+	{
+		var modelDisplay:RTLLabel = new RTLLabel(this.supportData.getSFSObject(0).getUtfString("model"), 0xAABBBB, null, "ltr", true, null, 0.58 );
+		modelDisplay.layoutData = new AnchorLayoutData(padding * 4.3, appModel.isLTR?NaN:padding * 5, NaN, appModel.isLTR?padding * 7:NaN);
+		addChild(modelDisplay);
+
+		var dDateString:Date = new Date();
+		dDateString.time = this.supportData.getSFSObject(0).getLong("create_at");
+		var creationDate:RTLLabel = new RTLLabel(dDateString.toUTCString(), 0xAABBBB, null, "ltr", true, null, 0.58);
+		creationDate.layoutData = new AnchorLayoutData(padding * 4.3, appModel.isLTR?padding*2:NaN, NaN, appModel.isLTR?NaN:padding*2);
+		addChild(creationDate);
+	}
 	
 	var closeButton:MMOryButton = new MMOryButton();
 	closeButton.alpha = 0;
@@ -250,7 +269,7 @@ private function showProfile():void
 	Image(scroller.backgroundSkin).scale9Grid = MainTheme.ROUND_MEDIUM_SCALE9_GRID;
 	scroller.backgroundSkin.alpha = 0.2;
 	scroller.layout = new AnchorLayout();
-	scroller.layoutData = new AnchorLayoutData(padding * 5, padding, padding * 2, padding);
+	scroller.layoutData = new AnchorLayoutData(padding * (adminMode?5:6), padding, padding * 2, padding);
 	scroller.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
 	addChild(scroller);
 	
