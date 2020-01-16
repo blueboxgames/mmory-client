@@ -121,6 +121,10 @@ package com.gerantech.towercraft.controls.screens
 
       switch(event.params.cmd)
       {
+      case SFSCommands.BATTLE_UNIT_CHANGE:
+        appModel.battleFieldView.updateUnits(data);
+        break;
+
       case SFSCommands.BATTLE_END:
         endBattle(data);
         break;
@@ -147,9 +151,6 @@ package com.gerantech.towercraft.controls.screens
           battleField.elixirUpdater.updateAt(1 - battleField.side, data.getInt(String(1 - battleField.side)));
         break;
 
-      case SFSCommands.BATTLE_UNIT_CHANGE:
-        appModel.battleFieldView.updateUnits(data);
-        break;
       }
     }
 
