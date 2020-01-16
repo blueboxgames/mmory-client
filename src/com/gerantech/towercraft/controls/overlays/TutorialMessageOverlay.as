@@ -69,7 +69,7 @@ protected function characterArmature_completeHandler(event:StarlingEvent) : void
 	characterArmature.animation.gotoAndPlayByTime("idle", 0, -1);
 
 	var position:Rectangle = new Rectangle(characterArmature.x + 200, stageHeight - 800, 1, 1);
-	var tootlip:ConfirmTooltip = new ConfirmTooltip( loc(task.message), position, 0.7, 0.56, task.type == TutorialTask.TYPE_CONFIRM);
+	var tootlip:ConfirmTooltip = new ConfirmTooltip( loc(task.message), position, 0.8, 0.56, task.type == TutorialTask.TYPE_CONFIRM, false);
 	tootlip.valign = "bot";
 	tootlip.addEventListener(Event.SELECT, tootlip_eventsHandler); 
 	tootlip.addEventListener(Event.CANCEL, tootlip_eventsHandler); 

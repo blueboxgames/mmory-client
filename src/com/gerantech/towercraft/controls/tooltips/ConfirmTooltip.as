@@ -8,14 +8,18 @@ import feathers.layout.AnchorLayoutData;
 import flash.geom.Rectangle;
 
 import starling.events.Event;
+import starling.events.Touch;
 import starling.events.TouchEvent;
+import starling.events.TouchPhase;
 
 public class ConfirmTooltip extends BaseTooltip
 {
 public var hasDecline:Boolean;
-public function ConfirmTooltip(message:String, position:Rectangle, fontScale:Number=0.8, hSize:Number=0.5, hasDecline:Boolean=true)
+public var hasAccept:Boolean;
+public function ConfirmTooltip(message:String, position:Rectangle, fontScale:Number=0.8, hSize:Number=0.5, hasDecline:Boolean=true, hasAccept:Boolean=true)
 {
 	super(message, position, fontScale, hSize);
+	this.hasAccept = hasAccept;
 	this.hasDecline = hasDecline;
 }
 
@@ -23,14 +27,24 @@ override protected function initialize():void
 {
 	super.initialize();
 	
-	var acceptButton:Button = new Button();
-	acceptButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
-	acceptButton.label = loc("popup_ok_label");
-	acceptButton.width = hasDecline ? 180 : 240;
-	acceptButton.height = padding * 4;
-	acceptButton.addEventListener(Event.TRIGGERED, acceptButton_triggeredHandler);
-	acceptButton.layoutData = new AnchorLayoutData(NaN, hasDecline ? padding * 2 : NaN, padding * 2, NaN, hasDecline ? NaN : 0);
-	addChild(acceptButton);
+	if( hasAccept )
+	{
+		var acceptButton:Button = new Button();
+		acceptButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
+		acceptButton.label = loc("popup_ok_label");
+		acceptButton.width = hasDecline ? 180 : 240;
+		acceptButton.height = padding * 4;
+		acceptButton.addEventListener(Event.TRIGGERED, acceptButton_triggeredHandler);
+		acceptButton.layoutData = new AnchorLayoutData(NaN, hasDecline ? padding * 2 : NaN, padding * 2, NaN, hasDecline ? NaN : 0);
+		addChild(acceptButton);
+	}
+	else
+	{
+		this.touchable = true;
+		this.stage.addEventListener(TouchEvent.TOUCH, stage_touchHandler);
+
+		this.labelDisplay.layoutData = new AnchorLayoutData(80, 80, 80, 80); 
+	}
 	
 	if( hasDecline )
 	{
@@ -56,7 +70,10 @@ private function acceptButton_triggeredHandler(event:Event):void
 }
 override protected function stage_touchHandler(event:TouchEvent):void
 {
-}		
+	var touch:Touch = event.touches.pop();
+	if( touch != null && touch.phase == TouchPhase.ENDED )
+		dispatchEventWith(Event.SELECT);
+}
 
 }
 }
