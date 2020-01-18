@@ -136,7 +136,7 @@ package com.gerantech.towercraft.controls.screens
       case SFSCommands.BATTLE_SUMMON:
         if( data.containsKey("now") )
         {
-          this.battleField.now = data.getDouble("now");
+          this.battleField.forceUpdate(data.getDouble("now") - this.battleField.now);
           break;
         }
         appModel.battleFieldView.summonUnits(data.getSFSArray("units"), data.getDouble("time"));
