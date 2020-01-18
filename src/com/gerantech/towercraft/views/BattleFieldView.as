@@ -145,7 +145,7 @@ protected function syncToolPost_completeHandler(event:Event):void
 	addChild(shadowsContainer);
 	addChild(unitsContainer);
 
-	summonUnits(battleData.sfsData.getSFSArray("units"), battleData.sfsData.getDouble("now"), true);
+	summonUnits(battleData.sfsData.getSFSArray("units"), battleData.sfsData.getDouble("now"));
 	scale = 0.85;
 
 	/*for ( i = 0; i < battleData.battleField.tileMap.width; i ++ )
@@ -160,7 +160,6 @@ protected function syncToolPost_completeHandler(event:Event):void
 
 protected function timeManager_updateHandler(e:Event):void
 {
-	battleData.battleField.update(e.data as int);
 	unitsContainer.sortChildren(unitSortMethod);
 }
 
@@ -171,67 +170,30 @@ private function unitSortMethod(left:IElement, right:IElement) : Number
 	return left.unit.y - right.unit.y;
 }
 
-public function summonUnits(units:ISFSArray, summonTime:Number, noSummonTime:Boolean=false):void
+public function summonUnits(units:ISFSArray, time:Number):void
 {
-	var log:String = "";
-	if( mapBuilder == null )
-	{
-		trace("not able to summon units:\n" + units.getDump(), "\nsummonTime: " + summonTime)
-		return;
-	}
-
-	var diff:Number = summonTime - TimeManager.instance.millis;
-	if( DEBUG )
-	{
-		log += "Start rollback\n";
-		log += "stime: " + summonTime + "\n";
-		log += "ctime: " + TimeManager.instance.millis + "\n";
-		log += "amount: " + diff + "\n";
-		log += "---------------------------\n";
-	}
-	if( diff < 0 )
-		this.battleData.battleField.forceUpdate(diff);
 	for( var i:int = 0; i < units.size(); i++ )
 	{
 		var u:ISFSObject = units.getSFSObject(i);
-		this.summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), u.containsKey("h") ? u.getDouble("h") : -1, noSummonTime);
-	}
-	if( diff < 0 )
-		this.battleData.battleField.forceUpdate(diff*-1);
-	if( DEBUG )
-	{
-		log += "End rollback\n";
-		log += "ctime: " + TimeManager.instance.millis + "\n";
-		log += "---------------------------\n";
-		trace(log);
+		this.summonUnit(u.getInt("i"), u.getInt("t"), u.getInt("l"), u.getInt("s"), u.getDouble("x"), u.getDouble("y"), u.containsKey("h") ? u.getDouble("h") : -1, time);
 	}
 }
 
-private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number, noSummonTime:Boolean=false) : void
+private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number, t:Number) : void
 {
 	var card:Card = getCard(side, type, level);
-	var cardSummonTime:int = card.summonTime;
-	if( noSummonTime )
-		card.summonTime = 0;
 	if( CardTypes.isSpell(type) )
 	{
 		var offset:Point3 = GraphicMetrics.getSpellStartPoint(card.type);
 		var spell:BulletView = new BulletView(battleData.battleField, id, card, side, x + offset.x, y + offset.y * (side == 0 ? 0.7 : -0.7), offset.z * 0.7, x, y, 0);
 		battleData.battleField.bullets.set(id, spell as Bullet);
-		//trace("summon spell", " side:" + side, " x:" + x, " y:" + y, " offset:" + offset);
-		card.summonTime = cardSummonTime;
 		return;
 	}
 
-	var u:UnitView = new UnitView(card, id, side, x, y, card.z);
-	if( card.z < 0 )
-		battleData.battleField.field.air.add(u);
-	else
-		battleData.battleField.field.ground.add(u);
+	var u:UnitView = new UnitView(card, id, side, x, y, card.z, t);
 	if( health >= 0 )
 		u.health = health;
 	battleData.battleField.units.set(id, u as Unit);
-	card.summonTime = cardSummonTime;
 
 	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
 }

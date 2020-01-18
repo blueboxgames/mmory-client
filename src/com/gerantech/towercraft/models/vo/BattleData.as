@@ -16,6 +16,8 @@ import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.models.AppModel;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 
+import starling.events.Event;
+
 public class BattleData
 {
 public var roomId:int = -1;
@@ -88,8 +90,13 @@ public function BattleData(sfsData:ISFSObject)
 	this.battleField.decks.set(1, BattleField.getDeckCards(this.battleField.games[1], this.battleField.games[1].loginData.deck, this.battleField.friendlyMode));
 	TimeManager.instance.setNow(Math.ceil(sfsData.getDouble("now") / 1000));
 	TimeManager.instance.setMillis(sfsData.getDouble("now"));
+	TimeManager.instance.addEventListener(Event.UPDATE, timeManager_updateHandler);
 }
 
+protected function timeManager_updateHandler(e:Event):void
+{
+	this.battleField.update(e.data as int);
+}
 public function getAlliseDeck():IntCardMap 
 {
 	return battleField.decks.get(this.battleField.side);

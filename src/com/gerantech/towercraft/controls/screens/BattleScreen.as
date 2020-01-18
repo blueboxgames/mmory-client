@@ -15,7 +15,6 @@ package com.gerantech.towercraft.controls.screens
   import com.gerantech.towercraft.controls.popups.UnderMaintenancePopup;
   import com.gerantech.towercraft.events.GameEvent;
   import com.gerantech.towercraft.managers.SoundManager;
-  import com.gerantech.towercraft.managers.TimeManager;
   import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
   import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
   import com.gerantech.towercraft.models.tutorials.TutorialData;
@@ -122,6 +121,10 @@ package com.gerantech.towercraft.controls.screens
 
       switch(event.params.cmd)
       {
+      case SFSCommands.BATTLE_UNIT_CHANGE:
+        appModel.battleFieldView.updateUnits(data);
+        break;
+
       case SFSCommands.BATTLE_END:
         endBattle(data);
         break;
@@ -131,6 +134,11 @@ package com.gerantech.towercraft.controls.screens
         break;
 
       case SFSCommands.BATTLE_SUMMON:
+        if( data.containsKey("now") )
+        {
+          this.battleField.forceUpdate(data.getDouble("now") - this.battleField.now);
+          break;
+        }
         appModel.battleFieldView.summonUnits(data.getSFSArray("units"), data.getDouble("time"));
         break;
 
@@ -148,9 +156,6 @@ package com.gerantech.towercraft.controls.screens
           battleField.elixirUpdater.updateAt(1 - battleField.side, data.getInt(String(1 - battleField.side)));
         break;
 
-      case SFSCommands.BATTLE_UNIT_CHANGE:
-        appModel.battleFieldView.updateUnits(data);
-        break;
       }
     }
 
@@ -179,7 +184,6 @@ package com.gerantech.towercraft.controls.screens
         return;
 
       IN_BATTLE = true;
-      TimeManager.instance.forceUpdate();
       tutorials.addEventListener(GameEvent.TUTORIAL_TASKS_STARTED, tutorials_tasksStartHandler);
       if( !WAITING.ready )
       {

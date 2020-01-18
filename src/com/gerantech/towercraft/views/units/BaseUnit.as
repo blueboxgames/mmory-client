@@ -14,9 +14,9 @@ import com.gerantech.mmory.core.battle.units.Unit;
 */
 public class BaseUnit extends Unit
 {
-public function BaseUnit(card:Card, id:int, side:int, x:Number, y:Number, z:Number)
+public function BaseUnit(card:Card, id:int, side:int, x:Number, y:Number, z:Number, t:Number)
 {
-	super(id, AppModel.instance.battleFieldView.battleData.battleField, card, side, x, y, z);
+	super(id, AppModel.instance.battleFieldView.battleData.battleField, card, side, x, y, z, t);
 }
 protected function get appModel():		AppModel		{	return AppModel.instance;			}
 protected function get game():			Game			{	return appModel.game;				}

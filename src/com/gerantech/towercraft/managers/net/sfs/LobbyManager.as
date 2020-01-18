@@ -42,6 +42,7 @@ public function joinToPublic(imei:String) : void
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_joinPublicHandler);
 	var params:SFSObject = new SFSObject();
 	params.putText("imei", imei);
+	params.putText("locale", AppModel.instance.locale);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC, params);	
 }
 

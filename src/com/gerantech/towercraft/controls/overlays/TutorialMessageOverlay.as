@@ -50,9 +50,9 @@ override protected function transitionInCompleted():void
 	transitionOut.delay = 0.5;
 	characterArmature = factory.buildArmatureDisplay("103");
 	characterArmature.touchable = false;
-	characterArmature.x = side == 0 ? 220 : stageWidth - 220;
+	characterArmature.x = 170; //side == 0 ? 220 : stageWidth - 220;
 	characterArmature.y = stageHeight;
-	characterArmature.scale = 1 / 0.7;
+	characterArmature.scale = 1 / 0.6;
 	characterArmature.addEventListener(EventObject.COMPLETE, characterArmature_completeHandler);
 	characterArmature.animation.gotoAndPlayByTime("appear", 0, 1);
 	addChild(characterArmature as DisplayObject);
@@ -68,8 +68,8 @@ protected function characterArmature_completeHandler(event:StarlingEvent) : void
 	characterArmature.removeEventListener(EventObject.COMPLETE, characterArmature_completeHandler);
 	characterArmature.animation.gotoAndPlayByTime("idle", 0, -1);
 
-	var position:Rectangle = new Rectangle(characterArmature.x, stageHeight - 1000, 1, 1);
-	var tootlip:ConfirmTooltip = new ConfirmTooltip( loc(task.message), position, 0.85, 0.75, task.type == TutorialTask.TYPE_CONFIRM);
+	var position:Rectangle = new Rectangle(characterArmature.x + 200, stageHeight - 800, 1, 1);
+	var tootlip:ConfirmTooltip = new ConfirmTooltip( loc(task.message), position, 0.8, 0.56, task.type == TutorialTask.TYPE_CONFIRM, false);
 	tootlip.valign = "bot";
 	tootlip.addEventListener(Event.SELECT, tootlip_eventsHandler); 
 	tootlip.addEventListener(Event.CANCEL, tootlip_eventsHandler); 
