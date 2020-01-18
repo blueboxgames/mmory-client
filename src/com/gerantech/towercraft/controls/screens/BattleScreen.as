@@ -2,6 +2,7 @@ package com.gerantech.towercraft.controls.screens
 {
   import com.gerantech.mmory.core.battle.BattleField;
   import com.gerantech.mmory.core.battle.fieldes.FieldData;
+  import com.gerantech.mmory.core.battle.units.Unit;
   import com.gerantech.mmory.core.constants.PrefsTypes;
   import com.gerantech.mmory.core.constants.ResourceType;
   import com.gerantech.mmory.core.socials.Challenge;
@@ -23,7 +24,6 @@ package com.gerantech.towercraft.controls.screens
   import com.gerantech.towercraft.models.vo.UserData;
   import com.gerantech.towercraft.themes.MainTheme;
   import com.gerantech.towercraft.views.BattleFieldView;
-  import com.gerantech.towercraft.views.units.UnitView;
   import com.smartfoxserver.v2.core.SFSEvent;
   import com.smartfoxserver.v2.entities.data.ISFSArray;
   import com.smartfoxserver.v2.entities.data.ISFSObject;
@@ -33,8 +33,6 @@ package com.gerantech.towercraft.controls.screens
   import feathers.layout.AnchorLayoutData;
 
   import flash.utils.setTimeout;
-
-  import haxe.ds._IntMap.IntMapKeysIterator;
 
   import starling.animation.Transitions;
   import starling.core.Starling;
@@ -301,13 +299,9 @@ package com.gerantech.towercraft.controls.screens
         loserSide = 0;
       if( loserSide > -1 )
       {
-        var iterator:IntMapKeysIterator = battleData.battleField.units.keys() as IntMapKeysIterator;
-        while( iterator.hasNext() )
-        {
-          var u:UnitView = battleData.battleField.units.get(iterator.next()) as UnitView;
-          if( u.side == loserSide && (u.card.speed > 0 || player.get_battlesCount() < appModel.maxTutorBattles) )
+        for each(var u:Unit in battleData.battleField.units)
+           if( u.side == loserSide && (u.card.speed > 0 || player.get_battlesCount() < appModel.maxTutorBattles) )
             u.hit(100);
-        }
       }
 
       // reduce player resources
