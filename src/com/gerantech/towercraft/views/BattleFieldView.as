@@ -28,8 +28,6 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import flash.utils.setTimeout;
 
-import haxe.ds._IntMap.IntMapKeysIterator;
-
 import starling.assets.AssetManager;
 import starling.core.Starling;
 import starling.display.DisplayObjectContainer;
@@ -186,14 +184,14 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 	{
 		var offset:Point3 = GraphicMetrics.getSpellStartPoint(card.type);
 		var spell:BulletView = new BulletView(battleData.battleField, id, card, side, x + offset.x, y + offset.y * (side == 0 ? 0.7 : -0.7), offset.z * 0.7, x, y, 0);
-		battleData.battleField.bullets.set(id, spell as Bullet);
+		battleData.battleField.bullets.push(spell as Bullet);
 		return;
 	}
 
 	var u:UnitView = new UnitView(card, id, side, x, y, card.z, t);
 	if( health >= 0 )
 		u.health = health;
-	battleData.battleField.units.set(id, u as Unit);
+	battleData.battleField.units.push(u as Unit);
 
 	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
 }
@@ -234,30 +232,12 @@ public function requestKillPioneers(side:int):void
 	setTimeout(carPassing, time, color == 0 ? -400 : 1300, color == 0 ? 1300 : -400, color == 1 ? -480 : 420, color);
 }
 
-/* public function hitUnits(buletId:int, targets:ISFSArray) : void
-{
-	return;
-	for ( var i:int = 0; i < targets.size(); i ++ )
-	{
-		var id:int = targets.getSFSObject(i).getInt("i");
-		if( battleData.battleField.units.get(id) != null )
-			battleData.battleField.units.get(id).setHealth(targets.getSFSObject(i).getDouble("h"));
-		else
-			trace("unit " + id + " not found.");
-	}
-}*/
-
 public function updateUnits(unitData:SFSObject) : void
 {
 	var serverUnitIds:Array = unitData.getIntArray("keys");
-	var iterator:IntMapKeysIterator = battleData.battleField.units.keys() as IntMapKeysIterator;
-	// force remove units from server
-	while( iterator.hasNext() )
-	{
-		var k:int = iterator.next();
-		if( serverUnitIds.indexOf(k) == -1 )
-			battleData.battleField.units.get(k).hit(100);
-	}
+	for(var i:int = 0; i < battleData.battleField.units.length; i++)
+		if( serverUnitIds.indexOf(battleData.battleField.units[i].id) == -1 )
+			battleData.battleField.units[i].hit(100);
 	
 /* 	if( !unitData.containsKey("testData") )
 		return;

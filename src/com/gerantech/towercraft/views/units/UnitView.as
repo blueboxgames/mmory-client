@@ -198,9 +198,9 @@ override public function attack(enemy:Unit) : void
 	fireOffset = ArtRules.getFlamePosition(card.type, Math.atan2(x - enemy.x, y - enemy.y));
 	var b:BulletView = new BulletView(battleField, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, enemy.x, enemy.y, 0);
 	b.targetId = enemy.id;
-	battleField.bullets.set(bulletId, b as Bullet);
+	battleField.bullets.push(b as Bullet);
 	bulletId ++;
-	turn("s_", CoreUtils.getRadString(Math.atan2(__x - battleField.units.get(enemy.id).getSideX(), __y - battleField.units.get(enemy.id).getSideY())));
+	turn("s_", CoreUtils.getRadString(Math.atan2(__x - enemy.getSideX(), __y - enemy.getSideY())));
 }
 
 override public function setPosition(x:Number, y:Number, z:Number, forced:Boolean = false) : Boolean

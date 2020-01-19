@@ -271,7 +271,7 @@ public function updateScores(round:int, winnerSide:int, allise:int, axis:int, un
 	// uniit focus only appeared  in touchdown battles
 	if( battleData.battleField.field.mode == Challenge.MODE_1_TOUCHDOWN )
 	{	
-		var unit:UnitView = battleData.battleField.units.get(unitId) as UnitView;
+		var unit:UnitView = battleData.battleField.getUnit(unitId) as UnitView;
 		if( unit != null )
 			unit.showWinnerFocus();
 	}
