@@ -1,9 +1,7 @@
 package com.gerantech.towercraft.controls.items.challenges 
 {
 import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.socials.Challenge;
-import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.buttons.IconButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.SimpleLayoutButton;
@@ -226,7 +224,7 @@ protected function backgroundImage_triggerdHandler(event:Event) : void
 {
 	if( locked && !IN_HOME)
 	{
-		appModel.navigator.addLog(loc("availableuntil_messeage", [loc("resource_title_2") + " " + Challenge.getUnlockAt(game, challenge.index), ""]));
+		appModel.navigator.addLog(loc("availableuntil_messeage", [loc("resource_title_2") + " " + Challenge.getUnlockAt(game, challenge.index), loc("challenge_label", [loc("num_" + (challenge.index+1)) + " "])]));
 		return;
 	}
 	if( _owner != null )

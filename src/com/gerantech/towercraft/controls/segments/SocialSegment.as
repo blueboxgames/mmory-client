@@ -60,7 +60,7 @@ override public function init():void
 
 	if( player.get_point() < 300 )
 	{
-		showLabel(loc("availableuntil_messeage", [loc("resource_title_2") + " " + 300, " "]));
+		showLabel(loc("availableuntil_messeage", [loc("resource_title_2") + " " + 300 , loc("tab-3") + " "]));
 		return;
 	}
 	
