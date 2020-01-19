@@ -58,9 +58,9 @@ override public function init():void
 		addChild(labelDisplay);
 	}
 
-	if( player.get_arena(0) < 1 )
+	if( player.get_point() < 300 )
 	{
-		showLabel(loc("availableat_messeage", [loc("tab-3"), loc("arena_text") + " " + loc("num_2")]));
+		showLabel(loc("availableuntil_messeage", [loc("resource_title_2") + " " + 300, " "]));
 		return;
 	}
 	
