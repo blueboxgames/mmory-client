@@ -232,27 +232,12 @@ public function requestKillPioneers(side:int):void
 	setTimeout(carPassing, time, color == 0 ? -400 : 1300, color == 0 ? 1300 : -400, color == 1 ? -480 : 420, color);
 }
 
-/* public function hitUnits(buletId:int, targets:ISFSArray) : void
-{
-	return;
-	for ( var i:int = 0; i < targets.size(); i ++ )
-	{
-		var id:int = targets.getSFSObject(i).getInt("i");
-		if( battleData.battleField.units.get(id) != null )
-			battleData.battleField.units.get(id).setHealth(targets.getSFSObject(i).getDouble("h"));
-		else
-			trace("unit " + id + " not found.");
-	}
-}*/
-
 public function updateUnits(unitData:SFSObject) : void
 {
 	var serverUnitIds:Array = unitData.getIntArray("keys");
 	for(var i:int = 0; i < battleData.battleField.units.length; i++)
-	{
 		if( serverUnitIds.indexOf(battleData.battleField.units[i].id) == -1 )
 			battleData.battleField.units[i].hit(100);
-	}
 	
 /* 	if( !unitData.containsKey("testData") )
 		return;
