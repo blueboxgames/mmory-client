@@ -300,7 +300,7 @@ package com.gerantech.towercraft.controls.screens
       if( loserSide > -1 )
       {
         for each(var u:Unit in battleData.battleField.units)
-           if( u.side == loserSide && (u.card.speed > 0 || player.get_battlesCount() < appModel.maxTutorBattles) )
+           if( !u.disposed() && u.side == loserSide && (u.card.speed > 0 || player.get_battlesCount() < appModel.maxTutorBattles) )
             u.hit(100);
       }
 
