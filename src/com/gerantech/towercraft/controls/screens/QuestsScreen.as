@@ -10,9 +10,11 @@ import com.gerantech.towercraft.controls.items.QuestItemRenderer;
 import com.gerantech.towercraft.managers.net.CoreLoader;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
+import feathers.controls.ImageLoader;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.layout.AnchorLayoutData;
@@ -31,7 +33,16 @@ override protected function initialize():void
 	virtualHeader = false;
 	headerSize = 220;
 	super.initialize();
-	
+
+	var gradient:ImageLoader = new ImageLoader();
+	gradient.touchable = false;
+	gradient.scale9Grid = MainTheme.SHADOW_SIDE_SCALE9_GRID;
+	gradient.color = 0x001133;
+	gradient.layoutData = new AnchorLayoutData(0, 0, NaN, 0);
+	gradient.height = 440;
+	gradient.source = appModel.assets.getTexture("theme/gradeint-top");
+	addChildAt(gradient, numChildren - 2);
+
 	var indicatorHC:Indicator = new Indicator("rtl", ResourceType.R4_CURRENCY_HARD);
 	indicatorHC.layoutData = new AnchorLayoutData(20, 70);
 	addChild(indicatorHC);
