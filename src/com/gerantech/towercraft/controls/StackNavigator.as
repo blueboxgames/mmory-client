@@ -490,6 +490,10 @@ package com.gerantech.towercraft.controls
 			//trace(sessions, type, prefs.keys(), prefs.values());
 			
 			if( type > 0 )
+				confirmOffer(type);
+		}
+
+		public function confirmOffer(type:int):void
 			{
 				var confirm:TutorialMessageOverlay;
 				if( type == PrefsTypes.OFFER_30_RATING )
