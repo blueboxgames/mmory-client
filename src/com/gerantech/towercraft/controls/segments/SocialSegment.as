@@ -58,12 +58,6 @@ override public function init():void
 		addChild(labelDisplay);
 	}
 
-	if( player.get_point() < 300 )
-	{
-		showLabel(loc("availableuntil_messeage", [loc("resource_title_2") + " " + 300, " "]));
-		return;
-	}
-	
 	if( appModel.loadingManager.serverData.containsKey("forbidenApps") )
 	{
 		var filter:Array = appModel.loadingManager.serverData.getText("forbidenApps").split(",");
