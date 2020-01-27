@@ -110,7 +110,6 @@ override protected function commitData():void
 	var point:int = buddy.containsVariable("$point") ? buddy.getVariable("$point").getIntValue() : 0;
 	pointDisplay.text = point>0 ? ("" + point) : "";
 	pointIconDisplay.source = appModel.assets.getTexture("leagues/" + player.get_arena(point));
-	//trace(_data.i, player.id);
 	var itsMe:Boolean = buddy.nickName == player.nickName;
 	var fs:int = AppModel.instance.theme.gameFontSize * (itsMe?1:0.9);
 	var fc:int = itsMe?MainTheme.PRIMARY_TEXT_COLOR:DEFAULT_TEXT_COLOR;
@@ -127,7 +126,6 @@ override protected function commitData():void
 	// Set status display
 	buddy.setVariable( new SFSBuddyVariable("$__BV_STATE__", buddy.isOnline?(buddy.state!="Occupied"?"Available":"Occupied"):"Away") as BuddyVariable);
 	statusSkin.defaultTexture = statusSkin.getTextureForState(buddy.state);
-	//trace(buddy.nickName, buddy.state, buddy.isOnline)
 }
 
 private function item_triggeredHandler(event:Event):void
