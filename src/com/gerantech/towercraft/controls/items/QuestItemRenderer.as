@@ -118,7 +118,7 @@ override protected function commitData():void
 	
 	messageDisplay.text = loc("quest_message_" + quest.type);
 	rewardPalette.setRewards(quest.rewards);
-	progressBarDisplay.visible = !passed;
+	progressBarDisplay.visible = !passed && Quest.progressive(quest.type);
 	if( progressBarDisplay.visible )
 	{
 		progressBarDisplay.maximum = quest.target;
@@ -181,9 +181,10 @@ static private function getIcon(type:int) : String
 		case 1: return "leagues/" + AppModel.instance.game.player.get_arena(0) + 1;
 		case 2:
 		case 3:
+		case 6:
 		case 4: return "home/dash-tab-2";
 		case 5: return "home/dash-tab-3";
-		case 6: return "home/dash-tab-4";
+		case 13: return "home/dash-tab-4";
 		case 7:
 		case 8: return "home/dash-tab-1";
 		case 9: return "books/56";
