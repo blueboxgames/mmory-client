@@ -33,9 +33,10 @@ package com.gerantech.towercraft.controls.groups
       var tagField:TextField = new TextField();
       tagField.embedFonts = true;
       tagField.defaultTextFormat = new TextFormat("SourceSans", 22, 0xFFCCAA, true);
-      tagField.text = "#" + AppModel.instance.game.player.invitationCode;
+      tagField.text = "\n#" + AppModel.instance.game.player.invitationCode;
       tagField.x = 256 - tagField.width * 0.5; 
-      tagField.y = 470;
+      tagField.y = 450;
+      tagField.height = 52;
       addChild(tagField);
     }
 

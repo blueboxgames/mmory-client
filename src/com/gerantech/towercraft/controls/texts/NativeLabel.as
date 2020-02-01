@@ -33,9 +33,9 @@ package com.gerantech.towercraft.controls.texts
     public function NativeLabel(text:String = null, width:int = 500, color:uint = 1, align:String = null, direction:String = null, wordWrap:Boolean = false, lastAlign:String = null, fontSize:Number = 0, fontFamily:String = null, fontWeight:String = null, fontPosture:String = null)
     {
       if( fontSize == 0 )
-        this.fontSize = AppModel.instance.theme.smallFontSize * 0.6;
+        this.fontSize = AppModel.instance.theme.smallFontSize * 0.55;
       else if( fontSize < 4 )
-        this.fontSize = fontSize * AppModel.instance.theme.smallFontSize * 0.6;
+        this.fontSize = fontSize * AppModel.instance.theme.smallFontSize * 0.55;
       else
         this.fontSize = fontSize;
             
