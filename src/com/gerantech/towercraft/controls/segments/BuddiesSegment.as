@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.controls.segments
 {
-import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.mmory.core.socials.Lobby;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.items.BuddyItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
+import com.gerantech.towercraft.controls.popups.BuddyRequestPopup;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
@@ -14,7 +14,6 @@ import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.themes.MainTheme;
-import com.gerantech.towercraft.utils.Localizations;
 import com.smartfoxserver.v2.core.SFSBuddyEvent;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Buddy;
@@ -135,10 +134,7 @@ protected function list_focusInHandler(event:Event):void
 	var buddy:Buddy = selectedItem.data as Buddy;
 	if( buddy == null )
 	{
-		var subject:String = loc("invite_friend");
-		var text:String = loc("invite_friend_message") + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
-		NativeAbilities.instance.shareText(subject, text);
-		trace(subject, text);
+		appModel.navigator.addPopup(new BuddyRequestPopup(player.invitationCode));
 		return;
 	}
 	

@@ -2,10 +2,18 @@ package com.gerantech.towercraft.controls.popups
 {
 
 
+    import com.gerantech.extensions.NativeAbilities;
     import com.gerantech.towercraft.controls.buttons.CustomButton;
     import com.gerantech.towercraft.controls.buttons.MMOryButton;
     import com.gerantech.towercraft.controls.texts.ShadowLabel;
+    import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+    import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+    import com.gerantech.towercraft.models.AppModel;
     import com.gerantech.towercraft.themes.MainTheme;
+    import com.gerantech.towercraft.utils.Localizations;
+    import com.gerantech.towercraft.utils.Utils;
+    import com.smartfoxserver.v2.core.SFSEvent;
+    import com.smartfoxserver.v2.entities.data.SFSObject;
 
     import feathers.controls.LayoutGroup;
     import feathers.controls.TextInput;
@@ -22,6 +30,7 @@ package com.gerantech.towercraft.controls.popups
     {
         private var inviteCode:String;
         protected var closeButton:MMOryButton;
+        private var addRequestInput:TextInput;
         
         public function BuddyRequestPopup(inviteCode:String)
         {
@@ -58,6 +67,7 @@ package com.gerantech.towercraft.controls.popups
             sendRequestGroup.addChild(codeLabel);
             
             var sendRequestButton:CustomButton = new CustomButton();
+            sendRequestButton.addEventListener(Event.TRIGGERED, sendRequestButton_triggeredHandler);
             sendRequestButton.label = loc("invite_friend");
             sendRequestButton.fontsize = 48;
 
@@ -78,13 +88,15 @@ package com.gerantech.towercraft.controls.popups
             var addRequestInputLabel:ShadowLabel = new ShadowLabel(loc("invitation_enter_ask"), 1, 0);
             addRequestGroup.addChild(addRequestInputLabel);
             
-            var addRequestInput:TextInput = new TextInput();
+            addRequestInput = new TextInput();
             addRequestInput.setSize(500, 90);
             addRequestGroup.addChild(addRequestInput);
             
             var addRequestButton:CustomButton = new CustomButton();
             addRequestButton.label = loc("invitation_send");
             addRequestGroup.addChild(addRequestButton);
+            
+            addRequestButton.addEventListener(Event.TRIGGERED, addRequestButton_triggeredHandler);
             
             container.addChild(sendRequestGroup);
             container.addChild(addRequestGroup);
@@ -113,6 +125,29 @@ package com.gerantech.towercraft.controls.popups
         {
             dispatchEventWith(Event.CLOSE);
             close();
+        }
+
+        protected function sendRequestButton_triggeredHandler(e:Event):void
+        {
+            var subject:String = loc("invite_friend");
+            var text:String = loc("invite_friend_message") + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
+            NativeAbilities.instance.shareText(subject, text);
+            trace(subject, text);
+        }
+
+        protected function addRequestButton_triggeredHandler(e:Event):void
+        {
+            var sfs:SFSObject = new SFSObject();
+            sfs.putText("invitationCode", this.addRequestInput.text);
+            sfs.putText("udid", appModel.platform == AppModel.PLATFORM_ANDROID ? NativeAbilities.instance.deviceInfo.id : Utils.getPCUniqueCode());
+            SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_responseHandler);
+            SFSConnection.instance.sendExtensionRequest(SFSCommands.BUDDY_ADD, sfs);
+            function sfsConnection_responseHandler(event:SFSEvent):void
+            {
+                if (event.params.cmd != SFSCommands.BUDDY_ADD)
+                    return SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_responseHandler);
+                appModel.navigator.addPopup(new InvitationPopup(event.params.params));
+            }
         }
 
         override public function dispose():void
