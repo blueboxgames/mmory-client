@@ -10,6 +10,7 @@ package com.gerantech.towercraft.controls.groups
   import flash.text.TextField;
   import flash.text.TextFormat;
   import com.gerantech.towercraft.utils.Localizations;
+  import com.gerantech.mmory.core.Player;
 
   public class ShareImageFactory extends Sprite
   {
@@ -32,7 +33,8 @@ package com.gerantech.towercraft.controls.groups
 
       var tagField:TextField = new TextField();
       tagField.embedFonts = true;
-      tagField.defaultTextFormat = new TextFormat("SourceSans", 22, 0xFFCCAA, true);
+      tagField.defaultTextFormat = new TextFormat("SourceSans", 22, 0xFFCCAA, true, null, null, null, null, "center");
+      tagField.width = 330
       tagField.text = "\n#" + AppModel.instance.game.player.invitationCode;
       tagField.x = 256 - tagField.width * 0.5; 
       tagField.y = 450;
