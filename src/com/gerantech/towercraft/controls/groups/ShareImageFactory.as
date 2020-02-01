@@ -26,7 +26,7 @@ package com.gerantech.towercraft.controls.groups
       addChild(stream.loader);
 
       var padding:int = 32;
-      var messageField:NativeLabel = new NativeLabel(Localizations.instance.get("invite_friend_label"), this.size - padding * 2, 1, "justify", null, true, "center");
+      var messageField:NativeLabel = new NativeLabel(Localizations.instance.get("invite_friend_label", [AppModel.instance.game.player.nickName]), this.size - padding * 2, 1, "justify", null, true, "center");
       messageField.x = padding;
       messageField.y = 355 + padding;
       addChild(messageField);
