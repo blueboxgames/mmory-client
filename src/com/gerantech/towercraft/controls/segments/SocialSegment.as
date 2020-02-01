@@ -71,6 +71,13 @@ override public function init():void
 		}
 	}
 
+	var syncTool:SyncUtil = new SyncUtil();
+	syncTool.addEventListener(Event.COMPLETE, syncToolPost_completeHandler);
+	syncTool.sync("social");
+}
+
+protected function syncToolPost_completeHandler(event:Event):void
+{
 	var pageLayout:HorizontalLayout = new HorizontalLayout();
 	pageLayout.horizontalAlign = HorizontalAlign.CENTER;
 	pageLayout.verticalAlign = VerticalAlign.JUSTIFY;
