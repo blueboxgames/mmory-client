@@ -8,6 +8,7 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.themes.MainTheme;
+import com.gerantech.towercraft.utils.SyncUtil;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
@@ -70,7 +71,7 @@ override public function init():void
 			return;
 		}
 	}
-
+	
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPost_completeHandler);
 	syncTool.sync("social");
