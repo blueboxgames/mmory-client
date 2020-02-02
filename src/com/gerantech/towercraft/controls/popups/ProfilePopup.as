@@ -76,7 +76,7 @@ public function ProfilePopup(user:Object, getFullPlayerData:Boolean = false)
 
 override protected function initialize():void
 {
-	var _h:int = adminMode ? 1800 : 1200;
+	var _h:int = adminMode ? 1800 : 1320;
 	var _p:int = 48;
 	transitionIn = new TransitionData();
 	transitionOut = new TransitionData();
