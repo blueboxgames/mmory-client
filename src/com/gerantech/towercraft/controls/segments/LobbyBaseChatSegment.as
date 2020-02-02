@@ -61,6 +61,9 @@ override public function init():void
 
 protected function loadData():void
 {
+	if( !initializeStarted || initializeCompleted || manager == null || EmoteItemRenderer.factory == null )
+		return;
+	
 	if( player.getResource(ResourceType.R7_MAX_POINT) < 300 )
 	{
 		var descDisplay:ShadowLabel = new ShadowLabel(loc("availableuntil_messeage", [loc("resource_title_2") + " " + 300, ""]), 1, 0, "center");
@@ -69,9 +72,6 @@ protected function loadData():void
 		addChild(descDisplay);
 		return;
 	}
-
-	if( manager == null )
-		return;
 
 	var imei:String = appModel.platform == AppModel.PLATFORM_ANDROID ? NativeAbilities.instance.deviceInfo.imei : "";
 	if( manager.isPublic && appModel.platform == AppModel.PLATFORM_ANDROID && imei == "" )
@@ -92,10 +92,7 @@ protected function loadData():void
 
 	if( isBan() )
 		return;
-	
-	if( !initializeStarted || initializeCompleted || EmoteItemRenderer.factory == null )
-		return;
-	
+
 	if( manager.isReady )
 	{
 		showElements();
