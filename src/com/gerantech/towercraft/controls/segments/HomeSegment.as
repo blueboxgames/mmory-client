@@ -243,7 +243,6 @@ private function showTutorial():void
 				appModel.navigator.pushScreen( Game.LEAGUES_SCREEN );
 			}
 		}
-
 	}
 
 	// show challenge tutorial
