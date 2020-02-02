@@ -343,14 +343,22 @@ package com.gerantech.towercraft.controls.screens
         if( challengUnlockAt > player.get_point() )
           break;
       }
-      var before_win_wins:int = player.get_battleswins();
+      var wins_before_battle:int = player.get_battleswins();
       player.addResources(outcomes);
-      if( player.get_battleswins() == 10 || player.get_battleswins() == 20 && player.get_battleswins() > before_win_wins )
+      if( player.get_battleswins() > wins_before_battle )
       {
         if( Metrix.instance.isSupported )
         {
-          var first_session_event:MetrixEvent = Metrix.instance.newEvent("ifrcs");
-          Metrix.instance.sendEvent(first_session_event);
+          if( player.get_battleswins() == 10 )
+          {
+            var ten_battle:MetrixEvent = Metrix.instance.newEvent("ifrcs");
+            Metrix.instance.sendEvent(ten_battle);
+          }
+          if( player.get_battleswins() == 20 )
+          {
+            var twenty_battle:MetrixEvent = Metrix.instance.newEvent("cxftv");
+            Metrix.instance.sendEvent(twenty_battle);
+          }
         }
       }
 
