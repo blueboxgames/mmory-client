@@ -71,12 +71,13 @@ override public function init():void
 	
 	var padding:int = 72;
 
-	RankItemRenderer.RANK_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:16, NaN, appModel.isLTR?16:NaN, NaN, 0);
-	RankItemRenderer.POINT_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?96:NaN, NaN, appModel.isLTR?NaN:96, NaN, 0);
-	RankItemRenderer.NAME_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:205, NaN, appModel.isLTR?205:NaN, NaN, 0);
+	BuddyItemRenderer.STATUS_LAYOUT = new AnchorLayoutData(0, appModel.isLTR?NaN:0, 0, appModel.isLTR?0:NaN);
+	RankItemRenderer.RANK_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:36, NaN, appModel.isLTR?36:NaN, NaN, 0);
+	RankItemRenderer.POINT_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?116:NaN, NaN, appModel.isLTR?NaN:116, NaN, 0);
+	RankItemRenderer.NAME_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:225, NaN, appModel.isLTR?225:NaN, NaN, 0);
 	RankItemRenderer.POINT_BG_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?16:NaN, NaN, appModel.isLTR?NaN:16, NaN, 0);
-	RankItemRenderer.LEAGUE_BG_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:112, NaN, appModel.isLTR?112:NaN, NaN, 0);
-	RankItemRenderer.LEAGUE_IC_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:122, NaN, appModel.isLTR?122:NaN, NaN, -5);
+	RankItemRenderer.LEAGUE_BG_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:132, NaN, appModel.isLTR?132:NaN, NaN, 0);
+	RankItemRenderer.LEAGUE_IC_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:142, NaN, appModel.isLTR?142:NaN, NaN, -5);
 	
 	var listLayout:VerticalLayout = new VerticalLayout();
 	listLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
