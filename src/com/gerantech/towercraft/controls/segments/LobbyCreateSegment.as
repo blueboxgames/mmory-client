@@ -48,29 +48,29 @@ override protected function initialize():void
 	tilteDisplay.layoutData = new AnchorLayoutData(padding, padding, NaN, padding);
 	addChild(tilteDisplay);
 
-	nameInput = addInput("name", 390, 100);
-	bioInput = addInput("bio", 520, 280);
+	nameInput = addInput("name", 290, 100);
+	bioInput = addInput("bio", 420, 240);
 	
 	// lobby emblem
 	var emblemLabel:RTLLabel = new RTLLabel( loc("lobby_pic"), 1, null, null, false, null, 0.75);
-	emblemLabel.layoutData = new AnchorLayoutData(900, appModel.isLTR?NaN:padding, NaN, appModel.isLTR?padding:NaN);
+	emblemLabel.layoutData = new AnchorLayoutData(860, appModel.isLTR?NaN:padding, NaN, appModel.isLTR?padding:NaN);
 	addChild(emblemLabel);
 	
 	emblemButton = new EmblemButton(0);
-	emblemButton.layoutData = new AnchorLayoutData(850, appModel.isLTR?padding:NaN, NaN, appModel.isLTR?NaN:padding);
+	emblemButton.layoutData = new AnchorLayoutData(710, appModel.isLTR?padding:NaN, NaN, appModel.isLTR?NaN:padding);
 	emblemButton.addEventListener(Event.TRIGGERED, emblemButton_triggeredHandler);
 	emblemButton.width = 144;
 	emblemButton.height = 150;
 	addChild(emblemButton);
 
 
-	maxSwitcher = addSwitcher("max", 1040, 100, 10, 30, 50, 20);
-	minSwitcher = addSwitcher("min", 1170, 100, 0, 200, 3000, 200);
-	privacySwitcher = addSwitcher("pri", 1300, 100, 0, 0, 1, 1, "lobby_pri");
+	maxSwitcher = addSwitcher("max", 900, 100, 10, 30, 50, 20);
+	minSwitcher = addSwitcher("min", 1030, 100, 0, 200, 3000, 200);
+	privacySwitcher = addSwitcher("pri", 1160, 100, 0, 0, 1, 1, "lobby_pri");
 	
 	
 	errorDisplay = new RTLLabel(null, 0xFF0000, "center", null, false, null, 0.9);
-	errorDisplay.layoutData = new AnchorLayoutData(NaN, padding, 300, padding );
+	errorDisplay.layoutData = new AnchorLayoutData(NaN, padding, 50, padding);
 	addChild(errorDisplay);
 
 	var t:int = game.lobby.get_createRequirements().keys()[0];
@@ -84,7 +84,7 @@ override protected function initialize():void
 	createButton.message = loc("lobby_create_button");
 	createButton.label = MMOryButton.getLabel(t, v);
 	createButton.iconTexture = MMOryButton.getIcon(t, v);
-	createButton.layoutData = new AnchorLayoutData(NaN, NaN, 100, NaN, 0);
+	createButton.layoutData = new AnchorLayoutData(NaN, NaN, 150, NaN, 0);
 	createButton.addEventListener(Event.TRIGGERED,  createButton_triggeredHandler);
 	addChild(createButton);
 }
