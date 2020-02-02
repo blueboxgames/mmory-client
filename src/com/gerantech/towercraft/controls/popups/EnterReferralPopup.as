@@ -11,7 +11,6 @@ package com.gerantech.towercraft.controls.popups
     import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
     import com.gerantech.towercraft.models.AppModel;
     import com.gerantech.towercraft.themes.MainTheme;
-    import com.gerantech.towercraft.utils.Localizations;
     import com.gerantech.towercraft.utils.Utils;
     import com.smartfoxserver.v2.core.SFSEvent;
     import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -27,16 +26,14 @@ package com.gerantech.towercraft.controls.popups
 
     import starling.events.Event;
 
-    public class InvitationSelectPopup extends SimplePopup
+    public class EnterReferralPopup extends SimplePopup
     {
-        private var inviteCode:String;
         protected var closeButton:MMOryButton;
         private var addRequestInput:TextInput;
         
-        public function InvitationSelectPopup(inviteCode:String)
+        public function EnterReferralPopup()
         {
             super();
-            this.inviteCode = inviteCode;
         }
 
         override protected function initialize():void
@@ -78,8 +75,7 @@ package com.gerantech.towercraft.controls.popups
             addRequestGroup.addChild(addRequestButton);
             
             addRequestButton.addEventListener(Event.TRIGGERED, addRequestButton_triggeredHandler);
-            
-            // container.addChild(sendRequestGroup);
+
             container.addChild(addRequestGroup);
 
             this.addChild(container);
@@ -106,14 +102,6 @@ package com.gerantech.towercraft.controls.popups
         {
             dispatchEventWith(Event.COMPLETE);
             close();
-        }
-
-        protected function sendRequestButton_triggeredHandler(e:Event):void
-        {
-            var subject:String = loc("invite_friend");
-            var text:String = loc("invite_friend_message") + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
-            NativeAbilities.instance.shareText(subject, text);
-            trace(subject, text);
         }
 
         protected function addRequestButton_triggeredHandler(e:Event):void

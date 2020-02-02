@@ -14,7 +14,7 @@ import com.gerantech.towercraft.controls.groups.HomeBooksLine;
 import com.gerantech.towercraft.controls.groups.Profile;
 import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRenderer;
 import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
-import com.gerantech.towercraft.controls.popups.InvitationSelectPopup;
+import com.gerantech.towercraft.controls.popups.EnterReferralPopup;
 import com.gerantech.towercraft.controls.popups.RankingPopup;
 import com.gerantech.towercraft.controls.popups.SelectNamePopup;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
@@ -234,7 +234,7 @@ private function showTutorial():void
 		{
 			confirm.removeEventListener(Event.COMPLETE, confirm_eventsHandler);
 			UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_72_NAME_SELECTED);
-			var invitationPopup:InvitationSelectPopup = new InvitationSelectPopup("");
+			var invitationPopup:EnterReferralPopup = new EnterReferralPopup();
 			invitationPopup.addEventListener(Event.COMPLETE, invite_eventsHandler);
 			appModel.navigator.addPopup(invitationPopup);
 			function invite_eventsHandler():void
