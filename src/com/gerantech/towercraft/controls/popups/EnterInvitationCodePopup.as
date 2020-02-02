@@ -9,6 +9,7 @@ package com.gerantech.towercraft.controls.popups
     import com.gerantech.towercraft.themes.MainTheme;
     import com.gerantech.towercraft.utils.Utils;
     import com.smartfoxserver.v2.core.SFSEvent;
+    import com.smartfoxserver.v2.entities.data.ISFSObject;
     import com.smartfoxserver.v2.entities.data.SFSObject;
 
     import feathers.controls.Button;
@@ -32,7 +33,7 @@ package com.gerantech.towercraft.controls.popups
             var _p:int = 100;
             var _h:int = 560;
             var pad:int = 20;
-            closeOnOverlay = false;
+            closeWithKeyboard = closeOnOverlay = false;
 
             var titleDisplay:ShadowLabel = new ShadowLabel(loc("invitation_enter_ask"), 1, 0);
             titleDisplay.layoutData = new AnchorLayoutData(70, NaN, NaN, NaN, 0);
@@ -89,14 +90,16 @@ package com.gerantech.towercraft.controls.popups
             SFSConnection.instance.sendExtensionRequest(SFSCommands.BUDDY_ADD, sfs);
             function sfsConnection_responseHandler(event:SFSEvent):void
             {
-                trace( event.params.params.getDump() );
-                if( event.params.params.getInt("response") == MessageTypes.RESPONSE_NOT_ALLOWED )
+                var params:ISFSObject = event.params.params;
+                if( params.getInt("response") == MessageTypes.RESPONSE_NOT_ALLOWED )
                 {
-                    appModel.navigator.addLog(loc("popup_invitation_" + event.params.params.getInt("response")));
+                    appModel.navigator.addLog(loc("popup_invitation_" + params.getInt("response")));
                     return;
                 }
                 if (event.params.cmd != SFSCommands.BUDDY_ADD)
                     return SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_responseHandler);
+                if( params.containsKey("rewardType") )
+					player.resources.increase(params.getInt("rewardType"), params.getInt("rewardCount") );
                 dispatchEventWith(Event.COMPLETE);
                 close();
             }
