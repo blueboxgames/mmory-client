@@ -1,19 +1,25 @@
 package com.gerantech.towercraft.controls.items
 {
+import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.smartfoxserver.v2.entities.Buddy;
+import com.smartfoxserver.v2.entities.variables.BuddyVariable;
+import com.smartfoxserver.v2.entities.variables.SFSBuddyVariable;
 
+import feathers.controls.ImageLoader;
 import feathers.controls.LayoutGroup;
 import feathers.events.FeathersEventType;
-import feathers.skins.ImageSkin;
+import feathers.layout.AnchorLayoutData;
 
 import starling.events.Event;
 import starling.events.Touch;
 
 public class BuddyItemRenderer extends RankItemRenderer
 {
+	static public var STATUS_LAYOUT:AnchorLayoutData;
+	
 	private var buddy:Buddy;
-	private var statusSkin:ImageSkin;
+	private var statusSkin:ImageLoader;
 	private var statusDisplay:LayoutGroup;
 
 	public function getTouch():Touch
@@ -26,13 +32,13 @@ public class BuddyItemRenderer extends RankItemRenderer
 	{
 		super.initialize();
 		
-		// statusSkin = new ImageSkin(appModel.theme.buttonUpSkinTexture);
-		// statusSkin.scale9Grid = MainTheme.BUTTON_SCALE9_GRID;
-		// statusSkin.setTextureForState("Available", appModel.theme.buttonUpSkinTexture );
-		// statusSkin.setTextureForState("Away", appModel.theme.buttonDisabledSkinTexture );
-		// statusSkin.setTextureForState("Occupied", appModel.theme.buttonDangerUpSkinTexture );
+		statusSkin = new ImageLoader();
+		statusSkin.scale9Grid = MainTheme.BUTTON_SMALL_SCALE9_GRID;
+		statusSkin.layoutData = STATUS_LAYOUT;
+		statusSkin.width = 20;
+		addChild(statusSkin)
 
-		this.height = 110;
+		this.height = 120;
 		this.addEventListener(Event.TRIGGERED, item_triggeredHandler);
 	}
 
@@ -52,7 +58,14 @@ public class BuddyItemRenderer extends RankItemRenderer
 		this.leagueBGDisplay.source = appModel.assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-small");
 		
 		// // Set status display
-		// buddy.setVariable( new SFSBuddyVariable("$__BV_STATE__", buddy.isOnline?(buddy.state!="Occupied"?"Available":"Occupied"):"Away") as BuddyVariable);
+		buddy.setVariable( new SFSBuddyVariable("$__BV_STATE__", buddy.isOnline?(buddy.state!="Occupied"?"Available":"Occupied"):"Away") as BuddyVariable);
+		if( buddy.isOnline )
+			statusSkin.source = buddy.state == "Available" ? appModel.theme.buttonSmallUpSkinTexture : appModel.theme.buttonSmallDangerUpSkinTexture;
+		else
+			statusSkin.source = appModel.theme.buttonSmallDisabledSkinTexture;
+		// statusSkin.setTextureForState("Available", appModel.theme.buttonSmallUpSkinTexture );
+		// statusSkin.setTextureForState("Away", appModel.theme.buttonSmallDisabledSkinTexture );
+		// statusSkin.setTextureForState("Occupied", appModel.theme.buttonSmallDangerUpSkinTexture );
 		// statusSkin.defaultTexture = statusSkin.getTextureForState(buddy.state);
 		//trace(buddy.nickName, buddy.state, buddy.isOnline)
 	}
