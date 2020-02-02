@@ -108,6 +108,9 @@
 				<action android:name="com.google.firebase.MESSAGING_EVENT"/>
 			</intent-filter>
 		</service>
+    <provider android:name="android.support.v4.content.FileProvider" android:authorities="__APPID__.provider" android:exported="false" android:grantUriPermissions="true">
+      <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
+    </provider>
 	</application>
 	
 </manifest>
@@ -140,6 +143,7 @@
   <extensions>
 		<extensionID>com.gameanalytics.sdk</extensionID>
 		<extensionID>com.gerantech.dependency</extensionID>
+		<extensionID>com.gerantech.extensions.share</extensionID>
 		<extensionID>com.gerantech.extensions.iabilling</extensionID>
 		<extensionID>com.gerantech.extensions.nativeabilities</extensionID>
 		<extensionID>com.tuarua.firebase.AnalyticsANE</extensionID>

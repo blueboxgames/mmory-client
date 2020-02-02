@@ -10,9 +10,11 @@ import com.gerantech.towercraft.controls.items.QuestItemRenderer;
 import com.gerantech.towercraft.managers.net.CoreLoader;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
+import feathers.controls.ImageLoader;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.layout.AnchorLayoutData;
@@ -20,6 +22,13 @@ import feathers.layout.AnchorLayoutData;
 import flash.geom.Rectangle;
 
 import starling.events.Event;
+import com.gerantech.mmory.core.constants.PrefsTypes;
+import flash.net.navigateToURL;
+import flash.net.URLRequest;
+import com.gerantech.towercraft.controls.segments.SocialSegment;
+import com.gerantech.towercraft.Game;
+import com.gerantech.towercraft.controls.segments.CardsSegment;
+import com.gerantech.towercraft.models.vo.UserData;
 
 public class QuestsScreen extends ListScreen
 {
@@ -31,7 +40,16 @@ override protected function initialize():void
 	virtualHeader = false;
 	headerSize = 220;
 	super.initialize();
-	
+
+	var gradient:ImageLoader = new ImageLoader();
+	gradient.touchable = false;
+	gradient.scale9Grid = MainTheme.SHADOW_SIDE_SCALE9_GRID;
+	gradient.color = 0x001133;
+	gradient.layoutData = new AnchorLayoutData(0, 0, NaN, 0);
+	gradient.height = 440;
+	gradient.source = appModel.assets.getTexture("theme/gradeint-top");
+	addChildAt(gradient, numChildren - 2);
+
 	var indicatorHC:Indicator = new Indicator("rtl", ResourceType.R4_CURRENCY_HARD);
 	indicatorHC.layoutData = new AnchorLayoutData(20, 70);
 	addChild(indicatorHC);
@@ -65,7 +83,7 @@ private function showQuests(needsLoad:Boolean):void
 	
 	listLayout.gap = 40;
 	listLayout.padding = 50
-	listLayout.paddingBottom = footerSize + 20;
+	listLayout.paddingBottom = footerSize + 40;
 	listLayout.paddingTop = headerSize + 40;
 	listLayout.hasVariableItemDimensions = true;
 	
@@ -98,22 +116,34 @@ protected function list_selectHandler(e:Event):void
 		passQuest(questItem);
 		return;
 	}
-	
-	/*switch( questItem.quest.type )
+
+	// increase step
+	if( !Quest.progressive(questItem.quest.type) && questItem.quest.current == -1 )
+		UserData.instance.prefs.setInt(questItem.quest.key, player.prefs.getAsInt(questItem.quest.key) + 2);
+
+	var nextScreen:String;	
+	switch( questItem.quest.type )
 	{
 		//case Quest.TYPE_2_OPERATIONS :			appModel.navigator.pushScreen(Main.OPERATIONS_SCREEN);	return;
 		
-		case Quest.TYPE_3_BATTLES :				
-		case Quest.TYPE_4_BATTLE_WINS :			appModel.navigator.runBattle();	return;
-		case Quest.TYPE_0_LEVELUP :
-		case Quest.TYPE_1_LEAGUEUP :
-		case Quest.TYPE_9_BOOK_OPEN :			DashboardScreen.TAB_INDEX = 2;	break;
+		// case Quest.TYPE_3_BATTLES :				
+		// case Quest.TYPE_4_BATTLE_WINS :			appModel.navigator.runBattle();	return;
+		// case Quest.TYPE_0_LEVELUP :
+		case Quest.TYPE_1_LEAGUEUP :	nextScreen = Game.LEAGUES_SCREEN;	break;
+		// case Quest.TYPE_9_BOOK_OPEN :			DashboardScreen.TAB_INDEX = 2;	break;
 		case Quest.TYPE_5_FRIENDLY_BATTLES :	DashboardScreen.TAB_INDEX = 3;	break;
-		case Quest.TYPE_6_CHALLENGES :			DashboardScreen.TAB_INDEX = 4;	break;
-		case Quest.TYPE_7_CARD_COLLECT :
-		case Quest.TYPE_8_CARD_UPGRADE :		DashboardScreen.TAB_INDEX = 1;	BuildingsSegment.SELECTED_CARD = questItem.quest.key;	break;
+		// case Quest.TYPE_6_CHALLENGES :			DashboardScreen.TAB_INDEX = 4;	break;
+		// case Quest.TYPE_7_CARD_COLLECT :
+		case Quest.TYPE_8_CARD_UPGRADE :		DashboardScreen.TAB_INDEX = 1;	break;
+		case Quest.TYPE_10_RATING :		appModel.navigator.confirmOffer(PrefsTypes.OFFER_30_RATING);	break;
+		case Quest.TYPE_11_TELEGRAM:	navigateToURL(new URLRequest(loc("setting_value_311", null, false)));			break;
+		case Quest.TYPE_12_INSTAGRAM: navigateToURL(new URLRequest(loc("setting_value_312", null, false)));			break;
+		case Quest.TYPE_13_FRIENDSHIP:DashboardScreen.TAB_INDEX = 3;	SocialSegment.TAB_INDEX = 2;	break;
 	}
-	appModel.navigator.popScreen();*/
+
+	appModel.navigator.popScreen();
+	if( nextScreen != null )
+		appModel.navigator.pushScreen(nextScreen);
 }
 
 private function passQuest(questItem:QuestItemRenderer):void 

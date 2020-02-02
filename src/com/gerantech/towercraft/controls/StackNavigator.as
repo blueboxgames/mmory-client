@@ -479,64 +479,67 @@ package com.gerantech.towercraft.controls
 			var wins:int = AppModel.instance.game.player.get_battleswins();
 			var prefs:IntStrMap = AppModel.instance.game.player.prefs;
 			var type:int = 0;
-			if( wins > prefs.getAsInt(PrefsTypes.OFFER_30_RATING) )
+			if( wins > PrefsTypes.VALUE_30_RATING && prefs.getAsInt(PrefsTypes.OFFER_30_RATING) <= 0 )
 				type = PrefsTypes.OFFER_30_RATING;
-			else if (wins > prefs.getAsInt(PrefsTypes.OFFER_31_TELEGRAM))
+			else if( wins > PrefsTypes.VALUE_31_TELEGRAM && prefs.getAsInt(PrefsTypes.OFFER_31_TELEGRAM) <= 0 )
 				type = PrefsTypes.OFFER_31_TELEGRAM;
-			else if (wins > prefs.getAsInt(PrefsTypes.OFFER_32_INSTAGRAM))
+			else if( wins > PrefsTypes.VALUE_32_INSTAGRAM && prefs.getAsInt(PrefsTypes.OFFER_32_INSTAGRAM) <= 0 )
 				type = PrefsTypes.OFFER_32_INSTAGRAM;
-			else if (wins > prefs.getAsInt(PrefsTypes.OFFER_33_FRIENDSHIP))
+			else if( wins > PrefsTypes.VALUE_33_FRIENDSHIP && prefs.getAsInt(PrefsTypes.OFFER_33_FRIENDSHIP) <= 0 )
 				type = PrefsTypes.OFFER_33_FRIENDSHIP;
 			//trace(sessions, type, prefs.keys(), prefs.values());
 			
 			if( type > 0 )
+				confirmOffer(type);
+		}
+
+		public function confirmOffer(type:int):void
+		{
+			var confirm:TutorialMessageOverlay;
+			if( type == PrefsTypes.OFFER_30_RATING )
+				confirm = new RatingMessageOverlay(new TutorialTask(TutorialTask.TYPE_CONFIRM, "popup_offer_" + type)) as TutorialMessageOverlay;
+			else
+				confirm = new TutorialMessageOverlay(new TutorialTask(TutorialTask.TYPE_CONFIRM, "popup_offer_" + type));
+			confirm.addEventListener(Event.SELECT, confirm_handler);
+			confirm.addEventListener(Event.CANCEL, confirm_handler);
+			confirm.data = type;
+			addOverlay(confirm);
+			
+			function confirm_handler(e:Event):void
 			{
-				var confirm:TutorialMessageOverlay;
-				if( type == PrefsTypes.OFFER_30_RATING )
-					confirm = new RatingMessageOverlay(new TutorialTask(TutorialTask.TYPE_CONFIRM, "popup_offer_" + type)) as TutorialMessageOverlay;
-				else
-					confirm = new TutorialMessageOverlay(new TutorialTask(TutorialTask.TYPE_CONFIRM, "popup_offer_" + type));
-				confirm.addEventListener(Event.SELECT, confirm_handler);
-				confirm.addEventListener(Event.CANCEL, confirm_handler);
-				confirm.data = type;
-				addOverlay(confirm);
-				
-				function confirm_handler(e:Event):void
+				confirm.removeEventListener(Event.SELECT, confirm_handler);
+				confirm.removeEventListener(Event.CANCEL, confirm_handler);
+				var t:int = int(confirm.data);
+				if (e.type == Event.SELECT)
 				{
-					confirm.removeEventListener(Event.SELECT, confirm_handler);
-					confirm.removeEventListener(Event.CANCEL, confirm_handler);
-					var t:int = int(confirm.data);
-					if (e.type == Event.SELECT)
+					switch (t)
 					{
-						switch (t)
-						{
-						case PrefsTypes.OFFER_30_RATING: 
-							BillingManager.instance.rate();
-							break;
-						case PrefsTypes.OFFER_31_TELEGRAM: 
-							navigateToURL(new URLRequest(loc("setting_value_311")));
-							break;
-						case PrefsTypes.OFFER_32_INSTAGRAM: 
-							navigateToURL(new URLRequest(loc("setting_value_312")));
-							break;
-						case PrefsTypes.OFFER_33_FRIENDSHIP: 
-							DashboardScreen.TAB_INDEX = 3;
-							SocialSegment.TAB_INDEX = 2;
-							popToRootScreen();
-							break;
-						}
-						UserData.instance.prefs.setInt(t, prefs.getAsInt(t) + 1000);
+					case PrefsTypes.OFFER_30_RATING: 
+						BillingManager.instance.rate();
+						break;
+					case PrefsTypes.OFFER_31_TELEGRAM: 
+						navigateToURL(new URLRequest(loc("setting_value_311")));
+						break;
+					case PrefsTypes.OFFER_32_INSTAGRAM: 
+						navigateToURL(new URLRequest(loc("setting_value_312")));
+						break;
+					case PrefsTypes.OFFER_33_FRIENDSHIP: 
+						DashboardScreen.TAB_INDEX = 3;
+						SocialSegment.TAB_INDEX = 2;
+						popToRootScreen();
+						break;
 					}
-					else
+					UserData.instance.prefs.setInt(t, AppModel.instance.game.player.prefs.getAsInt(t) + 1000);
+				}
+				else
+				{
+					switch (t)
 					{
-						switch (t)
-						{
-						case PrefsTypes.OFFER_30_RATING: 
-							InboxSegment.openThread();
-							break;
-						}
-						UserData.instance.prefs.setInt(t, prefs.getAsInt(t) + 50);
+					case PrefsTypes.OFFER_30_RATING: 
+						InboxSegment.openThread();
+						break;
 					}
+					UserData.instance.prefs.setInt(t, AppModel.instance.game.player.prefs.getAsInt(t) + 50);
 				}
 			}
 		}

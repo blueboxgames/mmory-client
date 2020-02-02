@@ -8,6 +8,7 @@ import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.TabItemData;
 import com.gerantech.towercraft.themes.MainTheme;
+import com.gerantech.towercraft.utils.SyncUtil;
 
 import feathers.controls.ImageLoader;
 import feathers.controls.List;
@@ -58,12 +59,6 @@ override public function init():void
 		addChild(labelDisplay);
 	}
 
-	if( player.get_point() < 300 )
-	{
-		showLabel(loc("availableuntil_messeage", [loc("resource_title_2") + " " + 300 , loc("tab-3") + " "]));
-		return;
-	}
-	
 	if( appModel.loadingManager.serverData.containsKey("forbidenApps") )
 	{
 		var filter:Array = appModel.loadingManager.serverData.getText("forbidenApps").split(",");
@@ -76,7 +71,14 @@ override public function init():void
 			return;
 		}
 	}
+	
+	var syncTool:SyncUtil = new SyncUtil();
+	syncTool.addEventListener(Event.COMPLETE, syncToolPost_completeHandler);
+	syncTool.sync("social");
+}
 
+protected function syncToolPost_completeHandler(event:Event):void
+{
 	var pageLayout:HorizontalLayout = new HorizontalLayout();
 	pageLayout.horizontalAlign = HorizontalAlign.CENTER;
 	pageLayout.verticalAlign = VerticalAlign.JUSTIFY;

@@ -1,10 +1,11 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.extensions.share.Share;
 import com.gerantech.mmory.core.socials.Lobby;
 import com.gerantech.towercraft.controls.FastList;
+import com.gerantech.towercraft.controls.groups.ShareImageFactory;
 import com.gerantech.towercraft.controls.items.BuddyItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
-import com.gerantech.towercraft.controls.popups.BuddyRequestPopup;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
@@ -14,6 +15,7 @@ import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.themes.MainTheme;
+import com.gerantech.towercraft.utils.Localizations;
 import com.smartfoxserver.v2.core.SFSBuddyEvent;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.Buddy;
@@ -42,6 +44,7 @@ private var list:FastList;
 private var buttonsPopup:SimpleListPopup;
 private var buddyCollection:ListCollection;
 private var _buttonsEnabled:Boolean = true;
+private var share:ShareImageFactory;
 public function BuddiesSegment()
 {
 	SFSConnection.instance.buddyManager.setInited(true);
@@ -96,6 +99,9 @@ override public function init():void
 
 private function showTutorials():void
 {
+	share = new ShareImageFactory();
+	// Starling.current.nativeStage.addChild(share);
+
 	if( SFSConnection.instance.buddyManager.buddyList.length >= 3 || game.sessionsCount % 5 != 0 )
 		return;
 	var tutorialData:TutorialData = new TutorialData("buddy_tutorial");
@@ -122,7 +128,7 @@ protected function sfs_buddyChangeHandler(event:SFSBuddyEvent):void
 	if( event.type == SFSBuddyEvent.BUDDY_ADD )
 		buddyCollection.addItemAt(buddy, buddyCollection.length - 2);
 	else if( event.type == SFSBuddyEvent.BUDDY_REMOVE )
-		buddyCollection.removeItemAt(buddyCollection.getItemIndex(buddy))
+		buddyCollection.removeItemAt(buddyCollection.getItemIndex(buddy));
 }
 
 protected function list_focusInHandler(event:Event):void
@@ -134,7 +140,10 @@ protected function list_focusInHandler(event:Event):void
 	var buddy:Buddy = selectedItem.data as Buddy;
 	if( buddy == null )
 	{
-		appModel.navigator.addPopup(new BuddyRequestPopup(player.invitationCode));
+		var subject:String = loc("invite_friend");
+		var text:String = loc("invite_friend_message") + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
+		Share.instance.shareImage(share.export(), subject, text);
+		// trace(subject, text);
 		return;
 	}
 	
@@ -251,7 +260,5 @@ override public function dispose():void
 	SFSConnection.instance.removeEventListener(SFSBuddyEvent.BUDDY_REMOVE,				sfs_buddyChangeHandler); 
 	super.dispose();
 }
-
-
 }
 }

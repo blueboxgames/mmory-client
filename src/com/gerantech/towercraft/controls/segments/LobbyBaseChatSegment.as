@@ -28,6 +28,7 @@ import feathers.layout.AnchorLayoutData;
 
 import starling.core.Starling;
 import starling.events.Event;
+import com.gerantech.mmory.core.constants.ResourceType;
 
 public class LobbyBaseChatSegment extends ChatSegment
 {
@@ -54,6 +55,16 @@ override public function init():void
 	
 	super.init();
 	layout = new AnchorLayout();
+
+	if( player.getResource(ResourceType.R7_MAX_POINT) < 300 )
+	{
+		var descDisplay:ShadowLabel = new ShadowLabel(loc("availableuntil_messeage", [loc("resource_title_2") + " " + 300, ""]), 1, 0, "center");
+		descDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
+		descDisplay.width = stageWidth - 200;
+		addChild(descDisplay);
+		return;
+	}
+
 	loadData();
 }
 

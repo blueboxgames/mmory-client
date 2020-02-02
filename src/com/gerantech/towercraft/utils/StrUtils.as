@@ -177,9 +177,11 @@ public static function  getFullURL (path:String, sura:uint, aya:uint, post:Strin
 	return (path + "/" + getZeroNum(sura.toString()) + getZeroNum(aya.toString()) + "." + post);
 }
 
-public static function loc(resourceName:String, parameters:Array = null) : String
+public static function loc(resourceName:String, parameters:Array = null, convertDigits:Boolean = true) : String
 {
-	return getNumber(Localizations.instance.get(resourceName, parameters));
+	if( convertDigits )
+		return getNumber(Localizations.instance.get(resourceName, parameters));
+	return Localizations.instance.get(resourceName, parameters);
 }
 
 //  UINT TO TIME _________________________________________________________________________
