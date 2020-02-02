@@ -25,6 +25,7 @@ package com.gerantech.towercraft.controls.popups
     {
         private var inputDisplay:TextInput;
         private var closeButton:Button;
+        private var submitButton:Button;
         
         public function EnterInvitationCodePopup() { super(); }
         override protected function initialize():void
@@ -44,7 +45,7 @@ package com.gerantech.towercraft.controls.popups
             inputDisplay.setSize(500, 110);
             addChild(inputDisplay);
             
-            var submitButton:Button = new Button();
+            submitButton = new Button();
             submitButton.layoutData = new AnchorLayoutData(NaN, NaN, 50, NaN, 0);
             submitButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
             submitButton.label = loc("invitation_send");
@@ -99,7 +100,11 @@ package com.gerantech.towercraft.controls.popups
                 if (event.params.cmd != SFSCommands.BUDDY_ADD)
                     return SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_responseHandler);
                 if( params.containsKey("rewardType") )
+                {
 					player.resources.increase(params.getInt("rewardType"), params.getInt("rewardCount") );
+                    var rec:Rectangle = submitButton.getBounds(stage);
+					appModel.navigator.dispatchEventWith("achieveResource", false, [rec.x + rec.width * 0.5, rec.y, params.getInt("rewardType"), params.getInt("rewardCount")]);
+                }
                 dispatchEventWith(Event.COMPLETE);
                 close();
             }
@@ -107,6 +112,7 @@ package com.gerantech.towercraft.controls.popups
 
         override public function dispose():void
         {
+            this.submitButton.removeEventListener(Event.TRIGGERED, this.addRequestButton_triggeredHandler);
             this.closeButton.removeEventListener(Event.TRIGGERED, this.closeButton_triggeredHandler);
             super.dispose();
         }
