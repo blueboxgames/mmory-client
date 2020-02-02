@@ -14,6 +14,7 @@ import com.gerantech.towercraft.controls.groups.HomeBooksLine;
 import com.gerantech.towercraft.controls.groups.Profile;
 import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRenderer;
 import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
+import com.gerantech.towercraft.controls.popups.InvitationSelectPopup;
 import com.gerantech.towercraft.controls.popups.RankingPopup;
 import com.gerantech.towercraft.controls.popups.SelectNamePopup;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
@@ -38,7 +39,6 @@ import flash.geom.Rectangle;
 import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.events.Event;
-import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 public class HomeSegment extends Segment
 {
@@ -234,8 +234,16 @@ private function showTutorial():void
 		{
 			confirm.removeEventListener(Event.COMPLETE, confirm_eventsHandler);
 			UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_72_NAME_SELECTED);
-			appModel.navigator.pushScreen( Game.LEAGUES_SCREEN );
+			var invitationPopup:InvitationSelectPopup = new InvitationSelectPopup("");
+			invitationPopup.addEventListener(Event.COMPLETE, invite_eventsHandler);
+			appModel.navigator.addPopup(invitationPopup);
+			function invite_eventsHandler():void
+			{
+				invitationPopup.removeEventListener(Event.COMPLETE, invite_eventsHandler);
+				appModel.navigator.pushScreen( Game.LEAGUES_SCREEN );
+			}
 		}
+
 	}
 
 	// show challenge tutorial
