@@ -14,6 +14,7 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import starling.events.Event;
 import starling.events.EventDispatcher;
+import flash.utils.setTimeout;
 
 public class UserPrefs extends EventDispatcher 
 {
@@ -96,27 +97,8 @@ public function setString(key:int, value:String):void
 /************************   AUTHENTICATE SOCIAL OR GAME SERVICES   ***************************/
 public function authenticateSocial():void
 {
-    //NativeAbilities.instance.showToast(SocialManager.instance.initialized + " == " + SocialManager.instance.authenticated + " == " + player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE), 2);
-    if( OAuthManager.instance.authenticated )
-    {
-        /*socials.user = new SocialUser();
-        socials.user.id = "g01079473321487998344";
-        socials.user.name = "ManJav";
-        socials.user.imageURL = "content://com.google.android.gms.games.background/images/751cd60e/7927";
-        sendSocialData();*/
-        return;
-    }
-    
-    //state = STATE_SOCIAL_SIGNIN;            
-    OAuthManager.instance.addEventListener(OAuthManager.AUTHENTICATE, socialManager_eventsHandler);
-    OAuthManager.instance.addEventListener(OAuthManager.FAILURE, socialManager_eventsHandler);
-    OAuthManager.instance.init( PrefsTypes.AUTH_41_GOOGLE , true);
-}
-protected function socialManager_eventsHandler(event:Event):void
-{
-    OAuthManager.instance.removeEventListener(OAuthManager.AUTHENTICATE, socialManager_eventsHandler);
-    OAuthManager.instance.removeEventListener(OAuthManager.FAILURE, socialManager_eventsHandler);
-    //sendSocialData();
+	OAuthManager.instance.init( PrefsTypes.AUTH_41_GOOGLE , true);
+	setTimeout(OAuthManager.instance.signin, 1000);
 }
 }
 }

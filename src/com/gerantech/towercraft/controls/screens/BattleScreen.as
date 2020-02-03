@@ -34,6 +34,9 @@ package com.gerantech.towercraft.controls.screens
 
   import flash.utils.setTimeout;
 
+  import ir.metrix.sdk.Metrix;
+  import ir.metrix.sdk.MetrixEvent;
+
   import starling.animation.Transitions;
   import starling.core.Starling;
   import starling.display.Image;
@@ -340,8 +343,24 @@ package com.gerantech.towercraft.controls.screens
         if( challengUnlockAt > player.get_point() )
           break;
       }
-
+      var wins_before_battle:int = player.get_battleswins();
       player.addResources(outcomes);
+      if( player.get_battleswins() > wins_before_battle )
+      {
+        if( Metrix.instance.isSupported )
+        {
+          if( player.get_battleswins() == 10 )
+          {
+            var ten_battle:MetrixEvent = Metrix.instance.newEvent("ifrcs");
+            Metrix.instance.sendEvent(ten_battle);
+          }
+          if( player.get_battleswins() == 20 )
+          {
+            var twenty_battle:MetrixEvent = Metrix.instance.newEvent("cxftv");
+            Metrix.instance.sendEvent(twenty_battle);
+          }
+        }
+      }
 
       // check new challenge unlocked
       if( challengUnlockAt > 0 && challengUnlockAt < player.get_point() )

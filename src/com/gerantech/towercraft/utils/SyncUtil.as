@@ -19,10 +19,23 @@ package com.gerantech.towercraft.utils
         private var saveQueue:Array;
         private var assetsDir:File;
         private var numAssets:int;
-        public function sync(assets:Object):void
+        public function sync(data:Object):void
         {
             SYNCYING = true;
-            this.assets = assets;
+            
+            // provide assets
+            if( data is String )
+            {
+                this.assets = new Object();
+                for ( var key:String in AppModel.instance.syncData )
+                    if( AppModel.instance.syncData[key]["mode"] == data )
+                        this.assets[key] = AppModel.instance.syncData[key];
+            }
+            else
+            {
+               this.assets = data;
+            }
+            
             assetsDir = File.applicationStorageDirectory.resolvePath("assets");
             if( assetsDir.exists )
             {

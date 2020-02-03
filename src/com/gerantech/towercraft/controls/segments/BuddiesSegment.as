@@ -1,9 +1,11 @@
 package com.gerantech.towercraft.controls.segments
 {
-import com.gerantech.extensions.NativeAbilities;
+import com.gerantech.extensions.share.Share;
 import com.gerantech.mmory.core.socials.Lobby;
 import com.gerantech.towercraft.controls.FastList;
+import com.gerantech.towercraft.controls.groups.ShareImageFactory;
 import com.gerantech.towercraft.controls.items.BuddyItemRenderer;
+import com.gerantech.towercraft.controls.items.RankItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
@@ -24,6 +26,7 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 import com.smartfoxserver.v2.entities.variables.BuddyVariable;
 import com.smartfoxserver.v2.entities.variables.SFSBuddyVariable;
 
+import feathers.controls.Button;
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
 import feathers.events.FeathersEventType;
@@ -43,6 +46,7 @@ private var list:FastList;
 private var buttonsPopup:SimpleListPopup;
 private var buddyCollection:ListCollection;
 private var _buttonsEnabled:Boolean = true;
+private var share:ShareImageFactory;
 public function BuddiesSegment()
 {
 	SFSConnection.instance.buddyManager.setInited(true);
@@ -65,17 +69,24 @@ override public function init():void
 	
 	layout = new AnchorLayout();
 	
+	var padding:int = 72;
+
+	BuddyItemRenderer.STATUS_LAYOUT = new AnchorLayoutData(0, appModel.isLTR?NaN:0, 0, appModel.isLTR?0:NaN);
+	RankItemRenderer.RANK_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:36, NaN, appModel.isLTR?36:NaN, NaN, 0);
+	RankItemRenderer.POINT_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?116:NaN, NaN, appModel.isLTR?NaN:116, NaN, 0);
+	RankItemRenderer.NAME_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:225, NaN, appModel.isLTR?225:NaN, NaN, 0);
+	RankItemRenderer.POINT_BG_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?16:NaN, NaN, appModel.isLTR?NaN:16, NaN, 0);
+	RankItemRenderer.LEAGUE_BG_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:132, NaN, appModel.isLTR?132:NaN, NaN, 0);
+	RankItemRenderer.LEAGUE_IC_LAYOUT = new AnchorLayoutData(NaN, appModel.isLTR?NaN:142, NaN, appModel.isLTR?142:NaN, NaN, -5);
+	
 	var listLayout:VerticalLayout = new VerticalLayout();
 	listLayout.horizontalAlign = HorizontalAlign.JUSTIFY;
-	listLayout.padding = 24;	
-	listLayout.paddingTop = listLayout.padding;
-	listLayout.useVirtualLayout = true;
-	listLayout.typicalItemHeight = 164;;
-	listLayout.gap = 12;	
+	listLayout.paddingTop = 200;
+	listLayout.gap = 16;
 	
 	list = new FastList();
 	list.layout = listLayout;
-	list.layoutData = new AnchorLayoutData(0, 0, 0, 0);
+	list.layoutData = new AnchorLayoutData(padding, padding, padding, padding);
 	addChild(list);
 	
 	buddyCollection = new ListCollection(SFSConnection.instance.buddyManager.buddyList);
@@ -85,11 +96,18 @@ override public function init():void
 	me.setVariable( new SFSBuddyVariable("$point", player.get_point()) as BuddyVariable);
 	//me.setVariable( new SFSBuddyVariable("$room", SFSConnection.instance.myLobby.name));
 	buddyCollection.addItem( me );
-	buddyCollection.addItem( 0 );
-	listLayout.hasVariableItemDimensions = true;
 	list.addEventListener(FeathersEventType.FOCUS_IN, list_focusInHandler);
 	list.itemRendererFactory = function():IListItemRenderer { return new BuddyItemRenderer(); }
 	list.dataProvider = buddyCollection;
+
+	var invitationButton:Button = new Button();
+	invitationButton.height = 150;
+	invitationButton.label = loc("invite_friend");
+	invitationButton.styleName = MainTheme.STYLE_BUTTON_SMALL_HILIGHT;
+	invitationButton.layoutData = new AnchorLayoutData(padding, padding, NaN, padding);
+	invitationButton.addEventListener(Event.TRIGGERED, invitationButton_triggeredHandler);
+	addChild(invitationButton);
+
 	initializeCompleted = true;
 	
 	showTutorials();
@@ -97,6 +115,9 @@ override public function init():void
 
 private function showTutorials():void
 {
+	share = new ShareImageFactory();
+	// Starling.current.nativeStage.addChild(share);
+
 	if( SFSConnection.instance.buddyManager.buddyList.length >= 3 || game.sessionsCount % 5 != 0 )
 		return;
 	var tutorialData:TutorialData = new TutorialData("buddy_tutorial");
@@ -123,7 +144,15 @@ protected function sfs_buddyChangeHandler(event:SFSBuddyEvent):void
 	if( event.type == SFSBuddyEvent.BUDDY_ADD )
 		buddyCollection.addItemAt(buddy, buddyCollection.length - 2);
 	else if( event.type == SFSBuddyEvent.BUDDY_REMOVE )
-		buddyCollection.removeItemAt(buddyCollection.getItemIndex(buddy))
+		buddyCollection.removeItemAt(buddyCollection.getItemIndex(buddy));
+}
+
+protected function invitationButton_triggeredHandler(event:Event):void
+{
+	var subject:String = loc("invite_friend");
+	var text:String = loc("invite_friend_message") + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
+	Share.instance.shareImage(share.export(), subject, text);
+	// trace(subject, text);
 }
 
 protected function list_focusInHandler(event:Event):void
@@ -133,15 +162,6 @@ protected function list_focusInHandler(event:Event):void
 		return;
 	
 	var buddy:Buddy = selectedItem.data as Buddy;
-	if( buddy == null )
-	{
-		var subject:String = loc("invite_friend");
-		var text:String = loc("invite_friend_message") + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
-		NativeAbilities.instance.shareText(subject, text);
-		trace(subject, text);
-		return;
-	}
-	
 	if( buddy.nickName == player.nickName )
 		buttonsPopup = new SimpleListPopup("buddy_profile");
 	else
@@ -165,7 +185,7 @@ protected function list_focusInHandler(event:Event):void
 	buttonsPopup.transitionIn = ti;
 	buttonsPopup.transitionOut = to;
 	appModel.navigator.addPopup(buttonsPopup);
-}		
+}
 
 private function buttonsPopup_selectHandler(event:Event):void
 {
@@ -180,7 +200,7 @@ private function buttonsPopup_selectHandler(event:Event):void
 	switch( event.data )
 	{
 		case "buddy_profile":
-            appModel.navigator.addPopup( new ProfilePopup({name:buddy.nickName, id:int(buddy.name)}) );
+			appModel.navigator.addPopup( new ProfilePopup({name:buddy.nickName, id:int(buddy.name)}) );
 			break;
 		case "buddy_battle":
 			appModel.navigator.invokeBuddyBattle(buddy);
@@ -255,7 +275,5 @@ override public function dispose():void
 	SFSConnection.instance.removeEventListener(SFSBuddyEvent.BUDDY_REMOVE,				sfs_buddyChangeHandler); 
 	super.dispose();
 }
-
-
 }
 }

@@ -19,14 +19,14 @@ static public var POINT_BG_LAYOUT:AnchorLayoutData;
 static public var LEAGUE_IC_LAYOUT:AnchorLayoutData;
 static public var LEAGUE_BG_LAYOUT:AnchorLayoutData;
 
-private var _visibility:Boolean = true;
-private var leagueIconDisplay:ImageLoader;
-private var leagueBGDisplay:ImageLoader;
-private var pointDisplay:ShadowLabel;
-private var rankDisplay:ShadowLabel;
-private var nameDisplay:ShadowLabel;
-private var leagueIndex:int;
-private var mySkin:Image;
+protected var _visibility:Boolean = true;
+protected var leagueIconDisplay:ImageLoader;
+protected var leagueBGDisplay:ImageLoader;
+protected var pointDisplay:ShadowLabel;
+protected var rankDisplay:ShadowLabel;
+protected var nameDisplay:ShadowLabel;
+protected var leagueIndex:int;
+protected var mySkin:Image;
 
 public function RankItemRenderer(){}
 override protected function initialize():void
@@ -108,7 +108,7 @@ override protected function commitData():void
 	leagueBGDisplay.source = appModel.assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-small");
 }
 
-private function set visibility(value:Boolean):void 
+protected function set visibility(value:Boolean):void 
 {
 	if( _visibility == value )
 		return;

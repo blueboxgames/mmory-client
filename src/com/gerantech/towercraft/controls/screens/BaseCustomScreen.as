@@ -48,9 +48,9 @@ protected function get exchanger():			Exchanger		{	return game.exchanger;						}
 protected function get exchangeManager():	ExchangeManager	{	return ExchangeManager.instance;			}
 protected function get stageWidth():		Number			{	return Starling.current.stage.stageWidth;	}
 protected function get stageHeight():		Number			{	return Starling.current.stage.stageHeight;	}
-protected function loc(resourceName:String, parameters:Array = null):String
+protected function loc(resourceName:String, parameters:Array = null, convertDigits:Boolean = true):String
 {
-	return StrUtils.loc(resourceName, parameters);
+	return StrUtils.loc(resourceName, parameters, convertDigits);
 }
 }
 }

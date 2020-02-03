@@ -17,7 +17,7 @@ public class RewardsPalette extends ColorGroup
 public function RewardsPalette() { super(); }
 public function setRewards(rewards:IntIntMap) : void
 {
-	removeChildren(1);
+	removeChildren();
 	var keys:Vector.<int> = rewards.keys();
 	var len:int = keys.length
 	for(var i:int = 0; i < len; i++)

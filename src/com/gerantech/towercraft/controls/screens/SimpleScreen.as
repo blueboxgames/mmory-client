@@ -48,7 +48,7 @@ override protected function initialize():void
 
 protected function cloaseButton_triggeredHandler(event:Event) : void 
 {
-	appModel.navigator.popScreen();
+	backButtonFunction();
 }
 }
 }

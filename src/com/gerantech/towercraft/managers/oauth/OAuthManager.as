@@ -26,20 +26,14 @@ public static const SINGIN:String = "signin";
 
 public var type:int;
 public var user:OAuthUser;
-public var signinTimeout:int = 14;
+public var signinTimeout:int = 30;
 private var timeoutID:int;
 
 public function OAuthManager(){};
 public function init(type:int, showLogs:Boolean = false):void
 {
 	this.type = type;
-	/*if( UserData.instance.authenticationAttemps > 1 && !force )
-	{
-		dispatchFailurEvent("out of authentication attemps");
-		return;
-	}*/
-	
-	timeoutID = setTimeout( timeoutCallback, signinTimeout * 1000);
+	timeoutID = setTimeout(timeoutCallback, signinTimeout * 1000);
 	if( type == PrefsTypes.AUTH_41_GOOGLE )
 	{
 		GameServices.addEventListener( GSAuthEvent.SUCCESS, gameServices_successHandler );
@@ -54,12 +48,16 @@ public function init(type:int, showLogs:Boolean = false):void
 private function timeoutCallback():void
 {
 	dispatchFailurEvent("Sign in timeout.");
-	//UserData.instance.authenticationAttemps ++;
-	//UserData.instance.save();
 }
 
 public function signin():void
 {
+		/*socials.user = new SocialUser();
+	socials.user.id = "g01079473321487998344";
+	socials.user.name = "ManJav";
+	socials.user.imageURL = "content://com.google.android.gms.games.background/images/751cd60e/7927";
+	sendSocialData();*/
+
 	toast("signin " + initialized );
 	if( !initialized )
 	{
@@ -92,9 +90,6 @@ public function signout():void
 
 protected function gameServices_successHandler(event:GSAuthEvent):void
 {
-	
-//	if( timeoutID == -1 )
-//		return;
 	toast("success:" + event.errorMessage + " player:" + event.player);
 	clearTimeout(timeoutID);
 	

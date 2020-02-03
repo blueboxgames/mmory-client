@@ -3,6 +3,7 @@ package com.gerantech.towercraft.controls.segments
 import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.extensions.events.AndroidEvent;
 import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
@@ -54,13 +55,26 @@ override public function init():void
 	
 	super.init();
 	layout = new AnchorLayout();
+
 	loadData();
 }
 
 protected function loadData():void
 {
+	if( !initializeStarted || initializeCompleted || manager == null || EmoteItemRenderer.factory == null )
+		return;
+	
+	if( player.getResource(ResourceType.R7_MAX_POINT) < 300 )
+	{
+		var descDisplay:ShadowLabel = new ShadowLabel(loc("availableuntil_messeage", [loc("resource_title_2") + " " + 300, ""]), 1, 0, "center");
+		descDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);
+		descDisplay.width = stageWidth - 200;
+		addChild(descDisplay);
+		return;
+	}
+
 	var imei:String = appModel.platform == AppModel.PLATFORM_ANDROID ? NativeAbilities.instance.deviceInfo.imei : "";
-	if( appModel.platform == AppModel.PLATFORM_ANDROID && imei == "" )
+	if( manager.isPublic && appModel.platform == AppModel.PLATFORM_ANDROID && imei == "" )
 	{
 		var confirm:ConfirmPopup = new ConfirmPopup(loc("lobby_imei_confirm"));
 		confirm.addEventListener(Event.SELECT, confirm_selectHandler);
@@ -78,10 +92,7 @@ protected function loadData():void
 
 	if( isBan() )
 		return;
-	
-	if( manager == null || !initializeStarted || initializeCompleted || EmoteItemRenderer.factory == null )
-		return;
-	
+
 	if( manager.isReady )
 	{
 		showElements();
