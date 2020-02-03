@@ -1,11 +1,8 @@
 package com.gerantech.towercraft.controls.popups
 {
-	import com.gerantech.towercraft.controls.screens.DashboardScreen;
-	import com.gerantech.towercraft.controls.segments.SocialSegment;
 	import com.smartfoxserver.v2.entities.data.SFSObject;
 
 	import flash.geom.Rectangle;
-	import flash.utils.setTimeout;
 
 	import starling.events.Event;
 	
@@ -35,18 +32,6 @@ package com.gerantech.towercraft.controls.popups
 					player.resources.increase(params.getInt("rewardType"), params.getInt("rewardCount") );
 					var rec:Rectangle = acceptButton.getBounds(stage);
 					appModel.navigator.dispatchEventWith("achieveResource", false, [rec.x + rec.width * 0.5, rec.y, params.getInt("rewardType"), params.getInt("rewardCount")]);
-				}
-				
-				var f:SFSObject = new SFSObject();
-				f.putText("name", params.getText("inviter") );
-				f.putInt("count", 120);
-				appModel.loadingManager.serverData.getSFSArray("friends").addSFSObject(f);
-				
-				if ( player.villageEnabled() )
-				{
-					DashboardScreen.TAB_INDEX = 3;
-					SocialSegment.TAB_INDEX = 2;
-					setTimeout(appModel.navigator.popToRootScreen, 500);
 				}
 			}
 		}
