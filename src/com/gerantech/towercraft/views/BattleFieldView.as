@@ -118,7 +118,6 @@ private function fillDeck(deck:Vector.<String>, assets:Object):void
 	for(var i:int=0; i<deck.length; i++)
 	for( var key:String in AppModel.instance.syncData )
 	{
-		trace(key, AppModel.instance.syncData[key].hasOwnProperty("mode"))
 		if( AppModel.instance.syncData[key].hasOwnProperty("mode") )
 			continue;
 		if( key.search(deck[i]) > -1 )
