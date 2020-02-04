@@ -31,11 +31,11 @@ public function ExchangeSegment(){ super(); }
 override public function init():void
 {
 	super.init();
-	EmoteItemRenderer.loadEmotes(animation_loadCallback);
+/* 	EmoteItemRenderer.loadEmotes(animation_loadCallback);
 }
 
 protected function animation_loadCallback():void 
-{
+{ */
 
 	layout = new AnchorLayout();
 

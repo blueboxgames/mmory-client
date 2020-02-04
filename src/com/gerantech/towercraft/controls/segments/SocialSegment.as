@@ -41,8 +41,8 @@ override protected function initialize() : void
 	layout = new AnchorLayout();
 	var backgroundDisplay:ImageLoader = new ImageLoader();
 	backgroundDisplay.source = appModel.theme.popupInsideBackgroundSkinTexture;
-	backgroundDisplay.scale9Grid = MainTheme.POPUP_INSIDE_SCALE9_GRID;
 	backgroundDisplay.layoutData = new AnchorLayoutData(tabsHeight + 9, 0, -10, 0);
+	backgroundDisplay.scale9Grid = MainTheme.POPUP_INSIDE_SCALE9_GRID;
 	addChild(backgroundDisplay);
 }	
 override public function init():void
@@ -54,8 +54,8 @@ override public function init():void
 	function showLabel(message:String) : void
 	{
 		var labelDisplay:ShadowLabel = new ShadowLabel(message, 1, 0, "center");
-		labelDisplay.width = width;
 		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, NaN, 0);
+		labelDisplay.width = width;
 		addChild(labelDisplay);
 	}
 
