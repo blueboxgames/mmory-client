@@ -197,17 +197,11 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 	else
 	{
 		appModel.syncData = serverData.getSFSObject("assets").toObject();
-		var initialAssets:Object = new Object();
-		for ( var key:String in appModel.syncData )
-			if( appModel.syncData[key]["initial"] == true )
-				initialAssets[key] = appModel.syncData[key];
-		
 		var syncTool:SyncUtil = new SyncUtil();
 		syncTool.addEventListener(Event.COMPLETE, syncTool_completeHandler);
-		syncTool.sync(initialAssets);
+		syncTool.sync("init");
 	}
 }
-
 
 private function syncTool_completeHandler(event:*):void
 {
