@@ -273,8 +273,13 @@ private function turn(anim:String, dir:String):void
 
 override public function estimateAngle(x:Number, y:Number):Number
 {
+	var angle:Number = super.estimateAngle(x, y); 
+	if( angle == -1 )
+		return angle;
+
+	if( state == GameObject.STATE_4_MOVING )
 	turn("m_", CoreUtils.getRadString(Math.atan2(this.getSideX() - this.getSide_X(x), this.getSideY() - this.getSide_Y(y))));
-	return super.estimateAngle(x, y);
+	return angle;
 }
 
 override public function setHealth(health:Number) : Number
