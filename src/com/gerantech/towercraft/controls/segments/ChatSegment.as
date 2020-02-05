@@ -52,12 +52,6 @@ private var startScrollBarIndicator:Number = 0;
 public function ChatSegment()
 {
 	super();
-	EmoteItemRenderer.loadEmotes(animation_loadCallback);
-}
-
-protected function animation_loadCallback():void 
-{
-	EmblemButton.loadAtlas(null);
 }
 
 protected function showElements() : void

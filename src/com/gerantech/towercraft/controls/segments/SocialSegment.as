@@ -2,7 +2,9 @@ package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.mmory.core.constants.SegmentType;
+import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.headers.TabsHeader;
+import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.SegmentsItemRenderer;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
@@ -79,6 +81,13 @@ override public function init():void
 
 protected function syncToolPost_completeHandler(event:Event):void
 {
+	EmoteItemRenderer.loadEmotes(animation_loadCallback);
+}
+
+protected function animation_loadCallback():void 
+{
+	EmblemButton.loadAtlas(null);
+	
 	var pageLayout:HorizontalLayout = new HorizontalLayout();
 	pageLayout.horizontalAlign = HorizontalAlign.CENTER;
 	pageLayout.verticalAlign = VerticalAlign.JUSTIFY;

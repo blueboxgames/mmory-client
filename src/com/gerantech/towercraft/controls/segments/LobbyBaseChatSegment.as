@@ -42,12 +42,6 @@ public function get manager():LobbyManager
 	return SFSConnection.instance.publicLobbyManager;
 }
 
-override protected function animation_loadCallback():void
-{
-	super.animation_loadCallback();
-	loadData();
-}
-
 override public function init():void
 {
 	if( initializeStarted )

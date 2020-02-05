@@ -116,7 +116,6 @@ override public function init():void
 private function showTutorials():void
 {
 	share = new ShareImageFactory();
-	// Starling.current.nativeStage.addChild(share);
 
 	if( SFSConnection.instance.buddyManager.buddyList.length >= 3 || game.sessionsCount % 5 != 0 )
 		return;
