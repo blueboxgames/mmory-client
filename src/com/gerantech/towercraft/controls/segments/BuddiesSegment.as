@@ -6,6 +6,7 @@ import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.groups.ShareImageFactory;
 import com.gerantech.towercraft.controls.items.BuddyItemRenderer;
+import com.gerantech.towercraft.controls.items.LeagueItemRenderer;
 import com.gerantech.towercraft.controls.items.RankItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
@@ -200,6 +201,7 @@ private function buttonsPopup_selectHandler(event:Event):void
 	switch( event.data )
 	{
 		case "buddy_road":
+      LeagueItemRenderer.POINT = buddy.getVariable("$point").getIntValue();
 			appModel.navigator.getScreen(Game.BUDDY_ROAD).properties.title = loc("buddy_road_title", [buddy.nickName]);
 			appModel.navigator.pushScreen(Game.BUDDY_ROAD);
 			break;

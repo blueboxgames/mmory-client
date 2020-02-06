@@ -39,6 +39,9 @@ import starling.events.Event;
 
 public class LeagueItemRenderer extends AbstractListItemRenderer
 {
+static public var ITS_ME:Boolean = true;
+static public var POINT:int;
+static public var STEP:int;
 static public var LEAGUE:int;
 static public var HEIGHT:int;
 static public const ICON_X:int = 300;
@@ -104,19 +107,22 @@ private function createElements():void
 	if( commited || !ready )
 		return;
 	
-	// icon
-	var leagueIcon:LeagueButton = new LeagueButton(league.index);
-	leagueIcon.layoutData = ICON_LAYOUT_DATA;
-	leagueIcon.width = ICON_WIDTH;
-	leagueIcon.height = ICON_HEIGHT;
-	leagueIcon.pivotX = leagueIcon.width * 0.5;
-	leagueIcon.pivotY = leagueIcon.height * 0.5;
-	leagueIcon.touchable = false;
-	addChild(leagueIcon);
-	if( league.index == LEAGUE )
+	if( ITS_ME )
 	{
-		leagueIcon.scale = 1.2;
-		Starling.juggler.tween(leagueIcon, 0.3, {scale:1});
+		// icon
+		var leagueIcon:LeagueButton = new LeagueButton(league.index);
+		leagueIcon.layoutData = ICON_LAYOUT_DATA;
+		leagueIcon.width = ICON_WIDTH;
+		leagueIcon.height = ICON_HEIGHT;
+		leagueIcon.pivotX = leagueIcon.width * 0.5;
+		leagueIcon.pivotY = leagueIcon.height * 0.5;
+		leagueIcon.touchable = false;
+		addChild(leagueIcon);
+		if( league.index == LEAGUE )
+		{
+			leagueIcon.scale = 1.2;
+			Starling.juggler.tween(leagueIcon, 0.3, {scale:1});
+		}
 	}
 	
 	if( league.index <= 0 )
@@ -147,14 +153,14 @@ private function createElements():void
 			var bottomStep:TrophyReward, topStep:TrophyReward;
 			for(var i:int = 0; i < league.rewards.length; i++ )
 			{
-				if( player.get_point() <= league.rewards[i].point )
+				if( POINT <= league.rewards[i].point )
 				{
-					bottomStep = i < 1 ? new TrophyReward(game, league.index, -1, league.min, 0, 0) : league.rewards[i-1];
+					bottomStep = i < 1 ? new TrophyReward(game, league.index, -1, league.min, 0, 0, -1) : league.rewards[i-1];
 					topStep = league.rewards[i];
 					break;
 				}
 			}
-			var fillHeight:Number = HEIGHT - stepH * (1 + bottomStep.index + (player.get_point() - bottomStep.point) / (topStep.point - bottomStep.point));
+			var fillHeight:Number = HEIGHT - stepH * (1 + bottomStep.index + (POINT - bottomStep.point) / (topStep.point - bottomStep.point));
 
 			var pointRect:ImageLoader = new ImageLoader();
 			pointRect.source = appModel.assets.getTexture("leagues/point-rect");
@@ -193,7 +199,7 @@ private function createElements():void
 		addChildAt(sliderBackground, 0);
 	}
 
-	if( league.index > 0 )
+	if( ITS_ME && league.index > 0 )
 	{
 		var minPointRect:ImageLoader = new ImageLoader();
 		minPointRect.source = appModel.assets.getTexture("leagues/min-point-rect");
@@ -206,20 +212,20 @@ private function createElements():void
 
 	if( LEAGUE == league.index )
 	{
-		var pointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(player.get_point()), 1, "center", null, false, "center", 0.7);
+		var pointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(POINT), 1, "center", null, false, "center", 0.7);
 		pointLabel.layoutData = new AnchorLayoutData(fillHeight - pointRect.height * 0.5 + 5, -10);
 		pointLabel.width = pointRect.width - 40;
 		addChild(pointLabel);
 	}
 
-	if( league.index > 0 )
+	if( ITS_ME && league.index > 0 )
 	{
 		var minPointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(league.max + "+"), 1, "center", null, false, null, 0.8);
 		minPointLabel.layoutData = MIN_POINT_LAYOUT_DATA;
 		addChild(minPointLabel);
 	}
 
-	if( league.index == LEAGUE )
+	if( league.index == LEAGUE && _owner != null )
 		setTimeout(_owner.dispatchEventWith, 500, Event.OPEN);
 	commited = true;
 }
@@ -227,9 +233,11 @@ private function createElements():void
 
 private function createRewardItem(r:int) : void 
 {
+	if( !ITS_ME && r == league.rewards.length - 1 )
+		return;
 	var reward:TrophyReward = league.rewards[r];
-	var reached:Boolean = reward.reached();
-	var collectible:Boolean = reward.collectible();
+	var reached:Boolean = reward.reached(POINT);
+	var collectible:Boolean = reward.collectible(POINT, STEP);
 	var colW:int = 240;
 	var itemX:int = 60;
 	var itemY:int = HEIGHT - (r+1) / league.rewards.length * HEIGHT;
@@ -380,7 +388,7 @@ protected function rewardItem_triggeredHandler(event:Event) : void
 	appModel.navigator.addOverlay(earnOverlay);
 
 	var params:SFSObject = new SFSObject();
-	params.putInt("l", reward.league);
+	params.putInt("l", ITS_ME ? reward.league : 1000);
 	params.putInt("i", reward.index);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_responseHandler)
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.COLLECT_ROAD_REWARD, params);

@@ -63,7 +63,10 @@ override protected function initialize():void
 	layout = new AnchorLayout();
 	
 	LeagueItemRenderer.HEIGHT = 1800;
+	LeagueItemRenderer.ITS_ME = true;
+	LeagueItemRenderer.POINT = player.get_point();
 	LeagueItemRenderer.LEAGUE = player.get_arena(0);
+	LeagueItemRenderer.STEP = player.getResource(ResourceType.R25_REWARD_STEP);
 
 	listLayout.gap = 0;
 	listLayout.paddingTop = 500;
