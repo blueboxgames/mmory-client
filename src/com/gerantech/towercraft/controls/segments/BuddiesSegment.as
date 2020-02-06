@@ -2,6 +2,7 @@ package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.extensions.share.Share;
 import com.gerantech.mmory.core.socials.Lobby;
+import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.groups.ShareImageFactory;
 import com.gerantech.towercraft.controls.items.BuddyItemRenderer;
@@ -164,7 +165,7 @@ protected function list_focusInHandler(event:Event):void
 	if( buddy.nickName == player.nickName )
 		buttonsPopup = new SimpleListPopup("buddy_profile");
 	else
-		buttonsPopup = new SimpleListPopup("buddy_profile", "buddy_remove", buddy.state == "Occupied"?"buddy_spectate$":"buddy_battle");
+		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove", buddy.state == "Occupied"?"buddy_spectate$":"buddy_battle");
 	buttonsPopup.data = buddy;
 	buttonsPopup.addEventListener(Event.SELECT, buttonsPopup_selectHandler);
 	buttonsPopup.addEventListener(Event.CLOSE, buttonsPopup_selectHandler);
@@ -198,6 +199,10 @@ private function buttonsPopup_selectHandler(event:Event):void
 	var buddy:Buddy = buttonsPopup.data as Buddy;
 	switch( event.data )
 	{
+		case "buddy_road":
+			appModel.navigator.getScreen(Game.BUDDY_ROAD).properties.title = loc("buddy_road_title", [buddy.nickName]);
+			appModel.navigator.pushScreen(Game.BUDDY_ROAD);
+			break;
 		case "buddy_profile":
 			appModel.navigator.addPopup( new ProfilePopup({name:buddy.nickName, id:int(buddy.name)}) );
 			break;

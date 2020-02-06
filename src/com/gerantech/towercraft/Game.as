@@ -12,6 +12,7 @@ import feathers.motion.Cover;
 import feathers.motion.Reveal;
 
 import starling.events.Event;
+import com.gerantech.towercraft.controls.screens.BuddyRoad;
 
 public class Game extends Drawers
 {
@@ -29,6 +30,7 @@ public static const PLAYERS_SCREEN:String = "playersScreen";
 static public const CHALLENGES_SCREEN:String = "challengesScreen";
 static public const QUESTS_SCREEN:String = "questsScreen";
 static public const SEARCH_CHAT_SCREEN:String = "searchChatScreen";
+static public const BUDDY_ROAD:String = "buddyRoad";
 
 public function Game(content:IFeathersControl=null)
 {
@@ -50,6 +52,7 @@ override protected function initialize():void
 	addScreen(BATTLE_SCREEN, 	BattleScreen, false, false);
 	addScreen(QUESTS_SCREEN,	QuestsScreen, false, false);
 	addScreen(INBOX_SCREEN, 	InboxScreen);
+	addScreen(BUDDY_ROAD,			BuddyRoad);
 	addScreen(ADMIN_SCREEN, 	AdminScreen);
 	addScreen(ISSUES_SCREEN, 	IssuesScreen);
 	addScreen(BANNEDS_SCREEN,	BanndsScreen);
