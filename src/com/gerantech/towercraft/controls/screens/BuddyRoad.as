@@ -16,12 +16,10 @@ package com.gerantech.towercraft.controls.screens
       super.initialize();
 
     	LeagueItemRenderer.HEIGHT = stageHeight;
-      LeagueItemRenderer.ITS_ME = false;
-      LeagueItemRenderer.LEAGUE = 1;
       LeagueItemRenderer.STEP = 0;
       var road:LeagueItemRenderer = new LeagueItemRenderer();
-      road.index = 1;
-      road.data = game.buddyRoad;
+      road.index = game.friendRoad.index = LeagueItemRenderer.LEAGUE;
+      road.data = game.friendRoad;
       road.layoutData = new AnchorLayoutData(0, 30, 0, 10);
       this.addChild(road);
 

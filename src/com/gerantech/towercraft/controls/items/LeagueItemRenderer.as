@@ -39,7 +39,6 @@ import starling.events.Event;
 
 public class LeagueItemRenderer extends AbstractListItemRenderer
 {
-static public var ITS_ME:Boolean = true;
 static public var POINT:int;
 static public var STEP:int;
 static public var LEAGUE:int;
@@ -75,7 +74,7 @@ override protected function commitData():void
 	if( league.index == 0 )
 		height = 300;
 	
-	ready = league.index > LEAGUE - 2 && league.index < LEAGUE + 3;
+	ready = LEAGUE > 10000 || (league.index > LEAGUE - 2 && league.index < LEAGUE + 3);
 	if( ready )
 	{
 		createElements();
@@ -107,7 +106,7 @@ private function createElements():void
 	if( commited || !ready )
 		return;
 	
-	if( ITS_ME )
+	if( LEAGUE < 10000 )
 	{
 		// icon
 		var leagueIcon:LeagueButton = new LeagueButton(league.index);
@@ -199,7 +198,7 @@ private function createElements():void
 		addChildAt(sliderBackground, 0);
 	}
 
-	if( ITS_ME && league.index > 0 )
+	if( LEAGUE < 10000 && league.index > 0 )
 	{
 		var minPointRect:ImageLoader = new ImageLoader();
 		minPointRect.source = appModel.assets.getTexture("leagues/min-point-rect");
@@ -218,7 +217,7 @@ private function createElements():void
 		addChild(pointLabel);
 	}
 
-	if( ITS_ME && league.index > 0 )
+	if( LEAGUE < 10000 && league.index > 0 )
 	{
 		var minPointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(league.max + "+"), 1, "center", null, false, null, 0.8);
 		minPointLabel.layoutData = MIN_POINT_LAYOUT_DATA;
@@ -233,7 +232,7 @@ private function createElements():void
 
 private function createRewardItem(r:int) : void 
 {
-	if( !ITS_ME && r == league.rewards.length - 1 )
+	if( LEAGUE > 10000 && r == league.rewards.length - 1 )
 		return;
 	var reward:TrophyReward = league.rewards[r];
 	var reached:Boolean = reward.reached(POINT);
@@ -374,21 +373,20 @@ protected function rewardItem_triggeredHandler(event:Event) : void
 	if( player.achieveReward(reward.league, reward.index as int) != MessageTypes.RESPONSE_SUCCEED )
 	{
 		appModel.navigator.addLog(loc("arena_reward_error"));
-		Starling.juggler.delayCall(_owner.scrollToPosition, 0.1, NaN, _owner.verticalScrollPosition + 500, 1);
+		if( _owner != null )
+			Starling.juggler.delayCall(_owner.scrollToPosition, 0.1, NaN, _owner.verticalScrollPosition + 500, 1);
 		return;
 	}
 	
 	if( ResourceType.isBook(reward.key) )
-	{
 		earnOverlay = new OpenBookOverlay(reward.key) as EarnOverlay;
-	}
 	else
 		earnOverlay = new NewCardOverlay(reward.key) as EarnOverlay;
 	earnOverlay.data = reward as Object;
 	appModel.navigator.addOverlay(earnOverlay);
 
 	var params:SFSObject = new SFSObject();
-	params.putInt("l", ITS_ME ? reward.league : 1000);
+	params.putInt("l", reward.league);
 	params.putInt("i", reward.index);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_responseHandler)
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.COLLECT_ROAD_REWARD, params);

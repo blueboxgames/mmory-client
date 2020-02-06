@@ -201,6 +201,7 @@ private function buttonsPopup_selectHandler(event:Event):void
 	switch( event.data )
 	{
 		case "buddy_road":
+      LeagueItemRenderer.LEAGUE = int(buddy.name);
       LeagueItemRenderer.POINT = buddy.getVariable("$point").getIntValue();
 			appModel.navigator.getScreen(Game.BUDDY_ROAD).properties.title = loc("buddy_road_title", [buddy.nickName]);
 			appModel.navigator.pushScreen(Game.BUDDY_ROAD);
