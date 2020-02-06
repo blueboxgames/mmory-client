@@ -19,6 +19,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.popups.InvitationPopup;
 	import com.gerantech.towercraft.controls.popups.LobbyDetailsPopup;
 	import com.gerantech.towercraft.controls.popups.MessagePopup;
+	import com.gerantech.towercraft.controls.screens.BattleScreen;
 	import com.gerantech.towercraft.controls.screens.DashboardScreen;
 	import com.gerantech.towercraft.controls.segments.ExchangeSegment;
 	import com.gerantech.towercraft.controls.segments.InboxSegment;
@@ -44,7 +45,6 @@ package com.gerantech.towercraft.controls
 
 	import feathers.controls.LayoutGroup;
 	import feathers.controls.StackScreenNavigator;
-	import feathers.controls.StackScreenNavigatorItem;
 
 	import flash.geom.Rectangle;
 	import flash.net.URLRequest;
@@ -55,7 +55,6 @@ package com.gerantech.towercraft.controls
 	import starling.core.Starling;
 	import starling.events.Event;
 	import starling.textures.Texture;
-	import com.gerantech.towercraft.controls.screens.BattleScreen;
 	
 	public class StackNavigator extends StackScreenNavigator
 	{
