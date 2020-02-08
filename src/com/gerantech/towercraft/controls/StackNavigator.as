@@ -16,7 +16,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.overlays.RatingMessageOverlay;
 	import com.gerantech.towercraft.controls.overlays.TutorialMessageOverlay;
 	import com.gerantech.towercraft.controls.popups.AbstractPopup;
-	import com.gerantech.towercraft.controls.popups.InvitationPopup;
+	import com.gerantech.towercraft.controls.popups.InvitationResultPopup;
 	import com.gerantech.towercraft.controls.popups.LobbyDetailsPopup;
 	import com.gerantech.towercraft.controls.popups.MessagePopup;
 	import com.gerantech.towercraft.controls.screens.BattleScreen;
@@ -33,11 +33,11 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 	import com.gerantech.towercraft.models.AppModel;
 	import com.gerantech.towercraft.models.tutorials.TutorialTask;
+	import com.gerantech.towercraft.models.vo.FriendData;
 	import com.gerantech.towercraft.models.vo.UserData;
 	import com.gerantech.towercraft.utils.StrUtils;
 	import com.gerantech.towercraft.utils.Utils;
 	import com.smartfoxserver.v2.core.SFSEvent;
-	import com.smartfoxserver.v2.entities.Buddy;
 	import com.smartfoxserver.v2.entities.data.ISFSObject;
 	import com.smartfoxserver.v2.entities.data.SFSObject;
 	import com.zarinpal.ZarinpalCallbackHandler;
@@ -55,7 +55,6 @@ package com.gerantech.towercraft.controls
 	import starling.core.Starling;
 	import starling.events.Event;
 	import starling.textures.Texture;
-	import com.gerantech.towercraft.models.vo.FriendData;
 	
 	public class StackNavigator extends StackScreenNavigator
 	{
@@ -328,7 +327,7 @@ package com.gerantech.towercraft.controls
 						if (pars["type"] == "invitation")
 						{
 							var sfs:SFSObject = new SFSObject();
-							sfs.putText("invitationCode", pars["ic"]);
+							sfs.putText("ic", pars["ic"]);
 							sfs.putText("udid", AppModel.instance.platform == AppModel.PLATFORM_ANDROID ? NativeAbilities.instance.deviceInfo.id : Utils.getPCUniqueCode());
 							SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_responseHandler);
 							SFSConnection.instance.sendExtensionRequest(SFSCommands.BUDDY_ADD, sfs);
@@ -336,7 +335,7 @@ package com.gerantech.towercraft.controls
 							{
 								if (event.params.cmd != SFSCommands.BUDDY_ADD)
 									return SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_responseHandler);
-								addPopup(new InvitationPopup(event.params.params));
+								addPopup(new InvitationResultPopup(event.params.params));
 							}
 						}
 						else if (pars["type"] == "lobbydetails" && !AppModel.instance.game.player.inTutorial())

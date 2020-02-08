@@ -6,11 +6,11 @@ package com.gerantech.towercraft.controls.popups
 
 	import starling.events.Event;
 	
-	public class InvitationPopup extends MessagePopup
+	public class InvitationResultPopup extends MessagePopup
 	{
 		private var responseCode:int;
 		private var params:SFSObject;
-		public function InvitationPopup(params:SFSObject)
+		public function InvitationResultPopup(params:SFSObject)
 		{
 			this.params = params;
 			responseCode = params.getInt("response");

@@ -14,7 +14,7 @@ import com.gerantech.towercraft.controls.groups.HomeBooksLine;
 import com.gerantech.towercraft.controls.groups.Profile;
 import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRenderer;
 import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
-import com.gerantech.towercraft.controls.popups.EnterInvitationCodePopup;
+import com.gerantech.towercraft.controls.popups.InvitationEnterCodePopup;
 import com.gerantech.towercraft.controls.popups.RankingPopup;
 import com.gerantech.towercraft.controls.popups.SelectNamePopup;
 import com.gerantech.towercraft.controls.screens.DashboardScreen;
@@ -234,13 +234,23 @@ private function showTutorial():void
 		{
 			confirm.removeEventListener(Event.COMPLETE, confirm_eventsHandler);
 			UserData.instance.prefs.setInt(PrefsTypes.TUTOR, PrefsTypes.T_72_NAME_SELECTED);
-			var invitationPopup:EnterInvitationCodePopup = new EnterInvitationCodePopup();
+			var invitationPopup:InvitationEnterCodePopup = new InvitationEnterCodePopup();
+			invitationPopup.addEventListener(Event.CLOSE, invite_eventsHandler);
 			invitationPopup.addEventListener(Event.COMPLETE, invite_eventsHandler);
 			appModel.navigator.addPopup(invitationPopup);
-			function invite_eventsHandler():void
+			function invite_eventsHandler(event:Event):void
 			{
+				invitationPopup.removeEventListener(Event.CLOSE, invite_eventsHandler);
 				invitationPopup.removeEventListener(Event.COMPLETE, invite_eventsHandler);
-				appModel.navigator.pushScreen( Game.LEAGUES_SCREEN );
+				if( event.type == Event.CLOSE )
+				{
+					appModel.navigator.pushScreen(Game.LEAGUES_SCREEN);
+					return;
+				}
+
+				DashboardScreen(appModel.navigator.activeScreen).gotoPage(3);
+				DashboardScreen.TAB_INDEX = 3;
+				SocialSegment.TAB_INDEX = 2;
 			}
 		}
 	}
