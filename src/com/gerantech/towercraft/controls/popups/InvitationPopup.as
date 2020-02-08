@@ -14,7 +14,7 @@ package com.gerantech.towercraft.controls.popups
 		{
 			this.params = params;
 			responseCode = params.getInt("response");
-			var array:Array = responseCode == 0 || responseCode == -2 ? [params.getText("inviter")] : null;
+			var array:Array = responseCode == 0 || responseCode == -3 ? [params.getText("inviter")] : null;
 			var msg:String = loc("popup_invitation_" + responseCode, array);
 			if( params.containsKey("rewardType") )
 				msg += "\n" + loc("popup_invitation_reward", [params.getInt("rewardCount"), loc("resource_title_" + params.getInt("rewardType"))]);
