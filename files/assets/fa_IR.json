@@ -1,4 +1,4 @@
-﻿{
+{
     "app_title": "بوم‌لند",
     "app_brief": "طعم نبرد آنلاین و رقابت نفس‌گیر در لیگ حرفه‌ای ها در یک بازی ایرانی با گرافیگ و گیم‌پلی باور نکردنی",
     "": "",
@@ -315,7 +315,9 @@
     "arena_down": "ای وای! برگشتی لیگ",
     "arena_unlocked_at": "در # بدست میاری",
     "arena_chance_to": "شانس بدست آوردن اینا رو داری",
-    "arena_reward_error": "ابتدا پاداش های قبلی رو دریافت کن!",
+    "arena_reward_response-7": "هنوز وقتش نرسیده !",
+    "arena_reward_response-1": "ابتدا پاداش های قبلی رو دریافت کن!",
+    "arena_reward_response-3": "قبلا دریافت کردی!",
     "earn_at_chests": "در کتاب‌های طلایی و شگفت‌انگیز پیدا کن!",
     "": "",
     "ranking_label": "رده بندی #",
@@ -577,7 +579,7 @@
     "buddy_remove": "قهر",
     "buddy_battle": "نبرد دوستانه",
     "buddy_spectate$": "تماشای نبرد",
-    "buddy_road_title": "دریافت جایزه پیشرفت #",
+    "buddy_road_title": "با پیشرفت # جایزه بگیر",
     "buddy_remove_confirm": "مطمئنی میخوای باهاش قهر کنی؟",
     "buddy_remove_message": "با دوستت قهر کردی!",
     "buddy_battle_request": "# تو رو به نبرد دعوت میکنه. ",

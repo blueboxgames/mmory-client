@@ -16,7 +16,6 @@ package com.gerantech.towercraft.controls.screens
       super.initialize();
 
     	LeagueItemRenderer.HEIGHT = stageHeight;
-      LeagueItemRenderer.STEP = 0;
       var road:LeagueItemRenderer = new LeagueItemRenderer();
       road.index = game.friendRoad.index = LeagueItemRenderer.LEAGUE;
       road.data = game.friendRoad;

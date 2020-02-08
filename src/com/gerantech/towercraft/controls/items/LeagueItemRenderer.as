@@ -255,7 +255,7 @@ private function createRewardItem(r:int) : void
 	item.touchGroup = true;
 	item.data = {index:r, reward:reward};
 	item.width = itemW;
-	item.height = 340;
+	item.height = league.index > 1000 ? 260 : 340;
 	item.pivotX = item.width * 0.5;
 	item.pivotY = item.height * 0.5;
 	item.x = itemX + item.pivotX;
@@ -319,11 +319,9 @@ private function createRewardItem(r:int) : void
 
 	createPoint(reward, item.y);
 
+	item.addEventListener(Event.TRIGGERED, rewardItem_triggeredHandler);
 	if( collectible )
-	{
-		item.addEventListener(Event.TRIGGERED, rewardItem_triggeredHandler);
 		punchButton(item);
-	}
 	addChild(item);
 }
 
@@ -367,14 +365,13 @@ private function createPoint(reward:TrophyReward, y:int):void
 protected function rewardItem_triggeredHandler(event:Event) : void 
 {
 	var item:SimpleLayoutButton = event.currentTarget as SimpleLayoutButton;
-	item.removeEventListener(Event.TRIGGERED, rewardItem_triggeredHandler);
 	var reward:TrophyReward = item.data.reward as TrophyReward;
-
-	if( player.achieveReward(reward.league, reward.index as int) != MessageTypes.RESPONSE_SUCCEED )
+	var response:int = reward.achievable(POINT, STEP, league.index < 10000);
+	if( response != MessageTypes.RESPONSE_SUCCEED )
 	{
-		appModel.navigator.addLog(loc("arena_reward_error"));
+		appModel.navigator.addLog(loc("arena_reward_response" + response));
 		if( _owner != null )
-			Starling.juggler.delayCall(_owner.scrollToPosition, 0.1, NaN, _owner.verticalScrollPosition + 500, 1);
+			Starling.juggler.delayCall(_owner.scrollToPosition, 0.1, NaN, _owner.verticalScrollPosition + (response == -3 ? -500 :  500), 1);
 		return;
 	}
 	
@@ -386,7 +383,7 @@ protected function rewardItem_triggeredHandler(event:Event) : void
 	appModel.navigator.addOverlay(earnOverlay);
 
 	var params:SFSObject = new SFSObject();
-	params.putInt("l", reward.league);
+	params.putInt("l", league.index);
 	params.putInt("i", reward.index);
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_responseHandler)
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.COLLECT_ROAD_REWARD, params);
@@ -410,6 +407,7 @@ protected function sfs_responseHandler(event:SFSEvent):void
 protected function earnOverlay_closeHandler(event:Event) : void 
 {
 	earnOverlay.removeEventListener(Event.CLOSE, earnOverlay_closeHandler);
+	STEP ++;
 	removeChildren();
 	commited = false;
 	createElements();
