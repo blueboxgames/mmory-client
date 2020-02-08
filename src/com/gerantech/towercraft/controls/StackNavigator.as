@@ -55,6 +55,7 @@ package com.gerantech.towercraft.controls
 	import starling.core.Starling;
 	import starling.events.Event;
 	import starling.textures.Texture;
+	import com.gerantech.towercraft.models.vo.FriendData;
 	
 	public class StackNavigator extends StackScreenNavigator
 	{
@@ -391,10 +392,10 @@ package com.gerantech.towercraft.controls
 		}
 		
 		// -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-  BUDDY BATTLE  -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-		public function invokeBuddyBattle(buddy:Buddy):void
+		public function invokeBuddyBattle(buddy:FriendData):void
 		{
 			var params:ISFSObject = new SFSObject();
-			params.putInt("o", int(buddy.name));
+			params.putInt("o", buddy.id);
 			sendBattleRequest(params, 0);
 		}
 		

@@ -52,6 +52,7 @@ public static const LOBBY_REMOVE:String = "lobbyRemove";
 public static const BUDDY_ADD:String = "buddyAdd";
 public static const BUDDY_REMOVE:String = "buddyRemove";
 public static const BUDDY_BATTLE:String = "buddyBattle";
+public static const BUDDY_DATA:String = "buddyData";
 
 public static const INBOX_GET_THREADS:String = "inboxGetThreads";
 public static const INBOX_GET_RELATIONS:String = "inboxGetRelations";

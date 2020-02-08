@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.extensions.share.Share;
-import com.gerantech.mmory.core.socials.Lobby;
+import com.gerantech.mmory.core.others.TrophyReward;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.groups.ShareImageFactory;
@@ -14,19 +14,15 @@ import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
-import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
+import com.gerantech.towercraft.models.vo.FriendData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.Localizations;
-import com.smartfoxserver.v2.core.SFSBuddyEvent;
 import com.smartfoxserver.v2.core.SFSEvent;
-import com.smartfoxserver.v2.entities.Buddy;
-import com.smartfoxserver.v2.entities.SFSBuddy;
+import com.smartfoxserver.v2.entities.data.ISFSArray;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import com.smartfoxserver.v2.entities.variables.BuddyVariable;
-import com.smartfoxserver.v2.entities.variables.SFSBuddyVariable;
 
 import feathers.controls.Button;
 import feathers.controls.renderers.IListItemRenderer;
@@ -41,27 +37,26 @@ import flash.geom.Rectangle;
 
 import starling.animation.Transitions;
 import starling.events.Event;
+import com.gerantech.mmory.core.constants.MessageTypes;
 
 public class BuddiesSegment extends Segment
 {
 private var list:FastList;
 private var buttonsPopup:SimpleListPopup;
-private var buddyCollection:ListCollection;
+private var collection:ListCollection;
 private var _buttonsEnabled:Boolean = true;
 private var share:ShareImageFactory;
 public function BuddiesSegment()
 {
-	SFSConnection.instance.buddyManager.setInited(true);
-	SFSConnection.instance.addEventListener(SFSBuddyEvent.BUDDY_VARIABLES_UPDATE,		sfs_buddyVariablesUpdateHandler); 
-	SFSConnection.instance.addEventListener(SFSBuddyEvent.BUDDY_ONLINE_STATE_UPDATE,	sfs_buddyVariablesUpdateHandler); 
-	SFSConnection.instance.addEventListener(SFSBuddyEvent.BUDDY_ADD,					sfs_buddyChangeHandler); 
-	SFSConnection.instance.addEventListener(SFSBuddyEvent.BUDDY_REMOVE,					sfs_buddyChangeHandler); 
-	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, 				sfs_buddyBattleHandler);
+	collection = new ListCollection();
+	collection.addItem( new FriendData().init(player.id, player.nickName, player.get_point(), 1, 0) );
+	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, this.sfs_responseHandler);
 }
 
 override public function updateData():void
 {
 	super.updateData();
+	SFSConnection.instance.sendExtensionRequest(SFSCommands.BUDDY_DATA);
 }
 override public function init():void
 {
@@ -70,6 +65,8 @@ override public function init():void
 		return;
 	
 	layout = new AnchorLayout();
+	share = new ShareImageFactory();
+	updateData();
 	
 	var padding:int = 72;
 
@@ -89,18 +86,10 @@ override public function init():void
 	list = new FastList();
 	list.layout = listLayout;
 	list.layoutData = new AnchorLayoutData(padding, padding, padding, padding);
-	addChild(list);
-	
-	buddyCollection = new ListCollection(SFSConnection.instance.buddyManager.buddyList);
-	var me:SFSBuddy = new SFSBuddy(0, player.id + "");
-	me.setVariable( new SFSBuddyVariable("$__BV_NICKNAME__", player.nickName) as BuddyVariable);
-	me.setVariable( new SFSBuddyVariable("$__BV_STATE__", "Available") as BuddyVariable);
-	me.setVariable( new SFSBuddyVariable("$point", player.get_point()) as BuddyVariable);
-	//me.setVariable( new SFSBuddyVariable("$room", SFSConnection.instance.myLobby.name));
-	buddyCollection.addItem( me );
 	list.addEventListener(FeathersEventType.FOCUS_IN, list_focusInHandler);
 	list.itemRendererFactory = function():IListItemRenderer { return new BuddyItemRenderer(); }
-	list.dataProvider = buddyCollection;
+	list.dataProvider = collection;
+	addChild(list);
 
 	var invitationButton:Button = new Button();
 	invitationButton.height = 150;
@@ -111,41 +100,60 @@ override public function init():void
 	addChild(invitationButton);
 
 	initializeCompleted = true;
-	
+}
+
+protected function sfs_responseHandler(event:SFSEvent):void
+{
+	var params:SFSObject = SFSObject(event.params.params);
+	if( event.params.cmd == SFSCommands.BUDDY_DATA )
+	{
+		if( !params.containsKey("items") )
+			return;
+		var items:ISFSArray = params.getSFSArray("items");
+		var len:int = items.size();
+		for(var i:int = 0; i < len; i++)
+		{
+			var item:ISFSObject = items.getSFSObject(i);
+			var index:int = find(item.getInt("id"));
+			if( index > -1 )
+			{
+				FriendData(collection[index]).update(item);
+				collection.updateItemAt(index);
+			}
+			else
+			{
+				collection.addItem(new FriendData().update(item));
+			}
+		}
+	}
+
+	if( event.params.cmd == SFSCommands.BUDDY_REMOVE && params.getInt("response") == MessageTypes.RESPONSE_SUCCEED )
+	{
+		index = find(params.getInt("id"));
+		if( index > -1 )
+			collection.removeItemAt(index);
+		appModel.navigator.addLog(loc("buddy_remove_message"));
+	}
+
+
+	function find(id:int):int{
+		for(var b:int = 0; b < collection.length; b++)
+			if(collection.getItemAt(b).id == id)
+				return b;
+		return -1;
+	}
+
 	showTutorials();
 }
 
 private function showTutorials():void
 {
-	share = new ShareImageFactory();
-
-	if( SFSConnection.instance.buddyManager.buddyList.length >= 3 || game.sessionsCount % 5 != 0 )
+	if( collection.length >= 3 || game.sessionsCount % 3 != 0 || Math.random() > 0.3 )
 		return;
 	var tutorialData:TutorialData = new TutorialData("buddy_tutorial");
-	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, loc("tutor_buddy_0", [Lobby.buddyInviterReward, Lobby.buddyInviteeReward]), null, 1000, 1000, 0));
+	var prize:int = TrophyReward(game.friendRoad.rewards[0]).value;
+	tutorialData.addTask(new TutorialTask(TutorialTask.TYPE_MESSAGE, loc("tutor_buddy_0", [prize, prize]), null, 1000, 1000, 0));
 	tutorials.show(tutorialData);
-}
-
-protected function sfs_buddyVariablesUpdateHandler(event:SFSBuddyEvent):void
-{
-	if( buddyCollection == null || buddyCollection.length == 0 )
-		return;
-	
-	var buddy:Buddy = event.params.buddy as Buddy;
-	var buddyIndex:int = buddyCollection.getItemIndex(buddy);
-	buddyCollection.data[buddyIndex] = buddy;
-	buddyCollection.updateItemAt(buddyIndex);
-}
-protected function sfs_buddyChangeHandler(event:SFSBuddyEvent):void
-{
-	if( buddyCollection == null || buddyCollection.length == 0 )
-		return;
-	
-	var buddy:Buddy = event.params.buddy as Buddy;
-	if( event.type == SFSBuddyEvent.BUDDY_ADD )
-		buddyCollection.addItemAt(buddy, buddyCollection.length - 2);
-	else if( event.type == SFSBuddyEvent.BUDDY_REMOVE )
-		buddyCollection.removeItemAt(buddyCollection.getItemIndex(buddy));
 }
 
 protected function invitationButton_triggeredHandler(event:Event):void
@@ -153,7 +161,7 @@ protected function invitationButton_triggeredHandler(event:Event):void
 	var subject:String = loc("invite_friend");
 	var text:String = loc("invite_friend_message") + "\n" + Localizations.instance.get("buddy_invite_url", [player.invitationCode]);
 	Share.instance.shareImage(share.export(), subject, text);
-	// trace(subject, text);
+	trace(subject, text);
 }
 
 protected function list_focusInHandler(event:Event):void
@@ -162,12 +170,12 @@ protected function list_focusInHandler(event:Event):void
 	if( selectedItem == null )
 		return;
 	
-	var buddy:Buddy = selectedItem.data as Buddy;
-	if( buddy.nickName == player.nickName )
+	var friend:FriendData = selectedItem.data as FriendData;
+	if( friend.id == player.id )
 		buttonsPopup = new SimpleListPopup("buddy_profile");
 	else
-		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove", buddy.state == "Occupied"?"buddy_spectate$":"buddy_battle");
-	buttonsPopup.data = buddy;
+		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove", friend.status==2?"buddy_spectate":"buddy_battle");
+	buttonsPopup.data = friend;
 	buttonsPopup.addEventListener(Event.SELECT, buttonsPopup_selectHandler);
 	buttonsPopup.addEventListener(Event.CLOSE, buttonsPopup_selectHandler);
 	buttonsPopup.buttonsWidth = 360;
@@ -197,69 +205,52 @@ private function buttonsPopup_selectHandler(event:Event):void
 		return;
 	
 	var buttonsPopup:SimpleListPopup = event.currentTarget as SimpleListPopup;
-	var buddy:Buddy = buttonsPopup.data as Buddy;
+	var friend:FriendData = buttonsPopup.data as FriendData;
 	switch( event.data )
 	{
 		case "buddy_road":
-      LeagueItemRenderer.LEAGUE = int(buddy.name);
-      LeagueItemRenderer.POINT = buddy.getVariable("$point").getIntValue();
-			appModel.navigator.getScreen(Game.BUDDY_ROAD).properties.title = loc("buddy_road_title", [buddy.nickName]);
+      LeagueItemRenderer.STEP = friend.step;
+      LeagueItemRenderer.LEAGUE = friend.id;
+      LeagueItemRenderer.POINT = friend.point;
+			appModel.navigator.getScreen(Game.BUDDY_ROAD).properties.title = loc("buddy_road_title", [friend.name]);
 			appModel.navigator.pushScreen(Game.BUDDY_ROAD);
 			break;
 		case "buddy_profile":
-			appModel.navigator.addPopup( new ProfilePopup({name:buddy.nickName, id:int(buddy.name)}) );
+			appModel.navigator.addPopup( new ProfilePopup({name:friend.name, id:friend.id}) );
 			break;
 		case "buddy_battle":
-			appModel.navigator.invokeBuddyBattle(buddy);
+			appModel.navigator.invokeBuddyBattle(friend);
 			break;
 		case "buddy_remove":
-			removeFriend(buddy);
+			removeFriend(friend.id);
 			break;
-		case "buddy_spectate$":
-			spectate(buddy);
+		case "buddy_spectate":
+			spectate(friend);
 			break;
 	}
 }
 
-protected function sfs_buddyBattleHandler(event:SFSEvent):void
+
+private function spectate(friend:FriendData):void
 {
-	if( event.params.cmd != SFSCommands.BUDDY_BATTLE )
+	if( friend.status < 2 )
 		return;
-	var p:ISFSObject = event.params.params as SFSObject;
-	if( p.getInt("bs") == 0 && p.getInt("s") != AppModel.instance.game.player.id )
-		return;
-	buttonsEnabled = p.getInt("bs") > 0;
+	appModel.navigator.runBattle(0, false, friend.id+"", 2);
 }
 
-private function spectate(buddy:Buddy):void
-{
-	if( !buddy.containsVariable("br") )
-		return;
-	appModel.navigator.runBattle(0, false, buddy.name, 2);
-}
-
-private function removeFriend(buddy:Buddy):void
+private function removeFriend(friendId:int):void
 {
 	var confirm:ConfirmPopup = new ConfirmPopup(loc("buddy_remove_confirm"), loc("popup_yes_label"));
 	confirm.addEventListener(Event.SELECT, confirm_selectHandler);
-	confirm.acceptStyle = MainTheme.STYLE_BUTTON_SMALL_DANGER
+	confirm.acceptStyle = MainTheme.STYLE_BUTTON_SMALL_DANGER;
+	confirm.declineStyle = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
 	appModel.navigator.addPopup(confirm);
 	function confirm_selectHandler ( event:Event ):void {
 		confirm.removeEventListener(Event.SELECT, confirm_selectHandler);
 		var params:SFSObject = new SFSObject();
-		params.putText("buddyId", buddy.name);
-		SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_buddyRemoveHandler);
+		params.putInt("id", friendId);
 		SFSConnection.instance.sendExtensionRequest(SFSCommands.BUDDY_REMOVE, params);
 	}
-}
-
-protected function sfs_buddyRemoveHandler(event:SFSEvent):void
-{
-	if( event.params.cmd != SFSCommands.BUDDY_REMOVE )
-		return;
-	
-	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_buddyRemoveHandler);
-	appModel.navigator.addLog(loc("buddy_remove_message"));
 }
 
 public function set buttonsEnabled(value:Boolean):void
@@ -274,12 +265,7 @@ public function set buttonsEnabled(value:Boolean):void
 
 override public function dispose():void
 {
-	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, 			sfs_buddyRemoveHandler);
-	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, 			sfs_buddyBattleHandler);
-	SFSConnection.instance.removeEventListener(SFSBuddyEvent.BUDDY_VARIABLES_UPDATE,	sfs_buddyVariablesUpdateHandler); 
-	SFSConnection.instance.removeEventListener(SFSBuddyEvent.BUDDY_ONLINE_STATE_UPDATE,	sfs_buddyVariablesUpdateHandler); 
-	SFSConnection.instance.removeEventListener(SFSBuddyEvent.BUDDY_ADD,					sfs_buddyChangeHandler); 
-	SFSConnection.instance.removeEventListener(SFSBuddyEvent.BUDDY_REMOVE,				sfs_buddyChangeHandler); 
+	SFSConnection.instance.removeEventListener(SFSEvent.EXTENSION_RESPONSE, this.sfs_responseHandler);
 	super.dispose();
 }
 }
