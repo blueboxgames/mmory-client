@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.extensions.share.Share;
+import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.mmory.core.others.TrophyReward;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
@@ -37,7 +38,6 @@ import flash.geom.Rectangle;
 
 import starling.animation.Transitions;
 import starling.events.Event;
-import com.gerantech.mmory.core.constants.MessageTypes;
 
 public class BuddiesSegment extends Segment
 {
@@ -171,10 +171,16 @@ protected function list_focusInHandler(event:Event):void
 		return;
 	
 	var friend:FriendData = selectedItem.data as FriendData;
+	if( selectedItem.collectible )
+	{
+		showPrizeRoad(friend);
+		return;
+	}
+	
 	if( friend.id == player.id )
 		buttonsPopup = new SimpleListPopup("buddy_profile");
 	else
-		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove", friend.status==2?"buddy_spectate":"buddy_battle");
+		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove");//, friend.status==2?"buddy_spectate":"buddy_battle");
 	buttonsPopup.data = friend;
 	buttonsPopup.addEventListener(Event.SELECT, buttonsPopup_selectHandler);
 	buttonsPopup.addEventListener(Event.CLOSE, buttonsPopup_selectHandler);
@@ -209,11 +215,7 @@ private function buttonsPopup_selectHandler(event:Event):void
 	switch( event.data )
 	{
 		case "buddy_road":
-      LeagueItemRenderer.STEP = friend.step;
-      LeagueItemRenderer.LEAGUE = friend.id;
-      LeagueItemRenderer.POINT = friend.point;
-			appModel.navigator.getScreen(Game.BUDDY_ROAD).properties.title = loc("buddy_road_title", [friend.name]);
-			appModel.navigator.pushScreen(Game.BUDDY_ROAD);
+			showPrizeRoad(friend);
 			break;
 		case "buddy_profile":
 			appModel.navigator.addPopup( new ProfilePopup({name:friend.name, id:friend.id}) );
@@ -230,6 +232,14 @@ private function buttonsPopup_selectHandler(event:Event):void
 	}
 }
 
+private function showPrizeRoad(friend:FriendData):void
+{
+	LeagueItemRenderer.STEP = friend.step;
+	LeagueItemRenderer.LEAGUE = friend.id;
+	LeagueItemRenderer.POINT = friend.point;
+	appModel.navigator.getScreen(Game.BUDDY_ROAD).properties.title = loc("buddy_road_title", [friend.name]);
+	appModel.navigator.pushScreen(Game.BUDDY_ROAD);
+}
 
 private function spectate(friend:FriendData):void
 {
