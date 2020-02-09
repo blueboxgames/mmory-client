@@ -171,7 +171,7 @@ protected function list_focusInHandler(event:Event):void
 		return;
 	
 	var friend:FriendData = selectedItem.data as FriendData;
-	if( selectedItem.collectible )
+	if( friend.id != player.id && selectedItem.collectible )
 	{
 		showPrizeRoad(friend);
 		return;
@@ -245,7 +245,7 @@ private function spectate(friend:FriendData):void
 {
 	if( friend.status < 2 )
 		return;
-	appModel.navigator.runBattle(0, false, friend.id+"", 2);
+	appModel.navigator.runBattle(0, false, friend.id + "", 2);
 }
 
 private function removeFriend(friendId:int):void

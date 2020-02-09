@@ -49,12 +49,11 @@ public class BuddyItemRenderer extends RankItemRenderer
 		if(_data == null || _owner == null)
 			return;
 		this.friend = _data as FriendData;
-		var point:int = friend.containsKey("point") ? friend.point : 0;
-		this.leagueIndex = player.get_arena(point);
-		this.collectible = friend.step < game.friendRoad.calculateStep(point);
+		this.leagueIndex = player.get_arena(friend.point);
+		this.collectible = friend.step < game.friendRoad.calculateStep(friend.point);
 
 		this.nameDisplay.text = friend.name ;
-		this.pointDisplay.text = point > 0 ? StrUtils.getNumber(point) : "";
+		this.pointDisplay.text = friend.point > 0 ? StrUtils.getNumber(friend.point) : "";
 		this.rankDisplay.text = StrUtils.getNumber(index + 1);
 		this.leagueIconDisplay.source = appModel.assets.getTexture("leagues/" + Math.floor(leagueIndex * 0.5));
 		this.leagueBGDisplay.source = appModel.assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-small");
@@ -78,7 +77,7 @@ public class BuddyItemRenderer extends RankItemRenderer
 		this.mySkin.color = friend.id == player.id ? 0x99FFFF : (this.collectible ? 0xf9d712 : 0xFFFFFF);
 		if( this.collectible || friend.id == player.id )
 			this.mySkin.texture = appModel.assets.getTexture("theme/item-renderer-white-skin")
-		if( !this.collectible )
+		if( !this.collectible || friend.id == player.id )
 			return;
 		var hilight:GradientHilight = new GradientHilight();
 		hilight.layoutData = new AnchorLayoutData(4, 4, 4, 4);
