@@ -41,6 +41,7 @@ public class LeagueItemRenderer extends AbstractListItemRenderer
 {
 static public var POINT:int;
 static public var STEP:int;
+static public var START:int;
 static public var LEAGUE:int;
 static public var HEIGHT:int;
 static public const ICON_X:int = 300;
@@ -163,6 +164,7 @@ private function createElements():void
 
 			var pointRect:ImageLoader = new ImageLoader();
 			pointRect.source = appModel.assets.getTexture("leagues/point-rect");
+			pointRect.alpha = 0.7;
 			pointRect.width = 150;
 			pointRect.height = 72;
 			pointRect.scale9Grid = new Rectangle(17, 17, 2, 2);
@@ -210,8 +212,8 @@ private function createElements():void
 	}
 
 	if( LEAGUE == league.index )
-	{
-		var pointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(POINT), 1, "center", null, false, "center", 0.7);
+	{trace(POINT , "+" , START)
+		var pointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(POINT + START), 1, "center", null, false, "center", 0.7);
 		pointLabel.layoutData = new AnchorLayoutData(fillHeight - pointRect.height * 0.5 + 5, -10);
 		pointLabel.width = pointRect.width - 40;
 		addChild(pointLabel);
@@ -354,7 +356,7 @@ private function createEventItem(x:int, y:int, width:int, reward:TrophyReward, r
 }
 private function createPoint(reward:TrophyReward, y:int):void
 {
-	var pointDisplay:ShadowLabel = new ShadowLabel(StrUtils.getNumber(reward.point), 1, 0, "center", null, false, null, 1);
+	var pointDisplay:ShadowLabel = new ShadowLabel(StrUtils.getNumber(reward.point + START), 1, 0, "center", null, false, null, 1);
 	pointDisplay.height = 100;
 	pointDisplay.pivotY = pointDisplay.height * 0.5
 	pointDisplay.y = y;

@@ -5,11 +5,12 @@ package com.gerantech.towercraft.models.vo
 
   public class FriendData extends SFSObject 
   {
-    public function init(id:int, name:String, point:int, status:int, step:int) :FriendData
+    public function init(id:int, name:String, point:int, status:int, step:int, start:int) :FriendData
     {
       this.id = id;
       this.point = point;
       this.step = step;
+      this.start = start;
       this.status = status;
       this.name = name;
       return this;
@@ -25,6 +26,8 @@ package com.gerantech.towercraft.models.vo
 				this.point = data.getInt("point");
 			if( data.containsKey("step") )
 				this.step = data.getInt("step");
+			if( data.containsKey("start") )
+				this.start = data.getInt("start");
 			if( data.containsKey("status") )
 				this.status = data.getInt("status");
       return this;
@@ -60,6 +63,17 @@ package com.gerantech.towercraft.models.vo
     public function get step():int
     {
       return getInt("step");
+    }
+
+    public function set start(value:int):void
+    {
+      if( getInt("start") == value )
+        return;
+      putInt("start", value);
+    }
+    public function get start():int
+    {
+      return getInt("start");
     }
 
     public function set status(value:int):void

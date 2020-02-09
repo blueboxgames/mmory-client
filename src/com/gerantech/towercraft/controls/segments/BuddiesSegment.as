@@ -49,7 +49,7 @@ private var share:ShareImageFactory;
 public function BuddiesSegment()
 {
 	collection = new ListCollection();
-	collection.addItem( new FriendData().init(player.id, player.nickName, player.get_point(), 1, 0) );
+	collection.addItem( new FriendData().init(player.id, player.nickName, player.get_point(), 1, 0, 0) );
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, this.sfs_responseHandler);
 }
 
@@ -234,9 +234,10 @@ private function buttonsPopup_selectHandler(event:Event):void
 
 private function showPrizeRoad(friend:FriendData):void
 {
+	LeagueItemRenderer.START = friend.start;
 	LeagueItemRenderer.STEP = friend.step;
 	LeagueItemRenderer.LEAGUE = friend.id;
-	LeagueItemRenderer.POINT = friend.point;
+	LeagueItemRenderer.POINT = friend.point - friend.start;
 	appModel.navigator.getScreen(Game.BUDDY_ROAD).properties.title = loc("buddy_road_title", [friend.name]);
 	appModel.navigator.pushScreen(Game.BUDDY_ROAD);
 }

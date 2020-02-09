@@ -62,6 +62,7 @@ override protected function initialize():void
 	super.initialize();
 	layout = new AnchorLayout();
 	
+	LeagueItemRenderer.START = 0;
 	LeagueItemRenderer.HEIGHT = 1800;
 	LeagueItemRenderer.POINT = player.get_point();
 	LeagueItemRenderer.LEAGUE = player.get_arena(0);
