@@ -65,9 +65,9 @@ public function initialize () : void
 	guiTextsContainer = new Sprite();
 	
 	var preAssets:Object = new Object();
-	for ( var key:String in AppModel.instance.syncData )
-		if( AppModel.instance.syncData[key]["mode"] == "prev" )
-			preAssets[key] = AppModel.instance.syncData[key];
+	for ( var key:String in SyncUtil.ALL )
+		if( SyncUtil.ALL[key]["mode"] == "prev" )
+			preAssets[key] = SyncUtil.ALL[key];
 
 	var mode:int = ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX), AppModel.instance.game.player.id);
 	var deckKeys:Vector.<int> = AppModel.instance.game.player.decks.get(0).keys();
@@ -79,9 +79,9 @@ public function initialize () : void
 	fillDeck(deck, preAssets);
 
 	key = "map-" + mode;
-	preAssets[key +".json"] = AppModel.instance.syncData[key + ".json"];
-	preAssets[key + ".atf"] = AppModel.instance.syncData[key + ".atf"];
-	preAssets[key + ".xml"] = AppModel.instance.syncData[key + ".xml"];
+	preAssets[key +".json"] = SyncUtil.ALL[key + ".json"];
+	preAssets[key + ".atf"] = SyncUtil.ALL[key + ".atf"];
+	preAssets[key + ".xml"] = SyncUtil.ALL[key + ".xml"];
 
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPre_completeHandler);
@@ -115,13 +115,13 @@ public function createPlaces(battleData:BattleData) : void
 
 private function fillDeck(deck:Vector.<String>, assets:Object):void
 {
-	for(var i:int=0; i<deck.length; i++)
-	for( var key:String in AppModel.instance.syncData )
+	for( var i:int=0; i<deck.length; i++ )
+	for( var key:String in SyncUtil.ALL )
 	{
-		if( AppModel.instance.syncData[key].hasOwnProperty("mode") )
+		if( SyncUtil.ALL[key].hasOwnProperty("mode") )
 			continue;
 		if( key.search(deck[i]) > -1 )
-			assets[key] = AppModel.instance.syncData[key];
+			assets[key] = SyncUtil.ALL[key];
 	}
 }
 

@@ -196,9 +196,9 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		dispatchEvent(new LoadingEvent(LoadingEvent.NOTICE_UPDATE));
 	else
 	{
-		appModel.syncData = serverData.getSFSObject("assets").toObject();
+		SyncUtil.ALL = serverData.getSFSObject("assets").toObject();
+		SyncUtil.BASE_URL = serverData.getText("assetsBaseURL");trace(serverData.getText("assetsBaseURL"));
 		var syncTool:SyncUtil = new SyncUtil();
-		syncTool.baseURL = serverData.getText("assetsBaseURL");
 		syncTool.addEventListener(Event.COMPLETE, syncTool_completeHandler);
 		syncTool.sync("init");
 	}
@@ -233,7 +233,7 @@ protected function prefs_completeHandler(e:*):void
 	
 	// prevent ADs for new users
 	if( appModel.game.player.get_arena(0) == 0 || !appModel.game.player.prefs.getAsBool(PrefsTypes.SETTINGS_5_ADS) )
-        return;
+		return;
 
 	// catch video ads
 	VideoAdsManager.instance.adProvider = VideoAdsManager.AD_PROVIDER_CHARTBOOST;

@@ -13,9 +13,10 @@ package com.gerantech.towercraft.utils
 
     public class SyncUtil extends EventDispatcher
     {
-        public var baseURL:String;
         // private static const DEBUG:Boolean = true;
-        public static var SYNCYING:Boolean;
+        static public var ALL:Object;
+        static public var BASE_URL:String;
+        static public var SYNCYING:Boolean;
         private var assets:Object;
         private var saveQueue:Array;
         private var assetsDir:File;
@@ -28,9 +29,9 @@ package com.gerantech.towercraft.utils
             if( data is String )
             {
                 this.assets = new Object();
-                for ( var key:String in AppModel.instance.syncData )
-                    if( AppModel.instance.syncData[key]["mode"] == data )
-                        this.assets[key] = AppModel.instance.syncData[key];
+                for ( var key:String in ALL )
+                    if( ALL[key]["mode"] == data )
+                        this.assets[key] = ALL[key];
             }
             else
             {
@@ -77,7 +78,7 @@ package com.gerantech.towercraft.utils
                     continue;
                 }
                 this.assets[name].name = name;
-                this.assets[name].url = baseURL + name;
+                this.assets[name].url = BASE_URL + name;
                 this.assets[name].exists = false;
                 var loader:FileLoader = new FileLoader(this.assets[name]);
                 loader.addEventListener(Event.COMPLETE, loader_completeHandler);
