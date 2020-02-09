@@ -23,7 +23,7 @@ package com.gerantech.towercraft.views.units.elements
     private var bodyDisplay:UnitMC;
     private var sideDisplay:UnitMC;
 
-    static public  function has_side(t:int) : Boolean { return t == 104 || t == 108 || t == 117 || t == 118 || t == 119 || t == 120 || t == 224; }
+    static public  function has_side(t:int) : Boolean { return t == 102 || t == 104 || t == 108 || t == 117 || t == 118 || t == 119 || t == 120 || t == 224; }
 
     public function UnitBody(unit:UnitView, card:Card, side:int)
     {
