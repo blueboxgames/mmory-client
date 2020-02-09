@@ -198,6 +198,7 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 	{
 		appModel.syncData = serverData.getSFSObject("assets").toObject();
 		var syncTool:SyncUtil = new SyncUtil();
+		syncTool.baseURL = serverData.getText("assetsBaseURL");
 		syncTool.addEventListener(Event.COMPLETE, syncTool_completeHandler);
 		syncTool.sync("init");
 	}

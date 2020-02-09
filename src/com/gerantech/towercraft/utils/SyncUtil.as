@@ -13,6 +13,7 @@ package com.gerantech.towercraft.utils
 
     public class SyncUtil extends EventDispatcher
     {
+        public var baseURL:String;
         // private static const DEBUG:Boolean = true;
         public static var SYNCYING:Boolean;
         private var assets:Object;
@@ -76,6 +77,7 @@ package com.gerantech.towercraft.utils
                     continue;
                 }
                 this.assets[name].name = name;
+                this.assets[name].url = baseURL + name;
                 this.assets[name].exists = false;
                 var loader:FileLoader = new FileLoader(this.assets[name]);
                 loader.addEventListener(Event.COMPLETE, loader_completeHandler);
