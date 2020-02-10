@@ -3,6 +3,7 @@ package com.gerantech.towercraft.controls.screens
   import com.gerantech.mmory.core.battle.BattleField;
   import com.gerantech.mmory.core.battle.fieldes.FieldData;
   import com.gerantech.mmory.core.battle.units.Unit;
+  import com.gerantech.mmory.core.constants.MessageTypes;
   import com.gerantech.mmory.core.constants.PrefsTypes;
   import com.gerantech.mmory.core.constants.ResourceType;
   import com.gerantech.mmory.core.socials.Challenge;
@@ -83,7 +84,7 @@ package com.gerantech.towercraft.controls.screens
       if( FRIENDLY_MODE == 0 )
         SFSConnection.instance.sendExtensionRequest(SFSCommands.BATTLE_START, params);
 
-      startBattle();
+      syncAssets();
     }
 
     protected function sfsConnection_connectionLostHandler(event:SFSEvent):void
@@ -100,7 +101,7 @@ package com.gerantech.towercraft.controls.screens
       var data:SFSObject = event.params.params as SFSObject;
       
       // Handle battle start command
-      if( event.params.cmd == SFSCommands.BATTLE_START )
+      if( event.params.cmd == SFSCommands.BATTLE_ASSET_SYNC )
       {
         if( data.containsKey("umt") || data.containsKey("response") )
         {
@@ -112,8 +113,15 @@ package com.gerantech.towercraft.controls.screens
         this.battleData = new BattleData(data);
         // Starts battle if it's map is not null
         if( appModel.battleFieldView.mapBuilder != null )
-          startBattle();
+          syncAssets();
         return;
+      }
+
+      if( event.params.cmd == SFSCommands.BATTLE_START )
+      {
+        var responseCode:int = event.params.params.getInt("response");
+        if( responseCode == MessageTypes.RESPONSE_SUCCEED )
+          startBattle()
       }
 
       // Don't run any command if battleData is not set.
@@ -179,7 +187,7 @@ package com.gerantech.towercraft.controls.screens
     }
 
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- Start Battle _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-    private function startBattle():void
+    private function syncAssets():void
     {
       if( this.battleData == null )
         return;
@@ -192,7 +200,7 @@ package com.gerantech.towercraft.controls.screens
         function waitingOverlay_readyHandler():void
         {
           WAITING.removeEventListener(Event.READY, waitingOverlay_readyHandler);
-          startBattle();
+          syncAssets();
         }
         return;
       }
@@ -204,6 +212,13 @@ package com.gerantech.towercraft.controls.screens
     private function battleFieldView_triggeredHandler(event:Event):void
     {
       appModel.battleFieldView.removeEventListener(Event.TRIGGERED, battleFieldView_triggeredHandler);
+      var params:ISFSObject = new SFSObject();
+      params.putInt("roomId", this.battleData.roomId);
+      SFSConnection.instance.sendExtensionRequest(SFSCommands.BATTLE_READY, params);
+    }
+
+    private function startBattle():void
+    {
       WAITING.disappear();
       WAITING.addEventListener(Event.CLOSE, waitingOverlay_closeHandler);
       function waitingOverlay_closeHandler(e:Event):void
