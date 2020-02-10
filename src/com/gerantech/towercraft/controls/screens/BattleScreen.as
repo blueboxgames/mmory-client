@@ -101,7 +101,7 @@ package com.gerantech.towercraft.controls.screens
       var data:SFSObject = event.params.params as SFSObject;
       
       // Handle battle start command
-      if( event.params.cmd == SFSCommands.BATTLE_ASSET_SYNC )
+      if( event.params.cmd == SFSCommands.BATTLE_START )
       {
         if( data.containsKey("umt") || data.containsKey("response") )
         {
@@ -117,11 +117,11 @@ package com.gerantech.towercraft.controls.screens
         return;
       }
 
-      if( event.params.cmd == SFSCommands.BATTLE_START )
+      if( event.params.cmd == SFSCommands.BATTLE_READY )
       {
         var responseCode:int = event.params.params.getInt("response");
         if( responseCode == MessageTypes.RESPONSE_SUCCEED )
-          startBattle()
+          startBattle();
       }
 
       // Don't run any command if battleData is not set.

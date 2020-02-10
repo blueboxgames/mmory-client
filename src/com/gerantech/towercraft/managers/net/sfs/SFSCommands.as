@@ -2,7 +2,6 @@ package com.gerantech.towercraft.managers.net.sfs
 {
 public class SFSCommands
 {
-public static const BATTLE_ASSET_SYNC:String = "battleAssetSync";
 public static const BATTLE_READY:String = "battleReady";
 public static const BATTLE_START:String = "battleStart";
 public static const BATTLE_CANCEL:String = "battleCancel";
