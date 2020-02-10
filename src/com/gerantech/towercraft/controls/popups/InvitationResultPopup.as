@@ -5,16 +5,18 @@ package com.gerantech.towercraft.controls.popups
 	import flash.geom.Rectangle;
 
 	import starling.events.Event;
+	import com.gerantech.towercraft.controls.screens.DashboardScreen;
+	import com.gerantech.towercraft.controls.segments.SocialSegment;
 	
-	public class InvitationPopup extends MessagePopup
+	public class InvitationResultPopup extends MessagePopup
 	{
 		private var responseCode:int;
 		private var params:SFSObject;
-		public function InvitationPopup(params:SFSObject)
+		public function InvitationResultPopup(params:SFSObject)
 		{
 			this.params = params;
 			responseCode = params.getInt("response");
-			var array:Array = responseCode == 0 || responseCode == -2 ? [params.getText("inviter")] : null;
+			var array:Array = responseCode == 0 || responseCode == -3 ? [params.getText("inviter")] : null;
 			var msg:String = loc("popup_invitation_" + responseCode, array);
 			if( params.containsKey("rewardType") )
 				msg += "\n" + loc("popup_invitation_reward", [params.getInt("rewardCount"), loc("resource_title_" + params.getInt("rewardType"))]);
@@ -25,6 +27,11 @@ package com.gerantech.towercraft.controls.popups
 		override protected function acceptButton_triggeredHandler(event:Event):void
 		{
 			super.acceptButton_triggeredHandler(event);
+			
+			DashboardScreen(appModel.navigator.activeScreen).gotoPage(3);
+			DashboardScreen.TAB_INDEX = 3;
+			SocialSegment.TAB_INDEX = 2;
+
 			if( responseCode == 0 )
 			{
 				if( params.containsKey("rewardType") )

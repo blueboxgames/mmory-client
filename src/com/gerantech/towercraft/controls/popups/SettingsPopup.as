@@ -59,7 +59,7 @@ override protected function showElements():void
 	list.itemRendererFactory = function():IListItemRenderer { return new SettingsItemRenderer(); }
 	addChild(list);
 	
-	var versionLabel:RTLLabel = new RTLLabel("v. " + appModel.descriptor.versionLabel + " for " + appModel.descriptor.market + " in " + appModel.descriptor.server + ", User: " + (player.id * 2), 0x444488, null, "ltr", false, null, 0.55);
+	var versionLabel:RTLLabel = new RTLLabel("v. " + appModel.descriptor.versionLabel + " for " + appModel.descriptor.market + " in " + appModel.descriptor.server + ". " + (player.id * 2), 0x444488, null, "ltr", false, null, 0.55);
 	versionLabel.layoutData = new AnchorLayoutData(NaN, 10,  10);
 	versionLabel.touchable = false;
 	addChild(versionLabel);

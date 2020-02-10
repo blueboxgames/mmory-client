@@ -41,11 +41,6 @@ override protected function initialize() : void
 		return;
 	
 	layout = new AnchorLayout();
-	if( SFSConnection.instance.buddyManager.buddyList.length < 5 )
-		addItem(INVITE_BUDDY);
-	
-	if( !hasItem )
-		return;
 
 	var gradient:Image = new ImageSkin( appModel.assets.getTexture("theme/gradeint-right") );
 	gradient.scale9Grid = MainTheme.SHADOW_SIDE_SCALE9_GRID;

@@ -148,7 +148,7 @@ protected function sfsConnection_extensionResponseHandler(event:SFSEvent):void
 	confirm.data = sfs;
 	confirm.addEventListener("select", confirm_eventsHandler);
 	confirm.addEventListener("cancel", confirm_eventsHandler);
-	appModel.navigator.addChild(confirm);
+	appModel.navigator.addPopup(confirm);
 }		
 private function confirm_eventsHandler(event:*):void
 {

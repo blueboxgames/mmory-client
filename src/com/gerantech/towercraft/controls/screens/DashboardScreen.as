@@ -4,6 +4,7 @@ import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.constants.SegmentType;
+import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.TileBackground;
 import com.gerantech.towercraft.controls.buttons.Indicator;
@@ -196,7 +197,7 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	indicatorSC.layoutData = new AnchorLayoutData(20, NaN, NaN, NaN, 0);
 	toolbar.addChild(indicatorSC);
 	
-	if( player.get_arena(0) > 0 )
+	if( Challenge.getUnlockAt(game, 1) <= player.getResource(ResourceType.R7_MAX_POINT) )
 	{
 		var indicatorCT:Indicator = new Indicator("rtl", ResourceType.R6_TICKET);
 		indicatorCT.layoutData = new AnchorLayoutData(20, NaN, NaN, 70);

@@ -64,37 +64,28 @@ public function initialize () : void
 	guiImagesContainer = new Sprite();
 	guiTextsContainer = new Sprite();
 	
+	var preAssets:Object = new Object();
+	for ( var key:String in SyncUtil.ALL )
+		if( SyncUtil.ALL[key]["mode"] == "prev" )
+			preAssets[key] = SyncUtil.ALL[key];
+
+	var mode:int = ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX), AppModel.instance.game.player.id);
 	var deckKeys:Vector.<int> = AppModel.instance.game.player.decks.get(0).keys();
 	var deck:Vector.<String> = new Vector.<String>;
 	for(var k:int = 0; k < deckKeys.length; k++ )
 		deck.push(AppModel.instance.game.player.decks.get(0).get(deckKeys[k]).toString());
-	var preAssets:Object = new Object();
-	for ( var key:String in AppModel.instance.syncData )
-	{
-		if( AppModel.instance.syncData[key]["pre"] )
-			preAssets[key] = AppModel.instance.syncData[key];
-		else if( !AppModel.instance.syncData[key]["initial"] )
-			fillDeck(deck, AppModel.instance.syncData, preAssets, key);
-	}
-	
-	key = "map-" + ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX), AppModel.instance.game.player.id);
-	preAssets[key +".json"] = AppModel.instance.syncData[key + ".json"];
-	preAssets[key + ".atf"] = AppModel.instance.syncData[key + ".atf"];
-	preAssets[key + ".xml"] = AppModel.instance.syncData[key + ".xml"];
+	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, mode, false) + "");
+	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, mode, true) + "");
+	fillDeck(deck, preAssets);
+
+	key = "map-" + mode;
+	preAssets[key +".json"] = SyncUtil.ALL[key + ".json"];
+	preAssets[key + ".atf"] = SyncUtil.ALL[key + ".atf"];
+	preAssets[key + ".xml"] = SyncUtil.ALL[key + ".xml"];
 
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPre_completeHandler);
 	syncTool.sync(preAssets);
-}
-
-private function fillDeck(deck:Vector.<String>, fromAssets:Object, toAssets:Object, key:String):void
-{
-	for(var i:int=0; i<deck.length; i++)
-	if( key.search(deck[i]) > -1 )
-	{
-		toAssets[key] = fromAssets[key];
-		return;
-	}
 }
 
 protected function syncToolPre_completeHandler(event:Event):void 
@@ -114,14 +105,24 @@ public function createPlaces(battleData:BattleData) : void
 	var deck:Vector.<String> = new Vector.<String>;
 	for(var k:int = 0; k < deckKeys.length; k++ )
 		deck.push(battleData.getAxiseDeck().get(deckKeys[k]).type.toString());
-	var preAssets:Object = new Object();
-	for ( var key:String in AppModel.instance.syncData )
-		if( !AppModel.instance.syncData[key]["initial"] && !AppModel.instance.syncData[key]["pre"] )
-			fillDeck(deck, AppModel.instance.syncData, preAssets, key);
+	var postAssets:Object = new Object();
+	fillDeck(deck, postAssets);
 
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPost_completeHandler);
-	syncTool.sync(preAssets);
+	syncTool.sync(postAssets);
+}
+
+private function fillDeck(deck:Vector.<String>, assets:Object):void
+{
+	for( var i:int=0; i<deck.length; i++ )
+	for( var key:String in SyncUtil.ALL )
+	{
+		if( SyncUtil.ALL[key].hasOwnProperty("mode") )
+			continue;
+		if( key.search(deck[i]) > -1 )
+			assets[key] = SyncUtil.ALL[key];
+	}
 }
 
 protected function syncToolPost_completeHandler(event:Event):void

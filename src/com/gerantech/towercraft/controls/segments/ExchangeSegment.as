@@ -19,6 +19,7 @@ import feathers.layout.HorizontalAlign;
 import feathers.layout.VerticalLayout;
 
 import starling.events.Event;
+import com.gerantech.mmory.core.socials.Challenge;
 
 public class ExchangeSegment extends Segment
 {
@@ -31,11 +32,11 @@ public function ExchangeSegment(){ super(); }
 override public function init():void
 {
 	super.init();
-	EmoteItemRenderer.loadEmotes(animation_loadCallback);
+/* 	EmoteItemRenderer.loadEmotes(animation_loadCallback);
 }
 
 protected function animation_loadCallback():void 
-{
+{ */
 
 	layout = new AnchorLayout();
 
@@ -105,7 +106,7 @@ override public function updateData():void
 			emotes.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C120_MAGICS && player.get_arena(0) > 1 )
 			magics.add(itemKeys[i]);
-		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS && player.getResource(ResourceType.R6_TICKET) < 20 )
+		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C70_TICKETS && Challenge.getUnlockAt(game, 1) <= player.getResource(ResourceType.R7_MAX_POINT) && player.getResource(ResourceType.R6_TICKET) < 20 )
 			tickets.add(itemKeys[i]);
 		else if( ExchangeType.getCategory( itemKeys[i] ) == ExchangeType.C0_HARD && itemKeys[i] != ExchangeType.C0_HARD )
 			hards.add(itemKeys[i]);

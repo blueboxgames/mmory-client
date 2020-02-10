@@ -4,7 +4,6 @@ import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.popups.BroadcastMessagePopup;
 import com.gerantech.towercraft.controls.popups.RestorePopup;
 
-import feathers.controls.StackScreenNavigatorItem;
 import feathers.data.ListCollection;
 
 import starling.events.Event;
@@ -45,9 +44,8 @@ override protected function list_changeHandler(event:Event):void
 			appModel.navigator.addPopup(new BroadcastMessagePopup());
 			break;
 		case "Spectate Battles":
-			var item:StackScreenNavigatorItem = appModel.navigator.getScreen( Game.SPECTATE_SCREEN );
-			item.properties.cmd = String(list.selectedItem).toLowerCase() ;
-			appModel.navigator.pushScreen( Game.SPECTATE_SCREEN ) ;
+			appModel.navigator.getScreen(Game.SPECTATE_SCREEN).properties.cmd = String(list.selectedItem).toLowerCase() ;
+			appModel.navigator.pushScreen(Game.SPECTATE_SCREEN) ;
 			break;
 		case "Search Chat":
 			appModel.navigator.pushScreen(Game.SEARCH_CHAT_SCREEN);
