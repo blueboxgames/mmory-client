@@ -22,7 +22,7 @@ public function UserPrefs(){}
 public function init() : void
 {
 	// tutorial first step
-    setInt(PrefsTypes.TUTOR, PrefsTypes.T_000_FIRST_RUN);
+	setInt(PrefsTypes.TUTOR, PrefsTypes.T_000_FIRST_RUN);
 	authenticateSocial();
 	
 	// select language with market index

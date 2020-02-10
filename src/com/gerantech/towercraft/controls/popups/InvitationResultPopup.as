@@ -5,6 +5,8 @@ package com.gerantech.towercraft.controls.popups
 	import flash.geom.Rectangle;
 
 	import starling.events.Event;
+	import com.gerantech.towercraft.controls.screens.DashboardScreen;
+	import com.gerantech.towercraft.controls.segments.SocialSegment;
 	
 	public class InvitationResultPopup extends MessagePopup
 	{
@@ -25,6 +27,11 @@ package com.gerantech.towercraft.controls.popups
 		override protected function acceptButton_triggeredHandler(event:Event):void
 		{
 			super.acceptButton_triggeredHandler(event);
+			
+			DashboardScreen(appModel.navigator.activeScreen).gotoPage(3);
+			DashboardScreen.TAB_INDEX = 3;
+			SocialSegment.TAB_INDEX = 2;
+
 			if( responseCode == 0 )
 			{
 				if( params.containsKey("rewardType") )
