@@ -368,7 +368,7 @@ protected function rewardItem_triggeredHandler(event:Event) : void
 {
 	var item:SimpleLayoutButton = event.currentTarget as SimpleLayoutButton;
 	var reward:TrophyReward = item.data.reward as TrophyReward;
-	var response:int = reward.achievable(POINT, STEP, league.index < 10000);
+	var response:int = league.index < 10000 ? player.achieveReward(reward.league, reward.index) : reward.achievable(POINT, STEP, league.index < 10000);
 	if( response != MessageTypes.RESPONSE_SUCCEED )
 	{
 		appModel.navigator.addLog(loc("arena_reward_response" + response));
