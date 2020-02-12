@@ -46,26 +46,26 @@ override protected function initialize():void
 	if( isDraw || battleData.battleField.friendlyMode )
 	{
 		var drawLabel:ShadowLabel = new ShadowLabel(loc(battleData.battleField.friendlyMode?"buddy_battle":"draw_label"), 1, 0, null, null, false, null, 1.4);
-		drawLabel.layoutData = new AnchorLayoutData(padding * 3.5, NaN, NaN, NaN, 0);
+		drawLabel.layoutData = new AnchorLayoutData(stageHeight * 0.1, NaN, NaN, NaN, 0);
 		addChild(drawLabel);
 	}
-	
-	// axis
-	var name:String = BattleHUD.getAxisName(player.get_battleswins() - 1, reward_1.getText("name"));
-	var axisHeader:BattleHeader = new BattleHeader(name, reward_1.getInt("id") == player.id, reward_1.getInt("score"));
-	axisHeader.layoutData = new AnchorLayoutData(padding * 11, 100, NaN, 100);
-	addChild(axisHeader);
-	//axisHeader.addScoreImages(reward_1.getInt("score"));
-	if( !isDraw )
-		axisHeader.showWinnerLabel(reward_1.getInt("score") > reward_2.getInt("score"));
 	
 	// allise
 	name = reward_2.getText("name") == "guest" ? loc("guest_label") : reward_2.getText("name");
 	var alliseHeader:BattleHeader = new BattleHeader(name, reward_2.getInt("id") == player.id, reward_2.getInt("score"));
-	alliseHeader.layoutData = new AnchorLayoutData(padding * 21, 100, NaN, 100);
+	alliseHeader.layoutData = new AnchorLayoutData(stageHeight * 0.2, 100, NaN, 100);
 	addChild(alliseHeader);
 	if( !isDraw )
 		alliseHeader.showWinnerLabel(reward_2.getInt("score") > reward_1.getInt("score"));
+	
+	// axis
+	var name:String = BattleHUD.getAxisName(player.get_battleswins() - 1, reward_1.getText("name"));
+	var axisHeader:BattleHeader = new BattleHeader(name, reward_1.getInt("id") == player.id, reward_1.getInt("score"));
+	axisHeader.layoutData = new AnchorLayoutData(stageHeight * 0.50, 100, NaN, 100);
+	addChild(axisHeader);
+	//axisHeader.addScoreImages(reward_1.getInt("score"));
+	if( !isDraw )
+		axisHeader.showWinnerLabel(reward_1.getInt("score") > reward_2.getInt("score"));
 
 	var hlayout:HorizontalLayout = new HorizontalLayout();
 	hlayout.horizontalAlign = HorizontalAlign.CENTER;
@@ -86,7 +86,7 @@ override protected function initialize():void
 			rewardsList.backgroundSkin.alpha = 0.6;
 			rewardsList.height = 280;
 			rewardsList.layout = hlayout;
-			rewardsList.layoutData = new AnchorLayoutData(padding * 26, 0, NaN, 0);
+			rewardsList.layoutData = new AnchorLayoutData(stageHeight * 0.65, 0, NaN, 0);
 			rewardsList.itemRendererFactory = function ():IListItemRenderer { return new BattleOutcomeRewardItemRenderer(battleData); }
 			rewardsList.dataProvider = _rewards;
 			addChild(rewardsList);
@@ -100,7 +100,7 @@ override protected function initialize():void
 	closeBatton.label = loc("popup_ok_label");
 	closeBatton.styleName = MainTheme.STYLE_BUTTON_NEUTRAL;
 	closeBatton.addEventListener(Event.TRIGGERED, buttons_triggeredHandler);
-	closeBatton.layoutData = new AnchorLayoutData((rewardsList != null?33:28) * padding, NaN, NaN, NaN, 0);
+	closeBatton.layoutData = new AnchorLayoutData((rewardsList != null?0.85:0.6) * stageHeight, NaN, NaN, NaN, 0);
 	Starling.juggler.tween(closeBatton, 0.5, {delay:0.9, alpha:1});
 	closeBatton.alpha = 0;
 	addChild(closeBatton);
