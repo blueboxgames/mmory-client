@@ -64,15 +64,15 @@ override public function init():void
 	ChallengeIndexItemRenderer.IS_FRIENDLY = false;
 	var eventsButton:ChallengeIndexItemRenderer = new ChallengeIndexItemRenderer();
 	eventsButton.width = 840;
-	eventsButton.height = Math.min(410, stageHeight * 0.23)
-	eventsButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.05);
+	eventsButton.height = Math.min(380, stageHeight * 0.22)
+	eventsButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.02);
 	eventsButton.data = player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX) == -1 ? 0 : player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX);
 	addButton(eventsButton, "eventsButton");
 	
 	// battle button
 	var battleButton:BattleButton = new BattleButton("button-battle", loc("button_battle"), new Rectangle(75, 75, 1, 35), new Rectangle(0, 0, 0, 30));
-	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, stageHeight * 0.10);
-	battleButton.height = Math.min(260, stageHeight * 0.16);
+	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, stageHeight * 0.12);
+	battleButton.height = Math.min(260, stageHeight * 0.15);
 	battleButton.width = 420;
 	addButton(battleButton, "battleButton");
 
@@ -80,7 +80,7 @@ override public function init():void
 	var bg:ImageLoader = new ImageLoader();
 	bg.source = appModel.theme.roundBigSkin;
 	bg.scale9Grid = MainTheme.ROUND_BIG_SCALE9_GRID;
-	bg.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.052);
+	bg.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.024);
 	
 	bg.height = eventsButton.height + 40;
 	bg.width = eventsButton.width + 60;
@@ -143,7 +143,7 @@ override public function init():void
 	}
 	
 	var profile:Profile  = new Profile();
-	profile.layoutData = new AnchorLayoutData(130, paddingH + 32, NaN, paddingH + 120);
+	profile.layoutData = new AnchorLayoutData(110, paddingH + 32, NaN, paddingH + 120);
 	profile.name = "profile";
 	addChild(profile);
 
@@ -152,7 +152,7 @@ override public function init():void
 	addButton(leaguesButton, "leaguesButton");
 	
 	var starsButton:CollectableStarsButton = new CollectableStarsButton();
-	starsButton.layoutData = new AnchorLayoutData(330, paddingH + 32);
+	starsButton.layoutData = new AnchorLayoutData(300, paddingH + 32);
 	starsButton.height = 140;
 	starsButton.width = 410;
 	addButton(starsButton, "starsButton");
@@ -170,7 +170,7 @@ override public function init():void
 	if( player.get_battleswins() > 10 && !player.prefs.getAsBool(PrefsTypes.AUTH_41_GOOGLE) )
 	{
 		googleButton = new IconButton(appModel.assets.getTexture("settings/41"), 0.6, appModel.assets.getTexture("home/button-bg-0"), new Rectangle(22, 38, 4, 4));
-		googleButton.layoutData = new AnchorLayoutData(330, paddingH + 36 + starsButton.width);
+		googleButton.layoutData = new AnchorLayoutData(300, paddingH + 36 + starsButton.width);
 		googleButton.width = googleButton.height = 140;
 		addButton(googleButton, "googleButton");
 	}
