@@ -123,7 +123,7 @@ private function starStarling():void
 	this.starling.stage.stageHeight = 1080 * (stage.stageHeight / stage.stageWidth);
 	//NativeAbilities.instance.showToast(stage.fullScreenWidth + "," + stage.fullScreenHeight + "," + this.starling.stage.stageWidth + "," + this.starling.stage.stageHeight + "," + this.starling.contentScaleFactor, 2);
 	//this.starling.showStatsAt("right", "top", 1 / this.starling.contentScaleFactor);
-	trace(stage.fullScreenWidth, stage.fullScreenHeight, this.starling.stage.stageWidth, this.starling.stage.stageHeight, this.starling.contentScaleFactor);
+	trace("Screen(" + stage.fullScreenWidth + "x" + stage.fullScreenHeight + "), Stage(" + stage.stageWidth + "x" +  stage.stageHeight + "), Starling(" + starling.stage.stageWidth + "x" +  starling.stage.stageHeight + "), Ratio:" + starling.contentScaleFactor);
 }
 
 private function starling_rootCreatedHandler(event:Object):void
