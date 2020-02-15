@@ -16,9 +16,9 @@ private var animTextureName:String;
 
 public function UnitMC(baseTextureName:String, animTextureName:String) 
 {
+	super(AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 12);
 	this.baseTextureName = baseTextureName;
 	this.animTextureName = animTextureName;
-	super(AppModel.instance.assets.getTextures(baseTextureName + animTextureName), 15);
 }
 
 public function updateTexture(anim:String, dir:String):void 

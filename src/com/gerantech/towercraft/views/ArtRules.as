@@ -40,7 +40,7 @@ public function ArtRules(data:Object)
 public function get(type:int, attribute:String) : String
 {
 	if( rules[type] == null )
-		return "";
+		return attribute == TEXTURE ? type.toString() : "";
 	return rules[type][attribute];
 }
 public function getInt(type:int, attribute:String) : int

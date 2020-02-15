@@ -39,7 +39,7 @@ package com.gerantech.towercraft.views.units.elements
 
     	var hasSide:Boolean = has_side(card.type);
       var angle:String = side == battleField.side ? "000_" : "180_";
-      this.bodyDisplay = new UnitMC(card.type + "/" + (hasSide ? 0 : battleField.getColorIndex(side)) + "/", "m_" + angle);
+      this.bodyDisplay = new UnitMC(texture + "/" + (hasSide ? 0 : battleField.getColorIndex(side)) + "/", "m_" + angle);
       if( CardTypes.isTroop(card.type) )
       	this.bodyDisplay.currentFrame = Math.floor(Math.random() * bodyDisplay.numFrames);
       this.bodyDisplay.pause();
@@ -54,7 +54,7 @@ package com.gerantech.towercraft.views.units.elements
 
       if( hasSide && side != battleField.side )
       {
-        this.sideDisplay = new UnitMC(card.type + "/1/", "m_" + angle);
+        this.sideDisplay = new UnitMC(texture + "/1/", "m_" + angle);
         this.sideDisplay.pause();
         this.sideDisplay.currentFrame = this.bodyDisplay.currentFrame;
         Starling.juggler.add(this.sideDisplay);

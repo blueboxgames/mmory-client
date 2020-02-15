@@ -13,10 +13,10 @@ import com.gerantech.towercraft.controls.indicators.CountdownIcon;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
 import com.gerantech.towercraft.views.ArtRules;
-import com.gerantech.towercraft.views.UnitMC;
 import com.gerantech.towercraft.views.effects.BattleParticleSystem;
 import com.gerantech.towercraft.views.units.elements.ImageElement;
 import com.gerantech.towercraft.views.units.elements.UnitBody;
+import com.gerantech.towercraft.views.units.elements.UnitMC;
 import com.gerantech.towercraft.views.weapons.BulletView;
 
 import flash.utils.setTimeout;
@@ -72,7 +72,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	fieldView.unitsContainer.addChild(bodyDisplay);
 
 	var angle:String = side == battleField.side ? "000_" : "180_";
-  shadowDisplay = new UnitMC(card.type + "/0/", "m_" + angle);
+  shadowDisplay = new UnitMC(appModel.artRules.get(card.type, ArtRules.TEXTURE) + "/0/", "m_" + angle);
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, "y");
 	// shadowDisplay.skewX = 10;
