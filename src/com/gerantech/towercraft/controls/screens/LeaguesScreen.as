@@ -11,6 +11,7 @@ import com.gerantech.towercraft.controls.overlays.EndBattleOverlay;
 import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
 import com.gerantech.towercraft.controls.toasts.BattleTurnToast;
+import com.gerantech.towercraft.controls.toasts.ConfirmToast;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.BattleData;
@@ -85,6 +86,7 @@ override protected function initialize():void
 	// testOffer();
 	// testBattleToast();
 	// testBattleOverlay();
+	// testConfirmToast();
 
 	if( player.getTutorStep() == PrefsTypes.T_72_NAME_SELECTED )
 	{
@@ -134,6 +136,16 @@ private function testOffer():void
 private function testBattleToast():void 
 {
 	appModel.navigator.addPopup(new BattleTurnToast(1, 3));
+}
+
+private function testConfirmToast():void
+{
+	var acceptLabel:String = loc("lobby_battle_accept");
+	var message:String = loc("lobby_battle_me");
+	var battleconfirmToast:ConfirmToast =  new ConfirmToast(message, acceptLabel, loc("popup_cancel_label"));
+	battleconfirmToast.acceptStyle = "danger";
+	battleconfirmToast.declineStyle = "neutral";
+	appModel.navigator.addToast(battleconfirmToast);
 }
 
 private function testBattleOverlay() : void
