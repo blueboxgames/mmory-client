@@ -3,6 +3,7 @@ package com.gerantech.towercraft.controls.segments
 import com.gerantech.extensions.share.Share;
 import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.mmory.core.others.TrophyReward;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.groups.ShareImageFactory;
@@ -11,6 +12,7 @@ import com.gerantech.towercraft.controls.items.LeagueItemRenderer;
 import com.gerantech.towercraft.controls.items.RankItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
+import com.gerantech.towercraft.controls.popups.FriendlyBattleModePopup;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
 import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
@@ -46,6 +48,8 @@ private var buttonsPopup:SimpleListPopup;
 private var collection:ListCollection;
 private var _buttonsEnabled:Boolean = true;
 private var share:ShareImageFactory;
+private var friend:FriendData = null;
+
 public function BuddiesSegment()
 {
 	collection = new ListCollection();
@@ -117,7 +121,7 @@ protected function sfs_responseHandler(event:SFSEvent):void
 			var index:int = find(item.getInt("id"));
 			if( index > -1 )
 			{
-				FriendData(collection[index]).update(item);
+				FriendData(collection.getItemAt(index)).update(item);
 				collection.updateItemAt(index);
 			}
 			else
@@ -180,7 +184,7 @@ protected function list_focusInHandler(event:Event):void
 	if( friend.id == player.id )
 		buttonsPopup = new SimpleListPopup("buddy_profile");
 	else
-		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove", friend.status==2 ? "buddy_spectate" : null);//:"buddy_battle");
+		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove", friend.status==2 ? "buddy_spectate" : "buddy_battle");
 	buttonsPopup.data = friend;
 	buttonsPopup.addEventListener(Event.SELECT, buttonsPopup_selectHandler);
 	buttonsPopup.addEventListener(Event.CLOSE, buttonsPopup_selectHandler);
@@ -211,7 +215,7 @@ private function buttonsPopup_selectHandler(event:Event):void
 		return;
 	
 	var buttonsPopup:SimpleListPopup = event.currentTarget as SimpleListPopup;
-	var friend:FriendData = buttonsPopup.data as FriendData;
+	this.friend = buttonsPopup.data as FriendData;
 	switch( event.data )
 	{
 		case "buddy_road":
@@ -221,7 +225,7 @@ private function buttonsPopup_selectHandler(event:Event):void
 			appModel.navigator.addPopup( new ProfilePopup({name:friend.name, id:friend.id}) );
 			break;
 		case "buddy_battle":
-			appModel.navigator.invokeBuddyBattle(friend);
+			battleSelectMode();
 			break;
 		case "buddy_remove":
 			removeFriend(friend.id);
@@ -247,6 +251,19 @@ private function spectate(friend:FriendData):void
 	if( friend.status < 2 )
 		return;
 	appModel.navigator.runBattle(-1, false, friend.id + "", 2);
+}
+
+private function battleSelectMode():void
+{
+	var battleModePopup:FriendlyBattleModePopup = new FriendlyBattleModePopup();
+	battleModePopup.addEventListener(Event.SELECT, battleModePopup_selectHandler);
+	appModel.navigator.addPopup(battleModePopup);
+}
+
+private function battleModePopup_selectHandler(event:Event):void
+{
+	var selectIndex:int = event.data as int;
+	appModel.navigator.invokeBuddyBattle(this.friend, ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, selectIndex, player.id));
 }
 
 private function removeFriend(friendId:int):void

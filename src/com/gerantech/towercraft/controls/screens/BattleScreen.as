@@ -112,7 +112,7 @@ package com.gerantech.towercraft.controls.screens
         }
 
         // This is the same sync in battleFieldView preSync, must find a workaround
-        if( SPECTATED_USER != null && SPECTATED_USER != "" )
+        if( (SPECTATED_USER != null && SPECTATED_USER != "") || FRIENDLY_MODE == 1 )
         {
           var mode:int = data.getInt("mode");
           var preAssets:Object = new Object();

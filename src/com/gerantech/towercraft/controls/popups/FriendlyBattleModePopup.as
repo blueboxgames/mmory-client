@@ -2,6 +2,7 @@ package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.towercraft.controls.items.challenges.ChallengeIndexItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
+import com.gerantech.towercraft.controls.segments.SocialSegment;
 import com.gerantech.towercraft.themes.MainTheme;
 
 import feathers.controls.List;
@@ -29,11 +30,14 @@ override protected function initialize():void
 	// create transition in data
 	var _h:int = 700;
 	var _p:int = 180;
+	var _start_h:int = stageHeight - 600 - _h;
+	if( SocialSegment.TAB_INDEX == 2 )
+		_start_h = _h;
 	transitionIn = new TransitionData();
 	transitionOut = new TransitionData();
 	transitionOut.destinationAlpha = 0;
-	transitionIn.sourceBound = transitionOut.destinationBound = new Rectangle(_p,	stageHeight - 600 - _h * 0.4,	stageWidth - _p * 2,	_h * 0.8);
-	transitionOut.sourceBound = transitionIn.destinationBound = new Rectangle(_p,	stageHeight - 600 - _h * 0.5,	stageWidth - _p * 2,	_h * 1.0);
+	transitionIn.sourceBound = transitionOut.destinationBound = new Rectangle(_p,	_start_h * 0.4,	stageWidth - _p * 2,	_h * 0.8);
+	transitionOut.sourceBound = transitionIn.destinationBound = new Rectangle(_p,	_start_h * 0.5,	stageWidth - _p * 2,	_h * 1.0);
 
 	super.initialize();
 	layout = new AnchorLayout();

@@ -391,10 +391,11 @@ package com.gerantech.towercraft.controls
 		}
 		
 		// -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-  BUDDY BATTLE  -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
-		public function invokeBuddyBattle(buddy:FriendData):void
+		public function invokeBuddyBattle(buddy:FriendData, mode:int):void
 		{
 			var params:ISFSObject = new SFSObject();
 			params.putInt("o", buddy.id);
+			params.putInt("m", mode);
 			sendBattleRequest(params, 0);
 		}
 		
@@ -426,7 +427,7 @@ package com.gerantech.towercraft.controls
 				break;
 			
 			case 1: 
-				runBattle(0, false, null, 2);
+				runBattle(-1, false, null, 1);
 				break;
 			
 			case 4: 
