@@ -207,7 +207,7 @@ protected function timeManager_changeHandler(event:Event):void
 	if( duration == 120 || duration == 180 )
 	{
 		appModel.sounds.stopAll(SoundManager.CATE_THEME);
-		appModel.sounds.addAndPlay("battle-" + duration, null, SoundManager.CATE_THEME, SoundManager.SINGLE_BYPASS_THIS, 4);
+		appModel.sounds.addAndPlay("battle-" + duration, null, SoundManager.CATE_THEME, SoundManager.SINGLE_BYPASS_THIS, duration == 120 ? 1 : 3);
 	}
 	if( duration == battleData.battleField.getTime(1) )
 	{
