@@ -50,12 +50,12 @@ public function addSound(id:String, sound:Sound = null, callback:Function = null
 		return;
 	}
 	
-	if( loadings[id] )
+	if( loadings.hasOwnProperty(id) )
 		return;
 	
 	if( sound == null )
 	{
-		loadings[id] = true;
+		loadings[id] = category;
 		if( AppModel.instance.assets.getAsset(AssetType.SOUND, id) == null )
 		{
 			AppModel.instance.assets.enqueue(File.applicationStorageDirectory.nativePath + "/assets/" + id + ".mp3");
@@ -70,9 +70,12 @@ public function addSound(id:String, sound:Sound = null, callback:Function = null
 	{
 		if( ratio < 1 )
 			return;
-		delete loadings[id];
+			
 		sound = AppModel.instance.assets.getSound(id);
 		loadeds[id] = {s:sound, c:category};
+		if( !loadings.hasOwnProperty(id) )
+			return;
+		delete loadings[id];
 		if( callback != null )
 			callback();
 	}
@@ -196,6 +199,10 @@ public function stop(id:String) : void
 /** Stop all sounds that are currently playing */
 public function stopAll(category:int =-1) : void
 {
+	for( var loadingId:String in loadings )
+		if( category == -1 || category == loadings[loadingId] == category )
+			delete loadings[loadingId];
+	
 	for( var playingId:String in playings ) 
 		if( category == -1 || category == playings[playingId].c == category )
 			stop(playingId);
