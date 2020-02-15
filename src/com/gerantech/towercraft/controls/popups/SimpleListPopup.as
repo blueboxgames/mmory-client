@@ -34,7 +34,12 @@ private var list:List;
 public function SimpleListPopup(... buttons)
 {
 	super();
-	this.buttons = buttons;
+	this.buttons = new Array();
+	for each(var button:String in buttons)
+	{
+		if( button != null )
+			this.buttons.push(button);
+	}
 }
 
 override protected function initialize():void

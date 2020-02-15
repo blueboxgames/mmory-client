@@ -6,6 +6,7 @@ package com.gerantech.towercraft.controls.screens
   import com.gerantech.mmory.core.constants.MessageTypes;
   import com.gerantech.mmory.core.constants.PrefsTypes;
   import com.gerantech.mmory.core.constants.ResourceType;
+  import com.gerantech.mmory.core.scripts.ScriptEngine;
   import com.gerantech.mmory.core.socials.Challenge;
   import com.gerantech.mmory.core.utils.maps.IntIntMap;
   import com.gerantech.towercraft.controls.BattleHUD;
@@ -24,6 +25,7 @@ package com.gerantech.towercraft.controls.screens
   import com.gerantech.towercraft.models.vo.BattleData;
   import com.gerantech.towercraft.models.vo.UserData;
   import com.gerantech.towercraft.themes.MainTheme;
+  import com.gerantech.towercraft.utils.SyncUtil;
   import com.gerantech.towercraft.views.BattleFieldView;
   import com.smartfoxserver.v2.core.SFSEvent;
   import com.smartfoxserver.v2.entities.data.ISFSArray;
@@ -81,7 +83,7 @@ package com.gerantech.towercraft.controls.screens
         params.putText("spectatedUser", SPECTATED_USER);
 
       SFSConnection.instance.addEventListener(SFSEvent.CONNECTION_LOST,	sfsConnection_connectionLostHandler);
-      if( FRIENDLY_MODE == 0 )
+      if( FRIENDLY_MODE == 0 || (SPECTATED_USER != null && SPECTATED_USER != "") )
         SFSConnection.instance.sendExtensionRequest(SFSCommands.BATTLE_START, params);
 
       syncAssets();
@@ -106,6 +108,43 @@ package com.gerantech.towercraft.controls.screens
         if( data.containsKey("umt") || data.containsKey("response") )
         {
           showErrorPopup(data);
+          return;
+        }
+
+        // This is the same sync in battleFieldView preSync, must find a workaround
+        if( SPECTATED_USER != null && SPECTATED_USER != "" )
+        {
+          var mode:int = data.getInt("mode");
+          var preAssets:Object = new Object();
+          for ( var key:String in SyncUtil.ALL )
+            if( SyncUtil.ALL[key]["mode"] == "prev" )
+              preAssets[key] = SyncUtil.ALL[key];
+          var deck:Vector.<String> = new Vector.<String>;
+          deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, mode, false) + "");
+          deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, mode, true) + "");
+          
+          for( var i:int=0; i<deck.length; i++ )
+          for( key in SyncUtil.ALL )
+          {
+            if( SyncUtil.ALL[key].hasOwnProperty("mode") )
+              continue;
+            if( key.search(deck[i]) > -1 )
+              preAssets[key] = SyncUtil.ALL[key];
+          }
+
+          key = "map-" + mode;
+          preAssets[key +".json"] = SyncUtil.ALL[key + ".json"];
+          preAssets[key + ".atf"] = SyncUtil.ALL[key + ".atf"];
+          preAssets[key + ".xml"] = SyncUtil.ALL[key + ".xml"];
+
+          var syncTool:SyncUtil = new SyncUtil();
+          syncTool.addEventListener(Event.COMPLETE, function(e:Event):void
+          {
+            battleData = new BattleData(data);
+            if( appModel.battleFieldView.mapBuilder != null )
+              syncAssets();
+          });
+          syncTool.sync(preAssets);
           return;
         }
 
@@ -322,64 +361,67 @@ package com.gerantech.towercraft.controls.screens
             u.hit(100);
       }
 
-      // reduce player resources
-      if( playerIndex > -1 )
+      if( SPECTATED_USER == null || SPECTATED_USER == "" )
       {
-        var outcomes:IntIntMap = new IntIntMap();
-        var item:ISFSObject = rewards.getSFSObject(playerIndex);
-        var bookKey:String = null;
-        var _keys:Array = item.getKeys();
-        for( i = 0; i < _keys.length; i++)
+        // reduce player resources
+        if( playerIndex > -1 )
         {
-          var key:int = int(_keys[i]);
-          if( ResourceType.isBook(key) )
-            bookKey = _keys[i];
-          else if ( key > 0 )
+          var outcomes:IntIntMap = new IntIntMap();
+          var item:ISFSObject = rewards.getSFSObject(playerIndex);
+          var bookKey:String = null;
+          var _keys:Array = item.getKeys();
+          for( i = 0; i < _keys.length; i++)
           {
-            if( key == ResourceType.R17_STARS )
-              exchanger.collectStars(item.getInt(_keys[i]), timeManager.now);
-            outcomes.set(key, item.getInt(_keys[i]));
+            var key:int = int(_keys[i]);
+            if( ResourceType.isBook(key) )
+              bookKey = _keys[i];
+            else if ( key > 0 )
+            {
+              if( key == ResourceType.R17_STARS )
+                exchanger.collectStars(item.getInt(_keys[i]), timeManager.now);
+              outcomes.set(key, item.getInt(_keys[i]));
+            }
+          }
+          if( bookKey != null )
+            outcomes.set(int(bookKey), item.getInt(bookKey));
+        }
+
+        // reserved prefs data
+        if( player.get_battleswins() < 10 && rewards.getSFSObject(0).getInt("score") > 0 )
+          UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 7);
+
+        var challengUnlockAt:int;
+        for( var c:int = 1; c < 4; c++ )
+        {
+          if( player.getTutorStep() > 200 + c * 10 )
+            continue;
+          challengUnlockAt = Challenge.getUnlockAt(game, c);
+          if( challengUnlockAt > player.get_point() )
+            break;
+        }
+        var wins_before_battle:int = player.get_battleswins();
+        player.addResources(outcomes);
+        if( player.get_battleswins() > wins_before_battle )
+        {
+          if( Metrix.instance.isSupported )
+          {
+            if( player.get_battleswins() == 10 )
+            {
+              var ten_battle:MetrixEvent = Metrix.instance.newEvent("ifrcs");
+              Metrix.instance.sendEvent(ten_battle);
+            }
+            if( player.get_battleswins() == 20 )
+            {
+              var twenty_battle:MetrixEvent = Metrix.instance.newEvent("cxftv");
+              Metrix.instance.sendEvent(twenty_battle);
+            }
           }
         }
-        if( bookKey != null )
-          outcomes.set(int(bookKey), item.getInt(bookKey));
-      }
 
-      // reserved prefs data
-      if( player.get_battleswins() < 10 && rewards.getSFSObject(0).getInt("score") > 0 )
-        UserData.instance.prefs.setInt(PrefsTypes.TUTOR, appModel.battleFieldView.battleData.getBattleStep() + 7);
-
-      var challengUnlockAt:int;
-      for( var c:int = 1; c < 4; c++ )
-      {
-        if( player.getTutorStep() > 200 + c * 10 )
-          continue;
-        challengUnlockAt = Challenge.getUnlockAt(game, c);
-        if( challengUnlockAt > player.get_point() )
-          break;
+        // check new challenge unlocked
+        if( challengUnlockAt > 0 && challengUnlockAt < player.get_point() )
+          UserData.instance.prefs.setInt(PrefsTypes.TUTOR, 200 + c * 10);
       }
-      var wins_before_battle:int = player.get_battleswins();
-      player.addResources(outcomes);
-      if( player.get_battleswins() > wins_before_battle )
-      {
-        if( Metrix.instance.isSupported )
-        {
-          if( player.get_battleswins() == 10 )
-          {
-            var ten_battle:MetrixEvent = Metrix.instance.newEvent("ifrcs");
-            Metrix.instance.sendEvent(ten_battle);
-          }
-          if( player.get_battleswins() == 20 )
-          {
-            var twenty_battle:MetrixEvent = Metrix.instance.newEvent("cxftv");
-            Metrix.instance.sendEvent(twenty_battle);
-          }
-        }
-      }
-
-      // check new challenge unlocked
-      if( challengUnlockAt > 0 && challengUnlockAt < player.get_point() )
-        UserData.instance.prefs.setInt(PrefsTypes.TUTOR, 200 + c * 10);
 
       var endOverlay:EndOverlay;
       if( field.isOperation() )

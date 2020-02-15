@@ -180,7 +180,7 @@ protected function list_focusInHandler(event:Event):void
 	if( friend.id == player.id )
 		buttonsPopup = new SimpleListPopup("buddy_profile");
 	else
-		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove");//, friend.status==2?"buddy_spectate":"buddy_battle");
+		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove", friend.status==2 ? "buddy_spectate" : null);//:"buddy_battle");
 	buttonsPopup.data = friend;
 	buttonsPopup.addEventListener(Event.SELECT, buttonsPopup_selectHandler);
 	buttonsPopup.addEventListener(Event.CLOSE, buttonsPopup_selectHandler);
@@ -246,7 +246,7 @@ private function spectate(friend:FriendData):void
 {
 	if( friend.status < 2 )
 		return;
-	appModel.navigator.runBattle(0, false, friend.id + "", 2);
+	appModel.navigator.runBattle(-1, false, friend.id + "", 2);
 }
 
 private function removeFriend(friendId:int):void
