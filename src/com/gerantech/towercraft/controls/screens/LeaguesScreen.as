@@ -99,15 +99,15 @@ override protected function initialize():void
 private function testOpenBook():void 
 {
 	OpenBookOverlay.createFactory();
-	var openOverlay:OpenBookOverlay = new OpenBookOverlay(59);
+	var openOverlay:OpenBookOverlay = new OpenBookOverlay(53);
 	appModel.navigator.addOverlay(openOverlay);
 	var outcomes:IntIntMap = new IntIntMap();
 	outcomes.set(ResourceType.R3_CURRENCY_SOFT, 50);
 	outcomes.set(ResourceType.R4_CURRENCY_HARD, 5);
-	outcomes.set(CardTypes.C105, 1);
-	outcomes.set(CardTypes.C110, 1);
+	// outcomes.set(CardTypes.C105, 1);
+	// outcomes.set(CardTypes.C110, 1);
 	outcomes.set(CardTypes.C103, 12);
-	outcomes.set(CardTypes.C107, 2);
+	outcomes.set(CardTypes.C102, 2);
 	outcomes.set(CardTypes.C104, 2);
 	player.resources.set(CardTypes.C110, 2);
 	player.cards.set(CardTypes.C110, new Card(game, 110, -1))
