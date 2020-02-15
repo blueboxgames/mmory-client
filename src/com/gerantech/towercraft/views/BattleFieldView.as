@@ -115,13 +115,18 @@ public function createPlaces(battleData:BattleData) : void
 
 private function fillDeck(deck:Vector.<String>, assets:Object):void
 {
+	var type:String;
 	for( var i:int=0; i<deck.length; i++ )
-	for( var key:String in SyncUtil.ALL )
 	{
-		if( SyncUtil.ALL[key].hasOwnProperty("mode") )
-			continue;
-		if( key.search(deck[i]) > -1 )
-			assets[key] = SyncUtil.ALL[key];
+		type = AppModel.instance.artRules.get(int(deck[i]), ArtRules.TEXTURE);
+		trace(type, deck[i]);
+		for( var key:String in SyncUtil.ALL )
+		{
+			if( SyncUtil.ALL[key].hasOwnProperty("mode") )
+				continue;
+			if( key.search(type) > -1 )
+				assets[key] = SyncUtil.ALL[key];
+		}
 	}
 }
 

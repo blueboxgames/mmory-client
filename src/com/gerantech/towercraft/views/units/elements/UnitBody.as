@@ -30,9 +30,10 @@ package com.gerantech.towercraft.views.units.elements
       this.unit = unit;
       var battleField:BattleField = AppModel.instance.battleFieldView.battleData.battleField;
 
+      var texture:String = AppModel.instance.artRules.get(card.type, ArtRules.TEXTURE);
       if( AppModel.instance.artRules.get(card.type, ArtRules.BASE) != "" )
       {
-        this.baseDisplay = new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/base"));
+        this.baseDisplay = new Image(AppModel.instance.assets.getTexture(texture + "/" + battleField.getColorIndex(side) + "/base"));
         this.addChild(this.baseDisplay);
       }
 
@@ -47,7 +48,7 @@ package com.gerantech.towercraft.views.units.elements
 
       if( AppModel.instance.artRules.get(card.type, ArtRules.OVERLAY) != "" )
       {
-        this.overlayDisplay = new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/overlay"));
+        this.overlayDisplay = new Image(AppModel.instance.assets.getTexture(texture + "/" + battleField.getColorIndex(side) + "/overlay"));
         this.addChild(this.overlayDisplay);
       }
 
