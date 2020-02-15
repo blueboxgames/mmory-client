@@ -16,7 +16,8 @@
     <systemChrome>standard</systemChrome>
     <resizable>false</resizable>
     <title>__APPNAME__</title>
-    <minSize>490 940</minSize>
+		<width>490</width>
+ 		<height>940</height>
     <visible>true</visible>
   </initialWindow>
 	<supportedProfiles>mobileDevice extendedDesktop</supportedProfiles>
