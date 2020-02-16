@@ -275,10 +275,6 @@ package com.gerantech.towercraft.controls.screens
       IN_BATTLE = false;
       var inTutorial:Boolean = player.get_battleswins() < appModel.maxTutorBattles + 1;
       battleField.state = BattleField.STATE_4_ENDED;
-      var field:FieldData = battleField.field;
-      touchEnable = false;
-      appModel.sounds.stopAll();
-      hud.stopTimers();
       Starling.juggler.tween(appModel.battleFieldView, 5, {delay:0.7, scale:0.95, transition:Transitions.EASE_OUT});
 
       tutorials.removeAll();
@@ -306,6 +302,10 @@ package com.gerantech.towercraft.controls.screens
            if( !u.disposed() && u.side == loserSide && (u.card.speed > 0 || player.get_battlesCount() < appModel.maxTutorBattles) )
             u.hit(100);
       }
+
+      touchEnable = false;
+      appModel.sounds.stopAll();
+      hud.stopTimers();
 
       // reduce player resources
       if( playerIndex > -1 )
@@ -346,28 +346,15 @@ package com.gerantech.towercraft.controls.screens
       var wins_before_battle:int = player.get_battleswins();
       player.addResources(outcomes);
       if( player.get_battleswins() > wins_before_battle )
-      {
-        if( Metrix.instance.isSupported )
-        {
-          if( player.get_battleswins() == 10 )
-          {
-            var ten_battle:MetrixEvent = Metrix.instance.newEvent("ifrcs");
-            Metrix.instance.sendEvent(ten_battle);
-          }
-          if( player.get_battleswins() == 20 )
-          {
-            var twenty_battle:MetrixEvent = Metrix.instance.newEvent("cxftv");
-            Metrix.instance.sendEvent(twenty_battle);
-          }
-        }
-      }
+        if( Metrix.instance.isSupported && (player.get_battleswins() == 10 || player.get_battleswins() == 20) )
+          Metrix.instance.sendEvent(Metrix.instance.newEvent(player.get_battleswins() == 10 ? "ifrcs" : "cxftv"));
 
       // check new challenge unlocked
       if( challengUnlockAt > 0 && challengUnlockAt < player.get_point() )
         UserData.instance.prefs.setInt(PrefsTypes.TUTOR, 200 + c * 10);
 
       var endOverlay:EndOverlay;
-      if( field.isOperation() )
+      if( battleField.field.isOperation() )
         endOverlay = new EndOperationOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);
       else
         endOverlay = new EndBattleOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);

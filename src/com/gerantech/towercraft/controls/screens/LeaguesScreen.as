@@ -106,9 +106,9 @@ private function testOpenBook():void
 	outcomes.set(ResourceType.R4_CURRENCY_HARD, 5);
 	// outcomes.set(CardTypes.C105, 1);
 	// outcomes.set(CardTypes.C110, 1);
-	outcomes.set(CardTypes.C103, 12);
-	outcomes.set(CardTypes.C102, 2);
-	outcomes.set(CardTypes.C104, 2);
+	outcomes.set(CardTypes.C104, 3);
+	outcomes.set(CardTypes.C105, 2);
+	outcomes.set(CardTypes.C121, 2);
 	player.resources.set(CardTypes.C110, 2);
 	player.cards.set(CardTypes.C110, new Card(game, 110, -1))
 	openOverlay.outcomes = outcomes;
