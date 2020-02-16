@@ -406,6 +406,8 @@ protected function defaultFireDisplayFactory(x:Number, y:Number, rotation:Number
 
 private function showDieAnimation():void 
 {
+	if( battleField.state >= BattleField.STATE_4_ENDED )
+		return;
 	var die:String = appModel.artRules.get(card.type, ArtRules.DIE);
 	if( die == "" )
 		return;
