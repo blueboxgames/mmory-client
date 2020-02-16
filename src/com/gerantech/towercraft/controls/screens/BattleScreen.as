@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.controls.screens
 {
   import com.gerantech.mmory.core.battle.BattleField;
+  import com.gerantech.mmory.core.battle.bullets.Bullet;
   import com.gerantech.mmory.core.battle.fieldes.FieldData;
   import com.gerantech.mmory.core.battle.units.Unit;
   import com.gerantech.mmory.core.constants.PrefsTypes;
@@ -289,6 +290,9 @@ package com.gerantech.towercraft.controls.screens
           break;
         }
       }
+
+      for each(var b:Bullet in battleField.bullets )
+        b.dispose();
 
       // kill all units of loser except hero units.
       var loserSide:int = -1;
