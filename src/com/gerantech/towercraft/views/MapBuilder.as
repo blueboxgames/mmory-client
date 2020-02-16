@@ -59,12 +59,18 @@ package com.gerantech.towercraft.views
       }
     }
 
+    private var summonAreaEnable:Boolean;
     public function setSummonAreaEnable(value:Boolean, summonState:int) : void
     {
+      if( summonAreaEnable == value )
+        return;
       if( summonImage != null )
+      {
         summonImage.visible = false;
+        Starling.juggler.removeTweens(summonImage);
+      }
+
       summonImage = getSummonImage(summonState)
-      Starling.juggler.removeTweens(summonImage);
       if( value )
       {
         summonImage.visible = true;
@@ -74,6 +80,7 @@ package com.gerantech.towercraft.views
       {
         Starling.juggler.tween(summonImage, 0.2, {alpha:0, onComplete:function () : void { summonImage.visible = false; }});
       }
+      summonAreaEnable = value;
     }
 
     private function getSummonImage(summonState:int):Image

@@ -408,6 +408,10 @@ private function showDieAnimation():void
 {
 	if( battleField.state >= BattleField.STATE_4_ENDED )
 		return;
+
+	if( CardTypes.isHero(card.type) && side != battleField.side )
+		fieldView.mapBuilder.setSummonAreaEnable(true, battleField.getSummonState(battleField.side == 0 ? 1 : 0));
+
 	var die:String = appModel.artRules.get(card.type, ArtRules.DIE);
 	if( die == "" )
 		return;
@@ -471,8 +475,6 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 override public function dispose() : void
 {
 	super.dispose();
-	if( CardTypes.isHero(card.type) && side != battleField.side )
-		fieldView.mapBuilder.setSummonAreaEnable(true, battleField.getSummonState(battleField.side == 0 ? 1 : 0));
 	battleField.removeEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
 	bodyDisplay.removeFromParent(true);
 	if( shadowDisplay != null )
