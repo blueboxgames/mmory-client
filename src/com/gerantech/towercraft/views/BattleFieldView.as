@@ -196,7 +196,7 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 
 	var u:UnitView = new UnitView(card, id, side, x, y, card.z, t);
 	if( health >= 0 )
-		u.health = health;
+		u.setHealth(health);
 	battleData.battleField.units.push(u as Unit);
 
 	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
