@@ -11,7 +11,6 @@ import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayoutData;
 import feathers.layout.RelativePosition;
 
-import starling.core.Starling;
 import starling.events.Event;
 import starling.events.Touch;
 
@@ -50,7 +49,7 @@ public class BuddyItemRenderer extends RankItemRenderer
 			return;
 		this.friend = _data as FriendData;
 		this.leagueIndex = player.get_arena(friend.point);
-		this.collectible = friend.step < game.friendRoad.calculateStep(friend.point);
+		this.collectible = friend.step < game.friendRoad.calculateStep(friend.point - friend.start);
 
 		this.nameDisplay.text = friend.name ;
 		this.pointDisplay.text = friend.point > 0 ? StrUtils.getNumber(friend.point) : "";
@@ -58,7 +57,7 @@ public class BuddyItemRenderer extends RankItemRenderer
 		this.leagueIconDisplay.source = appModel.assets.getTexture("leagues/" + Math.floor(leagueIndex * 0.5));
 		this.leagueBGDisplay.source = appModel.assets.getTexture("leagues/circle-" + (leagueIndex % 2) + "-small");
 		
-		// // Set status display
+		// Set status display
 		if( friend.status > 0 )
 			statusSkin.source = friend.status == 1 ? appModel.theme.buttonSmallUpSkinTexture : appModel.theme.buttonSmallDangerUpSkinTexture;
 		else
