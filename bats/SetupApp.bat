@@ -8,7 +8,7 @@ set DATE=%date:~-10,2%%date:~-7,2%%time:~-11,2%%time:~-8,2%
 for %%a in (%DATE: =0%) do set DATE=%%a
 
 :: Application descriptor
-set VER_ID=0.3.201
+set VER_ID=0.3.220
 set VER_LABEL=%VER_ID%.%DATE%
 set APP_ID=com.grantech.k2k
 set APP_NAME=Boomland
