@@ -271,6 +271,7 @@ override protected function sendButton_triggeredHandler(event:Event):void
 	params.putUtfString("t", preText + StrUtils.getSimpleString(chatTextInput.text));
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby );
 	chatTextInput.text = preText = "";
+	chatTextInput.clearFocus();
 }
 
 override protected function isInvalidMessage(message:String) : Boolean 

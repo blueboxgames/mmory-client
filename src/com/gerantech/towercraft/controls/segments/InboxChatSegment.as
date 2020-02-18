@@ -11,10 +11,13 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 
 import feathers.controls.renderers.IListItemRenderer;
 import feathers.data.ListCollection;
+import feathers.events.FeathersEventType;
 import feathers.layout.AnchorLayout;
+import feathers.layout.AnchorLayoutData;
 
 import flash.utils.setTimeout;
 
+import starling.core.Starling;
 import starling.events.Event;
 /**
 * @author Mansour Djawadi
@@ -48,6 +51,14 @@ override protected function showElements() : void
 	chatList.dataProvider = threadCollection;
 }
 
+override protected function chatTextInput_keyboardHandler(event:Event):void
+{
+	if( event.type == FeathersEventType.SOFT_KEYBOARD_ACTIVATE )
+		AnchorLayoutData(chatTextInput.layoutData).bottom = Starling.current.nativeStage.softKeyboardRect.height * (stage.stageWidth / Starling.current.nativeStage.stageWidth) * 1.3;
+	else
+		setTimeout(enabledChatting, 100, false);
+}
+
 override protected function chatButton_triggeredHandler(event:Event):void
 {
 	super.chatButton_triggeredHandler(event);
@@ -74,6 +85,7 @@ override protected function sendButton_triggeredHandler(event:Event):void
 	SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsInstance_extensionResponseHandler);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.INBOX_BROADCAST, params);
 	chatTextInput.text = preText = "";
+	chatTextInput.clearFocus();
 	
 	// temp message
 	params.putLong("timestamp", new Date().time);

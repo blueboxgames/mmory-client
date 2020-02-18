@@ -1,9 +1,7 @@
 package com.gerantech.towercraft.controls.segments 
 {
 import com.gerantech.mmory.core.constants.MessageTypes;
-import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
-import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
@@ -28,6 +26,7 @@ import flash.text.SoftKeyboardType;
 import flash.utils.setTimeout;
 
 import starling.animation.Transitions;
+import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.events.Event;
 /**
@@ -69,7 +68,7 @@ protected function showElements() : void
 	
 	chatList = new List();
 	chatList.layout = chatLayout;
-    chatList.layoutData = new AnchorLayoutData(21, 0, 0, 0);
+	chatList.layoutData = new AnchorLayoutData(21, 0, 0, 0);
 	chatList.itemRendererFactory = function ():IListItemRenderer { return new LobbyChatItemRenderer()};
 	chatList.scrollBarDisplayMode = ScrollBarDisplayMode.NONE;
 	chatList.addEventListener(Event.CHANGE, chatList_changeHandler);
@@ -84,17 +83,18 @@ protected function showElements() : void
 	chatTextInput.maxChars = 160;
 	chatTextInput.textEditorProperties.autoCorrect = true;
 	chatTextInput.height = footerSize;
-    chatTextInput.layoutData = new AnchorLayoutData(NaN, padding, padding, padding);
-    chatTextInput.addEventListener(FeathersEventType.ENTER, sendButton_triggeredHandler);
-    chatTextInput.addEventListener(FeathersEventType.FOCUS_OUT, chatTextInput_focusOutHandler);
+	chatTextInput.layoutData = new AnchorLayoutData(NaN, padding, padding, padding);
+	chatTextInput.addEventListener(FeathersEventType.ENTER, sendButton_triggeredHandler);
+	chatTextInput.addEventListener(FeathersEventType.FOCUS_OUT, chatTextInput_keyboardHandler);
+	chatTextInput.addEventListener(FeathersEventType.SOFT_KEYBOARD_ACTIVATE, chatTextInput_keyboardHandler);
 	
-    chatEnableButton = new MMOryButton();
+	chatEnableButton = new MMOryButton();
 	chatEnableButton.styleName = MainTheme.STYLE_BUTTON_SMALL_NEUTRAL;
-    chatEnableButton.width = chatEnableButton.height = footerSize;
-    chatEnableButton.iconTexture = appModel.assets.getTexture("socials/icon-text");
-    chatEnableButton.layoutData = new AnchorLayoutData(NaN, padding, padding, NaN);
-    chatEnableButton.addEventListener(Event.TRIGGERED, chatButton_triggeredHandler);
-    addChild(chatEnableButton);
+	chatEnableButton.width = chatEnableButton.height = footerSize;
+	chatEnableButton.iconTexture = appModel.assets.getTexture("socials/icon-text");
+	chatEnableButton.layoutData = new AnchorLayoutData(NaN, padding, padding, NaN);
+	chatEnableButton.addEventListener(Event.TRIGGERED, chatButton_triggeredHandler);
+	addChild(chatEnableButton);
 }
 
 protected function chatList_createCompleteHandler(event:Event):void
@@ -221,6 +221,7 @@ protected function sendButton_triggeredHandler(event:Event):void
 	params.putUtfString("t", preText + StrUtils.getSimpleString(chatTextInput.text));
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby );*/
 	chatTextInput.text = "";
+	chatTextInput.clearFocus();
 }
 
 private function areUVerbose():Boolean 
@@ -231,9 +232,12 @@ private function areUVerbose():Boolean
 	return false;
 }
 
-private function chatTextInput_focusOutHandler(event:Event):void
+protected function chatTextInput_keyboardHandler(event:Event):void
 {
-    setTimeout(enabledChatting, 100, false);
+	if( event.type == FeathersEventType.SOFT_KEYBOARD_ACTIVATE )
+		AnchorLayoutData(chatTextInput.layoutData).bottom = Starling.current.nativeStage.softKeyboardRect.height * (stage.stageWidth / Starling.current.nativeStage.stageWidth) + padding;
+	else
+		setTimeout(enabledChatting, 100, false);
 }
 
 public function enabledChatting(value:Boolean):void
