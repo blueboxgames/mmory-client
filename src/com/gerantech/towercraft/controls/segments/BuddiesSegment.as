@@ -100,6 +100,7 @@ override public function init():void
 	addChild(invitationButton);
 
 	initializeCompleted = true;
+	showTutorials();
 }
 
 protected function sfs_responseHandler(event:SFSEvent):void
@@ -142,13 +143,11 @@ protected function sfs_responseHandler(event:SFSEvent):void
 				return b;
 		return -1;
 	}
-
-	showTutorials();
 }
 
 private function showTutorials():void
 {
-	if( collection.length >= 3 || game.sessionsCount % 3 != 0 || Math.random() > 0.3 )
+	if( collection.length == 0 || collection.length > 3 || game.sessionsCount % 3 != 0 || Math.random() > 0.3 )
 		return;
 	var tutorialData:TutorialData = new TutorialData("buddy_tutorial");
 	var prize:int = TrophyReward(game.friendRoad.rewards[0]).value;
