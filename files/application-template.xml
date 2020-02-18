@@ -47,7 +47,7 @@
 	
 	<!-- Chartboost addition -->
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-	<application android:enabled="true" >
+	<application android:enabled="true" android:roundIcon="@mipmap/ic_launcher_round" >
 		<meta-data android:name="android.max_aspect" android:value="2.0" />
 		<!-- Chartboost -->
 		<meta-data android:name="__ChartboostAir__AppID" android:value="5d5a9cc80c7ec60cc5b67c06" />
