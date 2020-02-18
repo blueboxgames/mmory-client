@@ -118,7 +118,7 @@ protected function sfs_responseHandler(event:SFSEvent):void
 			var index:int = find(item.getInt("id"));
 			if( index > -1 )
 			{
-				FriendData(collection[index]).update(item);
+				FriendData(collection.getItemAt(index)).update(item);
 				collection.updateItemAt(index);
 			}
 			else
