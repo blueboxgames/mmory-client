@@ -61,6 +61,12 @@ override public function init():void
 		addChild(labelDisplay);
 	}
 
+	if( player.get_battleswins() < 4 )
+	{
+		showLabel(loc("button_availabled_after_tutorial", [loc("tab-3")]));
+		return;
+	}
+
 	if( appModel.loadingManager.serverData.containsKey("forbidenApps") )
 	{
 		var filter:Array = appModel.loadingManager.serverData.getText("forbidenApps").split(",");

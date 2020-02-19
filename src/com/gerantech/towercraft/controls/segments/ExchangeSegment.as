@@ -40,9 +40,9 @@ protected function animation_loadCallback():void
 
 	layout = new AnchorLayout();
 
-	if( player.get_arena(0) < 1 )
+	if( player.get_battleswins() < 4 )
 	{
-		var labelDisplay:ShadowLabel = new ShadowLabel(loc("availableat_messeage", [loc("tab-0"), loc("arena_text") + " " + loc("num_2")]), 1, 0, "center");
+		var labelDisplay:ShadowLabel = new ShadowLabel(loc("button_availabled_after_tutorial", [loc("tab-0")]), 1, 0, "center");
 		labelDisplay.width = width;
 		labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, NaN, 0);
 		addChild(labelDisplay);
