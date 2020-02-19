@@ -80,6 +80,7 @@ rd /q /s %BINF%
 if %TYPE%==ipa echo f | xcopy /f /y files\sfs-config.xml %BINF%\sfs-config.xml
 echo f | xcopy /f /y bin\release.swf %BINF%\release.swf
 echo d | xcopy /s /y files\assets %BINF%\assets
+echo d | xcopy /s /y files\res %FLEX_SDK%\lib\android\lib\resources\captive_runtime\res
 set FILE_OR_DIR=-C %BINF% . -C %ICONS% .
 
 if not "%OPTIONS%"=="" set DIST_NAME=%DIST_NAME%-%OPTIONS:~6%
