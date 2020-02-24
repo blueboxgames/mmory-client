@@ -24,6 +24,7 @@ import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
 
 import haxe.ds.StringMap;
+import com.gerantech.towercraft.utils.GTStreamer;
 
 [Event(name="succeed",			type="com.gerantech.towercraft.managers.net.sfs.SFSConnection")]
 [Event(name="failure",			type="com.gerantech.towercraft.managers.net.sfs.SFSConnection")]
@@ -72,16 +73,21 @@ public function SFSConnection()
 
 public function load(force:Boolean) : void 
 {
+	var cnfFile:File = File.applicationStorageDirectory.resolvePath("config.xml");
 	if( force )
 	{
-		var file:File = File.applicationStorageDirectory.resolvePath("config.xml");
-		File.applicationDirectory.resolvePath("assets/config.xml").copyTo(file, true);
+		var ips:* = {"local":"127.0.0.1", "iran":"85.208.252.20"}
+		var cnfg:String = '<?xml version="1.0" encoding="UTF-8"?><SmartFoxConfig><ip>' + ips[AppModel.instance.descriptor.server] + '</ip><port>9933</port><zone>mmory</zone><debug>false</debug><httpPort>8080</httpPort><useBlueBox>true</useBlueBox><blueBoxPollingRate>500</blueBoxPollingRate></SmartFoxConfig>';
+		new GTStreamer(cnfFile, saved, null, null, false, false).save(cnfg);
+		function saved(gt:GTStreamer):void{
+			loadConfig(cnfFile.url);
+		}
+		return;
 	}
+
 	var pattern:String = '<?xml version="1.0" encoding="UTF-8"?>\r\n<SmartFoxConfig>';
-	var cnfFile:File = File.applicationStorageDirectory.resolvePath("config.xml");
 	var url:String = "http://blueboxgames.ir/configs/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&version=" + AppModel.instance.descriptor.versionCode + "&r=" + Math.round(Math.random() * 1000);
-	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, false, false, 0, pattern);
-	trace(url);
+	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, false, false, 0, pattern);//trace(url);
 	cnfLoader.addEventListener(Event.COMPLETE,			cnfLoader_completeHandler);
 	cnfLoader.addEventListener(IOErrorEvent.IO_ERROR,	cnfLoader_ioErrorHandler);
 	cnfLoader.start();
