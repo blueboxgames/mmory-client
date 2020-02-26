@@ -53,9 +53,10 @@ private var flameParticle:BattleParticleSystem;
 private var smokeParticle:BattleParticleSystem;
 private var bulletParticle:BattleParticleSystem;
 
-public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Number, t:Number)
+public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Number, t:Number, isDump:Boolean = false)
 {
 	super(card, id, side, x, y, z, t);
+	this.isDump = isDump;
 	__x = getSideX();
 	__y = getSideY();
 
@@ -89,7 +90,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	Starling.juggler.add(shadowDisplay);
 	fieldView.shadowsContainer.addChild(shadowDisplay);
 
-	if( CardTypes.isTroop(card.type) )
+	if( !isDump && CardTypes.isTroop(card.type) )
 	{
 		bodyDisplay.alpha = 0;
 		bodyDisplay.y = __yz - 100;
@@ -101,7 +102,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scaleX:__bodyScale,scaleY:__bodyScale*_SHADOW_SCALE,	transition:Transitions.EASE_OUT_BACK});
 	}
 	
-	if( card.summonTime > 0 )
+	if( !isDump && card.summonTime > 0 )
 	{
 		deployIcon = new CountdownIcon();
 		deployIcon.stop();

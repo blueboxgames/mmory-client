@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.views
 {
 import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.GameObject;
 import com.gerantech.mmory.core.battle.bullets.Bullet;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
@@ -49,12 +50,12 @@ public var guiImagesContainer:DisplayObjectContainer;
 public var guiTextsContainer:DisplayObjectContainer;
 public var effectsContainer:DisplayObjectContainer;
 public var center:Point2;
-// private var units:IntUnitMap;
+private var units:Array;
 
 public function BattleFieldView() { super(); }
 public function initialize () : void 
 {
-	// units = new IntUnitMap();
+	units = new Array();
 	touchGroup = true;
 	alignPivot();
 
@@ -241,39 +242,44 @@ public function requestKillPioneers(side:int):void
 public function updateUnits(unitData:SFSObject) : void
 {
 	var serverUnitIds:Array = unitData.getIntArray("keys");
-	for(var i:int = 0; i < battleData.battleField.units.length; i++)
-		if( serverUnitIds.indexOf(battleData.battleField.units[i].id) == -1 )
-			battleData.battleField.units[i].hit(100);
-	
-/* 	if( !unitData.containsKey("testData") )
+	kill(battleData.battleField.units);
+	if( !unitData.containsKey("testData") )
 		return;
-	
+
+	kill(units);
 	var serverUnitTests:Array = unitData.getUtfStringArray("testData");
-	for( i = 0; i < serverUnitTests.length; i++ )
+	for( var i:int = 0; i < serverUnitTests.length; i++ )
 	{
 		var vars:Array = serverUnitTests[i].split(",");// unit.id + "," + unit.x + "," + unit.y + "," + unit.health + "," + unit.card.type + "," + unit.side + "," + unit.card.level
-		if( units.exists(vars[0]) )
+		var u:UnitView = getUnit(vars[0]);
+		if( u == null )
 		{
-			units.get(vars[0]).setPosition(vars[1], vars[2], GameObject.NaN);
-		}
-		else
-		{
-			var u:UnitView = new UnitView(getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0);
+			u = new UnitView(getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0, 0, true);
 			u.alpha = 0.3;
-			u.isDump = true;
-			units.set(vars[0], u as Unit);
+			units.push(u);
+			continue;
 		}
+		u.setPosition(vars[1], vars[2], GameObject.NaN);
+		u.setHealth(vars[3]);
 	}
 
-	clientUnitIds = units.keys();
-	for( i = 0; i < clientUnitIds.length; i++ )
+	function kill(units:Array):void
 	{
-		if( serverUnitIds.indexOf(clientUnitIds[i]) == -1 )
+		for(var i:int = 0; i < units.length; i++)
+		if( serverUnitIds.indexOf(units[i].id) == -1 )
 		{
-			units.get(clientUnitIds[i]).dispose();
-			units.remove(clientUnitIds[i]);
+			units[i].hit(100);
+			units.removeAt(i);
 		}
-	} */
+	}
+}
+
+private function getUnit(id:int):UnitView
+{
+	for(var i:int = 0; i < units.length; i++)
+		if( units[i].id == id )
+			return units[i] as UnitView;
+	return null;
 }
 
 override public function dispose() : void
