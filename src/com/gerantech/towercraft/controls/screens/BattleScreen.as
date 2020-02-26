@@ -79,6 +79,7 @@ package com.gerantech.towercraft.controls.screens
       params.putInt("friendlyMode", FRIENDLY_MODE);
       if( SPECTATED_USER != null && SPECTATED_USER != "" )
         params.putText("spectatedUser", SPECTATED_USER);
+      // params.putBool("debugMode", true);
 
       SFSConnection.instance.addEventListener(SFSEvent.CONNECTION_LOST,	sfsConnection_connectionLostHandler);
       if( FRIENDLY_MODE == 0 )

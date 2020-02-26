@@ -83,6 +83,7 @@ public function BattleData(sfsData:ISFSObject)
 	var map:Object = AppModel.instance.assets.getObject("map-" + sfsData.getInt("mode"));
 	var f:FieldData = new FieldData(sfsData.getInt("mode"), JSON.stringify(map), AppModel.instance.descriptor.versionCode);
 	this.battleField = new BattleField();
+	this.battleField.debugMode = sfsData.getBool("debugMode");
 	this.battleField.initialize(side == 0 ? alliseGame : axisGame, side == 0 ? axisGame : alliseGame, f, side, sfsData.getInt("startAt"), sfsData.getDouble("now"), false, sfsData.getInt("friendlyMode"));
 	this.battleField.state = BattleField.STATE_1_CREATED;
 	this.battleField.decks = new IntIntCardMap();

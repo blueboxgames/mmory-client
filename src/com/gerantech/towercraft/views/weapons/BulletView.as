@@ -54,7 +54,7 @@ override public function fireEvent(dispatcherId:int, type:String, data:*) : void
 		else if ( state == GameObject.STATE_5_SHOOTING )
 		{
 			hitDisplayFactory();
-			if( BattleField.DEBUG_MODE )
+			if( battleField.debugMode )
 			{
 				var damageAreaDisplay:Image = new Image(appModel.assets.getTexture("map/damage-range"));
 				damageAreaDisplay.pivotX = damageAreaDisplay.width * 0.5;

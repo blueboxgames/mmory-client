@@ -111,7 +111,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		deployIcon.rotateTo(0, 360, card.summonTime / 1000);
 		setTimeout(fieldView.guiImagesContainer.addChild, appearanceDelay * 1000, deployIcon);
 	}
-	if( BattleField.DEBUG_MODE )
+	if( battleField.debugMode )
 	{
 		sizeDisplay = new ImageElement(null, appModel.assets.getTexture("map/damage-range"));
 		sizeDisplay.pivotX = sizeDisplay.width * 0.5;
