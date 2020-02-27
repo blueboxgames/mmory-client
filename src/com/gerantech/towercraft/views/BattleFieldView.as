@@ -243,15 +243,24 @@ public function updateUnits(unitData:SFSObject) : void
 {
 	var serverUnitIds:Array = unitData.getIntArray("keys");
 	kill(battleData.battleField.units);
-	if( !unitData.containsKey("testData") )
+	if( !unitData.containsKey("data") )
 		return;
-
-	kill(units);
-	var serverUnitTests:Array = unitData.getUtfStringArray("testData");
+	var serverUnitTests:Array = unitData.getUtfStringArray("data");
 	for( var i:int = 0; i < serverUnitTests.length; i++ )
 	{
 		var vars:Array = serverUnitTests[i].split(",");// unit.id + "," + unit.x + "," + unit.y + "," + unit.health + "," + unit.card.type + "," + unit.side + "," + unit.card.level
-		var u:UnitView = getUnit(vars[0]);
+		var u:UnitView = battleData.battleField.getUnit(vars[0]) as UnitView;
+		u.setPosition(vars[1], vars[2], GameObject.NaN);
+		u.setHealth(vars[3]);
+	}
+
+	if( !battleData.battleField.debugMode )
+		return;
+	kill(units);
+	for( i = 0; i < serverUnitTests.length; i++ )
+	{
+		vars = serverUnitTests[i].split(",");// unit.id + "," + unit.x + "," + unit.y + "," + unit.health + "," + unit.card.type + "," + unit.side + "," + unit.card.level
+		u = getUnit(vars[0]);
 		if( u == null )
 		{
 			u = new UnitView(getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0, 0, true);
@@ -268,7 +277,7 @@ public function updateUnits(unitData:SFSObject) : void
 		for(var i:int = 0; i < units.length; i++)
 		if( serverUnitIds.indexOf(units[i].id) == -1 )
 		{
-			units[i].hit(100);
+			units[i].dispose();
 			units.removeAt(i);
 		}
 	}

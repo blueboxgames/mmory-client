@@ -46,6 +46,7 @@ package com.gerantech.towercraft.controls.screens
   public class BattleScreen extends BaseCustomScreen
   {
     static public var IN_BATTLE:Boolean;
+    static public var DEBUG_MODE:Boolean;
     static public var INDEX:int;
     static public var FRIENDLY_MODE:int;
     static public var SPECTATED_USER:String;
@@ -79,7 +80,8 @@ package com.gerantech.towercraft.controls.screens
       params.putInt("friendlyMode", FRIENDLY_MODE);
       if( SPECTATED_USER != null && SPECTATED_USER != "" )
         params.putText("spectatedUser", SPECTATED_USER);
-      // params.putBool("debugMode", true);
+      if( DEBUG_MODE )
+        params.putBool("debugMode", true);
 
       SFSConnection.instance.addEventListener(SFSEvent.CONNECTION_LOST,	sfsConnection_connectionLostHandler);
       if( FRIENDLY_MODE == 0 )

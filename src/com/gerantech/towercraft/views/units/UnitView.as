@@ -288,7 +288,7 @@ override public function setHealth(health:Number) : Number
 	if( this.disposed() )
 		return 0;
 
-	if( this.id < 6 && health < 0 && health > -10 && this.card.type > 200 )
+	if( health < 0 )
 		return 0;
 	
 	var damage:Number =  super.setHealth(health);
