@@ -11,6 +11,7 @@ import starling.textures.Texture;
 */
 public class UnitMC extends MovieClip
 {
+public var direction:String;
 private var baseTextureName:String;
 private var animTextureName:String;
 
@@ -23,6 +24,7 @@ public function UnitMC(baseTextureName:String, animTextureName:String)
 
 public function updateTexture(anim:String, dir:String):void 
 {
+	this.direction = dir;
 	if( this.animTextureName == anim + dir )
 	{
 		if( anim == "s_" )
