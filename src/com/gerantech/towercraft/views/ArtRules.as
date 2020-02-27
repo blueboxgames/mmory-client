@@ -10,6 +10,7 @@ import flash.utils.Dictionary;
 */
 public class ArtRules 
 {
+static public const Y:String = "y";
 static public const TEXTURE:String = "texture";
 static public const BASE:String = "base";
 static public const OVERLAY:String = "overlay";

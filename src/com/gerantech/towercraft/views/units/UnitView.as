@@ -64,7 +64,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	
 	bodyDisplay = new UnitBody(this, card, side);
 	bodyDisplay.pivotX = bodyDisplay.width * 0.5;
-	bodyDisplay.pivotY = bodyDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, "y");
+	bodyDisplay.pivotY = bodyDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
 	bodyDisplay.x = __x;
 	bodyDisplay.y = __y;
 	bodyDisplay.width = _WIDTH;
