@@ -113,7 +113,7 @@ package com.gerantech.towercraft.controls
 			}
 		}
 		
-		public function runBattle(index:int, cancelable:Boolean = true, spectatedUser:String = null, friendlyMode:int = 0) : void
+		public function runBattle(index:int, cancelable:Boolean = true, spectatedUser:String = null, friendlyMode:int = 0, debugMode:Boolean = false) : void
 		{
 			// var _type:int = ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, index)
 			var _cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, index));
@@ -128,6 +128,7 @@ package com.gerantech.towercraft.controls
 			BattleScreen.SPECTATED_USER = spectatedUser;
 			BattleScreen.FRIENDLY_MODE = friendlyMode;
 			BattleScreen.INDEX = index;
+			BattleScreen.DEBUG_MODE = debugMode;
 			pushScreen(Game.BATTLE_SCREEN);
 			addOverlay(BattleScreen.WAITING);
 		}
