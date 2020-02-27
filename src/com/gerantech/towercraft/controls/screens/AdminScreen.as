@@ -1,5 +1,6 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.popups.BroadcastMessagePopup;
 import com.gerantech.towercraft.controls.popups.RestorePopup;
@@ -18,7 +19,7 @@ override protected function initialize():void
 	
 	listLayout.gap = 0;	
 //	list.itemRendererFactory = function():IListItemRenderer { return new SettingsItemRenderer(); }
-	list.dataProvider = new ListCollection(["Players", "Track Issues", "Offends", "Push Message", "Restore", "Spectate Battles", "Search Chat"])
+	list.dataProvider = new ListCollection(["Players", "Track Issues", "Offends", "Push Message", "Debug Battle", "Restore", "Spectate Battles", "Search Chat"])
 }
 
 override protected function list_changeHandler(event:Event):void
@@ -49,6 +50,9 @@ override protected function list_changeHandler(event:Event):void
 			break;
 		case "Search Chat":
 			appModel.navigator.pushScreen(Game.SEARCH_CHAT_SCREEN);
+			break;
+		case "Debug Battle":
+			appModel.navigator.runBattle(player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX) == -1 ? 0 : player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX),true, null, 0, true);
 			break;
 	}
 }
