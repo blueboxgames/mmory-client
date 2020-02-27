@@ -269,7 +269,16 @@ private function turn(anim:String, dir:String):void
 	
 	bodyDisplay.loop = shadowDisplay.loop;
 	bodyDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
+	bodyDisplay.addEventListener(Event.COMPLETE, bodyDisplay_shootCompleteHandler);
 	bodyDisplay.updateTexture(anim, dir);
+}
+
+protected function bodyDisplay_shootCompleteHandler(event:Object):void
+{
+	bodyDisplay.loop = true;
+	bodyDisplay.updateTexture("i_", event.data);
+	shadowDisplay.loop = true;
+	shadowDisplay.updateTexture("i_", event.data);
 }
 
 override public function estimateAngle(x:Number, y:Number):Number
@@ -279,7 +288,7 @@ override public function estimateAngle(x:Number, y:Number):Number
 		return angle;
 
 	if( state == GameObject.STATE_4_MOVING )
-	turn("m_", CoreUtils.getRadString(Math.atan2(this.getSideX() - this.getSide_X(x), this.getSideY() - this.getSide_Y(y))));
+		turn("m_", CoreUtils.getRadString(Math.atan2(this.getSideX() - this.getSide_X(x), this.getSideY() - this.getSide_Y(y))));
 	return angle;
 }
 

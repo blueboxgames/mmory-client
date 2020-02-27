@@ -10,6 +10,7 @@ package com.gerantech.towercraft.views.units.elements
   import starling.core.Starling;
   import starling.display.Image;
   import starling.display.Sprite;
+  import starling.events.Event;
 
   public class UnitBody extends Sprite implements IElement
   {
@@ -107,9 +108,18 @@ package com.gerantech.towercraft.views.units.elements
 
 		public function updateTexture(anim:String, dir:String):void 
 		{
+      this.bodyDisplay.removeEventListener(Event.COMPLETE, this.bodyDisplay_completeHandler);
+      if( anim == "s_" )
+        this.bodyDisplay.addEventListener(Event.COMPLETE, this.bodyDisplay_completeHandler);
 			this.bodyDisplay.updateTexture(anim, dir);
       if( this.sideDisplay != null )
 				this.sideDisplay.updateTexture(anim, dir);
+		}
+
+		protected function bodyDisplay_completeHandler(event:Event):void
+		{
+      this.bodyDisplay.removeEventListener(Event.COMPLETE, this.bodyDisplay_completeHandler);
+      this.dispatchEventWith(event.type, false, this.bodyDisplay.direction);
 		}
 		
 		override public function dispose() : void
