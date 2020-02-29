@@ -190,7 +190,7 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 	if( CardTypes.isSpell(type) )
 	{
 		var offset:Point3 = GraphicMetrics.getSpellStartPoint(card.type);
-		var spell:BulletView = new BulletView(battleData.battleField, id, card, side, x + offset.x, y + offset.y * (side == 0 ? 0.7 : -0.7), offset.z * 0.7, x, y, 0);
+		var spell:BulletView = new BulletView(battleData.battleField, null, null, id, card, side, x + offset.x, y + offset.y * (side == 0 ? 0.7 : -0.7), offset.z * 0.7, x, y, 0);
 		battleData.battleField.bullets.push(spell as Bullet);
 		return;
 	}

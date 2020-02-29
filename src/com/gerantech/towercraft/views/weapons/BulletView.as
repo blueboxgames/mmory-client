@@ -4,6 +4,7 @@ import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.battle.GameObject;
 import com.gerantech.mmory.core.battle.bullets.Bullet;
 import com.gerantech.mmory.core.battle.units.Card;
+import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.events.BattleEvent;
 import com.gerantech.towercraft.models.AppModel;
@@ -30,9 +31,9 @@ private var bulletDisplay:MovieClip;
 private var shadowDisplay:Image;
 private var rotation:Number;
 
-public function BulletView(battleField:BattleField, id:int, card:Card, side:int, x:Number, y:Number, z:Number, fx:Number, fy:Number, fz:Number) 
+public function BulletView(battleField:BattleField, unit:Unit, target:Unit, id:int, card:Card, side:int, x:Number, y:Number, z:Number, fx:Number, fy:Number, fz:Number) 
 {
-	super(battleField, id, card, side, x, y, z, fx, fy, fz);
+	super(battleField, unit, target, id, card, side, x, y, z, fx, fy, fz);
 	rotation = MathUtil.normalizeAngle( -Math.atan2( -dx, -dy -dz * BattleField.CAMERA_ANGLE));
 	
 	if( bulletDisplayFactory == null )

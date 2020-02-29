@@ -112,6 +112,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		deployIcon.rotateTo(0, 360, card.summonTime / 1000);
 		setTimeout(fieldView.guiImagesContainer.addChild, appearanceDelay * 1000, deployIcon);
 	}
+	
 	if( battleField.debugMode )
 	{
 		sizeDisplay = new ImageElement(null, appModel.assets.getTexture("map/damage-range"));
@@ -196,9 +197,7 @@ override public function attack(enemy:Unit) : void
 	var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, rad);
 	fireDisplayFactory(__x + fireOffset.x, __y + fireOffset.y, rad);
 	
-	fireOffset = ArtRules.getFlamePosition(card.type, Math.atan2(x - enemy.x, y - enemy.y));
-	var b:BulletView = new BulletView(battleField, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, enemy.x, enemy.y, 0);
-	b.targetId = enemy.id;
+	var b:BulletView = new BulletView(battleField, this, target, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, target.x, target.y, 0);
 	battleField.bullets.push(b as Bullet);
 	bulletId ++;
 	turn("s_", CoreUtils.getRadString(Math.atan2(__x - enemy.getSideX(), __y - enemy.getSideY())));
