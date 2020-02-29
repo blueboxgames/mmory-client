@@ -1,8 +1,8 @@
 package com.gerantech.towercraft.views 
 {
 import com.gerantech.mmory.core.utils.CoreUtils;
-import com.gerantech.mmory.core.utils.Point3;
 
+import flash.geom.Point;
 import flash.utils.Dictionary;
 /**
 * ...
@@ -10,6 +10,7 @@ import flash.utils.Dictionary;
 */
 public class ArtRules 
 {
+static public const POSITIONS:String = "p";
 static public const Y:String = "y";
 static public const TEXTURE:String = "texture";
 static public const BASE:String = "base";
@@ -69,185 +70,29 @@ public function getArray(type:int, attribute:String) : Array
 	return rules[type][attribute];
 }
 
-static public function getFlamePosition(type:int, rad:Number) : Point3
+public function getFlamePosition(type:int, rad:Number) : Point
 {
 	var radStr:String = CoreUtils.getRadString(rad);
+	var ret:Point = new Point();
+
 	if( radStr == "000" )
-	switch( type )
-	{
-		case	101	:	return new Point3(18, -141, 0);
-		case	102	:	return new Point3(32, -204, 0);
-		case	103	:	return new Point3(14, -117, 0);
-		case	104	:	return new Point3(15,-140, 0);
-		case	105	:	return new Point3(28,-101, 0);
-		case	106	:	return new Point3(18, -141, 0);
-		case	107	:	return new Point3(18, -141, 0);
-		case	108	:	return new Point3(14,-152, 0);
-		case	109	:	return new Point3(0,-134, 0);
-		case	110	:	return new Point3(14, -117, 0);
-		case	111	:	return new Point3(15,-140, 0);
-		case	112	:	return new Point3(18, -141, 0);
-		case	113	:	return new Point3(18, -141, 0);
-		case	119	:	return new Point3(18, -141, 0);
-		
-		case	201 :	return new Point3(-27, -166, 0);
-		case	222 :	return new Point3(-24, -170, 0);
-	}
-
-	if( radStr == "045" )
-	switch( type )
-	{
-		case	101	:	return new Point3(-52, -130, 0);
-		case	102	:	return new Point3(-46,-200, 0);
-		case	103	:	return new Point3(-52,-104, 0);
-		case	104	:	return new Point3(-52,-129, 0);
-		case	105	:	return new Point3(-10,-106, 0);
-		case	106	:	return new Point3(18, -141, 0);
-		case	107	:	return new Point3(18, -141, 0);
-		case	108	:	return new Point3(-52,-139, 0);
-		case	109	:	return new Point3(-66,-111, 0);
-		case	110	:	return new Point3(-52,-104, 0);
-		case	111	:	return new Point3(-52,-129, 0);
-		case	112	:	return new Point3(18, -141, 0);
-		case	113	:	return new Point3(18, -141, 0);
-		case	119	:	return new Point3(-52, -130, 0);
-		
-		case	201 :	return new Point3(-116, -130, 0);
-		case	222 :	return new Point3(-96, -142, 0);
-	}
-
-	if( radStr == "090" )
-	switch( type )
-	{
-		case	101	:	return new Point3(-96, -83, 0);
-		case	102	:	return new Point3(-99,-156, 0);
-		case	103	:	return new Point3(-89,-59, 0);
-		case	104	:	return new Point3(-95,-82, 0);
-		case	105	:	return new Point3(-40,-90, 0);
-		case	106	:	return new Point3(18, -141, 0);
-		case	107	:	return new Point3(18, -141, 0);
-		case	108	:	return new Point3(-95,-95, 0);
-		case	109	:	return new Point3(-100,-60, 0);
-		case	110	:	return new Point3(-89,-59, 0);
-		case	111	:	return new Point3(-95,-82, 0);
-		case	112	:	return new Point3(18, -141, 0);
-		case	113	:	return new Point3(18, -141, 0);
-		case	119	:	return new Point3(-96, -83, 0);
-		
-		case	201 :	return new Point3(-148, -55, 0);
-		case	222 :	return new Point3(-130, -62, 0);
-	}
-
-	if( radStr == "135" )
-	switch( type )
-	{
-		case	101	:	return new Point3(-90, -21, 0);
-		case	102	:	return new Point3(-100,-95, 0);
-		case	103	:	return new Point3(-76,-5, 0);
-		case	104	:	return new Point3(-83,-25, 0);
-		case	105	:	return new Point3(-52,-61, 0);
-		case	106	:	return new Point3(18, -141, 0);
-		case	107	:	return new Point3(18, -141, 0);
-		case	108	:	return new Point3(-82,-38, 0);
-		case	109	:	return new Point3(-76,-0, 0);
-		case	110	:	return new Point3(-76,-5, 0);
-		case	111	:	return new Point3(-83,-25, 0);
-		case	112	:	return new Point3(18, -141, 0);
-		case	113	:	return new Point3(18, -141, 0);
-		case	119	:	return new Point3(-90, -21, 0);
-		
-		case	201 :	return new Point3(-83, 33, 0);
-		case	222 :	return new Point3(-80, 4, 0);
-	}
-
+		ret = new Point(getArray(type, POSITIONS)[0], getArray(type, POSITIONS)[1]);
+	if( radStr == "045" || radStr == "-45" )
+		ret = new Point(getArray(type, POSITIONS)[2], getArray(type, POSITIONS)[3]);
+	if( radStr == "090" || radStr == "-90"  )
+		ret = new Point(getArray(type, POSITIONS)[4], getArray(type, POSITIONS)[5]);
+	if( radStr == "135" || radStr == "-35"  )
+		ret = new Point(getArray(type, POSITIONS)[6], getArray(type, POSITIONS)[7]);
 	if( radStr == "180" )
-	switch( type )
-	{
-		case	101	:	return new Point3(-21, 14, 0);
-		case	102	:	return new Point3(-38,-52, 0);
-		case	103	:	return new Point3(-16,26, 0);
-		case	104	:	return new Point3(-18,9, 0);
-		case	105	:	return new Point3(-30,35, 0);
-		case	106	:	return new Point3(18, -141, 0);
-		case	107	:	return new Point3(18, -141, 0);
-		case	108	:	return new Point3(-17,-7, 0);
-		case	109	:	return new Point3(0,22, 0);
-		case	110	:	return new Point3(-16,26, 0);
-		case	111	:	return new Point3(-18,9, 0);
-		case	112	:	return new Point3(18, -141, 0);
-		case	113	:	return new Point3(18, -141, 0);
-		case	119	:	return new Point3(-21, 14, 0);
-		
-		case	201 :	return new Point3(32, 44, 0);
-		case	222 :	return new Point3(25, 11, 0);
-	}
+		ret = new Point(getArray(type, POSITIONS)[8], getArray(type, POSITIONS)[9]);
 
-	if( radStr == "-45" )
-	switch( type )
-	{
-		case	101	:	return new Point3(52, -130, 0);
-		case	102	:	return new Point3(46,-200, 0);
-		case	103	:	return new Point3(52,-104, 0);
-		case	104	:	return new Point3(52,-129, 0);
-		case	105	:	return new Point3(10,-106, 0);
-		case	106	:	return new Point3(18, -141, 0);
-		case	107	:	return new Point3(18, -141, 0);
-		case	108	:	return new Point3(52,-139, 0);
-		case	109	:	return new Point3(52,-139, 0);
-		case	110	:	return new Point3(52,-104, 0);
-		case	111	:	return new Point3(52,-129, 0);
-		case	112	:	return new Point3(18, -141, 0);
-		case	113	:	return new Point3(18, -141, 0);
-		case	119	:	return new Point3(52, -130, 0);
-		
-		case	201 :	return new Point3(116, -130, 0);
-		case	222 :	return new Point3(96, -142, 0);
-	}
+	ret.x -= 256;
+	ret.y -= (333 - getInt(type, Y));
 
-	if( radStr == "-90" )
-	switch( type )
-	{
-		case	101	:	return new Point3(96, -83, 0);
-		case	102	:	return new Point3(99,-156, 0);
-		case	103	:	return new Point3(89,-59, 0);
-		case	104	:	return new Point3(95,-82, 0);
-		case	105	:	return new Point3(40,-90, 0);
-		case	106	:	return new Point3(18, -141, 0);
-		case	107	:	return new Point3(18, -141, 0);
-		case	108	:	return new Point3(95,-95, 0);
-		case	109	:	return new Point3(95,-95, 0);
-		case	110	:	return new Point3(89,-59, 0);
-		case	111	:	return new Point3(95,-82, 0);
-		case	112	:	return new Point3(18, -141, 0);
-		case	113	:	return new Point3(18, -141, 0);
-		case	119	:	return new Point3(96, -83, 0);
-		
-		case	201 :	return new Point3(148, -55, 0);
-		case	222 :	return new Point3(130, -62, 0);
-	}
-
-	if( radStr == "-35" )
-	switch( type )
-	{
-		case	101	:	return new Point3(90, -21, 0);
-		case	102	:	return new Point3(100,-95, 0);
-		case	103	:	return new Point3(76,-5, 0);
-		case	104	:	return new Point3(83,-25, 0);
-		case	105	:	return new Point3(52,-61, 0);
-		case	106	:	return new Point3(18, -141, 0);
-		case	107	:	return new Point3(18, -141, 0);
-		case	108	:	return new Point3(82,-38, 0);
-		case	109	:	return new Point3(82,-38, 0);
-		case	110	:	return new Point3(76,-5, 0);
-		case	111	:	return new Point3(83,-25, 0);
-		case	112	:	return new Point3(18, -141, 0);
-		case	113	:	return new Point3(18, -141, 0);
-		case	119	:	return new Point3(90, -21, 0);
+	if( radStr == "-45" || radStr == "-90"  || radStr == "-35" )
+		ret.x *= -1;
 	
-		case	201 :	return new Point3(83, 33, 0);
-		case	222 :	return new Point3(80, 4, 0);
-	}
-	return new Point3(0, 0, 0);
+	return ret;
 }
 
 static public function getShadowSize(type:int): Number

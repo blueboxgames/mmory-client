@@ -6,11 +6,12 @@ import com.gerantech.mmory.core.battle.bullets.Bullet;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.utils.Point3;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.BattleFieldView;
 import com.gerantech.towercraft.views.units.UnitView;
+
+import flash.geom.Point;
 
 import starling.core.Starling;
 import starling.display.Image;
@@ -56,8 +57,8 @@ override public	function setState(state:int) : Boolean
 			var _x:Number = getSide_X(unit.x);
 			var _y:Number = getSide_Y(unit.y);
 			var rad:Number = Math.atan2(_x - getSide_X(target.x), _y - getSide_Y(target.y));
-			var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, rad);
-			UnitView(unit).fireDisplayFactory(_x + fireOffset.x, _y + fireOffset.y - appModel.artRules.getInt(card.type, ArtRules.Y) * 2, rad);
+			var fireOffset:Point = appModel.artRules.getFlamePosition(card.type, rad);
+			UnitView(unit).fireDisplayFactory(_x + fireOffset.x, _y + fireOffset.y, rad);
 		}
 		// bullet animation
 		bulletDisplayFactory();

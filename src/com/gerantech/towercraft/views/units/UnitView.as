@@ -8,7 +8,6 @@ import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.events.BattleEvent;
 import com.gerantech.mmory.core.utils.CoreUtils;
-import com.gerantech.mmory.core.utils.Point3;
 import com.gerantech.towercraft.controls.indicators.CountdownIcon;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
@@ -19,6 +18,7 @@ import com.gerantech.towercraft.views.units.elements.UnitBody;
 import com.gerantech.towercraft.views.units.elements.UnitMC;
 import com.gerantech.towercraft.views.weapons.BulletView;
 
+import flash.geom.Point;
 import flash.utils.setTimeout;
 
 import starling.animation.Transitions;
@@ -111,7 +111,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		deployIcon.rotateTo(0, 360, card.summonTime / 1000);
 		setTimeout(fieldView.guiImagesContainer.addChild, appearanceDelay * 1000, deployIcon);
 	}
-	
+
 	if( battleField.debugMode )
 	{
 		sizeDisplay = new ImageElement(null, appModel.assets.getTexture("map/damage-range"));
@@ -193,7 +193,7 @@ override public function attack(target:Unit) : void
 {
 	super.attack(target);
 	
-	var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, Math.atan2(x - target.x, y - target.y));
+	var fireOffset:Point = appModel.artRules.getFlamePosition(card.type, Math.atan2(x - target.x, y - target.y));
 	var b:BulletView = new BulletView(battleField, this, target, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, target.x, target.y, 0);
 	battleField.bullets.push(b as Bullet);
 	bulletId ++;
