@@ -75,8 +75,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	var angle:String = side == battleField.side ? "000_" : "180_";
   shadowDisplay = new UnitMC(appModel.artRules.get(card.type, ArtRules.TEXTURE) + "/0/", "m_" + angle);
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
-	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, "y");
-	// shadowDisplay.skewX = 10;
+	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
 	shadowDisplay.x = __x;
 	shadowDisplay.y = __y;
 	shadowDisplay.width = _WIDTH;
@@ -190,17 +189,14 @@ override public function setState(state:int) : Boolean
 	return true;
 }
 
-override public function attack(enemy:Unit) : void
+override public function attack(target:Unit) : void
 {
-	super.attack(enemy);
-	var rad:Number = Math.atan2(__x - getSide_X(enemy.x), getSide_Y(y) - getSide_Y(enemy.y));
-	var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, rad);
-	fireDisplayFactory(__x + fireOffset.x, __y + fireOffset.y, rad);
+	super.attack(target);
 	
 	var b:BulletView = new BulletView(battleField, this, target, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, target.x, target.y, 0);
 	battleField.bullets.push(b as Bullet);
 	bulletId ++;
-	turn("s_", CoreUtils.getRadString(Math.atan2(__x - enemy.getSideX(), __y - enemy.getSideY())));
+	turn("s_", CoreUtils.getRadString(Math.atan2(__x - target.getSideX(), __y - target.getSideY())));
 }
 
 override public function setPosition(x:Number, y:Number, z:Number, forced:Boolean = false) : Boolean
