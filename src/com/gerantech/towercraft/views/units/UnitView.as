@@ -193,6 +193,7 @@ override public function attack(target:Unit) : void
 {
 	super.attack(target);
 	
+	var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, Math.atan2(x - target.x, y - target.y));
 	var b:BulletView = new BulletView(battleField, this, target, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, target.x, target.y, 0);
 	battleField.bullets.push(b as Bullet);
 	bulletId ++;

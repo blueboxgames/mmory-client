@@ -6,10 +6,11 @@ import com.gerantech.mmory.core.battle.bullets.Bullet;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.events.BattleEvent;
+import com.gerantech.mmory.core.utils.Point3;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.BattleFieldView;
+import com.gerantech.towercraft.views.units.UnitView;
 
 import starling.core.Starling;
 import starling.display.Image;
@@ -21,7 +22,7 @@ import starling.utils.MathUtil;
 * ...
 * @author Mansour Djawadi
 */
-public class BulletView extends Bullet 
+public class BulletView extends Bullet
 {
 static public const _WIDTH:int = 512;
 static public const _HEIGHT:int = 512;
@@ -46,27 +47,37 @@ override public	function setState(state:int) : Boolean
 {
 	if( !super.setState(state) )
 		return false;
-		if( state == GameObject.STATE_1_DIPLOYED )
+	if( state == GameObject.STATE_1_DIPLOYED )
+	{
+		appModel.sounds.addAndPlayRandom(appModel.artRules.getArray(card.type, ArtRules.ATTACK_SFX));
+		// fire effect
+		if( unit != null )
 		{
-			appModel.sounds.addAndPlayRandom(appModel.artRules.getArray(card.type, ArtRules.ATTACK_SFX));
-			bulletDisplayFactory();
+			var _x:Number = getSide_X(unit.x);
+			var _y:Number = getSide_Y(unit.y);
+			var rad:Number = Math.atan2(_x - getSide_X(target.x), _y - getSide_Y(target.y));
+			var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, rad);
+			UnitView(unit).fireDisplayFactory(_x + fireOffset.x, _y + fireOffset.y - appModel.artRules.getInt(card.type, ArtRules.Y) * 2, rad);
 		}
+		// bullet animation
+		bulletDisplayFactory();
+	}
 	else if( state == GameObject.STATE_5_SHOOTING )
+	{
+		hitDisplayFactory();
+		if( battleField.debugMode )
 		{
-			hitDisplayFactory();
-			if( battleField.debugMode )
-			{
-				var damageAreaDisplay:Image = new Image(appModel.assets.getTexture("map/damage-range"));
-				damageAreaDisplay.pivotX = damageAreaDisplay.width * 0.5;
-				damageAreaDisplay.pivotY = damageAreaDisplay.height * 0.5;
-				damageAreaDisplay.width = card.bulletDamageArea * 2;
-				damageAreaDisplay.height = card.bulletDamageArea * 2 * BattleField.CAMERA_ANGLE;
-				damageAreaDisplay.x = getSideX();
-				damageAreaDisplay.y = getSideY();
-				fieldView.effectsContainer.addChild(damageAreaDisplay);
-				Starling.juggler.tween(damageAreaDisplay, 0.5, {scale:0, onComplete:damageAreaDisplay.removeFromParent, onCompleteArgs:[true]});
-			}
+			var damageAreaDisplay:Image = new Image(appModel.assets.getTexture("map/damage-range"));
+			damageAreaDisplay.pivotX = damageAreaDisplay.width * 0.5;
+			damageAreaDisplay.pivotY = damageAreaDisplay.height * 0.5;
+			damageAreaDisplay.width = card.bulletDamageArea * 2;
+			damageAreaDisplay.height = card.bulletDamageArea * 2 * BattleField.CAMERA_ANGLE;
+			damageAreaDisplay.x = getSideX();
+			damageAreaDisplay.y = getSideY();
+			fieldView.effectsContainer.addChild(damageAreaDisplay);
+			Starling.juggler.tween(damageAreaDisplay, 0.5, {scale:0, onComplete:damageAreaDisplay.removeFromParent, onCompleteArgs:[true]});
 		}
+	}
 	return true;
 }
 
