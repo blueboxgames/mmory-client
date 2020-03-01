@@ -1,6 +1,7 @@
 package com.gerantech.towercraft.views
 {
 import com.gerantech.mmory.core.battle.BattleField;
+import com.gerantech.mmory.core.battle.GameObject;
 import com.gerantech.mmory.core.battle.bullets.Bullet;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
@@ -49,12 +50,12 @@ public var guiImagesContainer:DisplayObjectContainer;
 public var guiTextsContainer:DisplayObjectContainer;
 public var effectsContainer:DisplayObjectContainer;
 public var center:Point2;
-// private var units:IntUnitMap;
+private var units:Array;
 
 public function BattleFieldView() { super(); }
 public function initialize () : void 
 {
-	// units = new IntUnitMap();
+	units = new Array();
 	touchGroup = true;
 	alignPivot();
 
@@ -189,7 +190,7 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 	if( CardTypes.isSpell(type) )
 	{
 		var offset:Point3 = GraphicMetrics.getSpellStartPoint(card.type);
-		var spell:BulletView = new BulletView(battleData.battleField, id, card, side, x + offset.x, y + offset.y * (side == 0 ? 0.7 : -0.7), offset.z * 0.7, x, y, 0);
+		var spell:BulletView = new BulletView(battleData.battleField, null, null, id, card, side, x + offset.x, y + offset.y * (side == 0 ? 0.7 : -0.7), offset.z * 0.7, x, y, 0);
 		battleData.battleField.bullets.push(spell as Bullet);
 		return;
 	}
@@ -241,39 +242,53 @@ public function requestKillPioneers(side:int):void
 public function updateUnits(unitData:SFSObject) : void
 {
 	var serverUnitIds:Array = unitData.getIntArray("keys");
-	for(var i:int = 0; i < battleData.battleField.units.length; i++)
-		if( serverUnitIds.indexOf(battleData.battleField.units[i].id) == -1 )
-			battleData.battleField.units[i].hit(100);
-	
-/* 	if( !unitData.containsKey("testData") )
+	kill(battleData.battleField.units);
+	if( !unitData.containsKey("data") )
 		return;
-	
-	var serverUnitTests:Array = unitData.getUtfStringArray("testData");
-	for( i = 0; i < serverUnitTests.length; i++ )
+	var serverUnitTests:Array = unitData.getUtfStringArray("data");
+	for( var i:int = 0; i < serverUnitTests.length; i++ )
 	{
 		var vars:Array = serverUnitTests[i].split(",");// unit.id + "," + unit.x + "," + unit.y + "," + unit.health + "," + unit.card.type + "," + unit.side + "," + unit.card.level
-		if( units.exists(vars[0]) )
-		{
-			units.get(vars[0]).setPosition(vars[1], vars[2], GameObject.NaN);
-		}
-		else
-		{
-			var u:UnitView = new UnitView(getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0);
-			u.alpha = 0.3;
-			u.isDump = true;
-			units.set(vars[0], u as Unit);
-		}
+		var u:UnitView = battleData.battleField.getUnit(vars[0]) as UnitView;
+		u.setPosition(vars[1], vars[2], GameObject.NaN);
+		u.setHealth(vars[3]);
 	}
 
-	clientUnitIds = units.keys();
-	for( i = 0; i < clientUnitIds.length; i++ )
+	if( !battleData.battleField.debugMode )
+		return;
+	kill(units);
+	for( i = 0; i < serverUnitTests.length; i++ )
 	{
-		if( serverUnitIds.indexOf(clientUnitIds[i]) == -1 )
+		vars = serverUnitTests[i].split(",");// unit.id + "," + unit.x + "," + unit.y + "," + unit.health + "," + unit.card.type + "," + unit.side + "," + unit.card.level
+		u = getUnit(vars[0]);
+		if( u == null )
 		{
-			units.get(clientUnitIds[i]).dispose();
-			units.remove(clientUnitIds[i]);
+			u = new UnitView(getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0, 0, true);
+			u.alpha = 0.3;
+			units.push(u);
+			continue;
 		}
-	} */
+		u.setPosition(vars[1], vars[2], GameObject.NaN);
+		u.setHealth(vars[3]);
+	}
+
+	function kill(units:Array):void
+	{
+		for(var i:int = 0; i < units.length; i++)
+		if( serverUnitIds.indexOf(units[i].id) == -1 )
+		{
+			units[i].dispose();
+			units.removeAt(i);
+		}
+	}
+}
+
+private function getUnit(id:int):UnitView
+{
+	for(var i:int = 0; i < units.length; i++)
+		if( units[i].id == id )
+			return units[i] as UnitView;
+	return null;
 }
 
 override public function dispose() : void

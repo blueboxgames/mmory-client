@@ -8,7 +8,6 @@ import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.events.BattleEvent;
 import com.gerantech.mmory.core.utils.CoreUtils;
-import com.gerantech.mmory.core.utils.Point3;
 import com.gerantech.towercraft.controls.indicators.CountdownIcon;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
 import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
@@ -19,6 +18,7 @@ import com.gerantech.towercraft.views.units.elements.UnitBody;
 import com.gerantech.towercraft.views.units.elements.UnitMC;
 import com.gerantech.towercraft.views.weapons.BulletView;
 
+import flash.geom.Point;
 import flash.utils.setTimeout;
 
 import starling.animation.Transitions;
@@ -53,9 +53,10 @@ private var flameParticle:BattleParticleSystem;
 private var smokeParticle:BattleParticleSystem;
 private var bulletParticle:BattleParticleSystem;
 
-public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Number, t:Number)
+public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Number, t:Number, isDump:Boolean = false)
 {
 	super(card, id, side, x, y, z, t);
+	this.isDump = isDump;
 	__x = getSideX();
 	__y = getSideY();
 
@@ -63,7 +64,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	
 	bodyDisplay = new UnitBody(this, card, side);
 	bodyDisplay.pivotX = bodyDisplay.width * 0.5;
-	bodyDisplay.pivotY = bodyDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, "y");
+	bodyDisplay.pivotY = bodyDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
 	bodyDisplay.x = __x;
 	bodyDisplay.y = __y;
 	bodyDisplay.width = _WIDTH;
@@ -74,8 +75,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	var angle:String = side == battleField.side ? "000_" : "180_";
   shadowDisplay = new UnitMC(appModel.artRules.get(card.type, ArtRules.TEXTURE) + "/0/", "m_" + angle);
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
-	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, "y");
-	// shadowDisplay.skewX = 10;
+	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
 	shadowDisplay.x = __x;
 	shadowDisplay.y = __y;
 	shadowDisplay.width = _WIDTH;
@@ -89,7 +89,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	Starling.juggler.add(shadowDisplay);
 	fieldView.shadowsContainer.addChild(shadowDisplay);
 
-	if( CardTypes.isTroop(card.type) )
+	if( !isDump && CardTypes.isTroop(card.type) )
 	{
 		bodyDisplay.alpha = 0;
 		bodyDisplay.y = __yz - 100;
@@ -101,7 +101,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scaleX:__bodyScale,scaleY:__bodyScale*_SHADOW_SCALE,	transition:Transitions.EASE_OUT_BACK});
 	}
 	
-	if( card.summonTime > 0 )
+	if( !isDump && card.summonTime > 0 )
 	{
 		deployIcon = new CountdownIcon();
 		deployIcon.stop();
@@ -111,7 +111,8 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		deployIcon.rotateTo(0, 360, card.summonTime / 1000);
 		setTimeout(fieldView.guiImagesContainer.addChild, appearanceDelay * 1000, deployIcon);
 	}
-	if( BattleField.DEBUG_MODE )
+
+	if( battleField.debugMode )
 	{
 		sizeDisplay = new ImageElement(null, appModel.assets.getTexture("map/damage-range"));
 		sizeDisplay.pivotX = sizeDisplay.width * 0.5;
@@ -188,19 +189,15 @@ override public function setState(state:int) : Boolean
 	return true;
 }
 
-override public function attack(enemy:Unit) : void
+override public function attack(target:Unit) : void
 {
-	super.attack(enemy);
-	var rad:Number = Math.atan2(__x - getSide_X(enemy.x), getSide_Y(y) - getSide_Y(enemy.y));
-	var fireOffset:Point3 = ArtRules.getFlamePosition(card.type, rad);
-	fireDisplayFactory(__x + fireOffset.x, __y + fireOffset.y, rad);
+	super.attack(target);
 	
-	fireOffset = ArtRules.getFlamePosition(card.type, Math.atan2(x - enemy.x, y - enemy.y));
-	var b:BulletView = new BulletView(battleField, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, enemy.x, enemy.y, 0);
-	b.targetId = enemy.id;
+	var fireOffset:Point = appModel.artRules.getFlamePosition(card.type, Math.atan2(x - target.x, y - target.y));
+	var b:BulletView = new BulletView(battleField, this, target, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, target.x, target.y, 0);
 	battleField.bullets.push(b as Bullet);
 	bulletId ++;
-	turn("s_", CoreUtils.getRadString(Math.atan2(__x - enemy.getSideX(), __y - enemy.getSideY())));
+	turn("s_", CoreUtils.getRadString(Math.atan2(__x - target.getSideX(), __y - target.getSideY())));
 }
 
 override public function setPosition(x:Number, y:Number, z:Number, forced:Boolean = false) : Boolean
@@ -268,7 +265,16 @@ private function turn(anim:String, dir:String):void
 	
 	bodyDisplay.loop = shadowDisplay.loop;
 	bodyDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
+	bodyDisplay.addEventListener(Event.COMPLETE, bodyDisplay_shootCompleteHandler);
 	bodyDisplay.updateTexture(anim, dir);
+}
+
+protected function bodyDisplay_shootCompleteHandler(event:Object):void
+{
+	bodyDisplay.loop = true;
+	bodyDisplay.updateTexture("i_", event.data);
+	shadowDisplay.loop = true;
+	shadowDisplay.updateTexture("i_", event.data);
 }
 
 override public function estimateAngle(x:Number, y:Number):Number
@@ -278,7 +284,7 @@ override public function estimateAngle(x:Number, y:Number):Number
 		return angle;
 
 	if( state == GameObject.STATE_4_MOVING )
-	turn("m_", CoreUtils.getRadString(Math.atan2(this.getSideX() - this.getSide_X(x), this.getSideY() - this.getSide_Y(y))));
+		turn("m_", CoreUtils.getRadString(Math.atan2(this.getSideX() - this.getSide_X(x), this.getSideY() - this.getSide_Y(y))));
 	return angle;
 }
 
@@ -287,7 +293,7 @@ override public function setHealth(health:Number) : Number
 	if( this.disposed() )
 		return 0;
 
-	if( this.id < 6 && health < 0 && health > -10 && this.card.type > 200 )
+	if( health < 0 )
 		return 0;
 	
 	var damage:Number =  super.setHealth(health);

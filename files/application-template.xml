@@ -50,8 +50,8 @@
 	<application android:enabled="true" android:roundIcon="@mipmap/ic_launcher_round" >
 		<meta-data android:name="android.max_aspect" android:value="2.0" />
 		<!-- Chartboost -->
-		<meta-data android:name="__ChartboostAir__AppID" android:value="5d5a9cc80c7ec60cc5b67c06" />
-		<meta-data android:name="__ChartboostAir__AppSignature" android:value="fc3d771153452cbc1fd0e83891b30d8aa096e50a" />
+		<meta-data android:name="__ChartboostAir__AppID" android:value="5e490c1e1e5f670ae904e2e1" />
+		<meta-data android:name="__ChartboostAir__AppSignature" android:value="fe236d4b659c7965165395c7c52d95c885777943" />
 		<activity android:name="com.chartboost.sdk.CBImpressionActivity"	android:excludeFromRecents="true"	android:hardwareAccelerated="true"	android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
 							android:configChanges="fontScale|keyboard|keyboardHidden|locale|mnc|mcc|navigation|orientation|screenLayout|screenSize|smallestScreenSize|uiMode|touchscreen" />
 		<activity android:excludeFromRecents="false">
