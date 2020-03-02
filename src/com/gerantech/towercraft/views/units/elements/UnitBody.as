@@ -24,8 +24,6 @@ package com.gerantech.towercraft.views.units.elements
     private var bodyDisplay:UnitMC;
     private var sideDisplay:UnitMC;
 
-    static public  function has_side(t:int) : Boolean { return t == 102 || t == 104 || t == 105 || t == 108 || t == 117 || t == 118 || t == 119 || t == 120 || t == 224; }
-
     public function UnitBody(unit:UnitView, card:Card, side:int)
     {
       this.unit = unit;
@@ -38,7 +36,7 @@ package com.gerantech.towercraft.views.units.elements
         this.addChild(this.baseDisplay);
       }
 
-    	var hasSide:Boolean = has_side(card.type);
+    	var hasSide:Boolean = AppModel.instance.artRules.getInt(card.type, ArtRules.SIDE) == 1;
       var angle:String = side == battleField.side ? "000_" : "180_";
       this.bodyDisplay = new UnitMC(texture + "/" + (hasSide ? 0 : battleField.getColorIndex(side)) + "/", "m_" + angle);
       if( CardTypes.isTroop(card.type) )
