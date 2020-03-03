@@ -11,8 +11,9 @@ import starling.events.EventDispatcher;
 
 public class TimeManager extends EventDispatcher
 {
-private var _now:uint;
 private var sampler:Number;
+private var _now:uint;
+private var _minutes:uint;
 private var _millis:Number;
 private var intervalId:uint;
 private static var _instance:TimeManager;
@@ -60,7 +61,13 @@ public function forceUpdate():int
 	if( _millis > _now * 1000 + 991 )
 	{
 		_now ++;
-		dispatchEventWith(Event.CHANGE, false, _now)		
+		dispatchEventWith(Event.CHANGE, false, _now);
+		var _m:int = Math.floor(_now/60) ;
+		if( _m != _minutes )
+		{
+			_minutes = _m;
+			dispatchEventWith(Event.TRIGGERED, false, _minutes);
+		}
 	}
 	return diff;
 }
@@ -74,7 +81,6 @@ public function dispose():void
 {
 	clearInterval(intervalId);
 	_instance = null;
-	
 }
 }
 }
