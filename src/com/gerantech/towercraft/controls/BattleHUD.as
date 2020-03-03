@@ -203,14 +203,12 @@ protected function timeManager_changeHandler(event:Event):void
 		time = battleData.battleField.startAt + battleData.battleField.field.times.get(3) - timeManager.now;
 	timerSlider.value = time;
 	
-	var duration:int = int(battleData.battleField.getDuration() + 1);
-	if( duration == 120 || duration == 180 )
-	{
-		appModel.sounds.stopAll(SoundManager.CATE_THEME);
-		appModel.sounds.addAndPlay("battle-" + duration, null, SoundManager.CATE_THEME, SoundManager.SINGLE_BYPASS_THIS, duration == 120 ? 1 : 3);
-	}
+	var duration:int = battleData.battleField.getDuration();
 	if( duration == battleData.battleField.getTime(1) )
 	{
+		appModel.sounds.stopAll();
+		appModel.sounds.addAndPlay("battle-1", null, SoundManager.CATE_THEME, SoundManager.SINGLE_BYPASS_THIS);
+
 		timerSlider.enableStars(0x08899);
 		animateShadow(1.0, null, 0x08899);
 		appModel.navigator.addPopup(new BattleExtraTimeToast(BattleExtraTimeToast.MODE_ELIXIR_2X));
@@ -218,12 +216,14 @@ protected function timeManager_changeHandler(event:Event):void
 	
 	if( battleData.allise.getInt("score") == battleData.axis.getInt("score") && duration == battleData.battleField.getTime(2) )
 	{
-		appModel.navigator.addPopup(new BattleExtraTimeToast(BattleExtraTimeToast.MODE_EXTRA_TIME));
+		appModel.sounds.stopAll();
+		appModel.sounds.addAndPlay("battle-2", null, SoundManager.CATE_THEME, SoundManager.SINGLE_BYPASS_THIS, 3);
 		animateShadow(1.0, null, 0xAA0000);
 		timerSlider.enableStars(0xFF0000);
+		appModel.navigator.addPopup(new BattleExtraTimeToast(BattleExtraTimeToast.MODE_EXTRA_TIME));
 	}
 	
-	if( duration == battleData.battleField.getTime(2) - 10 || duration == battleData.battleField.getTime(3) - 10 )
+	if( duration == battleData.battleField.getTime(2) - 11 || duration == battleData.battleField.getTime(3) - 11 )
 	{
 		lastSecondsToast = new LastSecondsToast();
 		lastSecondsToast.x = appModel.battleFieldView.x;
@@ -381,6 +381,8 @@ public function end(overlay:EndOverlay) : void
 			getChildAt(numCh).removeFromParent(true);
 		numCh --;
 	}
+
+	appModel.sounds.stopAll(SoundManager.CATE_THEME);
 
 	addChildAt(overlay, 0);
 	if( scoreBoard != null )

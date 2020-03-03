@@ -174,10 +174,8 @@ public function play(id:String, volume:Number = NaN, repeats:int = 1, panning:Nu
 private function channel_soundCompleteHandler(event:Event) : void
 {			
 	for (var id:String in playings) 
-	{
 		if( playings[id].channel == event.target )
 			delete playings[id];
-	}
 	event.currentTarget.removeEventListener(Event.SOUND_COMPLETE, channel_soundCompleteHandler);
 }
 

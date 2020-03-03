@@ -10,6 +10,7 @@ import flash.utils.setInterval;
 
 import starling.animation.Transitions;
 import starling.core.Starling;
+import com.gerantech.towercraft.managers.SoundManager;
 /**
 * ...
 * @author Mansour Djawadi
@@ -30,7 +31,7 @@ public function LastSecondsToast()
 	pivotX = width * 0.5;
 	pivotY = height;
 
-	AppModel.instance.sounds.addAndPlay("battle-cd");
+	AppModel.instance.sounds.addAndPlay("battle-cd", null, SoundManager.CATE_THEME);
 }
 
 override protected function initialize() : void
