@@ -485,6 +485,7 @@
     "popup_loginError_6_message": "You can not play with multiple devices!",
     "popup_coreLoadingError_message": "Game data not loaded!\nRetry?",
     "popup_connectionLost_message": "Connection lost!",
+    "popup_connectionTimeout_message": "Idle Timeout!",
     "popup_forceUpdate_message": "New version available.\nUpdate BoomLand!",
     "popup_noticeUpdate_message": "New version available.\nYou can update BoomLand!",
     "": "",

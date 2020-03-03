@@ -75,6 +75,7 @@ protected function logo_clearHandler(event:*):void
 	AppModel.instance.loadingManager.addEventListener(LoadingEvent.FORCE_UPDATE,		loadingManager_eventsHandler);
 	AppModel.instance.loadingManager.addEventListener(LoadingEvent.CORE_LOADING_ERROR,	loadingManager_eventsHandler);
 	AppModel.instance.loadingManager.addEventListener(LoadingEvent.LOADED,				loadingManager_eventsHandler);
+	AppModel.instance.loadingManager.addEventListener(LoadingEvent.CONNECTION_TIMEOUT,		loadingManager_eventsHandler);
 	AppModel.instance.loadingManager.addEventListener(LoadingEvent.CONNECTION_LOST,		loadingManager_eventsHandler);
 	AppModel.instance.loadingManager.addEventListener(LoadingEvent.FORCE_RELOAD,		loadingManager_eventsHandler);
 	AppModel.instance.loadingManager.addEventListener(LoadingEvent.PROGRESS,		loadingManager_progressHandler);
@@ -109,6 +110,7 @@ protected function loadingManager_eventsHandler(event:LoadingEvent):void
 			logo.play();
 			break;
 		case LoadingEvent.CONNECTION_LOST:
+		case LoadingEvent.CONNECTION_TIMEOUT:
 			var reloadpopup:MessagePopup = new MessagePopup(loc("popup_" + event.type + "_message"), loc("reconnect_button"));
 			reloadpopup.data = confirmData;
 			reloadpopup.closeOnOverlay = false;
@@ -232,6 +234,7 @@ private function confirm_eventsHandler(event:*):void
 
 private function reload():void
 {
+	AppModel.instance.loadingManager.removeEventListener(LoadingEvent.CONNECTION_TIMEOUT,		loadingManager_eventsHandler);
 	AppModel.instance.loadingManager.removeEventListener(LoadingEvent.CONNECTION_LOST,	loadingManager_eventsHandler);
 	AppModel.instance.loadingManager.removeEventListener(LoadingEvent.FORCE_RELOAD,		loadingManager_eventsHandler);
 

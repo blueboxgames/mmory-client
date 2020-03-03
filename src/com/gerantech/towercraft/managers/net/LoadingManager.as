@@ -249,7 +249,7 @@ protected function prefs_completeHandler(e:*):void
 protected function sfsConnection_connectionLostHandler(event:SFSEvent):void
 {
 	sfsConnection.logout();
-	dispatchEvent(new LoadingEvent(LoadingEvent.CONNECTION_LOST));
+	dispatchEvent(new LoadingEvent(event.params.reason == "idle" ? LoadingEvent.CONNECTION_TIMEOUT : LoadingEvent.CONNECTION_LOST));
 }
 
 private function registerOneSignalPushManager():void
