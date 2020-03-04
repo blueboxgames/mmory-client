@@ -1,9 +1,11 @@
 package com.gerantech.towercraft.managers.net.sfs
 {
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.mmory.core.utils.lists.IntList;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.overlays.LowConnectionOverlay;
 import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.utils.GTStreamer;
 import com.gerantech.towercraft.utils.LoadAndSaver;
 import com.smartfoxserver.v2.SmartFox;
 import com.smartfoxserver.v2.core.SFSEvent;
@@ -24,7 +26,6 @@ import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
 
 import haxe.ds.StringMap;
-import com.gerantech.towercraft.utils.GTStreamer;
 
 [Event(name="succeed",			type="com.gerantech.towercraft.managers.net.sfs.SFSConnection")]
 [Event(name="failure",			type="com.gerantech.towercraft.managers.net.sfs.SFSConnection")]
@@ -87,7 +88,7 @@ public function load(force:Boolean) : void
 
 	var pattern:String = '<?xml version="1.0" encoding="UTF-8"?>\r\n<SmartFoxConfig>';
 	var url:String = "http://blueboxgames.ir/configs/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&version=" + AppModel.instance.descriptor.versionCode + "&r=" + Math.round(Math.random() * 1000);
-	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, false, false, 0, pattern);//trace(url);
+	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, false, false, 0, pattern);trace(url);
 	cnfLoader.addEventListener(Event.COMPLETE,			cnfLoader_completeHandler);
 	cnfLoader.addEventListener(IOErrorEvent.IO_ERROR,	cnfLoader_ioErrorHandler);
 	cnfLoader.start();
