@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.overlays
 {
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;

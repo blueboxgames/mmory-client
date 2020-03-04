@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.managers.oauth
 {
 import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.BaseManager;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.marpies.ane.gameservices.GameServices;

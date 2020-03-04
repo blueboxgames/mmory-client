@@ -2,6 +2,7 @@ package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.extensions.share.Share;
 import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.mmory.core.others.TrophyReward;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
@@ -13,7 +14,6 @@ import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;

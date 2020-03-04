@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.segments 
 {
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.controls.items.InboxChatItemRenderer;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.InboxThread;
 import com.gerantech.towercraft.utils.StrUtils;

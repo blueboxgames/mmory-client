@@ -6,6 +6,7 @@ package com.gerantech.towercraft.controls.screens
   import com.gerantech.mmory.core.battle.units.Unit;
   import com.gerantech.mmory.core.constants.PrefsTypes;
   import com.gerantech.mmory.core.constants.ResourceType;
+  import com.gerantech.mmory.core.constants.SFSCommands;
   import com.gerantech.mmory.core.socials.Challenge;
   import com.gerantech.mmory.core.utils.maps.IntIntMap;
   import com.gerantech.towercraft.controls.BattleHUD;
@@ -17,7 +18,6 @@ package com.gerantech.towercraft.controls.screens
   import com.gerantech.towercraft.controls.popups.UnderMaintenancePopup;
   import com.gerantech.towercraft.events.GameEvent;
   import com.gerantech.towercraft.managers.SoundManager;
-  import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
   import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
   import com.gerantech.towercraft.models.tutorials.TutorialData;
   import com.gerantech.towercraft.models.tutorials.TutorialTask;

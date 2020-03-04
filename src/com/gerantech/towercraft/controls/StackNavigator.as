@@ -5,6 +5,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.extensions.NativeAbilities;
 	import com.gerantech.mmory.core.constants.PrefsTypes;
 	import com.gerantech.mmory.core.constants.ResourceType;
+	import com.gerantech.mmory.core.constants.SFSCommands;
 	import com.gerantech.mmory.core.exchanges.ExchangeItem;
 	import com.gerantech.mmory.core.scripts.ScriptEngine;
 	import com.gerantech.mmory.core.utils.maps.IntIntMap;
@@ -29,7 +30,6 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.toasts.SimpleToast;
 	import com.gerantech.towercraft.events.LoadingEvent;
 	import com.gerantech.towercraft.managers.BillingManager;
-	import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 	import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 	import com.gerantech.towercraft.models.AppModel;
 	import com.gerantech.towercraft.models.tutorials.TutorialTask;

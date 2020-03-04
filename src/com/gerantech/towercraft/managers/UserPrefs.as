@@ -5,16 +5,17 @@ import com.gameanalytics.sdk.GameAnalytics;
 import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.managers.oauth.OAuthManager;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.utils.Localizations;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 
+import flash.utils.setTimeout;
+
 import starling.events.Event;
 import starling.events.EventDispatcher;
-import flash.utils.setTimeout;
 
 public class UserPrefs extends EventDispatcher 
 {

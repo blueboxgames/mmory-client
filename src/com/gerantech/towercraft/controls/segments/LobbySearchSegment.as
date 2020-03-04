@@ -1,12 +1,12 @@
 package com.gerantech.towercraft.controls.segments
 {
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.buttons.LobbyTabButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.items.lobby.LobbyItemRenderer;
 import com.gerantech.towercraft.controls.popups.LobbyDetailsPopup;
 import com.gerantech.towercraft.controls.texts.CustomTextInput;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSArray;

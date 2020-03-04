@@ -2,6 +2,7 @@ package com.gerantech.towercraft.controls.headers
 {
 import com.gerantech.mmory.core.battle.BattleField;
 import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.Point2;
 import com.gerantech.towercraft.controls.BattleDeckCard;
@@ -10,7 +11,6 @@ import com.gerantech.towercraft.controls.TowersLayout;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.overlays.TutorialSwipeOverlay;
 import com.gerantech.towercraft.controls.sliders.ElixirBar;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
 import com.gerantech.towercraft.models.vo.UserData;

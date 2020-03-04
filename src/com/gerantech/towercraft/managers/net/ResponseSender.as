@@ -1,10 +1,10 @@
 package com.gerantech.towercraft.managers.net
 {
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.models.vo.BattleData;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import com.gerantech.towercraft.models.vo.BattleData;
 
 public class ResponseSender
 {

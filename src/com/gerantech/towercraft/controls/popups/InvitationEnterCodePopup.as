@@ -2,14 +2,13 @@ package com.gerantech.towercraft.controls.popups
 {
     import com.gerantech.extensions.NativeAbilities;
     import com.gerantech.mmory.core.constants.MessageTypes;
+    import com.gerantech.mmory.core.constants.SFSCommands;
     import com.gerantech.towercraft.controls.texts.CustomTextInput;
-    import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
     import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
     import com.gerantech.towercraft.models.AppModel;
     import com.gerantech.towercraft.themes.MainTheme;
     import com.gerantech.towercraft.utils.Utils;
     import com.smartfoxserver.v2.core.SFSEvent;
-    import com.smartfoxserver.v2.entities.data.ISFSObject;
     import com.smartfoxserver.v2.entities.data.SFSObject;
 
     import feathers.controls.Button;
