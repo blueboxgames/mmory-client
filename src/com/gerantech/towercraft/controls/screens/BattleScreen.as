@@ -381,7 +381,6 @@ package com.gerantech.towercraft.controls.screens
       }
 
       appModel.battleFieldView.responseSender.leave();
-      appModel.battleFieldView.responseSender.actived = false;
 
       if( player.get_battleswins() > 5 && endOverlay.score == 3 && player.get_arena(0) > 0 ) // !sfsConnection.mySelf.isSpectator &&
         appModel.navigator.showOffer();

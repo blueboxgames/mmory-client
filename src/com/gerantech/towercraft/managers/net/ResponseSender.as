@@ -8,7 +8,7 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 
 public class ResponseSender
 {
-	public var actived:Boolean = true;
+	private var actived:Boolean = true;
 	private var battleData:BattleData ;
 	public function ResponseSender(battleData:BattleData)
 	{
@@ -31,6 +31,7 @@ public class ResponseSender
 		if( retryMode )
 			params.putBool("retryMode", true);
 		send(SFSCommands.BATTLE_LEAVE, params, false);			
+		this.actived = false;
 	}
 
 	public function sendSticker(stickerType:int):void
