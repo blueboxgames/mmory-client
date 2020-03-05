@@ -37,6 +37,7 @@ import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
 import starling.events.Event;
 import starling.textures.Texture;
+import com.smartfoxserver.v2.entities.data.SFSArray;
 public class BattleFieldView extends Sprite
 {
 private const DEBUG:Boolean = false;
@@ -52,8 +53,7 @@ public var effectsContainer:DisplayObjectContainer;
 public var center:Point2;
 private var units:Array;
 
-public function BattleFieldView() { super(); }
-public function initialize () : void 
+public function BattleFieldView()
 {
 	units = new Array();
 	touchGroup = true;
@@ -95,12 +95,13 @@ public function initialize () : void
 protected function syncToolPre_completeHandler(event:Event):void 
 {
 	mapBuilder = new MapBuilder();
-	dispatchEventWith(Event.COMPLETE);
+	dispatchEventWith(Event.OPEN);
 }
 
-public function createPlaces(battleData:BattleData) : void
+public function load(battleData:BattleData) : void
 {
 	this.battleData = battleData	;
+	responseSender = new ResponseSender(battleData);
 	if( mapBuilder == null )
 		return;
 	var deckKeys:Vector.<int> = battleData.getAxiseDeck().keys();
@@ -133,6 +134,12 @@ private function fillDeck(deck:Vector.<String>, assets:Object):void
 
 protected function syncToolPost_completeHandler(event:Event):void
 {
+	event.currentTarget.removeEventListener(Event.COMPLETE, syncToolPost_completeHandler);
+	dispatchEventWith(Event.READY);
+}
+
+public function start(units:ISFSArray):void
+{
 	pivotX = BattleField.WIDTH * 0.5;
 	pivotY = BattleField.HEIGHT * 0.5;
 	center = new Point2(Starling.current.stage.stageWidth * 0.5, (Starling.current.stage.stageHeight - BattleFooter.HEIGHT * 0.5 - 100) * 0.5);
@@ -142,9 +149,6 @@ protected function syncToolPost_completeHandler(event:Event):void
 	mapBuilder.init(battleData.battleField.field.json);
 	addChild(mapBuilder);
 
-	battleData.battleField.state = BattleField.STATE_2_STARTED;
-
-	responseSender = new ResponseSender(battleData);
 	TimeManager.instance.addEventListener(Event.UPDATE, timeManager_updateHandler);
 	
 	addChild(shadowsContainer);
@@ -160,7 +164,7 @@ protected function syncToolPost_completeHandler(event:Event):void
 	addChild(effectsContainer);
 	addChild(guiImagesContainer);
 	addChild(guiTextsContainer);
-	dispatchEventWith(Event.TRIGGERED);
+	dispatchEventWith(Event.COMPLETE);
 }
 
 protected function timeManager_updateHandler(e:Event):void

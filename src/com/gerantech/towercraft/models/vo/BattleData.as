@@ -35,7 +35,7 @@ public function BattleData(sfsData:ISFSObject)
 {
 	this.sfsData = sfsData;
 	var side:int = sfsData.getInt("side");
-	this.roomId = sfsData.getInt("roomId");
+	this.roomId = sfsData.getInt("id");
 	this.userType = sfsData.getInt("userType");
 	this.singleMode = sfsData.getBool("singleMode");
 	this.allise = sfsData.getSFSObject("p" + side);
@@ -84,13 +84,17 @@ public function BattleData(sfsData:ISFSObject)
 	var f:FieldData = new FieldData(sfsData.getInt("mode"), JSON.stringify(map), AppModel.instance.descriptor.versionCode);
 	this.battleField = new BattleField();
 	this.battleField.debugMode = sfsData.getBool("debugMode");
-	this.battleField.initialize(side == 0 ? alliseGame : axisGame, side == 0 ? axisGame : alliseGame, f, side, sfsData.getInt("startAt"), sfsData.getDouble("now"), false, sfsData.getInt("friendlyMode"));
-	this.battleField.state = BattleField.STATE_1_CREATED;
+	this.battleField.create(side == 0 ? alliseGame : axisGame, side == 0 ? axisGame : alliseGame, f, side, sfsData.getInt("createAt"), false, sfsData.getInt("friendlyMode"));
 	this.battleField.decks = new IntIntCardMap();
 	this.battleField.decks.set(0, BattleField.getDeckCards(this.battleField.games[0], this.battleField.games[0].loginData.deck, this.battleField.friendlyMode));
 	this.battleField.decks.set(1, BattleField.getDeckCards(this.battleField.games[1], this.battleField.games[1].loginData.deck, this.battleField.friendlyMode));
-	TimeManager.instance.setNow(Math.ceil(sfsData.getDouble("now") / 1000));
-	TimeManager.instance.setMillis(sfsData.getDouble("now"));
+}
+
+public function start(startAt:int, now:Number):void
+{
+	this.battleField.start(startAt, now);
+	TimeManager.instance.setMillis(now);
+	TimeManager.instance.setNow(Math.ceil(now / 1000));
 	TimeManager.instance.addEventListener(Event.UPDATE, timeManager_updateHandler);
 }
 

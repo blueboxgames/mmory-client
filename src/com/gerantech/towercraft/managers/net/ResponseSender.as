@@ -25,6 +25,11 @@ public class ResponseSender
 		send(SFSCommands.BATTLE_SUMMON, params);
 	}
 
+	public function start():void
+	{
+		send(SFSCommands.BATTLE_START, new SFSObject(), false);			
+	}
+
 	public function leave(retryMode:Boolean=false):void
 	{
 		var params:SFSObject = new SFSObject();

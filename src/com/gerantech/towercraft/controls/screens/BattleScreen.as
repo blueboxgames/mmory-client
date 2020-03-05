@@ -2,7 +2,6 @@ package com.gerantech.towercraft.controls.screens
 {
   import com.gerantech.mmory.core.battle.BattleField;
   import com.gerantech.mmory.core.battle.bullets.Bullet;
-  import com.gerantech.mmory.core.battle.fieldes.FieldData;
   import com.gerantech.mmory.core.battle.units.Unit;
   import com.gerantech.mmory.core.constants.PrefsTypes;
   import com.gerantech.mmory.core.constants.ResourceType;
@@ -36,7 +35,6 @@ package com.gerantech.towercraft.controls.screens
   import flash.utils.setTimeout;
 
   import ir.metrix.sdk.Metrix;
-  import ir.metrix.sdk.MetrixEvent;
 
   import starling.animation.Transitions;
   import starling.core.Starling;
@@ -61,8 +59,7 @@ package com.gerantech.towercraft.controls.screens
       SFSConnection.instance.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfsConnection_extensionResponseHandler);
 
       appModel.battleFieldView = new BattleFieldView();
-      appModel.battleFieldView.addEventListener(Event.COMPLETE,	battleFieldView_completeHandler);
-      appModel.battleFieldView.initialize();
+      appModel.battleFieldView.addEventListener(Event.OPEN,	battleFieldView_openHandler);
       addChild(appModel.battleFieldView);
 
       backgroundSkin = new Image(appModel.theme.quadSkin);
@@ -70,9 +67,9 @@ package com.gerantech.towercraft.controls.screens
       Image(backgroundSkin).color = 0xCCB3A3;
     }
 
-    protected function battleFieldView_completeHandler(e:Event):void
+    protected function battleFieldView_openHandler(e:Event):void
     {
-      appModel.battleFieldView.removeEventListener(Event.COMPLETE, battleFieldView_completeHandler);
+      appModel.battleFieldView.removeEventListener(Event.OPEN, battleFieldView_openHandler);
       layout = new AnchorLayout();
 
       var params:SFSObject = new SFSObject();
@@ -85,9 +82,9 @@ package com.gerantech.towercraft.controls.screens
 
       SFSConnection.instance.addEventListener(SFSEvent.CONNECTION_LOST,	sfsConnection_connectionLostHandler);
       if( FRIENDLY_MODE == 0 )
-        SFSConnection.instance.sendExtensionRequest(SFSCommands.BATTLE_START, params);
+        SFSConnection.instance.sendExtensionRequest(SFSCommands.BATTLE_JOIN, params);
 
-      startBattle();
+      joinBattle();
     }
 
     protected function sfsConnection_connectionLostHandler(event:SFSEvent):void
@@ -104,7 +101,7 @@ package com.gerantech.towercraft.controls.screens
       var data:SFSObject = event.params.params as SFSObject;
       
       // Handle battle start command
-      if( event.params.cmd == SFSCommands.BATTLE_START )
+      if( event.params.cmd == SFSCommands.BATTLE_JOIN )
       {
         if( data.containsKey("umt") || data.containsKey("response") )
         {
@@ -116,7 +113,7 @@ package com.gerantech.towercraft.controls.screens
         this.battleData = new BattleData(data);
         // Starts battle if it's map is not null
         if( appModel.battleFieldView.mapBuilder != null )
-          startBattle();
+          joinBattle();
         return;
       }
 
@@ -126,6 +123,12 @@ package com.gerantech.towercraft.controls.screens
 
       switch(event.params.cmd)
       {
+      case SFSCommands.BATTLE_START:
+        battleData.start(data.getFloat("startAt"), data.getFloat("now"));
+        appModel.battleFieldView.addEventListener(Event.COMPLETE, battleFieldView_completeHandler);
+        appModel.battleFieldView.start(data.getSFSArray("units"));
+        break;
+
       case SFSCommands.BATTLE_UNIT_CHANGE:
         appModel.battleFieldView.updateUnits(data);
         break;
@@ -183,7 +186,7 @@ package com.gerantech.towercraft.controls.screens
     }
 
     // -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_- Start Battle _-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-
-    private function startBattle():void
+    private function joinBattle():void
     {
       if( this.battleData == null )
         return;
@@ -196,18 +199,24 @@ package com.gerantech.towercraft.controls.screens
         function waitingOverlay_readyHandler():void
         {
           WAITING.removeEventListener(Event.READY, waitingOverlay_readyHandler);
-          startBattle();
+          joinBattle();
         }
         return;
       }
 
-      appModel.battleFieldView.addEventListener(Event.TRIGGERED, battleFieldView_triggeredHandler);
-      appModel.battleFieldView.createPlaces(this.battleData);
+      appModel.battleFieldView.addEventListener(Event.READY, battleFieldView_readyHandler);
+      appModel.battleFieldView.load(this.battleData);
     }
 
-    private function battleFieldView_triggeredHandler(event:Event):void
+    protected function battleFieldView_readyHandler(event:Event):void
     {
-      appModel.battleFieldView.removeEventListener(Event.TRIGGERED, battleFieldView_triggeredHandler);
+      appModel.battleFieldView.removeEventListener(Event.READY, battleFieldView_readyHandler);
+      appModel.battleFieldView.responseSender.start();
+    }
+
+    protected function battleFieldView_completeHandler(event:Event):void
+    {
+      appModel.battleFieldView.removeEventListener(Event.COMPLETE, battleFieldView_completeHandler);
       WAITING.disappear();
       WAITING.addEventListener(Event.CLOSE, waitingOverlay_closeHandler);
       function waitingOverlay_closeHandler(e:Event):void
