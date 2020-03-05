@@ -150,7 +150,7 @@ protected function syncToolPost_completeHandler(event:Event):void
 	addChild(shadowsContainer);
 	addChild(unitsContainer);
 
-	summonUnits(battleData.sfsData.getSFSArray("units"), battleData.sfsData.getDouble("now"));
+	summonUnits(battleData.battleField.now, units);
 	scale = 0.85;
 
 	/*for ( i = 0; i < battleData.battleField.tileMap.width; i ++ )
@@ -175,7 +175,7 @@ private function unitSortMethod(left:IElement, right:IElement) : Number
 	return left.unit.y - right.unit.y;
 }
 
-public function summonUnits(units:ISFSArray, time:Number):void
+public function summonUnits(time:Number, units:ISFSArray):void
 {
 	for( var i:int = 0; i < units.size(); i++ )
 	{

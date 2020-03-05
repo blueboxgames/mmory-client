@@ -144,7 +144,7 @@ package com.gerantech.towercraft.controls.screens
           this.battleField.forceUpdate(data.getDouble("now") - this.battleField.now);
           break;
         }
-        appModel.battleFieldView.summonUnits(data.getSFSArray("units"), data.getDouble("time"));
+        appModel.battleFieldView.summonUnits(data.getDouble("time"), data.getSFSArray("units"));
         break;
 
       case SFSCommands.BATTLE_NEW_ROUND:
