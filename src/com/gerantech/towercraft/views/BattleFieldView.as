@@ -73,19 +73,11 @@ public function BattleFieldView()
 		if( SyncUtil.ALL[key]["mode"] == "prev" )
 			preAssets[key] = SyncUtil.ALL[key];
 
-	var mode:int = ScriptEngine.get(ScriptEngine.T41_CHALLENGE_MODE, AppModel.instance.game.player.prefs.get(PrefsTypes.CHALLENGE_INDEX), AppModel.instance.game.player.id);
 	var deckKeys:Vector.<int> = AppModel.instance.game.player.decks.get(0).keys();
 	var deck:Vector.<String> = new Vector.<String>;
 	for(var k:int = 0; k < deckKeys.length; k++ )
 		deck.push(AppModel.instance.game.player.decks.get(0).get(deckKeys[k]).toString());
-	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, mode, false) + "");
-	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, mode, true) + "");
 	fillDeck(deck, preAssets);
-
-	key = "map-" + mode;
-	preAssets[key +".json"] = SyncUtil.ALL[key + ".json"];
-	preAssets[key + ".atf"] = SyncUtil.ALL[key + ".atf"];
-	preAssets[key + ".xml"] = SyncUtil.ALL[key + ".xml"];
 
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPre_completeHandler);
@@ -100,16 +92,22 @@ protected function syncToolPre_completeHandler(event:Event):void
 
 public function load(battleData:BattleData) : void
 {
-	this.battleData = battleData	;
+	this.battleData = battleData;
 	responseSender = new ResponseSender(battleData);
 	if( mapBuilder == null )
 		return;
-	var deckKeys:Vector.<int> = battleData.getAxiseDeck().keys();
 	var deck:Vector.<String> = new Vector.<String>;
-	for(var k:int = 0; k < deckKeys.length; k++ )
-		deck.push(battleData.getAxiseDeck().get(deckKeys[k]).type.toString());
+	for(var k:int = 0; k < battleData.axisGame.loginData.deck.length; k++ )
+		deck.push(battleData.axisGame.loginData.deck[k].toString());
 	var postAssets:Object = new Object();
+	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), false) + "");
+	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), true) + "");
 	fillDeck(deck, postAssets);
+
+	var key:String = "map-" + battleData.sfsData.getInt("mode");
+	postAssets[key +".json"] = SyncUtil.ALL[key + ".json"];
+	postAssets[key + ".atf"] = SyncUtil.ALL[key + ".atf"];
+	postAssets[key + ".xml"] = SyncUtil.ALL[key + ".xml"];
 
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPost_completeHandler);

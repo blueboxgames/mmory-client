@@ -30,19 +30,20 @@ public var outcomes:Vector.<RewardData>;
 public var stars:Vector.<int>;
 public var sfsData:ISFSObject;
 public var userType:int;
+public var alliseGame:Game;
+public var axisGame:Game;
 
 public function BattleData(sfsData:ISFSObject)
 {
 	this.sfsData = sfsData;
-	var side:int = sfsData.getInt("side");
 	this.roomId = sfsData.getInt("id");
 	this.userType = sfsData.getInt("userType");
 	this.singleMode = sfsData.getBool("singleMode");
-	this.allise = sfsData.getSFSObject("p" + side);
-	this.axis = sfsData.getSFSObject(side == 0 ? "p1" : "p0");
-	
-	var alliseGame:Game =	instantiateGame(allise);
-	var axisGame:Game =		instantiateGame(axis);
+	this.allise = sfsData.getSFSObject("p" + sfsData.getInt("side"));
+	this.axis = sfsData.getSFSObject(sfsData.getInt("side") == 0 ? "p1" : "p0");
+	this.alliseGame =	instantiateGame(allise);
+	this.axisGame =		instantiateGame(axis);
+
 	function instantiateGame(gameSFS:ISFSObject) : Game
 	{
 		var game:Game = new Game();
@@ -62,7 +63,6 @@ public function BattleData(sfsData:ISFSObject)
 		
 		var cards:Array = gameSFS.getText("deck").split(",");
 		game.loginData.deck = new Array();
-		var deck:Array = new Array();
 		i = 0;
 		while ( i < cards.length )
 		{
@@ -71,15 +71,23 @@ public function BattleData(sfsData:ISFSObject)
 		}
 		return game;
 	}
+}
 
+public function start(startAt:int, now:Number):void
+{
 	// reduce battle cost
 	var game:Game = AppModel.instance.game;
-	var cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, sfsData.getInt("index")));
-	var exItem:ExchangeItem = Challenge.getExchangeItem(sfsData.getInt("mode"), cost, game.player.get_arena(0));
-	var response:int = game.exchanger.exchange(exItem, sfsData.getInt("startAt"), 0);
-	if( response != MessageTypes.RESPONSE_SUCCEED )
-		trace("battle cost data from server server is invalid!");
-	
+	if( sfsData.getInt("friendlyMode") == 0 )
+	{
+		var cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, sfsData.getInt("index")));
+		var exItem:ExchangeItem = Challenge.getExchangeItem(sfsData.getInt("mode"), cost, game.player.get_arena(0));
+		var response:int = game.exchanger.exchange(exItem, sfsData.getInt("startAt"), 0);
+		if( response != MessageTypes.RESPONSE_SUCCEED )
+			trace("battle cost data from server server is invalid!");
+	}
+
+	var a = AppModel.instance.assets;
+	var side:int = sfsData.getInt("side");
 	var map:Object = AppModel.instance.assets.getObject("map-" + sfsData.getInt("mode"));
 	var f:FieldData = new FieldData(sfsData.getInt("mode"), JSON.stringify(map), AppModel.instance.descriptor.versionCode);
 	this.battleField = new BattleField();
@@ -88,10 +96,6 @@ public function BattleData(sfsData:ISFSObject)
 	this.battleField.decks = new IntIntCardMap();
 	this.battleField.decks.set(0, BattleField.getDeckCards(this.battleField.games[0], this.battleField.games[0].loginData.deck, this.battleField.friendlyMode));
 	this.battleField.decks.set(1, BattleField.getDeckCards(this.battleField.games[1], this.battleField.games[1].loginData.deck, this.battleField.friendlyMode));
-}
-
-public function start(startAt:int, now:Number):void
-{
 	this.battleField.start(startAt, now);
 	TimeManager.instance.setMillis(now);
 	TimeManager.instance.setNow(Math.ceil(now / 1000));
