@@ -6,7 +6,6 @@ import com.gerantech.mmory.core.battle.bullets.Bullet;
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
-import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.mmory.core.utils.GraphicMetrics;
 import com.gerantech.mmory.core.utils.Point2;
@@ -37,7 +36,6 @@ import starling.display.Sprite;
 import starling.events.EnterFrameEvent;
 import starling.events.Event;
 import starling.textures.Texture;
-import com.smartfoxserver.v2.entities.data.SFSArray;
 public class BattleFieldView extends Sprite
 {
 private const DEBUG:Boolean = false;
@@ -241,46 +239,58 @@ public function requestKillPioneers(side:int):void
 	setTimeout(carPassing, time, color == 0 ? -400 : 1300, color == 0 ? 1300 : -400, color == 1 ? -480 : 420, color);
 }
 
-public function updateUnits(unitData:SFSObject) : void
+public function updateUnits(data:SFSObject) : void
 {
-	var serverUnitIds:Array = unitData.getIntArray("keys");
-	kill(battleData.battleField.units);
-	if( !unitData.containsKey("data") )
-		return;
-	var serverUnitTests:Array = unitData.getUtfStringArray("data");
-	for( var i:int = 0; i < serverUnitTests.length; i++ )
+	kill(battleData.battleField.units, data.getIntArray("k"), false);
+	if( data.containsKey("d") )
 	{
-		var vars:Array = serverUnitTests[i].split(",");// unit.id + "," + unit.x + "," + unit.y + "," + unit.health + "," + unit.card.type + "," + unit.side + "," + unit.card.level
-		var u:UnitView = battleData.battleField.getUnit(vars[0]) as UnitView;
-		u.setPosition(vars[1], vars[2], GameObject.NaN);
-		u.setHealth(vars[3]);
+		var vars:Array;
+		var u:UnitView;
+		var unitsData:Array = data.getUtfStringArray("d");
+		for( var i:int = 0; i < unitsData.length; i++ )
+		{
+			vars = unitsData[i].split(",");// unit.id + "," + unit.x + "," + unit.y + "," + unit.health + "," + unit.card.type + "," + unit.side + "," + unit.card.level
+			u = battleData.battleField.getUnit(vars[0]) as UnitView;
+			u.setPosition(vars[1], vars[2], GameObject.NaN);
+			u.setHealth(vars[3]);
+		}
+		return;
 	}
-
-	if( !battleData.battleField.debugMode )
+	
+	if( !data.containsKey("g") )
 		return;
-	kill(units);
-	for( i = 0; i < serverUnitTests.length; i++ )
+	unitsData = data.getUtfStringArray("g");
+	var serverUnitIds:Array = new Array();
+	for( i = 0; i < unitsData.length; i++ )
 	{
-		vars = serverUnitTests[i].split(",");// unit.id + "," + unit.x + "," + unit.y + "," + unit.health + "," + unit.card.type + "," + unit.side + "," + unit.card.level
+		vars = unitsData[i].split(",");// unit.id + "," + unit.x + "," + unit.y + "," + unit.health + "," + unit.card.type + "," + unit.side + "," + unit.card.level
+		serverUnitIds.push(int(vars[0]));
 		u = getUnit(vars[0]);
 		if( u == null )
 		{
 			u = new UnitView(getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0, 0, true);
-			u.alpha = 0.3;
+			u.alpha = 0.2;
 			units.push(u);
 			continue;
 		}
 		u.setPosition(vars[1], vars[2], GameObject.NaN);
 		u.setHealth(vars[3]);
 	}
+	kill(units, serverUnitIds, true);
 
-	function kill(units:Array):void
+	function kill(units:Array, keys:Array, exists:Boolean):void
 	{
-		for(var i:int = 0; i < units.length; i++)
-		if( serverUnitIds.indexOf(units[i].id) == -1 )
+		if( keys == null || keys.length == 0 )
+			return;
+		for(var i:int = units.length - 1; i >= 0; i-- )
 		{
-			units[i].dispose();
-			units.removeAt(i);
+			var ki:int = keys.indexOf(units[i].id);
+			if( (exists && ki == -1) || (!exists && ki > -1) )
+			{
+				trace("kill", units[i].id, units[i].card.type);
+				units[i].dispose();
+				units.removeAt(i);
+			}
 		}
 	}
 }

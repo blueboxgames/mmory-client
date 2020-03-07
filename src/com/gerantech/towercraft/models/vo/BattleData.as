@@ -86,7 +86,6 @@ public function start(startAt:int, now:Number):void
 			trace("battle cost data from server server is invalid!");
 	}
 
-	var a = AppModel.instance.assets;
 	var side:int = sfsData.getInt("side");
 	var map:Object = AppModel.instance.assets.getObject("map-" + sfsData.getInt("mode"));
 	var f:FieldData = new FieldData(sfsData.getInt("mode"), JSON.stringify(map), AppModel.instance.descriptor.versionCode);
