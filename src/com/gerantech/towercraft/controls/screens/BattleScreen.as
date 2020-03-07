@@ -111,22 +111,29 @@ package com.gerantech.towercraft.controls.screens
 
         // Setup room battle data
         this.battleData = new BattleData(data);
-        // Starts battle if it's map is not null
-        if( appModel.battleFieldView.mapBuilder != null )
-          joinBattle();
+        this.joinBattle();
         return;
       }
 
-      // Don't run any command if battleData is not set.
-      if( appModel.battleFieldView.battleData == null )
+      // Don't run any commands if battleData is not set.
+      if( battleData == null )
+        return;
+
+      if( event.params.cmd == SFSCommands.BATTLE_START )
+      {
+        battleData.start(data.getFloat("startAt"), data.getFloat("now"));
+        appModel.battleFieldView.addEventListener(Event.COMPLETE, battleFieldView_completeHandler);
+        appModel.battleFieldView.start(data.getSFSArray("units"));
+        return;
+      }
+
+      // Don't run any commands if battle not started.
+      if( battleData.battleField == null || battleData.battleField.state < BattleField.STATE_2_STARTED )
         return;
 
       switch(event.params.cmd)
       {
       case SFSCommands.BATTLE_START:
-        battleData.start(data.getFloat("startAt"), data.getFloat("now"));
-        appModel.battleFieldView.addEventListener(Event.COMPLETE, battleFieldView_completeHandler);
-        appModel.battleFieldView.start(data.getSFSArray("units"));
         break;
 
       case SFSCommands.BATTLE_UNIT_CHANGE:
@@ -189,6 +196,9 @@ package com.gerantech.towercraft.controls.screens
     private function joinBattle():void
     {
       if( this.battleData == null )
+        return;
+      // Starts battle if it's map is not null
+      if( appModel.battleFieldView.mapBuilder == null )
         return;
 
       IN_BATTLE = true;
