@@ -161,6 +161,11 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 	sfsConnection.addEventListener(SFSEvent.CONNECTION_LOST, sfsConnection_connectionLostHandler);
 	serverData = event.params.data;
 	
+	if( serverData.containsKey("loginError") ) // login failed
+	{
+		dispatchEvent(new LoadingEvent(LoadingEvent.LOGIN_ERROR, serverData.getInt("loginError")));
+		return;
+	}	
 	if( serverData.containsKey("umt") ) // under maintenance mode
 	{
 		dispatchEvent(new LoadingEvent(LoadingEvent.UNDER_MAINTENANCE, serverData));
