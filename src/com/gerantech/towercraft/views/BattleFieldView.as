@@ -11,6 +11,7 @@ import com.gerantech.mmory.core.utils.GraphicMetrics;
 import com.gerantech.mmory.core.utils.Point2;
 import com.gerantech.mmory.core.utils.Point3;
 import com.gerantech.towercraft.controls.headers.BattleFooter;
+import com.gerantech.towercraft.controls.screens.BattleScreen;
 import com.gerantech.towercraft.managers.DropTargets;
 import com.gerantech.towercraft.managers.SoundManager;
 import com.gerantech.towercraft.managers.TimeManager;
@@ -51,7 +52,7 @@ public var effectsContainer:DisplayObjectContainer;
 public var center:Point2;
 private var units:Array;
 
-public function BattleFieldView()
+public function init():void
 {
 	units = new Array();
 	touchGroup = true;
@@ -62,21 +63,19 @@ public function BattleFieldView()
 	effectsContainer = new Sprite();
 	guiImagesContainer = new Sprite();
 	guiTextsContainer = new Sprite();
+	mapBuilder = new MapBuilder();
 	
 	if( AppModel.instance.artRules == null )
 		AppModel.instance.artRules = new ArtRules(AppModel.instance.assets.getObject("arts-rules"));
+	
+	if( BattleScreen.FRIENDLY_MODE > 0 )
+	{
+		dispatchEventWith(Event.OPEN);
+		return;
+	}
 
 	var preAssets:Object = new Object();
-	for ( var key:String in SyncUtil.ALL )
-		if( SyncUtil.ALL[key]["mode"] == "prev" )
-			preAssets[key] = SyncUtil.ALL[key];
-
-	var deckKeys:Vector.<int> = AppModel.instance.game.player.decks.get(0).keys();
-	var deck:Vector.<String> = new Vector.<String>;
-	for(var k:int = 0; k < deckKeys.length; k++ )
-		deck.push(AppModel.instance.game.player.decks.get(0).get(deckKeys[k]).toString());
-	fillDeck(deck, preAssets);
-
+	addPreAssets(preAssets);
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPre_completeHandler);
 	syncTool.sync(preAssets);
@@ -84,7 +83,6 @@ public function BattleFieldView()
 
 protected function syncToolPre_completeHandler(event:Event):void 
 {
-	mapBuilder = new MapBuilder();
 	dispatchEventWith(Event.OPEN);
 }
 
@@ -98,6 +96,8 @@ public function load(battleData:BattleData) : void
 	for(var k:int = 0; k < battleData.axisGame.loginData.deck.length; k++ )
 		deck.push(battleData.axisGame.loginData.deck[k].toString());
 	var postAssets:Object = new Object();
+	if( BattleScreen.FRIENDLY_MODE > 0 )
+		addPreAssets(postAssets);
 	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), false) + "");
 	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), true) + "");
 	fillDeck(deck, postAssets);
@@ -112,6 +112,18 @@ public function load(battleData:BattleData) : void
 	syncTool.sync(postAssets);
 }
 
+private function addPreAssets(assets:Object):void
+{
+	for ( var key:String in SyncUtil.ALL )
+		if( SyncUtil.ALL[key]["mode"] == "prev" )
+			assets[key] = SyncUtil.ALL[key];
+
+	var deckKeys:Vector.<int> = AppModel.instance.game.player.decks.get(0).keys();
+	var deck:Vector.<String> = new Vector.<String>;
+	for(var k:int = 0; k < deckKeys.length; k++ )
+		deck.push(AppModel.instance.game.player.decks.get(0).get(deckKeys[k]).toString());
+	fillDeck(deck, assets);
+}
 private function fillDeck(deck:Vector.<String>, assets:Object):void
 {
 	var type:String;

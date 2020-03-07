@@ -60,6 +60,7 @@ package com.gerantech.towercraft.controls.screens
 
       appModel.battleFieldView = new BattleFieldView();
       appModel.battleFieldView.addEventListener(Event.OPEN,	battleFieldView_openHandler);
+      appModel.battleFieldView.init();
       addChild(appModel.battleFieldView);
 
       backgroundSkin = new Image(appModel.theme.quadSkin);
@@ -83,8 +84,6 @@ package com.gerantech.towercraft.controls.screens
       SFSConnection.instance.addEventListener(SFSEvent.CONNECTION_LOST,	sfsConnection_connectionLostHandler);
       if( FRIENDLY_MODE == 0 )
         SFSConnection.instance.sendExtensionRequest(SFSCommands.BATTLE_JOIN, params);
-
-      joinBattle();
     }
 
     protected function sfsConnection_connectionLostHandler(event:SFSEvent):void
