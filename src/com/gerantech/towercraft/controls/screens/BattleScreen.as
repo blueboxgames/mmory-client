@@ -112,6 +112,7 @@ package com.gerantech.towercraft.controls.screens
         // Setup room battle data
         this.battleData = new BattleData(data);
         this.joinBattle();
+        WAITING.cancelable = false;
         return;
       }
 
