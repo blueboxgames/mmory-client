@@ -27,7 +27,7 @@ public function FriendlyBattleModePopup() { super(); }
 override protected function initialize():void
 {
 	// create transition in data
-	var _h:int = 700;
+	var _h:int = 1000;
 	var _p:int = 180;
 	transitionIn = new TransitionData();
 	transitionOut = new TransitionData();
@@ -59,7 +59,7 @@ override protected function initialize():void
 	list.layout = listLayout;
 	list.verticalScrollPolicy	= ScrollPolicy.OFF;
 	list.scrollBarDisplayMode	= ScrollBarDisplayMode.NONE;
-	list.dataProvider			= new ListCollection([0,1]);
+	list.dataProvider			= new ListCollection([0,1,2]);
 	list.layoutData				= new AnchorLayoutData(0, 0, 0, 0);
 	list.itemRendererFactory	= function () : IListItemRenderer { return new ChallengeIndexItemRenderer(); };
 	list.addEventListener(Event.TRIGGERED, list_triggeredHandler);

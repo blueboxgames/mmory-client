@@ -56,7 +56,7 @@ override protected function showElements():void
 	battleButton.iconTexture = appModel.assets.getTexture("socials/icon-battle");
 	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, padding, padding);
 	battleButton.addEventListener(Event.TRIGGERED, battleButton_triggeredHandler);
-	// addChild(battleButton);
+	addChild(battleButton);
 	
 	chatLayout.paddingTop = LobbyHeader.HEIGHT;
 	chatList.addEventListener(Event.ROOT_CREATED, chatList_triggeredHandler);
@@ -108,8 +108,7 @@ protected function battleModePopup_selectHandler(event:Event):void
 	var params:SFSObject = new SFSObject();
 	params.putInt("m", MessageTypes.M30_FRIENDLY_BATTLE);
 	params.putInt("st", 0);
-	if( event.data == 1 )
-		params.putBool("bt", true);
+	params.putInt("md", event.data as int);
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby);
 }
 

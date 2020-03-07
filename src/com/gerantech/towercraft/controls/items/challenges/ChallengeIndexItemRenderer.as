@@ -68,7 +68,7 @@ override protected function commitData() : void
 
 	challenge = player.challenges.get(_data as int);
 	state = challenge.getState(timeManager.now);
-	locked = Challenge.getUnlockAt(game, challenge.index) > player.getResource(ResourceType.R7_MAX_POINT);
+	locked = Challenge.getUnlockAt(game, challenge.index) > player.getResource(ResourceType.R7_MAX_POINT) && !IS_FRIENDLY;
 	
 	backgroundFactory();
 	iconFactory();
