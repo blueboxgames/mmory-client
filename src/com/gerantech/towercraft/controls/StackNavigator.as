@@ -17,6 +17,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.overlays.RatingMessageOverlay;
 	import com.gerantech.towercraft.controls.overlays.TutorialMessageOverlay;
 	import com.gerantech.towercraft.controls.popups.AbstractPopup;
+	import com.gerantech.towercraft.controls.popups.FriendlyBattleModePopup;
 	import com.gerantech.towercraft.controls.popups.InvitationResultPopup;
 	import com.gerantech.towercraft.controls.popups.LobbyDetailsPopup;
 	import com.gerantech.towercraft.controls.popups.MessagePopup;
@@ -394,8 +395,19 @@ package com.gerantech.towercraft.controls
 		// -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-  BUDDY BATTLE  -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 		public function invokeBuddyBattle(buddy:FriendData):void
 		{
+			var battleModePopup:FriendlyBattleModePopup = new FriendlyBattleModePopup();
+			battleModePopup.data = buddy.id;
+			battleModePopup.addEventListener(Event.SELECT, battleModePopup_selectHandler);
+			addPopup(battleModePopup);
+		}
+		
+		protected function battleModePopup_selectHandler(event:Event):void 
+		{
+			var battleModePopup:FriendlyBattleModePopup = event.currentTarget as FriendlyBattleModePopup;
+			battleModePopup.removeEventListener(Event.SELECT, battleModePopup_selectHandler);
 			var params:ISFSObject = new SFSObject();
-			params.putInt("o", buddy.id);
+			params.putInt("o", battleModePopup.data as int);
+			params.putInt("m", event.data as int);
 			sendBattleRequest(params, 0);
 		}
 		
@@ -404,7 +416,7 @@ package com.gerantech.towercraft.controls
 			params.putInt("bs", state);
 			SFSConnection.instance.sendExtensionRequest(SFSCommands.BUDDY_BATTLE, params);
 		}
-		
+
 		protected function sfs_buddyBattleHandler(event:SFSEvent):void
 		{
 			if (event.params.cmd != SFSCommands.BUDDY_BATTLE)
