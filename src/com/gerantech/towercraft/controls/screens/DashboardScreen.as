@@ -104,9 +104,9 @@ protected function loadingManager_loadedHandler(event:LoadingEvent):void
 	}
 
 	// return to last open game
-	if( appModel.loadingManager.serverData.getBool("inBattle") )
+	if( appModel.loadingManager.serverData.getInt("joinedBattle") > 1 )
 	{
-		appModel.navigator.runBattle(0, false);
+		appModel.navigator.runBattle(appModel.loadingManager.serverData.getInt("joinedBattle"), false);
 		return;
 	}
 

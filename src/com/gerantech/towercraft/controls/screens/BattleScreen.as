@@ -43,11 +43,11 @@ package com.gerantech.towercraft.controls.screens
 
   public class BattleScreen extends BaseCustomScreen
   {
-    static public var IN_BATTLE:Boolean;
-    static public var DEBUG_MODE:Boolean;
     static public var INDEX:int;
     static public var FRIENDLY_MODE:int;
     static public var SPECTATED_USER:int;
+    static public var IN_BATTLE:Boolean;
+    static public var DEBUG_MODE:Boolean;
     static public var WAITING:BattleWaitingOverlay;
 
     public var hud:BattleHUD;
@@ -102,7 +102,7 @@ package com.gerantech.towercraft.controls.screens
       // Handle battle start command
       if( event.params.cmd == SFSCommands.BATTLE_JOIN )
       {
-        if( data.containsKey("umt") || data.containsKey("response") )
+        if( data.containsKey("response") )
         {
           showErrorPopup(data);
           return;
@@ -245,7 +245,7 @@ package com.gerantech.towercraft.controls.screens
       addChild(hud);
 
       resetAll(battleData.sfsData);
-      appModel.loadingManager.serverData.putBool("inBattle", false);
+      appModel.loadingManager.serverData.removeElement("joinedBattle");
 
       // play battle theme -_-_-_
       appModel.sounds.stopAll();
@@ -370,7 +370,8 @@ package com.gerantech.towercraft.controls.screens
           break;
       }
       var wins_before_battle:int = player.get_battleswins();
-      player.addResources(outcomes);
+      if( battleField.friendlyMode == 0 )
+        player.addResources(outcomes);
       if( player.get_battleswins() > wins_before_battle )
         if( Metrix.instance.isSupported && (player.get_battleswins() == 10 || player.get_battleswins() == 20) )
           Metrix.instance.sendEvent(Metrix.instance.newEvent(player.get_battleswins() == 10 ? "ifrcs" : "cxftv"));
