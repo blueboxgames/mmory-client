@@ -245,7 +245,7 @@ private function spectate(friend:FriendData):void
 {
 	if( friend.status < 2 )
 		return;
-	appModel.navigator.runBattle(0, false, friend.id + "", 2);
+	appModel.navigator.runBattle(friend.status, false, friend.id);
 }
 
 private function removeFriend(friendId:int):void

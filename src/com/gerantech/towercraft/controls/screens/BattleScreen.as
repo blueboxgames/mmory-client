@@ -47,7 +47,7 @@ package com.gerantech.towercraft.controls.screens
     static public var DEBUG_MODE:Boolean;
     static public var INDEX:int;
     static public var FRIENDLY_MODE:int;
-    static public var SPECTATED_USER:String;
+    static public var SPECTATED_USER:int;
     static public var WAITING:BattleWaitingOverlay;
 
     public var hud:BattleHUD;
@@ -76,8 +76,8 @@ package com.gerantech.towercraft.controls.screens
       var params:SFSObject = new SFSObject();
       params.putInt("index", INDEX);
       params.putInt("friendlyMode", FRIENDLY_MODE);
-      if( SPECTATED_USER != null && SPECTATED_USER != "" )
-        params.putText("spectatedUser", SPECTATED_USER);
+      if( SPECTATED_USER > -1 )
+        params.putInt("spectatedUser", SPECTATED_USER);
       if( DEBUG_MODE )
         params.putBool("debugMode", true);
 

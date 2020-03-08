@@ -114,18 +114,18 @@ package com.gerantech.towercraft.controls
 			}
 		}
 		
-		public function runBattle(index:int, cancelable:Boolean = true, spectatedUser:String = null, friendlyMode:int = 0, debugMode:Boolean = false) : void
+		public function runBattle(index:int, cancelable:Boolean = true, spectatedUser:int = -1, friendlyMode:int = 0, debugMode:Boolean = false) : void
 		{
 			// var _type:int = ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, index)
 			var _cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, index));
-			if( spectatedUser == null && friendlyMode == 0 && !AppModel.instance.game.player.has(_cost) )
+			if( spectatedUser == -1 && friendlyMode == 0 && !AppModel.instance.game.player.has(_cost) )
 			{
 				gotoShop(ResourceType.R6_TICKET);
 				addLog(loc("log_not_enough", [loc("resource_title_" + ResourceType.R6_TICKET)]));
 				return;
 			}
 			var arena:int =  AppModel.instance.game.player.get_arena(0);
-			BattleScreen.WAITING = new BattleWaitingOverlay(cancelable && arena > 0, spectatedUser != null, arena > 0);
+			BattleScreen.WAITING = new BattleWaitingOverlay(cancelable && arena > 0, spectatedUser > -1, arena > 0);
 			BattleScreen.SPECTATED_USER = spectatedUser;
 			BattleScreen.FRIENDLY_MODE = friendlyMode;
 			BattleScreen.INDEX = index;
