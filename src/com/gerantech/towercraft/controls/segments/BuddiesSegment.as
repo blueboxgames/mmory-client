@@ -178,8 +178,13 @@ protected function list_focusInHandler(event:Event):void
 	
 	if( friend.id == player.id )
 		buttonsPopup = new SimpleListPopup("buddy_profile");
+	else if( friend.status == 1 )
+		buttonsPopup = new SimpleListPopup("buddy_battle", "buddy_road", "buddy_profile", "buddy_remove");
+	else if( friend.status >= 2 )
+		buttonsPopup = new SimpleListPopup("buddy_spectate", "buddy_road", "buddy_profile", "buddy_remove");
 	else
-		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove");//, friend.status==2?"buddy_spectate":"buddy_battle");
+		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove");
+
 	buttonsPopup.data = friend;
 	buttonsPopup.addEventListener(Event.SELECT, buttonsPopup_selectHandler);
 	buttonsPopup.addEventListener(Event.CLOSE, buttonsPopup_selectHandler);
