@@ -407,7 +407,7 @@ package com.gerantech.towercraft.controls
 			battleModePopup.removeEventListener(Event.SELECT, battleModePopup_selectHandler);
 			var params:ISFSObject = new SFSObject();
 			params.putInt("o", battleModePopup.data as int);
-			params.putInt("m", event.data as int);
+			params.putInt("m", ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, event.data as int, AppModel.instance.game.player.id));
 			sendBattleRequest(params, 0);
 		}
 		

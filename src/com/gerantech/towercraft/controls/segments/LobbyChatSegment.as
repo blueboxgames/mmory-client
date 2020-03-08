@@ -18,6 +18,7 @@ import feathers.layout.AnchorLayoutData;
 import flash.utils.setTimeout;
 
 import starling.events.Event;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 public class LobbyChatSegment extends LobbyBaseChatSegment
 {
@@ -108,14 +109,14 @@ protected function battleModePopup_selectHandler(event:Event):void
 	var params:SFSObject = new SFSObject();
 	params.putInt("m", MessageTypes.M30_FRIENDLY_BATTLE);
 	params.putInt("st", 0);
-	params.putInt("md", event.data as int);
+	params.putInt("md", ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, event.data as int, player.id));
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby);
 }
 
 protected function manager_triggerHandler(event:Event):void
 {
 	buttonsEnabled = true;
-	appModel.navigator.runBattle(SFSObject(event.data).getInt("m"), false, null, 1);
+	appModel.navigator.runBattle(SFSObject(event.data).getInt("bid"), false, 0, 1);
 }
 
 override public function enabledChatting(value:Boolean):void
