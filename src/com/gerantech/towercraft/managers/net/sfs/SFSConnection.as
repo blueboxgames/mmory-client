@@ -1,9 +1,11 @@
 package com.gerantech.towercraft.managers.net.sfs
 {
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.mmory.core.utils.lists.IntList;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
 import com.gerantech.towercraft.controls.overlays.LowConnectionOverlay;
 import com.gerantech.towercraft.models.AppModel;
+import com.gerantech.towercraft.utils.GTStreamer;
 import com.gerantech.towercraft.utils.LoadAndSaver;
 import com.smartfoxserver.v2.SmartFox;
 import com.smartfoxserver.v2.core.SFSEvent;
@@ -24,7 +26,7 @@ import flash.utils.clearTimeout;
 import flash.utils.setTimeout;
 
 import haxe.ds.StringMap;
-import com.gerantech.towercraft.utils.GTStreamer;
+import flash.utils.Dictionary;
 
 [Event(name="succeed",			type="com.gerantech.towercraft.managers.net.sfs.SFSConnection")]
 [Event(name="failure",			type="com.gerantech.towercraft.managers.net.sfs.SFSConnection")]
@@ -46,8 +48,8 @@ private var retryIndex:int = 0;
 
 private var loginParams:ISFSObject;
 private var lowConnectionOverlay:LowConnectionOverlay;
+private var commandsPool:Dictionary;
 
-private var commandsPool:StringMap;
 public function SFSConnection()
 {
 	// Create an instance of the SmartFox class
@@ -65,7 +67,7 @@ public function SFSConnection()
 	
 
 	addEventListener(SFSEvent.EXTENSION_RESPONSE,	sfs_extensionResponseHandler);
-	commandsPool = new StringMap();
+	commandsPool = new Dictionary();
 	SFSErrorCodes.setErrorMessage(101, "{0}");
 	SFSErrorCodes.setErrorMessage(110, "{0}");
 	load(false);
@@ -87,7 +89,7 @@ public function load(force:Boolean) : void
 
 	var pattern:String = '<?xml version="1.0" encoding="UTF-8"?>\r\n<SmartFoxConfig>';
 	var url:String = "http://blueboxgames.ir/configs/config.php?id=" + NativeApplication.nativeApplication.applicationID + "&server=" + AppModel.instance.descriptor.server + "&version=" + AppModel.instance.descriptor.versionCode + "&r=" + Math.round(Math.random() * 1000);
-	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, false, false, 0, pattern);//trace(url);
+	var cnfLoader:LoadAndSaver = new LoadAndSaver(cnfFile.nativePath, url, null, false, false, 0, pattern);trace(url);
 	cnfLoader.addEventListener(Event.COMPLETE,			cnfLoader_completeHandler);
 	cnfLoader.addEventListener(IOErrorEvent.IO_ERROR,	cnfLoader_ioErrorHandler);
 	cnfLoader.start();
@@ -210,7 +212,6 @@ public function sendExtensionRequest(extCmd:String, params:ISFSObject=null, room
 {
 	if( !isConnected )
 		return;
-	
 	var canceledCommand:String = SFSCommands.getCanceled(extCmd);
 	if( canceledCommand != null )
 		removeFromCommands(canceledCommand);
@@ -218,7 +219,7 @@ public function sendExtensionRequest(extCmd:String, params:ISFSObject=null, room
 	removeFromCommands(extCmd);
 	var deadline:int = SFSCommands.getDeadline(extCmd);
 	if( deadline > -1 )
-		commandsPool.setReserved(extCmd, setTimeout(responseDeadlineCallback, deadline, extCmd));
+		commandsPool[extCmd] = setTimeout(responseDeadlineCallback, deadline, extCmd);
 	send(new ExtensionRequest(extCmd, params, room, useUDP));
 }
 
@@ -230,20 +231,20 @@ protected function sfs_extensionResponseHandler(event:SFSEvent):void
 }
 public function removeFromCommands(command:String):void
 {
-	if( !commandsPool.existsReserved(command) )
+	if( !commandsPool.hasOwnProperty(command) )
 		return;
-	clearTimeout(commandsPool.getReserved(command) as uint);
-	delete(commandsPool.rh[command]);
+	clearTimeout(commandsPool[command] as uint);
+	delete(commandsPool[command]);
 	hideLowConnectionAlert(command);
 }
 
-private function responseDeadlineCallback(extCmd:String):void
+private function responseDeadlineCallback(command:String):void
 {
-	if( !commandsPool.existsReserved(extCmd) )
+	if( !commandsPool.hasOwnProperty(command) )
 		return;
-	removeFromCommands(extCmd);
-	showLowConnectionAlert(extCmd);
-	trace("deadline", extCmd);
+	removeFromCommands(command);
+	showLowConnectionAlert(command);
+	trace("deadline", command);
 }		
 protected function sfs_pingPongHandler(event:SFSEvent):void
 {

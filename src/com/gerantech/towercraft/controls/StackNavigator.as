@@ -5,6 +5,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.extensions.NativeAbilities;
 	import com.gerantech.mmory.core.constants.PrefsTypes;
 	import com.gerantech.mmory.core.constants.ResourceType;
+	import com.gerantech.mmory.core.constants.SFSCommands;
 	import com.gerantech.mmory.core.exchanges.ExchangeItem;
 	import com.gerantech.mmory.core.scripts.ScriptEngine;
 	import com.gerantech.mmory.core.utils.maps.IntIntMap;
@@ -16,6 +17,7 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.overlays.RatingMessageOverlay;
 	import com.gerantech.towercraft.controls.overlays.TutorialMessageOverlay;
 	import com.gerantech.towercraft.controls.popups.AbstractPopup;
+	import com.gerantech.towercraft.controls.popups.FriendlyBattleModePopup;
 	import com.gerantech.towercraft.controls.popups.InvitationResultPopup;
 	import com.gerantech.towercraft.controls.popups.LobbyDetailsPopup;
 	import com.gerantech.towercraft.controls.popups.MessagePopup;
@@ -29,7 +31,6 @@ package com.gerantech.towercraft.controls
 	import com.gerantech.towercraft.controls.toasts.SimpleToast;
 	import com.gerantech.towercraft.events.LoadingEvent;
 	import com.gerantech.towercraft.managers.BillingManager;
-	import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 	import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 	import com.gerantech.towercraft.models.AppModel;
 	import com.gerantech.towercraft.models.tutorials.TutorialTask;
@@ -113,18 +114,18 @@ package com.gerantech.towercraft.controls
 			}
 		}
 		
-		public function runBattle(index:int, cancelable:Boolean = true, spectatedUser:String = null, friendlyMode:int = 0, debugMode:Boolean = false) : void
+		public function runBattle(index:int, cancelable:Boolean = true, spectatedUser:int = -1, friendlyMode:int = 0, debugMode:Boolean = false) : void
 		{
 			// var _type:int = ScriptEngine.getInt(ScriptEngine.T42_CHALLENGE_TYPE, index)
 			var _cost:IntIntMap = new IntIntMap(ScriptEngine.get(ScriptEngine.T52_CHALLENGE_RUN_REQS, index));
-			if( spectatedUser == null && friendlyMode == 0 && !AppModel.instance.game.player.has(_cost) )
+			if( spectatedUser == -1 && friendlyMode == 0 && !AppModel.instance.game.player.has(_cost) )
 			{
 				gotoShop(ResourceType.R6_TICKET);
 				addLog(loc("log_not_enough", [loc("resource_title_" + ResourceType.R6_TICKET)]));
 				return;
 			}
 			var arena:int =  AppModel.instance.game.player.get_arena(0);
-			BattleScreen.WAITING = new BattleWaitingOverlay(cancelable && arena > 0, spectatedUser != null, arena > 0);
+			BattleScreen.WAITING = new BattleWaitingOverlay(cancelable && arena > 0, spectatedUser > -1, arena > 0);
 			BattleScreen.SPECTATED_USER = spectatedUser;
 			BattleScreen.FRIENDLY_MODE = friendlyMode;
 			BattleScreen.INDEX = index;
@@ -394,8 +395,19 @@ package com.gerantech.towercraft.controls
 		// -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-  BUDDY BATTLE  -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 		public function invokeBuddyBattle(buddy:FriendData):void
 		{
+			var battleModePopup:FriendlyBattleModePopup = new FriendlyBattleModePopup();
+			battleModePopup.data = buddy.id;
+			battleModePopup.addEventListener(Event.SELECT, battleModePopup_selectHandler);
+			addPopup(battleModePopup);
+		}
+		
+		protected function battleModePopup_selectHandler(event:Event):void 
+		{
+			var battleModePopup:FriendlyBattleModePopup = event.currentTarget as FriendlyBattleModePopup;
+			battleModePopup.removeEventListener(Event.SELECT, battleModePopup_selectHandler);
 			var params:ISFSObject = new SFSObject();
-			params.putInt("o", buddy.id);
+			params.putInt("o", battleModePopup.data as int);
+			params.putInt("m", ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, event.data as int, AppModel.instance.game.player.id));
 			sendBattleRequest(params, 0);
 		}
 		
@@ -404,7 +416,7 @@ package com.gerantech.towercraft.controls
 			params.putInt("bs", state);
 			SFSConnection.instance.sendExtensionRequest(SFSCommands.BUDDY_BATTLE, params);
 		}
-		
+
 		protected function sfs_buddyBattleHandler(event:SFSEvent):void
 		{
 			if (event.params.cmd != SFSCommands.BUDDY_BATTLE)

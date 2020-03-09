@@ -1,14 +1,14 @@
 package com.gerantech.towercraft.managers.net
 {
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.models.vo.BattleData;
 import com.smartfoxserver.v2.entities.data.ISFSObject;
 import com.smartfoxserver.v2.entities.data.SFSObject;
-import com.gerantech.towercraft.models.vo.BattleData;
 
 public class ResponseSender
 {
-	public var actived:Boolean = true;
+	private var actived:Boolean = true;
 	private var battleData:BattleData ;
 	public function ResponseSender(battleData:BattleData)
 	{
@@ -25,12 +25,18 @@ public class ResponseSender
 		send(SFSCommands.BATTLE_SUMMON, params);
 	}
 
+	public function start():void
+	{
+		send(SFSCommands.BATTLE_START, new SFSObject(), false);			
+	}
+
 	public function leave(retryMode:Boolean=false):void
 	{
 		var params:SFSObject = new SFSObject();
 		if( retryMode )
 			params.putBool("retryMode", true);
 		send(SFSCommands.BATTLE_LEAVE, params, false);			
+		this.actived = false;
 	}
 
 	public function sendSticker(stickerType:int):void

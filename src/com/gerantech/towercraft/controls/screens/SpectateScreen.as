@@ -50,7 +50,7 @@ protected function sfs_responseUpdateHandler(event:SFSEvent):void
 override protected function list_changeHandler(event:Event):void
 {
 	super.list_changeHandler(event);
-	appModel.navigator.runBattle(SFSObject(list.selectedItem).getInt("id"), false, player.nickName, 0);
+	appModel.navigator.runBattle(SFSObject(list.selectedItem).getInt("id"), false, player.id, 0);
 }
 
 protected function sfs_roomVariablesUpdateHandler(event:SFSEvent):void

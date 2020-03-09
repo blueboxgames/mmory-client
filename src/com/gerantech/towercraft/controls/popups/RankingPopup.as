@@ -1,12 +1,12 @@
 package com.gerantech.towercraft.controls.popups
 {
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.controls.FastList;
 import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.headers.TabsHeader;
 import com.gerantech.towercraft.controls.items.RankItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;
