@@ -90,7 +90,7 @@ public function set type(value:int) : void
 	var nums:int = AppModel.instance.game.player.cards.get(_type).quantity;
 	for (var i:int = 0; i < card.quantity; i++)
 	{
-		var unitDisplay:UnitBody = new UnitBody(null, card, 0);
+		var unitDisplay:UnitBody = new UnitBody(null, card, AppModel.instance.battleFieldView.battleData.battleField.side);
 		unitDisplay.pivotX = unitDisplay.width * 0.5;
 		unitDisplay.pivotY = unitDisplay.height * UnitView._PIVOT_Y;
 		unitDisplay.width = UnitView._WIDTH;

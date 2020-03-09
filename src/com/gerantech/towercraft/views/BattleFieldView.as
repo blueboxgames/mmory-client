@@ -184,7 +184,7 @@ private function unitSortMethod(left:IElement, right:IElement) : Number
 {
 	if( left.unit == null || right.unit == null )
 		return 0;
-	return left.unit.y - right.unit.y;
+	return battleData.battleField.side == 0 ? left.unit.y - right.unit.y : right.unit.y - left.unit.y;
 }
 
 public function summonUnits(time:Number, units:ISFSArray):void
