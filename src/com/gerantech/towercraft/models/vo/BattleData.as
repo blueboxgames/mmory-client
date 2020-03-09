@@ -73,7 +73,7 @@ public function BattleData(sfsData:ISFSObject)
 	}
 }
 
-public function start(startAt:int, now:Number):void
+public function start(startAt:Number, now:Number):void
 {
 	// reduce battle cost
 	var game:Game = AppModel.instance.game;
