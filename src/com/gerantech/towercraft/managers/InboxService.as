@@ -1,6 +1,6 @@
 package com.gerantech.towercraft.managers
 {
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSArray;

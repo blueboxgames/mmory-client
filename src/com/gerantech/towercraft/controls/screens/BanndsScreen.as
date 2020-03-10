@@ -1,8 +1,8 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.controls.items.BanMessageItemRenderer;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSArray;

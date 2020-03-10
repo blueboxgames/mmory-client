@@ -2,6 +2,7 @@ package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.FastList;
@@ -18,7 +19,6 @@ import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.segments.InboxSegment;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;

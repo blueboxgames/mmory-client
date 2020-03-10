@@ -53,7 +53,7 @@ override protected function initialize():void
 	// allise
 	name = reward_2.getText("name") == "guest" ? loc("guest_label") : reward_2.getText("name");
 	var alliseHeader:BattleHeader = new BattleHeader(name, reward_2.getInt("id") == player.id, reward_2.getInt("score"));
-	alliseHeader.layoutData = new AnchorLayoutData(stageHeight * 0.2, 100, NaN, 100);
+	alliseHeader.layoutData = new AnchorLayoutData(stageHeight * 0.55, 100, NaN, 100);
 	addChild(alliseHeader);
 	if( !isDraw )
 		alliseHeader.showWinnerLabel(reward_2.getInt("score") > reward_1.getInt("score"));
@@ -61,7 +61,7 @@ override protected function initialize():void
 	// axis
 	var name:String = BattleHUD.getAxisName(player.get_battleswins() - 1, reward_1.getText("name"));
 	var axisHeader:BattleHeader = new BattleHeader(name, reward_1.getInt("id") == player.id, reward_1.getInt("score"));
-	axisHeader.layoutData = new AnchorLayoutData(stageHeight * 0.50, 100, NaN, 100);
+	axisHeader.layoutData = new AnchorLayoutData(stageHeight * 0.30, 100, NaN, 100);
 	addChild(axisHeader);
 	//axisHeader.addScoreImages(reward_1.getInt("score"));
 	if( !isDraw )
@@ -100,7 +100,7 @@ override protected function initialize():void
 	closeBatton.label = loc("popup_ok_label");
 	closeBatton.styleName = MainTheme.STYLE_BUTTON_NEUTRAL;
 	closeBatton.addEventListener(Event.TRIGGERED, buttons_triggeredHandler);
-	closeBatton.layoutData = new AnchorLayoutData((rewardsList != null?0.85:0.6) * stageHeight, NaN, NaN, NaN, 0);
+	closeBatton.layoutData = new AnchorLayoutData((rewardsList!=null?0.85:0.7) * stageHeight, NaN, NaN, NaN, 0);
 	Starling.juggler.tween(closeBatton, 0.5, {delay:0.9, alpha:1});
 	closeBatton.alpha = 0;
 	addChild(closeBatton);
@@ -110,14 +110,13 @@ override protected function getRewardsCollection(playerIndex:int) : ListCollecti
 {
 	var ret:ListCollection = super.getRewardsCollection(playerIndex);
 	
-	if( battleData.battleField.friendlyMode || reward_1.getInt("score") > reward_2.getInt("score") )
+	if( battleData.battleField.friendlyMode || reward_1.getInt("score") >= reward_2.getInt("score") )
 		return ret;
-	
 	if( exchanger.findItem(ExchangeType.C110_BATTLES, ExchangeItem.CHEST_STATE_EMPTY, timeManager.now) == null )
 		ret.push({t:"-1", c:loc("battle_no_book")});
 	if( player.get_arena(player.get_point() - reward_2.getInt("point")) > 0 && ScriptEngine.getInt(ScriptEngine.T48_CHALLENGE_REWARDCOEF, battleData.sfsData.getInt("type")) <= 0 )
-
 		ret.push({t:"-2", c:loc("battle_no_point")});
+
 	return ret;
 }
 }

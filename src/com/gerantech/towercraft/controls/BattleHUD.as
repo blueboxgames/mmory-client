@@ -79,7 +79,7 @@ override protected function initialize():void
 	gradient.color = Color.BLACK;
 	gradient.alpha = 0.5;
 	gradient.width = 440;
-	gradient.height = 140;
+	gradient.height = 172;
 	gradient.source = appModel.assets.getTexture("theme/gradeint-left");
 	addChild(gradient);
 	

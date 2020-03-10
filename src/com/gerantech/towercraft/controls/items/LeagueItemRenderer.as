@@ -3,6 +3,7 @@ package com.gerantech.towercraft.controls.items
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.constants.MessageTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.mmory.core.others.Arena;
 import com.gerantech.mmory.core.others.TrophyReward;
 import com.gerantech.mmory.core.utils.maps.IntIntMap;
@@ -16,7 +17,6 @@ import com.gerantech.towercraft.controls.overlays.OpenBookOverlay;
 import com.gerantech.towercraft.controls.popups.BundleDetailsPopup;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.StrUtils;

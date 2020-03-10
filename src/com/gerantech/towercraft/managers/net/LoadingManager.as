@@ -5,6 +5,7 @@ import com.gerantech.extensions.DeviceInfo;
 import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.mmory.core.constants.ExchangeType;
 import com.gerantech.mmory.core.constants.PrefsTypes;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.exchange.ExCategoryItemRenderer;
@@ -18,7 +19,6 @@ import com.gerantech.towercraft.managers.TimeManager;
 import com.gerantech.towercraft.managers.UserPrefs;
 import com.gerantech.towercraft.managers.VideoAdsManager;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.models.vo.UserData;
@@ -161,6 +161,11 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 	sfsConnection.addEventListener(SFSEvent.CONNECTION_LOST, sfsConnection_connectionLostHandler);
 	serverData = event.params.data;
 	
+	if( serverData.containsKey("loginError") ) // login failed
+	{
+		dispatchEvent(new LoadingEvent(LoadingEvent.LOGIN_ERROR, serverData.getInt("loginError")));
+		return;
+	}	
 	if( serverData.containsKey("umt") ) // under maintenance mode
 	{
 		dispatchEvent(new LoadingEvent(LoadingEvent.UNDER_MAINTENANCE, serverData));

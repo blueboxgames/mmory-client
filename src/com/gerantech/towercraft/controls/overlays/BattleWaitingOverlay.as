@@ -1,7 +1,7 @@
 package com.gerantech.towercraft.controls.overlays
 {
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;
@@ -21,7 +21,17 @@ public class BattleWaitingOverlay extends BaseOverlay
 {
 public var ready:Boolean;
 public var showTips:Boolean;
-public var cancelable:Boolean;
+private var _cancelable:Boolean;
+
+public function get cancelable():Boolean { return _cancelable; }
+public function set cancelable(value:Boolean):void
+{
+	if( _cancelable == value )
+		return;
+	_cancelable = value;
+	if( cancelButton!= null )
+		cancelButton.isEnabled = false;
+}
 public var spactateMode:Boolean;
 
 private var cancelButton:Button;

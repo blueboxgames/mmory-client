@@ -2,6 +2,7 @@ package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.mmory.core.exchanges.Exchanger;
 import com.gerantech.towercraft.controls.CardView;
 import com.gerantech.towercraft.controls.ClosableLayout;
@@ -15,7 +16,6 @@ import com.gerantech.towercraft.controls.popups.CardDetailsPopup;
 import com.gerantech.towercraft.controls.popups.CardSelectPopup;
 import com.gerantech.towercraft.controls.popups.RequirementConfirmPopup;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.smartfoxserver.v2.entities.data.SFSObject;
 

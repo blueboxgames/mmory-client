@@ -1,15 +1,19 @@
 package com.gerantech.towercraft.controls.screens
 {
 import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.PrefsTypes;
 import com.gerantech.mmory.core.constants.ResourceType;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.others.Quest;
+import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.buttons.Indicator;
 import com.gerantech.towercraft.controls.buttons.IndicatorXP;
 import com.gerantech.towercraft.controls.items.QuestItemRenderer;
+import com.gerantech.towercraft.controls.segments.SocialSegment;
 import com.gerantech.towercraft.managers.net.CoreLoader;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
+import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.smartfoxserver.v2.core.SFSEvent;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -20,15 +24,10 @@ import feathers.data.ListCollection;
 import feathers.layout.AnchorLayoutData;
 
 import flash.geom.Rectangle;
+import flash.net.URLRequest;
+import flash.net.navigateToURL;
 
 import starling.events.Event;
-import com.gerantech.mmory.core.constants.PrefsTypes;
-import flash.net.navigateToURL;
-import flash.net.URLRequest;
-import com.gerantech.towercraft.controls.segments.SocialSegment;
-import com.gerantech.towercraft.Game;
-import com.gerantech.towercraft.controls.segments.CardsSegment;
-import com.gerantech.towercraft.models.vo.UserData;
 
 public class QuestsScreen extends ListScreen
 {

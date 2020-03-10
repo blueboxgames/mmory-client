@@ -2,6 +2,7 @@ package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.extensions.share.Share;
 import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.mmory.core.others.TrophyReward;
 import com.gerantech.towercraft.Game;
 import com.gerantech.towercraft.controls.FastList;
@@ -13,7 +14,6 @@ import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
 import com.gerantech.towercraft.controls.popups.ProfilePopup;
 import com.gerantech.towercraft.controls.popups.SimpleListPopup;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.tutorials.TutorialData;
 import com.gerantech.towercraft.models.tutorials.TutorialTask;
@@ -178,8 +178,13 @@ protected function list_focusInHandler(event:Event):void
 	
 	if( friend.id == player.id )
 		buttonsPopup = new SimpleListPopup("buddy_profile");
+	else if( friend.status == 1 )
+		buttonsPopup = new SimpleListPopup("buddy_battle", "buddy_road", "buddy_profile", "buddy_remove");
+	else if( friend.status >= 2 )
+		buttonsPopup = new SimpleListPopup("buddy_spectate", "buddy_road", "buddy_profile", "buddy_remove");
 	else
-		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove");//, friend.status==2?"buddy_spectate":"buddy_battle");
+		buttonsPopup = new SimpleListPopup("buddy_road", "buddy_profile", "buddy_remove");
+
 	buttonsPopup.data = friend;
 	buttonsPopup.addEventListener(Event.SELECT, buttonsPopup_selectHandler);
 	buttonsPopup.addEventListener(Event.CLOSE, buttonsPopup_selectHandler);
@@ -245,7 +250,7 @@ private function spectate(friend:FriendData):void
 {
 	if( friend.status < 2 )
 		return;
-	appModel.navigator.runBattle(0, false, friend.id + "", 2);
+	appModel.navigator.runBattle(friend.status, false, friend.id);
 }
 
 private function removeFriend(friendId:int):void

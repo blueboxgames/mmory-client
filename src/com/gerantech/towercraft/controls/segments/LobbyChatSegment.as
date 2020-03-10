@@ -1,13 +1,13 @@
 package com.gerantech.towercraft.controls.segments
 {
 import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
 import com.gerantech.towercraft.controls.headers.LobbyHeader;
 import com.gerantech.towercraft.controls.items.EmoteItemRenderer;
 import com.gerantech.towercraft.controls.items.lobby.LobbyChatItemRenderer;
 import com.gerantech.towercraft.controls.popups.FriendlyBattleModePopup;
 import com.gerantech.towercraft.managers.net.sfs.LobbyManager;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.themes.MainTheme;
@@ -18,6 +18,7 @@ import feathers.layout.AnchorLayoutData;
 import flash.utils.setTimeout;
 
 import starling.events.Event;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 public class LobbyChatSegment extends LobbyBaseChatSegment
 {
@@ -56,7 +57,7 @@ override protected function showElements():void
 	battleButton.iconTexture = appModel.assets.getTexture("socials/icon-battle");
 	battleButton.layoutData = new AnchorLayoutData(NaN, NaN, padding, padding);
 	battleButton.addEventListener(Event.TRIGGERED, battleButton_triggeredHandler);
-	// addChild(battleButton);
+	addChild(battleButton);
 	
 	chatLayout.paddingTop = LobbyHeader.HEIGHT;
 	chatList.addEventListener(Event.ROOT_CREATED, chatList_triggeredHandler);
@@ -108,15 +109,14 @@ protected function battleModePopup_selectHandler(event:Event):void
 	var params:SFSObject = new SFSObject();
 	params.putInt("m", MessageTypes.M30_FRIENDLY_BATTLE);
 	params.putInt("st", 0);
-	if( event.data == 1 )
-		params.putBool("bt", true);
+	params.putInt("md", ScriptEngine.getInt(ScriptEngine.T41_CHALLENGE_MODE, event.data as int, player.id));
 	SFSConnection.instance.sendExtensionRequest(SFSCommands.LOBBY_PUBLIC_MESSAGE, params, manager.lobby);
 }
 
 protected function manager_triggerHandler(event:Event):void
 {
 	buttonsEnabled = true;
-	appModel.navigator.runBattle(SFSObject(event.data).getInt("m"), false, null, 1);
+	appModel.navigator.runBattle(SFSObject(event.data).getInt("bid"), false, 0, 1);
 }
 
 override public function enabledChatting(value:Boolean):void

@@ -2,6 +2,7 @@ package com.gerantech.towercraft.controls.popups
 {
 import com.gerantech.extensions.NativeAbilities;
 import com.gerantech.mmory.core.constants.MessageTypes;
+import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.towercraft.controls.buttons.EmblemButton;
 import com.gerantech.towercraft.controls.buttons.IndicatorButton;
 import com.gerantech.towercraft.controls.buttons.MMOryButton;
@@ -12,7 +13,6 @@ import com.gerantech.towercraft.controls.items.lobby.LobbyMemberItemRenderer;
 import com.gerantech.towercraft.controls.overlays.TransitionData;
 import com.gerantech.towercraft.controls.texts.RTLLabel;
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
-import com.gerantech.towercraft.managers.net.sfs.SFSCommands;
 import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.themes.MainTheme;
 import com.gerantech.towercraft.utils.Localizations;
