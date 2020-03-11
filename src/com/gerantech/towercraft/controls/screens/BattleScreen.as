@@ -370,7 +370,7 @@ package com.gerantech.towercraft.controls.screens
           break;
       }
       var wins_before_battle:int = player.get_battleswins();
-      if( battleField.friendlyMode == 0 )
+      if( outcomes != null && battleField.friendlyMode == 0 )
         player.addResources(outcomes);
       if( player.get_battleswins() > wins_before_battle )
         if( Metrix.instance.isSupported && (player.get_battleswins() == 10 || player.get_battleswins() == 20) )
