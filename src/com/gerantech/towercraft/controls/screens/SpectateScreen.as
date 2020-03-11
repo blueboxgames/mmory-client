@@ -30,8 +30,7 @@ override protected function initialize():void
 	sfsConnection = SFSConnection.instance;
 	sfsConnection.addEventListener(SFSEvent.CONNECTION_LOST,	sfs_connectionLostHandler);
 	sfsConnection.addEventListener(SFSEvent.EXTENSION_RESPONSE, sfs_responseUpdateHandler);
-	sfsConnection.addEventListener(SFSEvent.ROOM_VARIABLES_UPDATE, sfs_roomVariablesUpdateHandler);
-	sfsConnection.sendExtensionRequest("spectateBattles", sfsObj);
+	sfsConnection.sendExtensionRequest(SFSCommands.SPECTATE_JOIN, params);
 	
 	title = loc("button_spectate");
 	showTileAnimationn = false;
@@ -43,9 +42,8 @@ override protected function initialize():void
 
 protected function sfs_responseUpdateHandler(event:SFSEvent):void
 {
-	if( event.params.cmd != "spectateBattles" )
-		return;
-	updateRooms(SFSRoomVariable(sfsConnection.getRoomByName(cmd).getVariable("rooms")).getSFSArrayValue());
+	if( event.params.cmd == SFSCommands.SPECTATE_UPDATE )
+		updateRooms(SFSObject(event.params.params).getSFSArray("rooms"));
 }
 override protected function list_changeHandler(event:Event):void
 {
@@ -104,8 +102,9 @@ override protected function backButtonFunction():void
 }
 override public function dispose():void
 {
-	var r:Room = sfsConnection.getRoomByName(cmd)
-	sfsConnection.send(new LeaveRoomRequest(sfsConnection.getRoomByName(cmd)) as IRequest);
+	var params:SFSObject = new SFSObject();
+	params.putText("t", cmd);
+	sfsConnection.sendExtensionRequest(SFSCommands.SPECTATE_LEAVE, params);
 	removeConnectionListeners();
 	super.dispose();
 }
