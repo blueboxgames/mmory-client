@@ -97,15 +97,15 @@ override protected function commitData():void
 	
 	var allis:ISFSObject = room.getSFSArray("players").getSFSObject(0);
 	allisNameDisplay.text = allis.getText("n");
-    allisLobbyNameDisplay.text = allis.containsKey("ln") ? allis.getText("ln") : loc("lobby_no");
-    allisLobbyIconDisplay.source = EmblemButton.getTexture(allis.containsKey("lp") ? allis.getInt("lp") : 110) ;
+	allisLobbyNameDisplay.text = allis.containsKey("ln") ? allis.getText("ln") : loc("lobby_no");
+	allisLobbyIconDisplay.source = EmblemButton.getTexture(allis.containsKey("lp") ? allis.getInt("lp") : 110) ;
 	
 	if( room.getSFSArray("players").size() > 1 )
 	{
-        var axis:ISFSObject = room.getSFSArray("players").getSFSObject(1);
-        axisNameDisplay.text = axis.getText("n");
-        axisLobbyNameDisplay.text = axis.containsKey("ln") ? axis.getText("ln") : loc("lobby_no");
-        axisLobbyIconDisplay.source = EmblemButton.getTexture(axis.containsKey("lp") ? axis.getInt("lp"):110) ;
+		var axis:ISFSObject = room.getSFSArray("players").getSFSObject(1);
+		axisNameDisplay.text = axis.getText("n");
+		axisLobbyNameDisplay.text = axis.containsKey("ln") ? axis.getText("ln") : loc("lobby_no");
+		axisLobbyIconDisplay.source = EmblemButton.getTexture(axis.containsKey("lp") ? axis.getInt("lp"):110) ;
 	}
 	
 	timeDisplay.text =  StrUtils.toTimeFormat(timeManager.now - room.getInt("startAt")) ;
