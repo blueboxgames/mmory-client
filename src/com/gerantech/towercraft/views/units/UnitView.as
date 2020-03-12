@@ -73,7 +73,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	fieldView.unitsContainer.addChild(bodyDisplay);
 
 	var angle:String = side == battleField.side ? "000_" : "180_";
-  shadowDisplay = new UnitMC(appModel.artRules.get(card.type, ArtRules.TEXTURE) + "/0/", "m_" + angle);
+  shadowDisplay = new UnitMC(appModel.artRules.get(card.type, ArtRules.TEXTURE) + "/0/", "i_" + angle);
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
 	shadowDisplay.x = __x;
@@ -176,8 +176,8 @@ override public function setState(state:int) : Boolean
 			bodyDisplay.pause();
 			if( CardTypes.isHero(card.type) )
 			{
-				bodyDisplay.updateTexture("m_", side == battleField.side ? "000_" : "180_");
-				shadowDisplay.updateTexture("m_", side == battleField.side ? "000_" : "180_");
+				bodyDisplay.updateTexture("i_", side == battleField.side ? "000_" : "180_");
+				shadowDisplay.updateTexture("i_", side == battleField.side ? "000_" : "180_");
 			}
 		}
 	}
