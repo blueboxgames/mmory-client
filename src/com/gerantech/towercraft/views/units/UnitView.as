@@ -73,7 +73,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	fieldView.unitsContainer.addChild(bodyDisplay);
 
 	var angle:String = side == battleField.side ? "000_" : "180_";
-  shadowDisplay = new UnitMC(appModel.artRules.get(card.type, ArtRules.TEXTURE) + "/0/", "i_" + angle);
+  shadowDisplay = new UnitMC(appModel.artRules.get(card.type, ArtRules.TEXTURE) + "/" + battleField.getColorIndex(side) + "/", "i_" + angle);
 	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
 	shadowDisplay.x = __x;
