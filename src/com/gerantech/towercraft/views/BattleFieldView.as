@@ -75,7 +75,7 @@ public function init():void
 	}
 
 	var preAssets:Object = new Object();
-	addPreAssets(preAssets);
+	addAssets(preAssets);
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPre_completeHandler);
 	syncTool.sync(preAssets);
@@ -97,9 +97,13 @@ public function load(battleData:BattleData) : void
 		deck.push(battleData.axisGame.loginData.deck[k].toString());
 	var postAssets:Object = new Object();
 	if( BattleScreen.FRIENDLY_MODE > 0 )
-		addPreAssets(postAssets);
-	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), false) + "");
-	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), true) + "");
+		addAssets(postAssets);
+	addInitialUnit(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), 0)[0]);
+	addInitialUnit(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), 2)[0]);
+	function addInitialUnit(type:int):void {
+		if( type > -1 )
+			deck.push(type.toString());
+	}
 	fillDeck(deck, postAssets);
 
 	var key:String = "map-" + battleData.sfsData.getInt("mode");
@@ -112,7 +116,7 @@ public function load(battleData:BattleData) : void
 	syncTool.sync(postAssets);
 }
 
-private function addPreAssets(assets:Object):void
+private function addAssets(assets:Object):void
 {
 	for ( var key:String in SyncUtil.ALL )
 		if( SyncUtil.ALL[key]["mode"] == "prev" )
@@ -217,11 +221,11 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 
 private function getCard(side:int, type:int, level:int) : Card
 {
-	var ret:Card = battleData.battleField.decks.get(side).get(type);
+	var ret:Card = battleData.battleField.decks.get(side < 0 ? 0 : side).get(type);
 	if( ret == null )
 	{
 		trace("create new card while battling ==> side:", side, "type:", type, "level:", level);
-		ret = new Card(battleData.battleField.games[side], type, level);
+		ret = new Card(battleData.battleField.games[side < 0 ? 0 : side], type, level);
 	}
 	return ret;
 }
