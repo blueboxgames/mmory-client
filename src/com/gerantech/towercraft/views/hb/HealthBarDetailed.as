@@ -1,4 +1,4 @@
-package com.gerantech.towercraft.controls.sliders.battle 
+package com.gerantech.towercraft.views.hb
 {
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.views.BattleFieldView;

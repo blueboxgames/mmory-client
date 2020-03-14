@@ -9,10 +9,11 @@ import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.events.BattleEvent;
 import com.gerantech.mmory.core.utils.CoreUtils;
 import com.gerantech.towercraft.controls.indicators.CountdownIcon;
-import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
-import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.effects.BattleParticleSystem;
+import com.gerantech.towercraft.views.hb.HealthBar;
+import com.gerantech.towercraft.views.hb.HealthBarDetailed;
+import com.gerantech.towercraft.views.hb.HealthBarLeveled;
 import com.gerantech.towercraft.views.units.elements.ImageElement;
 import com.gerantech.towercraft.views.units.elements.UnitBody;
 import com.gerantech.towercraft.views.units.elements.UnitMC;
@@ -138,7 +139,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	
 	if( fireDisplayFactory == null )
 		fireDisplayFactory = defaultFireDisplayFactory;
-
+	
 	if( healthbarFactory == null )
 		healthbarFactory = defaultHealthbarFactory;
 
