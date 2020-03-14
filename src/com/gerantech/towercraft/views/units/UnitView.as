@@ -14,6 +14,7 @@ import com.gerantech.towercraft.views.effects.BattleParticleSystem;
 import com.gerantech.towercraft.views.hb.HealthBar;
 import com.gerantech.towercraft.views.hb.HealthBarDetailed;
 import com.gerantech.towercraft.views.hb.HealthBarLeveled;
+import com.gerantech.towercraft.views.hb.HealthBarZone;
 import com.gerantech.towercraft.views.hb.IHealthBar;
 import com.gerantech.towercraft.views.units.elements.ImageElement;
 import com.gerantech.towercraft.views.units.elements.UnitBody;
@@ -58,6 +59,13 @@ private var bulletParticle:BattleParticleSystem;
 
 public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Number, t:Number, isDump:Boolean = false)
 {
+		
+	if( fireDisplayFactory == null )
+		fireDisplayFactory = defaultFireDisplayFactory;
+	
+	if( healthbarFactory == null )
+		healthbarFactory = defaultHealthbarFactory;
+	
 	super(card, id, side, x, y, z, t);
 	this.isDump = isDump;
 	__x = getSideX();
@@ -80,20 +88,20 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	if( body != "" )
 	{
 		shadowDisplay = new UnitMC(body + "/" + battleField.getColorIndex(side) + "/", "i_" + angle);
-	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
-	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
-	shadowDisplay.x = __x;
-	shadowDisplay.y = __y;
-	shadowDisplay.width = _WIDTH;
-	shadowDisplay.height = _HEIGHT;
-	shadowDisplay.alpha = 0.3;
-	shadowDisplay.color = 0;
-	shadowDisplay.scaleX = __bodyScale;
-	shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
-	shadowDisplay.currentFrame = bodyDisplay.startFrame;
-	shadowDisplay.pause();
-	Starling.juggler.add(shadowDisplay);
-	fieldView.shadowsContainer.addChild(shadowDisplay);
+		shadowDisplay.pivotX = shadowDisplay.width * 0.5;
+		shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
+		shadowDisplay.x = __x;
+		shadowDisplay.y = __y;
+		shadowDisplay.width = _WIDTH;
+		shadowDisplay.height = _HEIGHT;
+		shadowDisplay.alpha = 0.3;
+		shadowDisplay.color = 0;
+		shadowDisplay.scaleX = __bodyScale;
+		shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
+		shadowDisplay.currentFrame = bodyDisplay.startFrame;
+		shadowDisplay.pause();
+		Starling.juggler.add(shadowDisplay);
+		fieldView.shadowsContainer.addChild(shadowDisplay);
 	}
 
 	if( !isDump && CardTypes.isTroop(card.type) )
@@ -106,9 +114,9 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay + 0.1,	scaleY:__bodyScale,	transition:Transitions.EASE_OUT_BACK});
 		if( shadowDisplay != null )
 		{
-		shadowDisplay.scale = 0.0
-		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scaleX:__bodyScale,scaleY:__bodyScale*_SHADOW_SCALE,	transition:Transitions.EASE_OUT_BACK});
-	}
+			shadowDisplay.scale = 0.0
+			Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scaleX:__bodyScale,scaleY:__bodyScale*_SHADOW_SCALE,	transition:Transitions.EASE_OUT_BACK});
+		}
 	}
 	
 	if( !isDump && card.summonTime > 0 )
@@ -144,12 +152,6 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		rangeDisplay.y = __y;
 		fieldView.unitsContainer.addChildAt(rangeDisplay, 0);
 	}
-	
-	if( fireDisplayFactory == null )
-		fireDisplayFactory = defaultFireDisplayFactory;
-	
-	if( healthbarFactory == null )
-		healthbarFactory = defaultHealthbarFactory;
 
 	battleField.addEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
 }
@@ -177,16 +179,16 @@ override public function setState(state:int) : Boolean
 		
 		if( shadowDisplay != null )
 		{
-		shadowDisplay.scaleX = __bodyScale;
-		shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
-		Starling.juggler.removeTweens(shadowDisplay);
-	}
+			shadowDisplay.scaleX = __bodyScale;
+			shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
+			Starling.juggler.removeTweens(shadowDisplay);
+		}
 	}
 	else if( state == GameObject.STATE_3_WAITING )
 	{
 		bodyDisplay.currentFrame = 0;
 		if( shadowDisplay != null )
-		shadowDisplay.currentFrame = 0;
+			shadowDisplay.currentFrame = 0;
 		if ( _state != GameObject.STATE_5_SHOOTING )
 		{
 			bodyDisplay.pause();
@@ -196,7 +198,7 @@ override public function setState(state:int) : Boolean
 			{
 				bodyDisplay.updateTexture("i_", side == battleField.side ? "000_" : "180_");
 				if( shadowDisplay != null )
-				shadowDisplay.updateTexture("i_", side == battleField.side ? "000_" : "180_");
+					shadowDisplay.updateTexture("i_", side == battleField.side ? "000_" : "180_");
 			}
 		}
 	}
@@ -204,7 +206,7 @@ override public function setState(state:int) : Boolean
 	{
 		bodyDisplay.play();
 		if( shadowDisplay != null )
-		shadowDisplay.play();
+			shadowDisplay.play();
 	}
 	return true;
 }
@@ -299,9 +301,9 @@ protected function bodyDisplay_shootCompleteHandler(event:Object):void
 	bodyDisplay.updateTexture("i_", event.data);
 	if( shadowDisplay != null )
 	{
-	shadowDisplay.loop = true;
-	shadowDisplay.updateTexture("i_", event.data);
-}
+		shadowDisplay.loop = true;
+		shadowDisplay.updateTexture("i_", event.data);
+	}
 }
 
 override public function estimateAngle(x:Number, y:Number):Number
@@ -323,7 +325,7 @@ override public function setHealth(health:Number) : Number
 	if( health < 0 && card.selfDammage == 0 )
 		return 0;
 	
-	var damage:Number =  super.setHealth(health);
+	var damage:Number = super.setHealth(health);
 	if( damage == 0 )
 		return damage;
 	
@@ -347,6 +349,15 @@ override public function setHealth(health:Number) : Number
 		dispose();
 	
 	return damage;
+}
+
+override public function set_side(value:int):int
+{
+	if( this.side == value )
+		return value;
+	if( this.healthDisplay != null )
+		this.healthDisplay.side = value;
+	return super.set_side(value);
 }
 
 protected function defaultSummonEffectFactory() : void
@@ -435,8 +446,9 @@ protected function defaultHealthbarFactory():	IHealthBar
 {
 	if( CardTypes.isTroop(card.type) )
 		return new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
-	else
-		return new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth) as HealthBar;
+	if( side < 0 )
+		return new HealthBarZone(fieldView, this);
+	return new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth) as HealthBar;
 }
 
 private function showDieAnimation():void 
@@ -505,7 +517,7 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 
 	bodyDisplay.play();
 	if( shadowDisplay != null )
-	shadowDisplay.play();
+		shadowDisplay.play();
 }
 
 override public function dispose() : void
