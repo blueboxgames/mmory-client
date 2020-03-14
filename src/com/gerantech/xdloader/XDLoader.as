@@ -74,7 +74,17 @@ package com.gerantech.xdloader
         performTransform(child, node);
 				child.width = shape.width;
 				child.height = shape.height;
-			}
+        if( fill.pattern.meta.ux.hasOwnProperty("flipX") )
+        {
+          child.scaleX *= -1;
+          child.x += child.width;
+        }
+        if( fill.pattern.meta.ux.hasOwnProperty("flipY") )
+        {
+          child.scaleY *= -1;
+          child.y += child.height;
+        }
+      }
       else
       {
         child = new Canvas();

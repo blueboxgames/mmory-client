@@ -9,10 +9,13 @@ import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.events.BattleEvent;
 import com.gerantech.mmory.core.utils.CoreUtils;
 import com.gerantech.towercraft.controls.indicators.CountdownIcon;
-import com.gerantech.towercraft.controls.sliders.battle.HealthBarDetailed;
-import com.gerantech.towercraft.controls.sliders.battle.HealthBarLeveled;
 import com.gerantech.towercraft.views.ArtRules;
 import com.gerantech.towercraft.views.effects.BattleParticleSystem;
+import com.gerantech.towercraft.views.hb.HealthBar;
+import com.gerantech.towercraft.views.hb.HealthBarDetailed;
+import com.gerantech.towercraft.views.hb.HealthBarLeveled;
+import com.gerantech.towercraft.views.hb.HealthBarZone;
+import com.gerantech.towercraft.views.hb.IHealthBar;
 import com.gerantech.towercraft.views.units.elements.ImageElement;
 import com.gerantech.towercraft.views.units.elements.UnitBody;
 import com.gerantech.towercraft.views.units.elements.UnitMC;
@@ -42,19 +45,27 @@ private var _muted:Boolean = true;
 private var __bodyScale:Number;
 
 public var fireDisplayFactory:Function;
+public var healthbarFactory:Function;
 
 private var deployIcon:CountdownIcon;
 private var rangeDisplay:ImageElement;
 private var sizeDisplay:ImageElement;
 private var bodyDisplay:UnitBody;
 private var shadowDisplay:UnitMC;
-private var healthDisplay:HealthBarLeveled;
+private var healthDisplay:IHealthBar;
 private var flameParticle:BattleParticleSystem;
 private var smokeParticle:BattleParticleSystem;
 private var bulletParticle:BattleParticleSystem;
 
 public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Number, t:Number, isDump:Boolean = false)
 {
+		
+	if( fireDisplayFactory == null )
+		fireDisplayFactory = defaultFireDisplayFactory;
+	
+	if( healthbarFactory == null )
+		healthbarFactory = defaultHealthbarFactory;
+	
 	super(card, id, side, x, y, z, t);
 	this.isDump = isDump;
 	__x = getSideX();
@@ -73,21 +84,25 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	fieldView.unitsContainer.addChild(bodyDisplay);
 
 	var angle:String = side == battleField.side ? "000_" : "180_";
-  shadowDisplay = new UnitMC(appModel.artRules.get(card.type, ArtRules.TEXTURE) + "/0/", "m_" + angle);
-	shadowDisplay.pivotX = shadowDisplay.width * 0.5;
-	shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
-	shadowDisplay.x = __x;
-	shadowDisplay.y = __y;
-	shadowDisplay.width = _WIDTH;
-	shadowDisplay.height = _HEIGHT;
-	shadowDisplay.alpha = 0.3;
-	shadowDisplay.color = 0;
-	shadowDisplay.scaleX = __bodyScale;
-	shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
-	shadowDisplay.currentFrame = bodyDisplay.startFrame;
-	shadowDisplay.pause();
-	Starling.juggler.add(shadowDisplay);
-	fieldView.shadowsContainer.addChild(shadowDisplay);
+	var body:String = appModel.artRules.get(card.type, ArtRules.BODY);
+	if( body != "" )
+	{
+		shadowDisplay = new UnitMC(body + "/" + battleField.getColorIndex(side) + "/", "i_" + angle);
+		shadowDisplay.pivotX = shadowDisplay.width * 0.5;
+		shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
+		shadowDisplay.x = __x;
+		shadowDisplay.y = __y;
+		shadowDisplay.width = _WIDTH;
+		shadowDisplay.height = _HEIGHT;
+		shadowDisplay.alpha = 0.3;
+		shadowDisplay.color = 0;
+		shadowDisplay.scaleX = __bodyScale;
+		shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
+		shadowDisplay.currentFrame = bodyDisplay.startFrame;
+		shadowDisplay.pause();
+		Starling.juggler.add(shadowDisplay);
+		fieldView.shadowsContainer.addChild(shadowDisplay);
+	}
 
 	if( !isDump && CardTypes.isTroop(card.type) )
 	{
@@ -97,8 +112,11 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay,	alpha:0.5, y:__yz,	transition:Transitions.EASE_OUT, onComplete:defaultSummonEffectFactory});
 		Starling.juggler.tween(bodyDisplay, 0.1, {delay:appearanceDelay+ 0.1,	alpha:0, repeatCount:20});
 		Starling.juggler.tween(bodyDisplay, 0.3, {delay:appearanceDelay + 0.1,	scaleY:__bodyScale,	transition:Transitions.EASE_OUT_BACK});
-		shadowDisplay.scale = 0.0
-		Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scaleX:__bodyScale,scaleY:__bodyScale*_SHADOW_SCALE,	transition:Transitions.EASE_OUT_BACK});
+		if( shadowDisplay != null )
+		{
+			shadowDisplay.scale = 0.0
+			Starling.juggler.tween(shadowDisplay, 0.3, {delay:appearanceDelay + 0.3,scaleX:__bodyScale,scaleY:__bodyScale*_SHADOW_SCALE,	transition:Transitions.EASE_OUT_BACK});
+		}
 	}
 	
 	if( !isDump && card.summonTime > 0 )
@@ -134,9 +152,6 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		rangeDisplay.y = __y;
 		fieldView.unitsContainer.addChildAt(rangeDisplay, 0);
 	}
-	
-	if( fireDisplayFactory == null )
-		fireDisplayFactory = defaultFireDisplayFactory;
 
 	battleField.addEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
 }
@@ -162,29 +177,36 @@ override public function setState(state:int) : Boolean
 		bodyDisplay.scaleY = __bodyScale;
 		Starling.juggler.removeTweens(bodyDisplay);
 		
-		shadowDisplay.scaleX = __bodyScale;
-		shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
-		Starling.juggler.removeTweens(shadowDisplay);
+		if( shadowDisplay != null )
+		{
+			shadowDisplay.scaleX = __bodyScale;
+			shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
+			Starling.juggler.removeTweens(shadowDisplay);
+		}
 	}
 	else if( state == GameObject.STATE_3_WAITING )
 	{
 		bodyDisplay.currentFrame = 0;
-		shadowDisplay.currentFrame = 0;
+		if( shadowDisplay != null )
+			shadowDisplay.currentFrame = 0;
 		if ( _state != GameObject.STATE_5_SHOOTING )
 		{
-			shadowDisplay.pause();
 			bodyDisplay.pause();
+			if( shadowDisplay != null )
+				shadowDisplay.pause();
 			if( CardTypes.isHero(card.type) )
 			{
-				bodyDisplay.updateTexture("m_", side == battleField.side ? "000_" : "180_");
-				shadowDisplay.updateTexture("m_", side == battleField.side ? "000_" : "180_");
+				bodyDisplay.updateTexture("i_", side == battleField.side ? "000_" : "180_");
+				if( shadowDisplay != null )
+					shadowDisplay.updateTexture("i_", side == battleField.side ? "000_" : "180_");
 			}
 		}
 	}
 	else if( state == GameObject.STATE_4_MOVING || state == GameObject.STATE_5_SHOOTING )
 	{
 		bodyDisplay.play();
-		shadowDisplay.play();
+		if( shadowDisplay != null )
+			shadowDisplay.play();
 	}
 	return true;
 }
@@ -259,22 +281,29 @@ private function turn(anim:String, dir:String):void
 			dir = dir.replace("-35", "135");
 		flipped = true;
 	}
-	shadowDisplay.loop = anim == "m_";
-	shadowDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
-	shadowDisplay.updateTexture(anim, dir);
 	
-	bodyDisplay.loop = shadowDisplay.loop;
+	bodyDisplay.loop = anim == "m_";
 	bodyDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 	bodyDisplay.addEventListener(Event.COMPLETE, bodyDisplay_shootCompleteHandler);
 	bodyDisplay.updateTexture(anim, dir);
+	
+	if( shadowDisplay != null )
+	{
+		shadowDisplay.loop = anim == "m_";
+		shadowDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
+		shadowDisplay.updateTexture(anim, dir);
+	}
 }
 
 protected function bodyDisplay_shootCompleteHandler(event:Object):void
 {
 	bodyDisplay.loop = true;
 	bodyDisplay.updateTexture("i_", event.data);
-	shadowDisplay.loop = true;
-	shadowDisplay.updateTexture("i_", event.data);
+	if( shadowDisplay != null )
+	{
+		shadowDisplay.loop = true;
+		shadowDisplay.updateTexture("i_", event.data);
+	}
 }
 
 override public function estimateAngle(x:Number, y:Number):Number
@@ -296,7 +325,7 @@ override public function setHealth(health:Number) : Number
 	if( health < 0 && card.selfDammage == 0 )
 		return 0;
 	
-	var damage:Number =  super.setHealth(health);
+	var damage:Number = super.setHealth(health);
 	if( damage == 0 )
 		return damage;
 	
@@ -313,19 +342,22 @@ override public function setHealth(health:Number) : Number
 	}
 
 	if( healthDisplay == null )
-	{
-		if( CardTypes.isTroop(card.type) )
-			healthDisplay = new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
-		else
-			healthDisplay = new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth) as HealthBarLeveled;
-		healthDisplay.initialize();
-	}
+		healthDisplay = this.healthbarFactory();
 	healthDisplay.value = health;
 	healthDisplay.setPosition(__x, __yz - card.sizeV - 60);
 	if( health < 0 )
 		dispose();
 	
 	return damage;
+}
+
+override public function set_side(value:int):int
+{
+	if( this.side == value )
+		return value;
+	if( this.healthDisplay != null )
+		this.healthDisplay.side = value;
+	return super.set_side(value);
 }
 
 protected function defaultSummonEffectFactory() : void
@@ -410,6 +442,15 @@ protected function defaultFireDisplayFactory(x:Number, y:Number, rotation:Number
 	}
 }
 
+protected function defaultHealthbarFactory():	IHealthBar
+{
+	if( CardTypes.isTroop(card.type) )
+		return new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
+	if( side < 0 )
+		return new HealthBarZone(fieldView, this);
+	return new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth) as HealthBar;
+}
+
 private function showDieAnimation():void 
 {
 	if( battleField.state >= BattleField.STATE_4_ENDED )
@@ -475,7 +516,8 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 		return;
 
 	bodyDisplay.play();
-	shadowDisplay.play();
+	if( shadowDisplay != null )
+		shadowDisplay.play();
 }
 
 override public function dispose() : void

@@ -1,4 +1,4 @@
-package com.gerantech.towercraft.controls.sliders.battle
+package com.gerantech.towercraft.views.hb
 {
 import com.gerantech.towercraft.models.AppModel;
 import com.gerantech.towercraft.views.BattleFieldView;
@@ -7,14 +7,15 @@ import flash.geom.Rectangle;
 
 import starling.display.Image;
 
-public class HealthBar
+public class HealthBar implements IHealthBar
 {
 static protected var SCALE_RECT:Rectangle = new Rectangle(3, 3, 1, 1);
 public var width:Number = 48;
 public var height:Number = 15;
-public var maximum:Number;
-protected var _value:Number = 0;
 protected var _side:int = -2;
+protected var _value:Number = 0.0;
+protected var _alpha:Number = 1.0;
+protected var _maximum:Number = 1.0;
 protected var sliderFillDisplay:Image;
 protected var sliderBackDisplay:Image;
 protected var filedView:BattleFieldView;
@@ -24,10 +25,7 @@ public function HealthBar(filedView:BattleFieldView, side:int, maximum:Number = 
 	this.filedView = filedView;
 	this.maximum = maximum;
 	this.side = side;
-}
 
-public function initialize() : void
-{
 	sliderBackDisplay = new Image(AppModel.instance.assets.getTexture("sliders/" + side + "/back"));
 	sliderBackDisplay.scale9Grid = SCALE_RECT;
 	sliderBackDisplay.touchable = false;
@@ -57,8 +55,6 @@ public function setPosition(x:Number, y:Number) : void
 		sliderFillDisplay.y = y;
 	}
 }
-
-
 
 public function get value() : Number
 {
@@ -94,16 +90,39 @@ public function set side(value:int):void
 		return;
 	_side = value;
 	
-	if( sliderBackDisplay!= null )
+	if( sliderBackDisplay != null )
 		sliderBackDisplay.texture = AppModel.instance.assets.getTexture("sliders/" + _side + "/back");
 	if( sliderFillDisplay != null )
 		sliderFillDisplay.texture = AppModel.instance.assets.getTexture("sliders/" + _side + "/fill");
+}
 
+public function get maximum():Number
+{
+	return _maximum;
+}
+public function set maximum(value:Number):void
+{
+	_maximum = value;
+}
+
+public function get alpha():Number
+{
+	return super.alpha;
+}
+public function set alpha(value:Number):void
+{
+	if( this._alpha == value )
+		return;
+	this._alpha = value;
+	if( sliderBackDisplay != null )
+		sliderBackDisplay.alpha = value;
+	if( sliderFillDisplay != null )
+		sliderFillDisplay.alpha = value;
 }
 
 public function dispose() : void 
 {
-	if( sliderBackDisplay!= null )
+	if( sliderBackDisplay != null )
 		sliderBackDisplay.removeFromParent(true);
 	if( sliderFillDisplay != null )
 		sliderFillDisplay.removeFromParent(true);

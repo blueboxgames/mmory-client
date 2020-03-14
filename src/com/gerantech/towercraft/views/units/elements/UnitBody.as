@@ -27,47 +27,59 @@ package com.gerantech.towercraft.views.units.elements
     public function UnitBody(unit:UnitView, card:Card, side:int)
     {
       this.unit = unit;
+      var artRules:ArtRules = AppModel.instance.artRules;
       var battleField:BattleField = AppModel.instance.battleFieldView.battleData.battleField;
 
-      var texture:String = AppModel.instance.artRules.get(card.type, ArtRules.TEXTURE);
-      if( AppModel.instance.artRules.get(card.type, ArtRules.BASE) != "" )
+      // base
+      var base:String = artRules.get(card.type, ArtRules.BASE);
+      if( base != "" )
       {
-        this.baseDisplay = new Image(AppModel.instance.assets.getTexture(texture + "/" + battleField.getColorIndex(side) + "/base"));
+        this.baseDisplay = new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/" + base));
         this.addChild(this.baseDisplay);
       }
 
-    	var hasSide:Boolean = AppModel.instance.artRules.getInt(card.type, ArtRules.SIDE) == 1;
-      var angle:String = side == battleField.side ? "000_" : "180_";
-      this.bodyDisplay = new UnitMC(texture + "/" + (hasSide ? 0 : battleField.getColorIndex(side)) + "/", "m_" + angle);
-      if( CardTypes.isTroop(card.type) )
-      	this.bodyDisplay.currentFrame = Math.floor(Math.random() * bodyDisplay.numFrames);
-      this.bodyDisplay.pause();
-    	Starling.juggler.add(this.bodyDisplay);
-      this.addChild(this.bodyDisplay);
-
-      if( AppModel.instance.artRules.get(card.type, ArtRules.OVERLAY) != "" )
+      // body and side
+      var body:String = artRules.get(card.type, ArtRules.BODY);
+      if( body != "" )
       {
-        this.overlayDisplay = new Image(AppModel.instance.assets.getTexture(texture + "/" + battleField.getColorIndex(side) + "/overlay"));
-        this.addChild(this.overlayDisplay);
+        var hasSide:Boolean = artRules.getInt(card.type, ArtRules.SIDE) == 1;
+        var angle:String = side == battleField.side ? "000_" : "180_";
+        this.bodyDisplay = new UnitMC(body + "/" + (hasSide ? 0 : battleField.getColorIndex(side)) + "/", "i_" + angle);
+        if( CardTypes.isTroop(card.type) )
+          this.bodyDisplay.currentFrame = Math.floor(Math.random() * bodyDisplay.numFrames);
+        this.bodyDisplay.pause();
+        Starling.juggler.add(this.bodyDisplay);
+        this.addChild(this.bodyDisplay);
+
+        if( hasSide && side != battleField.side )
+        {
+          this.sideDisplay = new UnitMC(body + "/1/", "i_" + angle);
+          this.sideDisplay.pause();
+          this.sideDisplay.currentFrame = this.bodyDisplay.currentFrame;
+          Starling.juggler.add(this.sideDisplay);
+          this.addChild(this.sideDisplay);
+        }
       }
 
-      if( hasSide && side != battleField.side )
+      // overlay
+      var overlay:String = artRules.get(card.type, ArtRules.OVERLAY);
+      if( overlay != "" )
       {
-        this.sideDisplay = new UnitMC(texture + "/1/", "m_" + angle);
-        this.sideDisplay.pause();
-        this.sideDisplay.currentFrame = this.bodyDisplay.currentFrame;
-        Starling.juggler.add(this.sideDisplay);
-        this.addChild(this.sideDisplay);
+        this.overlayDisplay = new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/" + overlay));
+        this.addChild(this.overlayDisplay);
       }
     }
 
     public function get color () : uint
     {
-      return this.bodyDisplay.color;
+      if( this.bodyDisplay != null )
+        return this.bodyDisplay.color;
+      return 0xFFFFFF;
     }
     public function set color (value:uint) : void
     {
-      this.bodyDisplay.color = value;
+      if( this.bodyDisplay != null )
+        this.bodyDisplay.color = value;
       if( this.baseDisplay != null )
         this.baseDisplay.color = value;
       if( this.overlayDisplay != null )
@@ -78,38 +90,45 @@ package com.gerantech.towercraft.views.units.elements
 
 		public function set loop(value:Boolean) : void
 		{
-			this.bodyDisplay.loop = value;
+      if( this.bodyDisplay != null )
+  			this.bodyDisplay.loop = value;
       if( this.sideDisplay != null )
 				this.sideDisplay.loop = value;
 		}
 
 		public function set currentFrame(value:int) : void
 		{
-			this.bodyDisplay.currentFrame = value;
+      if( this.bodyDisplay != null )
+  			this.bodyDisplay.currentFrame = value;
       if( this.sideDisplay != null )
 				this.sideDisplay.currentFrame = value;
 		}
 
 		public function pause() : void
 		{
-			this.bodyDisplay.pause();
+      if( this.bodyDisplay != null )
+  			this.bodyDisplay.pause();
       if( this.sideDisplay != null )
 				this.sideDisplay.pause();
 		}
 
 		public function play() : void
 		{
-			this.bodyDisplay.play();
+      if( this.bodyDisplay != null )
+  			this.bodyDisplay.play();
       if( this.sideDisplay != null )
 				this.sideDisplay.play();
 		}
 
 		public function updateTexture(anim:String, dir:String):void 
 		{
-      this.bodyDisplay.removeEventListener(Event.COMPLETE, this.bodyDisplay_completeHandler);
-      if( anim == "s_" )
-        this.bodyDisplay.addEventListener(Event.COMPLETE, this.bodyDisplay_completeHandler);
-			this.bodyDisplay.updateTexture(anim, dir);
+      if( this.bodyDisplay != null )
+      {
+        this.bodyDisplay.removeEventListener(Event.COMPLETE, this.bodyDisplay_completeHandler);
+        if( anim == "s_" )
+          this.bodyDisplay.addEventListener(Event.COMPLETE, this.bodyDisplay_completeHandler);
+  			this.bodyDisplay.updateTexture(anim, dir);
+      }
       if( this.sideDisplay != null )
 				this.sideDisplay.updateTexture(anim, dir);
 		}
@@ -122,7 +141,8 @@ package com.gerantech.towercraft.views.units.elements
 		
 		override public function dispose() : void
 		{
-			Starling.juggler.remove(this.bodyDisplay);
+      if( this.bodyDisplay != null )
+  			Starling.juggler.remove(this.bodyDisplay);
       if( this.sideDisplay != null )
 				Starling.juggler.remove(this.sideDisplay);
 			super.dispose();
