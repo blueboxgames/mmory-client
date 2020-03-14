@@ -42,13 +42,14 @@ private var _muted:Boolean = true;
 private var __bodyScale:Number;
 
 public var fireDisplayFactory:Function;
+public var healthbarFactory:Function;
 
 private var deployIcon:CountdownIcon;
 private var rangeDisplay:ImageElement;
 private var sizeDisplay:ImageElement;
 private var bodyDisplay:UnitBody;
 private var shadowDisplay:UnitMC;
-private var healthDisplay:HealthBarLeveled;
+private var healthDisplay:HealthBar;
 private var flameParticle:BattleParticleSystem;
 private var smokeParticle:BattleParticleSystem;
 private var bulletParticle:BattleParticleSystem;
@@ -137,6 +138,9 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	
 	if( fireDisplayFactory == null )
 		fireDisplayFactory = defaultFireDisplayFactory;
+
+	if( healthbarFactory == null )
+		healthbarFactory = defaultHealthbarFactory;
 
 	battleField.addEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
 }
@@ -314,10 +318,7 @@ override public function setHealth(health:Number) : Number
 
 	if( healthDisplay == null )
 	{
-		if( CardTypes.isTroop(card.type) )
-			healthDisplay = new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
-		else
-			healthDisplay = new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth) as HealthBarLeveled;
+		healthDisplay = this.healthbarFactory();
 		healthDisplay.initialize();
 	}
 	healthDisplay.value = health;
@@ -408,6 +409,14 @@ protected function defaultFireDisplayFactory(x:Number, y:Number, rotation:Number
 		bulletParticle.start();
 		fieldView.effectsContainer.addChild(bulletParticle);
 	}
+}
+
+protected function defaultHealthbarFactory():HealthBar
+{
+	if( CardTypes.isTroop(card.type) )
+		return new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
+	else
+		return new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth) as HealthBar;
 }
 
 private function showDieAnimation():void 
