@@ -45,6 +45,15 @@ override public function set value(v:Number) : void
 		healthDisplay.text = Math.round(v * 400).toString(); 
 }
 
+override public function set alpha(value:Number):void
+{
+	if( super.alpha == value )
+		return;
+	super.alpha = value;
+	if( healthDisplay != null )
+		healthDisplay.alpha = value;
+}
+
 override public function dispose() : void 
 {
 	super.dispose();

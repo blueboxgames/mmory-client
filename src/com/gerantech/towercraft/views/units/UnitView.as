@@ -14,6 +14,7 @@ import com.gerantech.towercraft.views.effects.BattleParticleSystem;
 import com.gerantech.towercraft.views.hb.HealthBar;
 import com.gerantech.towercraft.views.hb.HealthBarDetailed;
 import com.gerantech.towercraft.views.hb.HealthBarLeveled;
+import com.gerantech.towercraft.views.hb.IHealthBar;
 import com.gerantech.towercraft.views.units.elements.ImageElement;
 import com.gerantech.towercraft.views.units.elements.UnitBody;
 import com.gerantech.towercraft.views.units.elements.UnitMC;
@@ -50,7 +51,7 @@ private var rangeDisplay:ImageElement;
 private var sizeDisplay:ImageElement;
 private var bodyDisplay:UnitBody;
 private var shadowDisplay:UnitMC;
-private var healthDisplay:HealthBar;
+private var healthDisplay:IHealthBar;
 private var flameParticle:BattleParticleSystem;
 private var smokeParticle:BattleParticleSystem;
 private var bulletParticle:BattleParticleSystem;
@@ -409,7 +410,7 @@ protected function defaultFireDisplayFactory(x:Number, y:Number, rotation:Number
 	}
 }
 
-protected function defaultHealthbarFactory():HealthBar
+protected function defaultHealthbarFactory():	IHealthBar
 {
 	if( CardTypes.isTroop(card.type) )
 		return new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
