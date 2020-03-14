@@ -158,8 +158,13 @@ package com.gerantech.towercraft.controls.screens
         break;
 
       case SFSCommands.BATTLE_NEW_ROUND:
-        if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN && Math.max(data.getInt("0"), data.getInt("1")) < 3 )
-          appModel.battleFieldView.requestKillPioneers(data.getInt("winner"));
+
+        if( Math.max(data.getInt("0"), data.getInt("1")) < 3 )
+        {
+          if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN || battleField.field.mode == Challenge.MODE_3_ZONE )
+            appModel.battleFieldView.requestKillPioneers(data.getInt("unitId") > -1 ? data.getInt("winner") : -1);
+        }
+
         if( hud != null )
           hud.updateScores(data.getInt("round"), data.getInt("winner"), data.getInt(battleField.side + ""), data.getInt(battleField.side == 0 ? "1" : "0"), data.getInt("unitId"));
         break;
@@ -170,7 +175,6 @@ package com.gerantech.towercraft.controls.screens
         else
           battleField.elixirUpdater.updateAt(1 - battleField.side, data.getInt(String(1 - battleField.side)));
         break;
-
       }
     }
 
