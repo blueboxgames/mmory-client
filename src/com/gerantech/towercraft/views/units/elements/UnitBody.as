@@ -34,17 +34,17 @@ package com.gerantech.towercraft.views.units.elements
       var base:String = artRules.get(card.type, ArtRules.BASE);
       if( base != "" )
       {
-        this.baseDisplay = new Image(AppModel.instance.assets.getTexture(texture + "/" + battleField.getColorIndex(side) + "/" + base));
+        this.baseDisplay = new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/" + base));
         this.addChild(this.baseDisplay);
       }
 
       // body and side
-      var texture:String = artRules.get(card.type, ArtRules.TEXTURE);
-      if( texture != "" )
+      var body:String = artRules.get(card.type, ArtRules.BODY);
+      if( body != "" )
       {
         var hasSide:Boolean = artRules.getInt(card.type, ArtRules.SIDE) == 1;
         var angle:String = side == battleField.side ? "000_" : "180_";
-        this.bodyDisplay = new UnitMC(texture + "/" + (hasSide ? 0 : battleField.getColorIndex(side)) + "/", "i_" + angle);
+        this.bodyDisplay = new UnitMC(body + "/" + (hasSide ? 0 : battleField.getColorIndex(side)) + "/", "i_" + angle);
         if( CardTypes.isTroop(card.type) )
           this.bodyDisplay.currentFrame = Math.floor(Math.random() * bodyDisplay.numFrames);
         this.bodyDisplay.pause();
@@ -53,7 +53,7 @@ package com.gerantech.towercraft.views.units.elements
 
         if( hasSide && side != battleField.side )
         {
-          this.sideDisplay = new UnitMC(texture + "/1/", "i_" + angle);
+          this.sideDisplay = new UnitMC(body + "/1/", "i_" + angle);
           this.sideDisplay.pause();
           this.sideDisplay.currentFrame = this.bodyDisplay.currentFrame;
           Starling.juggler.add(this.sideDisplay);
@@ -65,7 +65,7 @@ package com.gerantech.towercraft.views.units.elements
       var overlay:String = artRules.get(card.type, ArtRules.OVERLAY);
       if( overlay != "" )
       {
-        this.overlayDisplay = new Image(AppModel.instance.assets.getTexture(texture + "/" + battleField.getColorIndex(side) + "/" + overlay));
+        this.overlayDisplay = new Image(AppModel.instance.assets.getTexture(card.type + "/" + battleField.getColorIndex(side) + "/" + overlay));
         this.addChild(this.overlayDisplay);
       }
     }

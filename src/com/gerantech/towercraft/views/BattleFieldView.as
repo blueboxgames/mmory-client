@@ -134,7 +134,7 @@ private function fillDeck(deck:Vector.<String>, assets:Object):void
 	var type:String;
 	for( var i:int=0; i<deck.length; i++ )
 	{		
-		type = AppModel.instance.artRules.get(int(deck[i]), ArtRules.TEXTURE);
+		type = AppModel.instance.artRules.get(int(deck[i]), ArtRules.BODY);
 		for( var key:String in SyncUtil.ALL )
 		{
 			if( SyncUtil.ALL[key].hasOwnProperty("mode") )
