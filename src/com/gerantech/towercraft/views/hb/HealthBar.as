@@ -24,10 +24,7 @@ public function HealthBar(filedView:BattleFieldView, side:int, maximum:Number = 
 	this.filedView = filedView;
 	this.maximum = maximum;
 	this.side = side;
-}
 
-public function initialize() : void
-{
 	sliderBackDisplay = new Image(AppModel.instance.assets.getTexture("sliders/" + side + "/back"));
 	sliderBackDisplay.scale9Grid = SCALE_RECT;
 	sliderBackDisplay.touchable = false;

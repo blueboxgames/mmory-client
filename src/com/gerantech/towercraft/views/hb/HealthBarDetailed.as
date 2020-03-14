@@ -14,10 +14,6 @@ public function HealthBarDetailed(filedView:BattleFieldView, side:int, level:int
 	super(filedView, side, level, maximum);
 	this.width = 90;
 	this.height = 18;
-}
-override public function initialize() : void
-{
-	super.initialize();
 
 	healthDisplay = new ShadowLabel(null, 1, 0, "left", "ltr", false, null, 0.45);//28
 	healthDisplay.pixelSnapping = false;

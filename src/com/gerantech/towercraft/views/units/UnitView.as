@@ -318,10 +318,7 @@ override public function setHealth(health:Number) : Number
 	}
 
 	if( healthDisplay == null )
-	{
 		healthDisplay = this.healthbarFactory();
-		healthDisplay.initialize();
-	}
 	healthDisplay.value = health;
 	healthDisplay.setPosition(__x, __yz - card.sizeV - 60);
 	if( health < 0 )

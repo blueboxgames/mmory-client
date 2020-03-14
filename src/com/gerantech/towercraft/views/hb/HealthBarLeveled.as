@@ -17,12 +17,7 @@ public function HealthBarLeveled(filedView:BattleFieldView, side:int, level:int 
 {
 	super(filedView, side, maximum);
 	this.level = level;
-}
 
-override public function initialize() : void
-{
-	super.initialize();
-	
 	levelDisplay = new Image(AppModel.instance.assets.getTexture("sliders/" + _side + "/level-" + CoreUtils.clamp(level, 1, 13)));
 	levelDisplay.height = 28;
 	levelDisplay.scaleX = levelDisplay.scaleY;
