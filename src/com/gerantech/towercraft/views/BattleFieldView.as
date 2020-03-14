@@ -7,6 +7,7 @@ import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.mmory.core.utils.GraphicMetrics;
 import com.gerantech.mmory.core.utils.Point2;
 import com.gerantech.mmory.core.utils.Point3;
@@ -222,6 +223,13 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 public function requestKillPioneers(side:int):void 
 {
 	var color:int = side == battleData.battleField.side ? 1 : 0;
+ 	battleData.battleField.requestKillPioneers(side);
+
+	if( battleData.battleField.field.mode != Challenge.MODE_1_TOUCHDOWN )
+		return;
+	var time:int = battleData.battleField.resetTime - battleData.battleField.now - 500;
+	setTimeout(carPassing, time, color == 0 ? -600 : 1100, color == 0 ? 1100 : -600, color == 1 ? -200 : 200, color);
+	setTimeout(carPassing, time, color == 0 ? -400 : 1300, color == 0 ? 1300 : -400, color == 1 ? -480 : 420, color);
 	function carPassing(fromX:int, toX:int, y:int, color:int) : void
 	{
 		AppModel.instance.sounds.addAndPlay("car-passing-by", null, 1, SoundManager.SINGLE_NONE);
@@ -237,11 +245,6 @@ public function requestKillPioneers(side:int):void
 		unitsContainer.addChild(car);
 		Starling.juggler.tween(car, 1, {x:toX, onComplete:car.removeFromParent, onCompleteArgs:[true]});
 	}
-
- 	battleData.battleField.requestKillPioneers(side);
-	var time:int = battleData.battleField.resetTime - battleData.battleField.now - 500;
-	setTimeout(carPassing, time, color == 0 ? -600 : 1100, color == 0 ? 1100 : -600, color == 1 ? -200 : 200, color);
-	setTimeout(carPassing, time, color == 0 ? -400 : 1300, color == 0 ? 1300 : -400, color == 1 ? -480 : 420, color);
 }
 
 public function updateUnits(data:SFSObject) : void
