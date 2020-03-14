@@ -202,7 +202,7 @@ public function summonUnits(time:Number, units:ISFSArray):void
 
 private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number, t:Number) : void
 {
-	var card:Card = getCard(side, type, level);
+	var card:Card = battleData.battleField.getCard(side, type, level);
 	if( CardTypes.isSpell(type) )
 	{
 		var offset:Point3 = GraphicMetrics.getSpellStartPoint(card.type);
@@ -217,17 +217,6 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 	battleData.battleField.units.push(u as Unit);
 
 	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
-}
-
-private function getCard(side:int, type:int, level:int) : Card
-{
-	var ret:Card = battleData.battleField.decks.get(side < 0 ? 0 : side).get(type);
-	if( ret == null )
-	{
-		trace("create new card while battling ==> side:", side, "type:", type, "level:", level);
-		ret = new Card(battleData.battleField.games[side < 0 ? 0 : side], type, level);
-	}
-	return ret;
 }
 
 public function requestKillPioneers(side:int):void 
@@ -284,7 +273,7 @@ public function updateUnits(data:SFSObject) : void
 		u = getUnit(vars[0]);
 		if( u == null )
 		{
-			u = new UnitView(getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0, 0, true);
+			u = new UnitView(battleData.battleField.getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0, 0, true);
 			u.alpha = 0.2;
 			units.push(u);
 			continue;
@@ -303,7 +292,6 @@ public function updateUnits(data:SFSObject) : void
 			var ki:int = keys.indexOf(units[i].id);
 			if( (exists && ki == -1) || (!exists && ki > -1) )
 			{
-				trace("kill", units[i].id, units[i].card.type);
 				units[i].dispose();
 				units.removeAt(i);
 			}
