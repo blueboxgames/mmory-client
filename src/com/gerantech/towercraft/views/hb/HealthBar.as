@@ -107,7 +107,7 @@ public function set maximum(value:Number):void
 
 public function get alpha():Number
 {
-	return super.alpha;
+	return _alpha;
 }
 public function set alpha(value:Number):void
 {
