@@ -161,7 +161,6 @@ override public function set_state(value:int) : int
 	if( this.state == value )
 		return this.state;
 	super.set_state(value);
-	
 	if( this.state == GameObject.STATE_1_DIPLOYED )
 	{
 		if( deployIcon != null )
@@ -283,7 +282,7 @@ private function turn(anim:String, dir:String):void
 
 protected function bodyDisplay_shootCompleteHandler(event:Object):void
 {
-	this.state = GameObject.STATE_6_IDLE;
+	this.turn("i_", __angle);
 }
 
 override public function estimateAngle(x:Number, y:Number):Number
