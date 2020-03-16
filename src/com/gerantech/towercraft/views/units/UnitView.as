@@ -289,7 +289,7 @@ private function turn(anim:String, dir:String):void
 	
 	if( shadowDisplay != null )
 	{
-		shadowDisplay.loop = anim == "m_";
+		shadowDisplay.loop = bodyDisplay.loop;
 		shadowDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 		shadowDisplay.updateTexture(anim, dir);
 	}

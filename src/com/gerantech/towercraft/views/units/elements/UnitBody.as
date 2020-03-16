@@ -14,6 +14,7 @@ package com.gerantech.towercraft.views.units.elements
 
   public class UnitBody extends Sprite implements IElement
   {
+		private var _loop:Boolean;
     private var _unit:UnitView;
     public function set unit(value:UnitView):void { this._unit = value; }
     public function get unit():UnitView { return this._unit; }
@@ -88,8 +89,14 @@ package com.gerantech.towercraft.views.units.elements
         this.sideDisplay.color = value;
     }
 
+		public function get loop() : Boolean
+    {
+      return this._loop;
+    }
 		public function set loop(value:Boolean) : void
 		{
+      if( this._loop == value )
+        return;
       if( this.bodyDisplay != null )
   			this.bodyDisplay.loop = value;
       if( this.sideDisplay != null )
