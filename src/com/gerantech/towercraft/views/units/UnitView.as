@@ -43,6 +43,7 @@ private var __y:Number;
 private var __yz:Number;
 private var _muted:Boolean = true;
 private var __bodyScale:Number;
+private var __angle:String = "i_";
 
 public var fireDisplayFactory:Function;
 public var healthbarFactory:Function;
@@ -87,7 +88,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 	var body:String = appModel.artRules.get(card.type, ArtRules.BODY);
 	if( body != "" )
 	{
-		shadowDisplay = new UnitMC(body + "/" + battleField.getColorIndex(side) + "/", "i_" + angle);
+		shadowDisplay = new UnitMC(body + "/0/", "i_" + angle);
 		shadowDisplay.pivotX = shadowDisplay.width * 0.5;
 		shadowDisplay.pivotY = shadowDisplay.height * _PIVOT_Y + appModel.artRules.getInt(card.type, ArtRules.Y);
 		shadowDisplay.x = __x;
@@ -99,7 +100,6 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		shadowDisplay.scaleX = __bodyScale;
 		shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
 		shadowDisplay.currentFrame = bodyDisplay.startFrame;
-		shadowDisplay.pause();
 		Starling.juggler.add(shadowDisplay);
 		fieldView.shadowsContainer.addChild(shadowDisplay);
 	}
@@ -153,24 +153,24 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		fieldView.unitsContainer.addChildAt(rangeDisplay, 0);
 	}
 
-	battleField.addEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
+	battleField.addEventListener(BattleEvent.STATE_CHANGE, battleField_pauseHandler);
 }
 
-override public function setState(state:int) : Boolean
+override public function set_state(value:int) : int
 {
-	var _state:int = super.state;
-	if( !super.setState(state) )
-		return false;
+	if( this.state == value )
+		return this.state;
+	super.set_state(value);
 	
-	if( state == GameObject.STATE_1_DIPLOYED )
+	if( this.state == GameObject.STATE_1_DIPLOYED )
 	{
 		if( deployIcon != null )
 			deployIcon.scaleTo(0, 0, 0.5, function():void{deployIcon.removeFromParent(true);} );
 	}
-	else if( state == GameObject.STATE_2_MORTAL )
+	else if( this.state == GameObject.STATE_2_MORTAL )
 	{
 		// finish summon animations
-		bodyDisplay.pause();
+		bodyDisplay.play();
 		bodyDisplay.x = __x;
 		bodyDisplay.y = __yz;
 		bodyDisplay.alpha = 1;
@@ -179,47 +179,33 @@ override public function setState(state:int) : Boolean
 		
 		if( shadowDisplay != null )
 		{
+			shadowDisplay.play();
 			shadowDisplay.scaleX = __bodyScale;
 			shadowDisplay.scaleY = __bodyScale * _SHADOW_SCALE;
 			Starling.juggler.removeTweens(shadowDisplay);
 		}
 	}
-	else if( state == GameObject.STATE_3_WAITING )
+	else if( this.state >= GameObject.STATE_4_MOVING && state <= GameObject.STATE_6_IDLE )
 	{
-		bodyDisplay.currentFrame = 0;
-		if( shadowDisplay != null )
-			shadowDisplay.currentFrame = 0;
-		if ( _state != GameObject.STATE_5_SHOOTING )
-		{
-			bodyDisplay.pause();
-			if( shadowDisplay != null )
-				shadowDisplay.pause();
-			if( CardTypes.isHero(card.type) )
-			{
-				bodyDisplay.updateTexture("i_", side == battleField.side ? "000_" : "180_");
-				if( shadowDisplay != null )
-					shadowDisplay.updateTexture("i_", side == battleField.side ? "000_" : "180_");
-			}
-		}
+		if( card.type == 102 && side == 0 )
+			trace(this.state, UnitMC.ANIMATIONS[value - 4]);
+		this.turn(UnitMC.ANIMATIONS[state - 4], __angle);
 	}
-	else if( state == GameObject.STATE_4_MOVING || state == GameObject.STATE_5_SHOOTING )
-	{
-		bodyDisplay.play();
-		if( shadowDisplay != null )
-			shadowDisplay.play();
-	}
-	return true;
+	return this.state;
 }
 
 override public function attack(target:Unit) : void
 {
+	var _a:String =  CoreUtils.getRadString(Math.atan2(__x - target.getSideX(), __y - target.getSideY()));
+	if( __angle != _a && this.state == GameObject.STATE_5_SHOOTING )
+		this.turn("s_", _a);// force update animation when state not changed yet
+	__angle = _a;
 	super.attack(target);
 	
 	var fireOffset:Point = appModel.artRules.getFlamePosition(card.type, Math.atan2(x - target.x, y - target.y));
 	var b:BulletView = new BulletView(battleField, this, target, bulletId, card, side, x + fireOffset.x, y, fireOffset.y / BattleField.CAMERA_ANGLE, target.x, target.y, 0);
 	battleField.bullets.push(b as Bullet);
 	bulletId ++;
-	turn("s_", CoreUtils.getRadString(Math.atan2(__x - target.getSideX(), __y - target.getSideY())));
 }
 
 override public function setPosition(x:Number, y:Number, z:Number, forced:Boolean = false) : Boolean
@@ -289,7 +275,7 @@ private function turn(anim:String, dir:String):void
 	
 	if( shadowDisplay != null )
 	{
-		shadowDisplay.loop = anim == "m_";
+		shadowDisplay.loop = bodyDisplay.loop;
 		shadowDisplay.scaleX = (flipped ? -__bodyScale : __bodyScale );
 		shadowDisplay.updateTexture(anim, dir);
 	}
@@ -297,23 +283,18 @@ private function turn(anim:String, dir:String):void
 
 protected function bodyDisplay_shootCompleteHandler(event:Object):void
 {
-	bodyDisplay.loop = true;
-	bodyDisplay.updateTexture("i_", event.data);
-	if( shadowDisplay != null )
-	{
-		shadowDisplay.loop = true;
-		shadowDisplay.updateTexture("i_", event.data);
-	}
+	this.state = GameObject.STATE_6_IDLE;
 }
 
 override public function estimateAngle(x:Number, y:Number):Number
 {
-	var angle:Number = super.estimateAngle(x, y); 
+	var angle:Number = super.estimateAngle(x, y);
 	if( angle == -1 )
 		return angle;
-
-	if( state == GameObject.STATE_4_MOVING )
-		turn("m_", CoreUtils.getRadString(Math.atan2(this.getSideX() - this.getSide_X(x), this.getSideY() - this.getSide_Y(y))));
+	var _a:String = CoreUtils.getRadString(Math.atan2(this.getSideX() - this.getSide_X(x), this.getSideY() - this.getSide_Y(y)));
+	if( __angle != _a && this.state == GameObject.STATE_4_MOVING )
+		this.turn("m_", _a);// force update animation when state not changed yet
+	__angle = _a;
 	return angle;
 }
 
@@ -490,8 +471,8 @@ private function showDieAnimation():void
 
 protected function battleField_pauseHandler(event:BattleEvent) : void
 {
-	var state:int = event.data as int;
-	if( state >= BattleField.STATE_3_PAUSED )
+	var battleState:int = event.data as int;
+	if( battleState >= BattleField.STATE_3_PAUSED )
 	{
 		if( bodyDisplay != null )
 		{
@@ -512,7 +493,7 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 		return;
 	}
 
-	if( state != GameObject.STATE_4_MOVING )
+	if( battleState != BattleField.STATE_2_STARTED )
 		return;
 
 	bodyDisplay.play();
@@ -523,7 +504,7 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 override public function dispose() : void
 {
 	super.dispose();
-	battleField.removeEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
+	battleField.removeEventListener(BattleEvent.STATE_CHANGE, battleField_pauseHandler);
 	bodyDisplay.removeFromParent(true);
 	if( shadowDisplay != null )
 		shadowDisplay.removeFromParent(true);

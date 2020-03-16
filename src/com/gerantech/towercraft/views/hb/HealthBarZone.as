@@ -80,11 +80,15 @@ package com.gerantech.towercraft.views.hb
 
     public function get alpha():Number
     {
-    	throw new Error("Method not implemented.");
+    	return _alpha;
     }
     public function set alpha(value:Number):void
     {
-    	throw new Error("Method not implemented.");
+      if( this._alpha == value )
+        return;
+      this.sideZone.alpha = value;
+      this.centerDisplay.alpha = value;
+      this.backgroundZone.alpha = value;
     }
 
     public function get side():int
