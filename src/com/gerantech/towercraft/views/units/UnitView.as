@@ -153,21 +153,21 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		fieldView.unitsContainer.addChildAt(rangeDisplay, 0);
 	}
 
-	battleField.addEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
+	battleField.addEventListener(BattleEvent.STATE_CHANGE, battleField_pauseHandler);
 }
 
-override public function setState(state:int) : Boolean
+override public function set_state(value:int) : int
 {
-	var _state:int = super.state;
-	if( !super.setState(state) )
-		return false;
+	if( this.state == value )
+		return this.state;
+	super.set_state(value);
 	
-	if( state == GameObject.STATE_1_DIPLOYED )
+	if( this.state == GameObject.STATE_1_DIPLOYED )
 	{
 		if( deployIcon != null )
 			deployIcon.scaleTo(0, 0, 0.5, function():void{deployIcon.removeFromParent(true);} );
 	}
-	else if( state == GameObject.STATE_2_MORTAL )
+	else if( this.state == GameObject.STATE_2_MORTAL )
 	{
 		// finish summon animations
 		bodyDisplay.pause();
@@ -184,7 +184,7 @@ override public function setState(state:int) : Boolean
 			Starling.juggler.removeTweens(shadowDisplay);
 		}
 	}
-	else if( state == GameObject.STATE_3_WAITING )
+	else if( this.state >= GameObject.STATE_4_MOVING && state <= GameObject.STATE_6_IDLE )
 	{
 		bodyDisplay.currentFrame = 0;
 		if( shadowDisplay != null )
@@ -207,9 +207,8 @@ override public function setState(state:int) : Boolean
 		bodyDisplay.play();
 		if( shadowDisplay != null )
 			shadowDisplay.play();
+	return this.state;
 	}
-	return true;
-}
 
 override public function attack(target:Unit) : void
 {
@@ -490,8 +489,8 @@ private function showDieAnimation():void
 
 protected function battleField_pauseHandler(event:BattleEvent) : void
 {
-	var state:int = event.data as int;
-	if( state >= BattleField.STATE_3_PAUSED )
+	var battleState:int = event.data as int;
+	if( battleState >= BattleField.STATE_3_PAUSED )
 	{
 		if( bodyDisplay != null )
 		{
@@ -512,7 +511,7 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 		return;
 	}
 
-	if( state != GameObject.STATE_4_MOVING )
+	if( battleState != BattleField.STATE_2_STARTED )
 		return;
 
 	bodyDisplay.play();
@@ -523,7 +522,7 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 override public function dispose() : void
 {
 	super.dispose();
-	battleField.removeEventListener(BattleEvent.PAUSE, battleField_pauseHandler);
+	battleField.removeEventListener(BattleEvent.STATE_CHANGE, battleField_pauseHandler);
 	bodyDisplay.removeFromParent(true);
 	if( shadowDisplay != null )
 		shadowDisplay.removeFromParent(true);
