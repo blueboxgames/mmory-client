@@ -233,17 +233,17 @@ public function requestKillPioneers(side:int):void
 	function carPassing(fromX:int, toX:int, y:int, color:int) : void
 	{
 		AppModel.instance.sounds.addAndPlay("car-passing-by", null, 1, SoundManager.SINGLE_NONE);
-		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/base");
+		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/b");
 		var a:AssetManager = AppModel.instance.assets;
 		var car:ImageElement = new ImageElement(null, txt);
 		car.pivotX = car.width * 0.5;
 		car.pivotY = car.height * UnitView._PIVOT_Y + AppModel.instance.artRules.getInt(201, "y");
-		car.width = UnitView._WIDTH;
-		car.height = UnitView._HEIGHT;
+		car.width = UnitView._WIDTH * 1.3;
+		car.height = UnitView._HEIGHT * 1.3;
 		car.x = fromX;
 		car.y = y + BattleField.HEIGHT * 0.5;
 		unitsContainer.addChild(car);
-		Starling.juggler.tween(car, 1, {x:toX, onComplete:car.removeFromParent, onCompleteArgs:[true]});
+		Starling.juggler.tween(car, 0.8, {x:toX, onComplete:car.removeFromParent, onCompleteArgs:[true]});
 	}
 }
 
