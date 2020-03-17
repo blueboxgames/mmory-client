@@ -435,7 +435,7 @@ private function showDieAnimation():void
 		return;
 
 	if( CardTypes.isHero(card.type) && side != battleField.side )
-		fieldView.mapBuilder.setSummonAreaEnable(true, battleField.getSummonState(battleField.side == 0 ? 1 : 0));
+		fieldView.mapBuilder.setSummonAreaEnable(true, battleField.getSummonState(battleField.side == 0 ? 1 : 0), true);
 
 	var die:String = appModel.artRules.get(card.type, ArtRules.DIE);
 	if( die == "" )
