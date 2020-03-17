@@ -149,7 +149,7 @@ protected function sfsConnection_loginErrorHandler(event:SFSEvent):void
 	if( event.params.errorCode == 110 )
 		dispatchEvent(new LoadingEvent(LoadingEvent.FORCE_UPDATE));
 	else
-		dispatchEvent(new LoadingEvent(LoadingEvent.LOGIN_ERROR, event.params["errorCode"]));
+		dispatchEvent(new LoadingEvent(LoadingEvent.LOGIN_ERROR, event.params.errorCode));
 }
 protected function sfsConnection_loginHandler(event:SFSEvent):void
 {

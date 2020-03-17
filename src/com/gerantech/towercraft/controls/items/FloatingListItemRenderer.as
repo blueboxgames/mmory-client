@@ -11,7 +11,6 @@ import starling.core.Starling;
 
 public class FloatingListItemRenderer extends AbstractTouchableListItemRenderer
 {
-private var nameShadowDisplay:ShadowLabel;
 private var labelDisplay:ShadowLabel;
 public function FloatingListItemRenderer(height:int)
 {
@@ -27,7 +26,7 @@ override protected function commitData() : void
 	
 	var label:String = loc(_data + "");
 	if( labelDisplay == null )
-		createElements( label );
+		createElements(label);
 	else
 		labelDisplay.text = label;
 
