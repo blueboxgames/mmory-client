@@ -153,7 +153,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		fieldView.unitsContainer.addChildAt(rangeDisplay, 0);
 	}
 
-	battleField.addEventListener(BattleEvent.STATE_CHANGE, battleField_pauseHandler);
+	battleField.addEventListener(BattleEvent.STATE_CHANGE, this.battleField_stateChangeHandler);
 }
 
 override public function set_state(value:int) : int
@@ -186,8 +186,6 @@ override public function set_state(value:int) : int
 	}
 	else if( this.state >= GameObject.STATE_4_MOVING && state <= GameObject.STATE_6_IDLE )
 	{
-		if( card.type == 102 && side == 0 )
-			trace(this.state, UnitMC.ANIMATIONS[value - 4]);
 		this.turn(UnitMC.ANIMATIONS[state - 4], __angle);
 	}
 	return this.state;
@@ -468,7 +466,7 @@ private function showDieAnimation():void
 	appModel.sounds.addAndPlayRandom(appModel.artRules.getArray(card.type, ArtRules.DIE_SFX));
 }
 
-protected function battleField_pauseHandler(event:BattleEvent) : void
+protected function battleField_stateChangeHandler(event:BattleEvent) : void
 {
 	var battleState:int = event.data as int;
 	if( battleState >= BattleField.STATE_3_PAUSED )
@@ -503,7 +501,7 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 override public function dispose() : void
 {
 	super.dispose();
-	battleField.removeEventListener(BattleEvent.STATE_CHANGE, battleField_pauseHandler);
+	battleField.removeEventListener(BattleEvent.STATE_CHANGE, this.battleField_stateChangeHandler);
 	bodyDisplay.removeFromParent(true);
 	if( shadowDisplay != null )
 		shadowDisplay.removeFromParent(true);
