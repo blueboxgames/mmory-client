@@ -136,7 +136,7 @@ protected function sfsConnection_elixirUpdateHandler(event:SFSEvent):void
 
 public function updateScore(round:int, winnerSide:int, allise:int, axis:int, unitId:int) : void 
 {
-	if( allise != 1 || appModel.maxTutorBattles <= player.get_battleswins() || numRounds < round )
+	if( allise > 2 || appModel.maxTutorBattles <= player.get_battleswins() || numRounds < round )
 		return;
 	var summonData:Array = ScriptEngine.get(ScriptEngine.T66_BATTLE_SUMMON_POS, battleField.field.mode, "newround", player.get_battleswins());
 	if( summonData != null )
