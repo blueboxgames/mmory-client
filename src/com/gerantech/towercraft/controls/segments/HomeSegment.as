@@ -66,7 +66,7 @@ override public function init():void
 	eventsButton.width = 840;
 	eventsButton.height = Math.min(380, stageHeight * 0.22)
 	eventsButton.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -stageHeight * 0.02);
-	eventsButton.data = player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX) == -1 ? 0 : player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX);
+	eventsButton.data = challengeIndex;
 	addButton(eventsButton, "eventsButton");
 	
 	// battle button
@@ -271,7 +271,7 @@ private function mainButtons_triggeredHandler(event:Event):void
 	switch( buttonName )
 	{
 		case "eventsButton":	if( player.get_battleswins() >= appModel.maxTutorBattles ) appModel.navigator.pushScreen( Game.CHALLENGES_SCREEN );				return;
-		case "battleButton":	appModel.navigator.runBattle(player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX) == -1 ? 0 : player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX));	return;
+		case "battleButton":	appModel.navigator.runBattle(challengeIndex);	return;
 	}
 	
 	if( league < 0 )
@@ -308,5 +308,9 @@ override public function dispose():void
 	Starling.juggler.removeDelayedCalls(showOffers);
 	super.dispose();
 } 
+
+public function get challengeIndex():int{
+	return Math.max(0, player.prefs.getAsInt(PrefsTypes.CHALLENGE_INDEX));
+}
 }
 }
