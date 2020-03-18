@@ -276,8 +276,12 @@ private function coverUnitTutorial():void
 		return;
 	
 	var ptoffset:int = ScriptEngine.getInt(ScriptEngine.T64_BATTLE_PAUSE_TIME, battleField.field.mode, player.get_battleswins(), battleField.numSummonedUnits);
-	if( ptoffset > 0 )
-		battleField.pauseTime = battleField.now + ptoffset;
+	if( ptoffset > -1 )
+	{
+		this.battleField.resetTime = battleField.now + ptoffset; // resume
+		if( ptoffset > 0 )
+			this.battleField.state = BattleField.STATE_3_PAUSED; // pause
+	}
 
 	if( numCovers < battleField.numSummonedUnits )
 		return;
