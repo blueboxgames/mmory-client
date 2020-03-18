@@ -44,9 +44,6 @@ override protected function initialize():void
 	titleDisplay.layoutData = new AnchorLayoutData(NaN, NaN, 50, NaN, 0);
 	addChild(titleDisplay);
 	
-	// sound
-	appModel.sounds.addAndPlay("scoreboard-" + side);
-
 	var _h:int = transitionIn.destinationBound.height;
 	for ( var i:int = 0; i < 3; i++ )
 	{
