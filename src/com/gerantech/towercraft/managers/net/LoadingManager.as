@@ -171,7 +171,7 @@ protected function sfsConnection_loginHandler(event:SFSEvent):void
 		dispatchEvent(new LoadingEvent(LoadingEvent.UNDER_MAINTENANCE, serverData));
 		return;
 	}			
-	if( serverData.containsKey("exists") )// duplicate user
+	if( serverData.containsKey("existGames") )// old user
 	{
 		dispatchEvent(new LoadingEvent(LoadingEvent.LOGIN_USER_EXISTS, serverData));
 		return;

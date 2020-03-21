@@ -1,4 +1,4 @@
-{
+﻿{
     "app_title": "BoomLand",
     "app_brief": "This is the battle of your life are you ready? One great game with cool graphics and gameplay.",
     "": "",
@@ -575,7 +575,8 @@
     "popup_offer_33": "Did you know you that you can compete with your friends or watch them while they're playing",
     "": "",
     "popup_under_maintenance": "Under Maintenance\n please wait #.",
-    "popup_reload_authenticated_label": "You played with #, Do you want continue game with old user-name?",
+    "popup_user_exists": "Welcome our old player!\nSelect your game:",
+    "popup_user_exists_button": "New Game",
     "popup_upgrade_building_error": "Not enough cards!",
     "": "",
     "popup_ban_button": "Ban",
