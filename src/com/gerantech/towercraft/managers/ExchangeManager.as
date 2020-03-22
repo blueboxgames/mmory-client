@@ -36,6 +36,7 @@ import com.smartfoxserver.v2.entities.data.SFSObject;
 import feathers.events.FeathersEventType;
 
 import starling.events.Event;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 /**
 * @author Mansour Djawadi
 */
@@ -112,7 +113,7 @@ public function process(item : ExchangeItem) : void
 			if( _state == ExchangeItem.CHEST_STATE_WAIT )
 			{
 				if( exchanger.isBattleBookReady(item.type, timeManager.now) == MessageTypes.RESPONSE_ALREADY_SENT )
-					params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+					params.putInt("hards", Exchanger.timeToHard(ScriptEngine.getInt(ScriptEngine.T91_PACK_DELAY, item.outcome)));
 				else
 					detailsPopup.addEventListener(Event.SELECT, detailsPopup_selectHandler);
 			}
