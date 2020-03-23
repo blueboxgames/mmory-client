@@ -150,9 +150,9 @@ static public function getSideColor(side:int):uint
 	switch(side)
 	{
 		case 0  :
-		case -3  : return 0x1C73B9;
 		case 1  :
 		case -2  : return 0xCE1C31;
+		case -3  : return 0x1C73B9;
 		case -4  : return 0xBC40A8;
 	}
 	return 0xFFFFFF;			
