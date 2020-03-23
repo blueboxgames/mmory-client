@@ -10,15 +10,16 @@ import starling.display.Image;
 public class HealthBar implements IHealthBar
 {
 static protected var SCALE_RECT:Rectangle = new Rectangle(3, 3, 1, 1);
-public var width:Number = 48;
-public var height:Number = 15;
 protected var _side:int = -2;
 protected var _value:Number = 0.0;
 protected var _alpha:Number = 1.0;
+protected var _width:Number = 48;
+protected var _height:Number = 15;
 protected var _maximum:Number = 1.0;
 protected var sliderFillDisplay:Image;
 protected var sliderBackDisplay:Image;
 protected var filedView:BattleFieldView;
+
 public function HealthBar(filedView:BattleFieldView, side:int, maximum:Number = 1)
 {
 	super();
@@ -126,6 +127,31 @@ public function dispose() : void
 		sliderBackDisplay.removeFromParent(true);
 	if( sliderFillDisplay != null )
 		sliderFillDisplay.removeFromParent(true);
+}
+
+public function get width():Number
+{
+	return this._width;
+}
+public function set width(value:Number):void
+{
+	if( this._width == value )
+		return;
+	this._width = value;
+	if( sliderBackDisplay != null )
+		sliderBackDisplay.width = width;
+
+}
+
+public function get height():Number
+{
+	return this._height;
+}
+public function set height(value:Number):void
+{
+	if( this._height == value )
+		return;
+	this._height = value;
 }
 }
 }
