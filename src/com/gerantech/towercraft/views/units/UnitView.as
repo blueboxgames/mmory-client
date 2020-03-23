@@ -422,11 +422,11 @@ protected function defaultFireDisplayFactory(x:Number, y:Number, rotation:Number
 
 protected function defaultHealthbarFactory():	IHealthBar
 {
-	if( CardTypes.isTroop(card.type) )
-		return new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
+	if( !CardTypes.isTroop(card.type) )
+		return new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth) as HealthBar;
 	if( side < 0 )
 		return new HealthBarZone(fieldView, this);
-	return new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth) as HealthBar;
+	return new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
 }
 
 private function showDieAnimation():void 
