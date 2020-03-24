@@ -60,7 +60,7 @@ package com.gerantech.towercraft.views
     }
 
     private var summonAreaEnable:Boolean;
-    public function setSummonAreaEnable(value:Boolean, summonState:int) : void
+    public function setSummonAreaEnable(value:Boolean, summonState:int, autoHide:Boolean = false) : void
     {
       if( summonAreaEnable == value )
         return;
@@ -75,6 +75,8 @@ package com.gerantech.towercraft.views
       {
         summonImage.visible = true;
         Starling.juggler.tween(summonImage, 0.2, {alpha:0.5});
+        if( autoHide )
+          Starling.juggler.tween(summonImage, 0.2, {alpha:0.0, delay:3.0});
       }
       else
       {
@@ -107,7 +109,7 @@ package com.gerantech.towercraft.views
       tutorHintText.pivotX = tutorHintText.width * 0.5;
       tutorHintText.pivotY = tutorHintText.height * 0.5;
       tutorHintText.x = Starling.current.stage.width * 0.45;
-      tutorHintText.y = Starling.current.stage.height * (field.mode == 0 ? 0.15 : 0.12);
+      tutorHintText.y = Starling.current.stage.height * (field.mode == 0 ? 0.12 : 0.08);
       tutorHintText.scale = 0;
       tutorHintText.alpha = 0;
       AppModel.instance.battleFieldView.guiTextsContainer.addChild(tutorHintText);

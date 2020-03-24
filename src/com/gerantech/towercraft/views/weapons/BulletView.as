@@ -44,11 +44,13 @@ public function BulletView(battleField:BattleField, unit:Unit, target:Unit, id:i
 	if( hitDisplayFactory == null )
 		hitDisplayFactory = defaultHitDisplayFactory;
 }
-override public	function setState(state:int) : Boolean
+override public	function set_state(value:int) : int
 {
-	if( !super.setState(state) )
-		return false;
-	if( state == GameObject.STATE_1_DIPLOYED )
+	if( this.state == value )
+		return this.state;
+	super.set_state(value);
+
+	if( value == GameObject.STATE_1_DIPLOYED )
 	{
 		appModel.sounds.addAndPlayRandom(appModel.artRules.getArray(card.type, ArtRules.ATTACK_SFX));
 		// fire effect
@@ -63,7 +65,7 @@ override public	function setState(state:int) : Boolean
 		// bullet animation
 		bulletDisplayFactory();
 	}
-	else if( state == GameObject.STATE_5_SHOOTING )
+	else if( value == GameObject.STATE_5_SHOOTING )
 	{
 		hitDisplayFactory();
 		if( battleField.debugMode )
@@ -79,7 +81,7 @@ override public	function setState(state:int) : Boolean
 			Starling.juggler.tween(damageAreaDisplay, 0.5, {scale:0, onComplete:damageAreaDisplay.removeFromParent, onCompleteArgs:[true]});
 		}
 	}
-	return true;
+	return this.state;
 }
 
 override public function setPosition(x:Number, y:Number, z:Number, forced:Boolean = false) : Boolean

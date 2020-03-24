@@ -1,4 +1,4 @@
-package com.gerantech.towercraft.controls.sliders.battle 
+package com.gerantech.towercraft.views.hb
 {
 import com.gerantech.towercraft.controls.texts.ShadowLabel;
 import com.gerantech.towercraft.views.BattleFieldView;
@@ -14,10 +14,6 @@ public function HealthBarDetailed(filedView:BattleFieldView, side:int, level:int
 	super(filedView, side, level, maximum);
 	this.width = 90;
 	this.height = 18;
-}
-override public function initialize() : void
-{
-	super.initialize();
 
 	healthDisplay = new ShadowLabel(null, 1, 0, "left", "ltr", false, null, 0.45);//28
 	healthDisplay.pixelSnapping = false;
@@ -47,6 +43,15 @@ override public function set value(v:Number) : void
 	healthDisplay.visible = v < maximum;
 	if( healthDisplay.visible )
 		healthDisplay.text = Math.round(v * 400).toString(); 
+}
+
+override public function set alpha(value:Number):void
+{
+	if( super.alpha == value )
+		return;
+	super.alpha = value;
+	if( healthDisplay != null )
+		healthDisplay.alpha = value;
 }
 
 override public function dispose() : void 

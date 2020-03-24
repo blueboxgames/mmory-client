@@ -158,8 +158,14 @@ package com.gerantech.towercraft.controls.screens
         break;
 
       case SFSCommands.BATTLE_NEW_ROUND:
-        if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN && Math.max(data.getInt("0"), data.getInt("1")) < 3 )
-          appModel.battleFieldView.requestKillPioneers(data.getInt("winner"));
+
+        appModel.sounds.stopAll(SoundManager.CATE_SFX);
+        if( Math.max(data.getInt("0"), data.getInt("1")) < 3 )
+        {
+          if( battleField.field.mode == Challenge.MODE_1_TOUCHDOWN || battleField.field.mode == Challenge.MODE_3_ZONE )
+            appModel.battleFieldView.requestKillPioneers(data.getInt("unitId") > -1 ? data.getInt("winner") : -1);
+        }
+
         if( hud != null )
           hud.updateScores(data.getInt("round"), data.getInt("winner"), data.getInt(battleField.side + ""), data.getInt(battleField.side == 0 ? "1" : "0"), data.getInt("unitId"));
         break;
@@ -170,7 +176,6 @@ package com.gerantech.towercraft.controls.screens
         else
           battleField.elixirUpdater.updateAt(1 - battleField.side, data.getInt(String(1 - battleField.side)));
         break;
-
       }
     }
 
@@ -330,7 +335,6 @@ package com.gerantech.towercraft.controls.screens
       }
 
       touchEnable = false;
-      appModel.sounds.stopAll();
       hud.stopTimers();
 
       // reduce player resources
@@ -386,7 +390,7 @@ package com.gerantech.towercraft.controls.screens
       else
         endOverlay = new EndBattleOverlay(appModel.battleFieldView.battleData, playerIndex, rewards, inTutorial);
       endOverlay.addEventListener(Event.CLOSE, endOverlay_closeHandler);
-      setTimeout(hud.end, 2000, endOverlay);// delay for noobs
+      setTimeout(hud.end, 3000, endOverlay);// delay for noobs
     }
 
     private function endOverlay_closeHandler(event:Event):void

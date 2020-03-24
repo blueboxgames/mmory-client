@@ -32,7 +32,7 @@ override protected function initialize():void
 	super.initialize();
 
 	touchable = false;
-	backgroundSkin = new Quad (1, 1, side == 0 ? 0x000088 : 0x880000);
+	backgroundSkin = new Quad(1, 1, side == 0 ? 0x0F2188 : 0x9B0900);
 	backgroundSkin.alpha = 0.7;
 	
 	transitionIn.time = 0.7;
@@ -44,9 +44,6 @@ override protected function initialize():void
 	titleDisplay.layoutData = new AnchorLayoutData(NaN, NaN, 50, NaN, 0);
 	addChild(titleDisplay);
 	
-	// sound
-	appModel.sounds.addAndPlay("scoreboard-" + side);
-
 	var _h:int = transitionIn.destinationBound.height;
 	for ( var i:int = 0; i < 3; i++ )
 	{

@@ -7,6 +7,7 @@ import com.gerantech.mmory.core.battle.units.Card;
 import com.gerantech.mmory.core.battle.units.Unit;
 import com.gerantech.mmory.core.constants.CardTypes;
 import com.gerantech.mmory.core.scripts.ScriptEngine;
+import com.gerantech.mmory.core.socials.Challenge;
 import com.gerantech.mmory.core.utils.GraphicMetrics;
 import com.gerantech.mmory.core.utils.Point2;
 import com.gerantech.mmory.core.utils.Point3;
@@ -75,7 +76,7 @@ public function init():void
 	}
 
 	var preAssets:Object = new Object();
-	addPreAssets(preAssets);
+	addAssets(preAssets);
 	var syncTool:SyncUtil = new SyncUtil();
 	syncTool.addEventListener(Event.COMPLETE, syncToolPre_completeHandler);
 	syncTool.sync(preAssets);
@@ -97,9 +98,13 @@ public function load(battleData:BattleData) : void
 		deck.push(battleData.axisGame.loginData.deck[k].toString());
 	var postAssets:Object = new Object();
 	if( BattleScreen.FRIENDLY_MODE > 0 )
-		addPreAssets(postAssets);
-	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), false) + "");
-	deck.push(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), true) + "");
+		addAssets(postAssets);
+	addInitialUnit(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), 0)[0]);
+	addInitialUnit(ScriptEngine.get(ScriptEngine.T54_CHALLENGE_INITIAL_UNITS, battleData.sfsData.getInt("mode"), 2)[0]);
+	function addInitialUnit(type:int):void {
+		if( type > -1 )
+			deck.push(type.toString());
+	}
 	fillDeck(deck, postAssets);
 
 	var key:String = "map-" + battleData.sfsData.getInt("mode");
@@ -112,7 +117,7 @@ public function load(battleData:BattleData) : void
 	syncTool.sync(postAssets);
 }
 
-private function addPreAssets(assets:Object):void
+private function addAssets(assets:Object):void
 {
 	for ( var key:String in SyncUtil.ALL )
 		if( SyncUtil.ALL[key]["mode"] == "prev" )
@@ -129,7 +134,7 @@ private function fillDeck(deck:Vector.<String>, assets:Object):void
 	var type:String;
 	for( var i:int=0; i<deck.length; i++ )
 	{		
-		type = AppModel.instance.artRules.get(int(deck[i]), ArtRules.TEXTURE);
+		type = AppModel.instance.artRules.get(int(deck[i]), ArtRules.BODY);
 		for( var key:String in SyncUtil.ALL )
 		{
 			if( SyncUtil.ALL[key].hasOwnProperty("mode") )
@@ -198,7 +203,7 @@ public function summonUnits(time:Number, units:ISFSArray):void
 
 private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:Number, health:Number, t:Number) : void
 {
-	var card:Card = getCard(side, type, level);
+	var card:Card = battleData.battleField.getCard(side, type, level);
 	if( CardTypes.isSpell(type) )
 	{
 		var offset:Point3 = GraphicMetrics.getSpellStartPoint(card.type);
@@ -215,40 +220,31 @@ private function summonUnit(id:int, type:int, level:int, side:int, x:Number, y:N
 	AppModel.instance.sounds.addAndPlayRandom(AppModel.instance.artRules.getArray(type, ArtRules.SUMMON_SFX), SoundManager.CATE_SFX, SoundManager.SINGLE_BYPASS_THIS);
 }
 
-private function getCard(side:int, type:int, level:int) : Card
-{
-	var ret:Card = battleData.battleField.decks.get(side).get(type);
-	if( ret == null )
-	{
-		trace("create new card while battling ==> side:", side, "type:", type, "level:", level);
-		ret = new Card(battleData.battleField.games[side], type, level);
-	}
-	return ret;
-}
-
 public function requestKillPioneers(side:int):void 
 {
 	var color:int = side == battleData.battleField.side ? 1 : 0;
+ 	battleData.battleField.requestKillPioneers(side);
+
+	if( battleData.battleField.field.mode != Challenge.MODE_1_TOUCHDOWN )
+		return;
+	var time:int = battleData.battleField.resetTime - battleData.battleField.now - 500;
+	setTimeout(carPassing, time, color == 0 ? -600 : 1100, color == 0 ? 1100 : -600, color == 1 ? -200 : 200, color);
+	setTimeout(carPassing, time, color == 0 ? -400 : 1300, color == 0 ? 1300 : -400, color == 1 ? -480 : 420, color);
 	function carPassing(fromX:int, toX:int, y:int, color:int) : void
 	{
 		AppModel.instance.sounds.addAndPlay("car-passing-by", null, 1, SoundManager.SINGLE_NONE);
-		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/base");
+		var txt:Texture = AppModel.instance.assets.getTexture("201/" + color + "/b");
 		var a:AssetManager = AppModel.instance.assets;
 		var car:ImageElement = new ImageElement(null, txt);
 		car.pivotX = car.width * 0.5;
 		car.pivotY = car.height * UnitView._PIVOT_Y + AppModel.instance.artRules.getInt(201, "y");
-		car.width = UnitView._WIDTH;
-		car.height = UnitView._HEIGHT;
+		car.width = UnitView._WIDTH * 1.3;
+		car.height = UnitView._HEIGHT * 1.3;
 		car.x = fromX;
 		car.y = y + BattleField.HEIGHT * 0.5;
 		unitsContainer.addChild(car);
-		Starling.juggler.tween(car, 1, {x:toX, onComplete:car.removeFromParent, onCompleteArgs:[true]});
+		Starling.juggler.tween(car, 0.8, {x:toX, onComplete:car.removeFromParent, onCompleteArgs:[true]});
 	}
-
- 	battleData.battleField.requestKillPioneers(side);
-	var time:int = battleData.battleField.resetTime - battleData.battleField.now - 500;
-	setTimeout(carPassing, time, color == 0 ? -600 : 1100, color == 0 ? 1100 : -600, color == 1 ? -200 : 200, color);
-	setTimeout(carPassing, time, color == 0 ? -400 : 1300, color == 0 ? 1300 : -400, color == 1 ? -480 : 420, color);
 }
 
 public function updateUnits(data:SFSObject) : void
@@ -280,7 +276,7 @@ public function updateUnits(data:SFSObject) : void
 		u = getUnit(vars[0]);
 		if( u == null )
 		{
-			u = new UnitView(getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0, 0, true);
+			u = new UnitView(battleData.battleField.getCard(vars[5], vars[4], vars[6]), vars[0], vars[5], vars[1], vars[2], 0, 0, true);
 			u.alpha = 0.2;
 			units.push(u);
 			continue;
@@ -299,7 +295,6 @@ public function updateUnits(data:SFSObject) : void
 			var ki:int = keys.indexOf(units[i].id);
 			if( (exists && ki == -1) || (!exists && ki > -1) )
 			{
-				trace("kill", units[i].id, units[i].card.type);
 				units[i].dispose();
 				units.removeAt(i);
 			}

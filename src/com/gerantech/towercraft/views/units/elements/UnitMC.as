@@ -11,6 +11,7 @@ import starling.textures.Texture;
 */
 public class UnitMC extends MovieClip
 {
+public static	const ANIMATIONS:Vector.<String> = new <String>["m_", "s_", "i_"];
 public var direction:String;
 private var baseTextureName:String;
 private var animTextureName:String;

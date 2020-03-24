@@ -13,7 +13,7 @@ public class ArtRules
 static public const POSITIONS:String = "p";
 static public const Y:String = "y";
 static public const SIDE:String = "sd";
-static public const TEXTURE:String = "texture";
+static public const BODY:String = "body";
 static public const BASE:String = "base";
 static public const OVERLAY:String = "overlay";
 static public const BULLET:String = "bullet";
@@ -43,7 +43,7 @@ public function ArtRules(data:Object)
 public function get(type:int, attribute:String) : String
 {
 	if( rules[type] == null )
-		return attribute == TEXTURE ? type.toString() : "";
+		return attribute == BODY ? type.toString() : "";
 	return rules[type][attribute];
 }
 public function getInt(type:int, attribute:String) : int
@@ -143,6 +143,19 @@ static public function getSmokeSize(type:int): Number
 		case	222 :	return 0.5;
 	}
 	return 1.0;
+}
+
+static public function getSideColor(side:int):uint
+{
+	switch(side)
+	{
+		case 0  :
+		case 1  :
+		case -2  : return 0xCE1C31;
+		case -3  : return 0x1C73B9;
+		case -4  : return 0xBC40A8;
+	}
+	return 0xFFFFFF;			
 }
 }
 }

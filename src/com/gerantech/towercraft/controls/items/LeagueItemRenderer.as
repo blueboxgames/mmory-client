@@ -212,7 +212,7 @@ private function createElements():void
 	}
 
 	if( LEAGUE == league.index )
-	{trace(POINT , "+" , START)
+	{
 		var pointLabel:RTLLabel = new RTLLabel(StrUtils.getNumber(POINT + START), 1, "center", null, false, "center", 0.7);
 		pointLabel.layoutData = new AnchorLayoutData(fillHeight - pointRect.height * 0.5 + 5, -10);
 		pointLabel.width = pointRect.width - 40;
@@ -373,7 +373,7 @@ protected function rewardItem_triggeredHandler(event:Event) : void
 	{
 		appModel.navigator.addLog(loc("arena_reward_response" + response));
 		if( _owner != null )
-			Starling.juggler.delayCall(_owner.scrollToPosition, 0.1, NaN, _owner.verticalScrollPosition + (response == -3 ? -500 :  500), 1);
+			Starling.juggler.delayCall(_owner.scrollToPosition, 0.1, NaN, _owner.verticalScrollPosition + (response == -3 ? -500 : 500), 1);
 		return;
 	}
 	

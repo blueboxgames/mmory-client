@@ -1,14 +1,16 @@
 package com.gerantech.towercraft.controls.screens
 {
+import com.gerantech.towercraft.controls.popups.AbstractPopup;
 import com.gerantech.towercraft.controls.popups.BanPopup;
 import com.gerantech.towercraft.controls.popups.ConfirmPopup;
+import com.gerantech.towercraft.controls.popups.ExistsGamePopup;
 import com.gerantech.towercraft.controls.popups.MessagePopup;
 import com.gerantech.towercraft.controls.popups.UnderMaintenancePopup;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.BillingManager;
 import com.gerantech.towercraft.managers.net.LoadingManager;
+import com.gerantech.towercraft.managers.net.sfs.SFSConnection;
 import com.gerantech.towercraft.models.AppModel;
-import com.gerantech.towercraft.models.vo.UserData;
 import com.gerantech.towercraft.utils.StrUtils;
 import com.gt.SplashMovie;
 import com.smartfoxserver.v2.entities.data.SFSObject;
@@ -141,7 +143,15 @@ protected function loadingManager_eventsHandler(event:LoadingEvent):void
 			AppModel.instance.navigator.addPopup(updatepopup);
 			removeLogo();
 			return;
-			
+					
+		case LoadingEvent.LOGIN_USER_EXISTS:
+			removeLogo();
+			var existsPopup:ExistsGamePopup = new ExistsGamePopup(SFSConnection.ToArray(event.data.getSFSArray("existGames")));
+			existsPopup.data = confirmData;
+			existsPopup.addEventListener("select", confirm_eventsHandler);
+			AppModel.instance.navigator.addPopup(existsPopup);
+			return;
+
 		default:
 			var message:String = loc("popup_" + event.type + "_message");
 			if( event.type == LoadingEvent.LOGIN_ERROR )
@@ -149,19 +159,10 @@ protected function loadingManager_eventsHandler(event:LoadingEvent):void
 				if( event.data == 2 || event.data == 3 || event.data == 6 )
 					message = loc("popup_loginError_" + event.data + "_message");
 			}
-			else if( event.type == LoadingEvent.LOGIN_USER_EXISTS )
-			{
-				message = loc("popup_reload_authenticated_label", [event.data.getText("name")]);
-			}
 			
 			var acceptLabel:String = "popup_reload_label";
 			if( event.type == LoadingEvent.NOTICE_UPDATE )
 				acceptLabel = "popup_update_label";
-			else if( event.type == LoadingEvent.LOGIN_USER_EXISTS )
-				acceptLabel = "popup_accept_label";
-			
-			if( event.type == LoadingEvent.LOGIN_USER_EXISTS )
-				confirmData.putSFSObject("serverData", event.data as SFSObject);
 			
 			var confirm:ConfirmPopup = new ConfirmPopup(message, loc(acceptLabel));
 			confirm.closeOnOverlay = false;
@@ -179,7 +180,7 @@ protected function loadingManager_eventsHandler(event:LoadingEvent):void
 
 private function confirm_eventsHandler(event:*):void
 {
-	var confirm:ConfirmPopup = event.currentTarget as ConfirmPopup;
+	var confirm:AbstractPopup = event.currentTarget as AbstractPopup;
 	confirm.closeOnOverlay = false;
 	confirm.removeEventListener("select", confirm_eventsHandler);
 	confirm.removeEventListener("cancel", confirm_eventsHandler);
@@ -203,9 +204,6 @@ private function confirm_eventsHandler(event:*):void
 				break;
 			
 			case LoadingEvent.LOGIN_USER_EXISTS:
-				UserData.instance.id = confirmData.getSFSObject("serverData").getLong("id");
-				UserData.instance.password = confirmData.getSFSObject("serverData").getText("password");
-				UserData.instance.save();
 				reload();
 				break;
 			
@@ -215,19 +213,12 @@ private function confirm_eventsHandler(event:*):void
 		return;
 	}
 	
-	switch( confirmData.getText("type") )
+	if( confirmData.getText("type") == LoadingEvent.NOTICE_UPDATE )
 	{
-		case LoadingEvent.NOTICE_UPDATE:
-			AppModel.instance.loadingManager.addEventListener(LoadingEvent.LOADED,				loadingManager_eventsHandler);
-			AppModel.instance.loadingManager.addEventListener(LoadingEvent.CORE_LOADING_ERROR,	loadingManager_eventsHandler);
-			AppModel.instance.loadingManager.loadCore();
-			return;
-			
-		case LoadingEvent.LOGIN_USER_EXISTS:
-			UserData.instance.id = -2;
-			UserData.instance.save();
-			reload();
-			return;
+		AppModel.instance.loadingManager.addEventListener(LoadingEvent.LOADED,				loadingManager_eventsHandler);
+		AppModel.instance.loadingManager.addEventListener(LoadingEvent.CORE_LOADING_ERROR,	loadingManager_eventsHandler);
+		AppModel.instance.loadingManager.loadCore();
+		return;
 	}
 	NativeApplication.nativeApplication.exit();
 }

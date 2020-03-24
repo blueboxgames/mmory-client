@@ -32,6 +32,7 @@ import starling.animation.Transitions;
 import starling.core.Starling;
 import starling.display.DisplayObject;
 import starling.events.Event;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 public class ExBookSlotItemRenderer extends ExBaseItemRenderer
 {
@@ -180,7 +181,8 @@ protected function waitGroupFactory() : LayoutGroup
 		
 		showOpenWarn();
 		
-		var timeLabel:ShadowLabel = new ShadowLabel(StrUtils.getSimpleTimeFormat(ExchangeType.getCooldown(exchange.outcome)), 1, 0, null, null, false, null, 0.9);
+		var cooldown:int = ScriptEngine.getInt(ScriptEngine.T91_PACK_DELAY, exchange.outcome);
+		var timeLabel:ShadowLabel = new ShadowLabel(StrUtils.getSimpleTimeFormat(cooldown), 1, 0, null, null, false, null, 0.9);
 		timeLabel.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, -height * 0.13);
 		waitGroup.addChild(timeLabel);
 	}

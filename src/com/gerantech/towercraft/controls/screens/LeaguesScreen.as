@@ -66,7 +66,7 @@ override protected function initialize():void
 	LeagueItemRenderer.HEIGHT = 1800;
 	LeagueItemRenderer.POINT = player.get_point();
 	LeagueItemRenderer.LEAGUE = player.get_arena(0);
-	LeagueItemRenderer.STEP = player.getResource(ResourceType.R25_REWARD_STEP);
+	LeagueItemRenderer.STEP = player.get_rewardStep();
 
 	listLayout.gap = 0;
 	listLayout.paddingTop = 500;

@@ -1,4 +1,4 @@
-package com.gerantech.towercraft.controls.sliders.battle 
+package com.gerantech.towercraft.views.hb
 {
 import com.gerantech.mmory.core.utils.CoreUtils;
 import com.gerantech.towercraft.models.AppModel;
@@ -17,11 +17,6 @@ public function HealthBarLeveled(filedView:BattleFieldView, side:int, level:int 
 {
 	super(filedView, side, maximum);
 	this.level = level;
-}
-
-override public function initialize() : void
-{
-	super.initialize();
 	
 	levelDisplay = new Image(AppModel.instance.assets.getTexture("sliders/" + _side + "/level-" + CoreUtils.clamp(level, 1, 13)));
 	levelDisplay.height = 28;
@@ -62,15 +57,20 @@ override public function set value(v:Number) : void
 		levelDisplay.visible = __visible;
 }
 
+override public function set alpha(value:Number):void
+{
+	if( super.alpha == value )
+		return;
+	super.alpha = value;
+	if( levelDisplay != null )
+		levelDisplay.alpha = value;
+}
+
 override public function dispose() : void 
 {
 	super.dispose();
 	if( levelDisplay != null )
 		levelDisplay.removeFromParent(true);
-}
-
-public function set alpha(value:Number):void 
-{
 }
 }
 }
