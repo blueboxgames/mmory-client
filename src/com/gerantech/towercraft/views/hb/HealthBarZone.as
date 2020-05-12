@@ -91,6 +91,21 @@ package com.gerantech.towercraft.views.hb
       this.backgroundZone.alpha = value;
     }
 
+    public function get width():Number
+    {
+      return 0;
+    }
+    public function set width(value:Number):void
+    {
+    }
+
+    public function get height():Number
+    {
+      return 0;
+    }
+    public function set height(value:Number):void
+    {}
+
     public function get side():int
     {
       return this._side;

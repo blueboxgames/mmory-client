@@ -25,28 +25,28 @@ public class SimpleListPopup extends AbstractPopup
 {
 public var buttons:Array;
 public var padding:int = 12;
-public var buttonsWidth:int = 24;
-public var buttonHeight:int = 24;
+public var paddingTop:int = 12;
+public var buttonsWidth:int = 640;
+public var buttonHeight:int = 128;
 
-private var list:List;
-
+protected var list:List;
 
 public function SimpleListPopup(... buttons)
 {
 	super();
-	this.buttons = buttons;
+	this.buttons = buttons[0] is Array ? buttons[0] : buttons;
 }
 
 override protected function initialize():void
 {
 	if( transitionIn == null )
 	{
-		var _h:int = buttons.length * buttonHeight + padding * 2;
+		var _h:int = buttons.length * buttonHeight + paddingTop + padding;
 		var _p:int = (stageWidth - buttonsWidth ) * 0.5;
 		transitionIn = new TransitionData();
 		transitionIn.transition = Transitions.EASE_OUT_BACK;
-		transitionIn.sourceBound = new Rectangle(_p,	stageHeight* 0.5 - _h * 0.4,	stageWidth - _p * 2,	_h * 0.8);
-		transitionIn.destinationBound = new Rectangle(_p,	stageHeight* 0.5 - _h * 0.5,	stageWidth - _p * 2,	_h * 1.0);
+		transitionIn.sourceBound = new Rectangle(_p,	stageHeight * 0.5 - _h * 0.4,	stageWidth - _p * 2,	_h * 0.8);
+		transitionIn.destinationBound = new Rectangle(_p,	stageHeight * 0.5 - _h * 0.5,	stageWidth - _p * 2,	_h * 1.0);
 	}
 
 	super.initialize();
@@ -61,13 +61,13 @@ override protected function initialize():void
 	list = new List();
 	list.verticalScrollPolicy = ScrollPolicy.OFF;
 	list.dataProvider = new ListCollection(buttons);
-	list.itemRendererFactory = function ():IListItemRenderer { return new FloatingListItemRenderer(buttonHeight);};
-	list.layoutData = new AnchorLayoutData(padding, padding, padding, padding);
+	list.itemRendererFactory = function ():IListItemRenderer { return new FloatingListItemRenderer(buttonHeight); };
+	list.layoutData = new AnchorLayoutData(paddingTop, padding, padding, padding);
 	list.addEventListener(Event.CHANGE, list_changeHandler);
 	addChild(list);
 }
 
-private function list_changeHandler(event:Event):void
+protected function list_changeHandler(event:Event):void
 {
 	dispatchEventWith(Event.SELECT, false, list.selectedItem);
 	close();
@@ -86,9 +86,10 @@ override protected function defaultOverlayFactory(color:uint = 0, alpha:Number =
 	return overlay;
 }
 
-private function overlay_triggeredHandler(event:Event):void
+protected function overlay_triggeredHandler(event:Event):void
 {
-	close();
+	if( closeOnOverlay )
+		close();
 }		
 }
 }

@@ -34,6 +34,7 @@ import flash.utils.setTimeout;
 import starling.display.DisplayObject;
 import starling.display.Image;
 import starling.events.Event;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 
 public class BookDetailsPopup extends SimpleHeaderPopup
 {
@@ -79,15 +80,15 @@ override protected function initialize():void
 	
 	titleDisplay.layoutData = new AnchorLayoutData(85, NaN, NaN, NaN, 220);
 
-	var numCards:int = ExchangeType.getNumTotalCards(item.outcome, arena, player.splitTestCoef, 0);
-	var cardsPalette:IconGroup = new IconGroup(appModel.assets.getTexture("cards"), int(numCards * 0.9) + " - " + int(numCards * 1.1 + 1));
+	var cards:int = ScriptEngine.getInt(ScriptEngine.T93_PACK_CARDS, item.outcome, arena, 0, player.id);
+	var cardsPalette:IconGroup = new IconGroup(appModel.assets.getTexture("cards"), int(cards * 0.9) + " - " + int(cards * 1.1 + 1));
 	cardsPalette.backgroundColor = 0x87a8d0;
 	cardsPalette.width = transitionIn.destinationBound.width * 0.42;
 	cardsPalette.layoutData = new AnchorLayoutData(290, NaN, NaN, 50);
 	addChild(cardsPalette);
 	
-	var numSofts:int = ExchangeType.getNumSofts(item.outcome, arena, player.splitTestCoef);
-	var softsPalette:IconGroup = new IconGroup(appModel.assets.getTexture("res-" + ResourceType.R3_CURRENCY_SOFT), int(numSofts * 0.9) + " - " + int(numSofts * 1.1 + 1));
+	var softs:int = ScriptEngine.getInt(ScriptEngine.T94_PACK_SOFTS, cards);
+	var softsPalette:IconGroup = new IconGroup(appModel.assets.getTexture("res-" + ResourceType.R3_CURRENCY_SOFT), int(softs * 0.9) + " - " + int(softs * 1.1 + 1));
 	softsPalette.backgroundColor = 0x87a8d0;
 	softsPalette.textColor = 0xFFFF99;
 	softsPalette.width = transitionIn.destinationBound.width * 0.42;
@@ -199,10 +200,11 @@ private function footerFactory(state:int):void
 			actionButton.layoutData = new AnchorLayoutData(NaN, free ? NaN : 30, 20, NaN, free ? 0 : NaN);
 			actionButton.styleName = free ? MainTheme.STYLE_BUTTON_HILIGHT : MainTheme.STYLE_BUTTON_NORMAL;
 			actionButton.iconPosition = RelativePosition.LEFT;
+			var cooldown:int = ScriptEngine.getInt(ScriptEngine.T91_PACK_DELAY, item.outcome);
 			if( free )
-				updateButton( -2, StrUtils.getSimpleTimeFormat(ExchangeType.getCooldown(item.outcome))); 
+				updateButton(-2, StrUtils.getSimpleTimeFormat(cooldown)); 
 			else
-				updateButton(ResourceType.R4_CURRENCY_HARD, Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+				updateButton(ResourceType.R4_CURRENCY_HARD, Exchanger.timeToHard(cooldown));
 			
 			// message ......
 			if( !free && messageDisplay == null )

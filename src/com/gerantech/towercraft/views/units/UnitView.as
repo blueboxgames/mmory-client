@@ -153,7 +153,7 @@ public function UnitView(card:Card, id:int, side:int, x:Number, y:Number, z:Numb
 		fieldView.unitsContainer.addChildAt(rangeDisplay, 0);
 	}
 
-	battleField.addEventListener(BattleEvent.STATE_CHANGE, battleField_pauseHandler);
+	battleField.addEventListener(BattleEvent.STATE_CHANGE, this.battleField_stateChangeHandler);
 }
 
 override public function set_state(value:int) : int
@@ -161,7 +161,6 @@ override public function set_state(value:int) : int
 	if( this.state == value )
 		return this.state;
 	super.set_state(value);
-	
 	if( this.state == GameObject.STATE_1_DIPLOYED )
 	{
 		if( deployIcon != null )
@@ -187,8 +186,6 @@ override public function set_state(value:int) : int
 	}
 	else if( this.state >= GameObject.STATE_4_MOVING && state <= GameObject.STATE_6_IDLE )
 	{
-		if( card.type == 102 && side == 0 )
-			trace(this.state, UnitMC.ANIMATIONS[value - 4]);
 		this.turn(UnitMC.ANIMATIONS[state - 4], __angle);
 	}
 	return this.state;
@@ -283,7 +280,7 @@ private function turn(anim:String, dir:String):void
 
 protected function bodyDisplay_shootCompleteHandler(event:Object):void
 {
-	this.state = GameObject.STATE_6_IDLE;
+	this.turn("i_", __angle);
 }
 
 override public function estimateAngle(x:Number, y:Number):Number
@@ -425,11 +422,11 @@ protected function defaultFireDisplayFactory(x:Number, y:Number, rotation:Number
 
 protected function defaultHealthbarFactory():	IHealthBar
 {
-	if( CardTypes.isTroop(card.type) )
-		return new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
 	if( side < 0 )
 		return new HealthBarZone(fieldView, this);
-	return new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth) as HealthBar;
+	if( !CardTypes.isTroop(card.type) )
+		return new HealthBarDetailed(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
+	return new HealthBarLeveled(fieldView, battleField.getColorIndex(side), card.level, cardHealth);
 }
 
 private function showDieAnimation():void 
@@ -438,7 +435,7 @@ private function showDieAnimation():void
 		return;
 
 	if( CardTypes.isHero(card.type) && side != battleField.side )
-		fieldView.mapBuilder.setSummonAreaEnable(true, battleField.getSummonState(battleField.side == 0 ? 1 : 0));
+		fieldView.mapBuilder.setSummonAreaEnable(true, battleField.getSummonState(battleField.side == 0 ? 1 : 0), true);
 
 	var die:String = appModel.artRules.get(card.type, ArtRules.DIE);
 	if( die == "" )
@@ -469,7 +466,7 @@ private function showDieAnimation():void
 	appModel.sounds.addAndPlayRandom(appModel.artRules.getArray(card.type, ArtRules.DIE_SFX));
 }
 
-protected function battleField_pauseHandler(event:BattleEvent) : void
+protected function battleField_stateChangeHandler(event:BattleEvent) : void
 {
 	var battleState:int = event.data as int;
 	if( battleState >= BattleField.STATE_3_PAUSED )
@@ -504,7 +501,7 @@ protected function battleField_pauseHandler(event:BattleEvent) : void
 override public function dispose() : void
 {
 	super.dispose();
-	battleField.removeEventListener(BattleEvent.STATE_CHANGE, battleField_pauseHandler);
+	battleField.removeEventListener(BattleEvent.STATE_CHANGE, this.battleField_stateChangeHandler);
 	bodyDisplay.removeFromParent(true);
 	if( shadowDisplay != null )
 		shadowDisplay.removeFromParent(true);

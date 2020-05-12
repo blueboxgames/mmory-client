@@ -9,10 +9,10 @@ import feathers.skins.ImageSkin;
 
 import starling.core.Starling;
 
-public class FloatingListItemRenderer extends AbstractTouchableListItemRenderer
+public class ExistGamesListItemRenderer extends AbstractTouchableListItemRenderer
 {
 private var labelDisplay:ShadowLabel;
-public function FloatingListItemRenderer(height:int)
+public function ExistGamesListItemRenderer(height:int)
 {
 	super();
 	this.height = height
@@ -24,11 +24,10 @@ override protected function commitData() : void
 	if( _data == null || _owner == null )
 		return;
 	
-	var label:String = loc(_data + "");
 	if( labelDisplay == null )
-		createElements(label);
+		createElements(_data.getUtfString("name"));
 	else
-		labelDisplay.text = label;
+		labelDisplay.text = _data.getUtfString("name");
 
 	alpha = 0;
 	Starling.juggler.tween(this, 0.05, {delay:index * 0.03, alpha:1});
@@ -36,12 +35,11 @@ override protected function commitData() : void
 
 private function createElements(label:String) : void
 {
-	var mySkin:ImageSkin = new ImageSkin(String(_data).indexOf("$") >-1?appModel.theme.itemRendererSelectedSkinTexture:appModel.theme.itemRendererUpSkinTexture);
-	mySkin.scale9Grid = MainTheme.ITEM_RENDERER_SCALE9_GRID;
+	var mySkin:ImageSkin = new ImageSkin(_data.getLong("id") == -2 ? appModel.theme.buttonSmallNeutralUpSkinTexture : appModel.theme.buttonSmallHilightUpSkinTexture);
+	mySkin.scale9Grid = MainTheme.BUTTON_SMALL_SCALE9_GRID;
 	backgroundSkin = mySkin;	
 	
 	layout = new AnchorLayout();
-	//var padding:int = 36;
 	
 	labelDisplay = new ShadowLabel(label, 0xDDFFFF, 0, "center", null, false, "center", 0.9);
 	labelDisplay.layoutData = new AnchorLayoutData(NaN, NaN, NaN, NaN, 0, 0);

@@ -11,6 +11,7 @@ import com.gerantech.mmory.core.constants.ResourceType;
 import com.gerantech.mmory.core.constants.SFSCommands;
 import com.gerantech.mmory.core.exchanges.ExchangeItem;
 import com.gerantech.mmory.core.exchanges.Exchanger;
+import com.gerantech.mmory.core.scripts.ScriptEngine;
 import com.gerantech.towercraft.controls.popups.MessagePopup;
 import com.gerantech.towercraft.events.LoadingEvent;
 import com.gerantech.towercraft.managers.net.LoadingManager;
@@ -263,7 +264,7 @@ public function verify(purchase:ISFSObject):void
 				 */
 				var params:SFSObject = new SFSObject();
 				params.putInt("type", item.type)
-				params.putInt("hards", Exchanger.timeToHard(ExchangeType.getCooldown(item.outcome)));
+				params.putInt("hards", Exchanger.timeToHard(ScriptEngine.getInt(ScriptEngine.T91_PACK_DELAY, item.outcome)));
 				ExchangeManager.instance.exchange(item, params);
 
 				item.enabled = true;
